@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.86
+Stable tag: 1.3.87
 Requires at least: 5.0
 Tested up to: 6.4.2
 Requires PHP: 5.6
@@ -442,6 +442,9 @@ memory_limit 256M or more
 post_max_size 64M
 
 == Changelog ==
+= Royal Elementor Addons v1.3.87 - 2024-01-25 =
+* ADDED: Developer Portfolio Template Kit [**Developer Portfolio**](https://demosites.royal-elementor-addons.com/developer-portfolio-v1/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.3.86 - 2024-01-25 =
 * ADDED: Personal Blog V4 Template Kit [**Personal Blog V4**](https://demosites.royal-elementor-addons.com/personal-blog-v4/?ref=rea-wpo-pp-details-tab).
 

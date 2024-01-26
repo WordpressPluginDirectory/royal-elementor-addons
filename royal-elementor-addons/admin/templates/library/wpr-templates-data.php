@@ -653,6 +653,20 @@ class WPR_Templates_Data {
 					'priority' => 80,
 				],
 			],
+			'developer-portfolio' => [
+				'v1' => [
+					'name' => 'Developer Portfolio - v1',
+					'pages' => 'home,portfolio,about,services,resume,contact,',
+					'plugins' => '{}',
+					'tags' => 'web developer portfolio dev projects work resume coding code app design software free portfolio personal cv designer ux artist artwork personal resume creative freelanceer vcard',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 3,
+				],
+			],
 			'nft-portfolio' => [
 				'v1' => [
 					'name' => 'NFT',
