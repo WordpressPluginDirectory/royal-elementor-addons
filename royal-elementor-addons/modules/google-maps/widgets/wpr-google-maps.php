@@ -121,7 +121,7 @@ class Wpr_Google_Maps extends Widget_Base {
 			'gm_custom_color_scheme',
 			[
 				'label' => esc_html__( 'Custom Style', 'wpr-addons' ),
-				'description' => esc_html__( 'Get custom map style code from <a href="https://snazzymaps.com/explore" target="_blank">Snazzy Maps</a> or <a href="https://mapstyle.withgoogle.com/" target="_blank">GM Styling Wizard</a> and copy/paste in this field.', 'wpr-addons' ),
+				'description' => __( 'Get custom map style code from <a href="https://snazzymaps.com/explore" target="_blank">Snazzy Maps</a> or <a href="https://mapstyle.withgoogle.com/" target="_blank">GM Styling Wizard</a> and copy/paste in this field.', 'wpr-addons' ),
 				'type' => Controls_Manager::TEXTAREA,
 				'dynamic' => [
 					'active' => true,
@@ -519,6 +519,7 @@ class Wpr_Google_Maps extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-google-map .gm-style-iw-d' => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} .wpr-google-map .gm-style-iw-t:after' => 'background: {{VALUE}}',
+					'{{WRAPPER}} .wpr-google-map .gm-style-iw-tc:after' => 'background: {{VALUE}}'
 				],
 			]
 		);
@@ -604,15 +605,21 @@ class Wpr_Google_Maps extends Widget_Base {
 	}
 
 	public function get_map_settings( $settings ) {
-		return [
+		$map_settings = [
 			'type' => $settings['gm_type'],
 			'style' => $settings['gm_color_scheme'],
-			'custom_style' => preg_replace( '/\s/', '', strip_tags($settings['gm_custom_color_scheme']) ),
 			'zoom_depth' => $settings['gm_zoom_depth']['size'],
 			'zoom_on_scroll' => $settings['gm_zoom_on_scroll'],
 			'cluster_markers' => $settings['gm_cluster_markers'],
 			'clusters_url' => WPR_ADDONS_URL . 'assets/js/lib/gmap/clusters/m',
 		];
+
+
+        if ( !is_array($settings['gm_custom_color_scheme']) ) {
+			$map_settings['custom_style'] = preg_replace( '/\s/', '', strip_tags($settings['gm_custom_color_scheme']) );
+        }
+
+        return $map_settings;
 	}
 
 	public function get_map_controls( $settings ) {

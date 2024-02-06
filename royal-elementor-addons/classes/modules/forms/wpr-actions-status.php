@@ -23,6 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     
     // In your PHP file
     public function wpr_update_form_action_meta() {
+        $nonce = $_POST['nonce'];
+
+        if ( !wp_verify_nonce( $nonce, 'wpr-addons-js' ) ) {
+          return; // Get out of here, the nonce is rotten!
+        }
+
         $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
         $action_name = isset($_POST['action_name']) ? sanitize_text_field($_POST['action_name']) : '';
         $status = isset($_POST['status']) ? sanitize_text_field($_POST['status']) : '';
@@ -33,7 +39,14 @@ if ( ! defined( 'ABSPATH' ) ) {
             'message' => $message
         ];
 
-        if ($post_id && $action_name && $status) {
+        $actions_whitelist = [
+            'wpr_form_builder_email',
+            'wpr_form_builder_submissions',
+            'wpr_form_builder_mailchimp',
+            'wpr_form_builder_webhook'
+        ];
+
+        if ($post_id && $action_name && $status && in_array($action_name, $actions_whitelist)) {
             update_post_meta($post_id, '_action_' . $action_name, $meta_value);
             wp_send_json_success('Post meta updated successfully');
         } else {

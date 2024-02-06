@@ -1244,6 +1244,17 @@ class Wpr_Advanced_Slider extends Widget_Base {
 
 		$this->add_control_slider_pause_on_hover();
 
+		$this->add_control(
+			'slider_loop',
+			[
+				'label' => esc_html__( 'Infinite Loop', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'frontend_available' => true,
+				'separator' => 'before',
+			]
+		);
+
 		$this->add_control_slider_effect();
 
 		$this->add_control(
@@ -2841,7 +2852,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 	public function render_pro_element_slider_scroll_btn() {}
 
 	protected function render() {
-		$settings = $this->get_settings();
+		$settings = $this->get_settings_for_display();
 		$slider_html = '';
 		$item_count = 0;
 
@@ -2879,12 +2890,12 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				}
 
 				$item_type = $item['slider_item_link_type'];
-				$item_url = $item['slider_item_bg_image_url']['url'];
+				$item_url = isset($item['slider_item_bg_image_url']) ? $item['slider_item_bg_image_url']['url'] : '';
 				$btn_url_1 = $item['slider_item_btn_url_1']['url'];
 				$btn_element_1 = 'div';
 				$btn_attribute_1 = '';
 				$icon_html_1 = $item['slider_item_btn_text_1'];
-				$btn_url_2 = $item['slider_item_btn_url_2']['url'];
+				$btn_url_2 = isset($item['slider_item_btn_url_2']) ? $item['slider_item_btn_url_2']['url'] : '';
 				$btn_element_2 = 'div';
 				$btn_attribute_2 = '';
 				$icon_html_2 = $item['slider_item_btn_text_2'];
@@ -2909,7 +2920,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					$icon_html_1 .= ob_get_clean();
 				}
 
-				if ( '' !== $item['slider_item_btn_icon_2']['value'] ) {
+				if ( isset($item['slider_item_btn_icon_2']) && '' !== $item['slider_item_btn_icon_2']['value'] ) { // me vpikrob es jobia ak - isset($item['slider_item_btn_icon_2']['value']
 					ob_start();
 					Icons_Manager::render_icon( $item['slider_item_btn_icon_2'], [ 'aria-hidden' => 'true' ] );
 					$icon_html_2 .= ob_get_clean();	
@@ -3050,7 +3061,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					// Slider Link Type
 					if ( ! empty( $item_url ) && $item_type === 'custom' ) {
 
-						$this->add_render_attribute( 'slider_item_url'. $item_count, 'href', $item_url );
+						$this->add_render_attribute( 'slider_item_url'. $item_count, 'href', esc_url($item_url) );
 
 						if ( $item['slider_item_bg_image_url']['is_external'] ) {
 							$this->add_render_attribute( 'slider_item_url'. $item_count, 'target', '_blank' );
@@ -3114,7 +3125,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 									
 									$btn_element_1 = 'a';
 
-									$this->add_render_attribute( 'primary_btn_url'. $item_count, 'href', $btn_url_1 );
+									$this->add_render_attribute( 'primary_btn_url'. $item_count, 'href', esc_url($btn_url_1) );
 
 									if ( $item['slider_item_btn_url_1']['is_external'] ) {
 										$this->add_render_attribute( 'primary_btn_url'. $item_count, 'target', '_blank' );
@@ -3132,7 +3143,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 									
 									$btn_element_2 = 'a';
 
-									$this->add_render_attribute( 'secondary_btn_url'. $item_count, 'href', $btn_url_2 );
+									$this->add_render_attribute( 'secondary_btn_url'. $item_count, 'href', esc_url($btn_url_2) );
 
 									if ( $item['slider_item_btn_url_2']['is_external'] ) {
 										$this->add_render_attribute( 'secondary_btn_url'. $item_count, 'target', '_blank' );
@@ -3200,6 +3211,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 
 		$slider_options = [
 			'rtl' => $slider_is_rtl,
+			'infinite' => ( $settings['slider_loop'] === 'yes' ),
 			'speed' => absint( $settings['slider_effect_duration'] * 1000 ),
 			'arrows'=> true,
 			'dots' 	=> true,

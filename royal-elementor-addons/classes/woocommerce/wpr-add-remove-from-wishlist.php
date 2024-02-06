@@ -26,9 +26,12 @@ class WPR_Add_Remove_From_Wishlist {
     }
     
     function add_to_wishlist() {
-        if ( ! isset( $_POST['product_id'] ) ) {
+        $nonce = $_POST['nonce'];
+
+        if ( ! wp_verify_nonce($nonce, 'wpr-addons-js') || ! isset( $_POST['product_id'] ) ) {
             return;
         }
+        
         $product_id = intval( $_POST['product_id'] );
         $user_id = get_current_user_id();
         
@@ -60,7 +63,9 @@ class WPR_Add_Remove_From_Wishlist {
     }
     
     function remove_from_wishlist() {
-        if ( ! isset( $_POST['product_id'] ) ) {
+        $nonce = $_POST['nonce'];
+
+        if ( ! wp_verify_nonce($nonce, 'wpr-addons-js') || ! isset( $_POST['product_id'] ) ) {
             return;
         }
         $product_id = intval( $_POST['product_id'] );

@@ -456,6 +456,8 @@ class Wpr_Form_Builder extends Widget_Base {
 		$this->end_controls_section();
 
 	}
+    
+    public $last_prev_btn_text;
 	
 	protected function register_controls() {
 
@@ -3777,6 +3779,10 @@ class Wpr_Form_Builder extends Widget_Base {
 
 					
 					if ( 'step' === $item['field_type'] )  {
+                        if ( isset($item['previous_button_text']) ) {
+                            $this->last_prev_btn_text = $item['previous_button_text'];
+                        }
+
 						if ( 0 === $step_count ) {
 							echo '<div class="wpr-step-tab wpr-step-tab-hidden">';
 						} else {
@@ -3876,7 +3882,7 @@ class Wpr_Form_Builder extends Widget_Base {
 				if ( 'exists' === $step_exists ) {
 						echo '<div '. $this->get_render_attribute_string( 'submit-group' ) .'>';
 							if ( 2 <= $step_count ) {
-								echo '<button type="button" class="wpr-step-prev">Previous</button>';
+								echo '<button type="button" class="wpr-step-prev">'. $this->last_prev_btn_text .'</button>';
 							}
 
 							echo $this->render_submit_button($instance);

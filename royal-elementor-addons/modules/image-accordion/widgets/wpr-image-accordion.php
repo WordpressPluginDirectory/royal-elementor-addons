@@ -2393,12 +2393,15 @@ class Wpr_Image_Accordion extends Widget_Base {
 		?>
 
 		<div class="wpr-image-accordion-wrap <?php echo $no_column ?>">
+
 			<?php if ( ! wpr_fs()->can_use_premium_code() ) : ?>
 				<div class="wpr-image-accordion">
 			<?php else : ?>
 				<div class="wpr-image-accordion" <?php echo $this->get_render_attribute_string('lightbox-settings') ?>>
 			<?php endif ; ?>
+
 			<?php foreach ( $settings['accordion_items'] as $key => $item ) :
+
 			if ( ! wpr_fs()->can_use_premium_code() && $key === 3 ) {
 				break;
 			}
@@ -2443,7 +2446,9 @@ class Wpr_Image_Accordion extends Widget_Base {
 								echo '</div>';
 							?>
 				</div>
+
 			<?php endforeach; ?>
+            
 			</div>
 		</div>
 

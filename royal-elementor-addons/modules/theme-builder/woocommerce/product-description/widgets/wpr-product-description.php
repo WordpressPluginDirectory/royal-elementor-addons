@@ -43,6 +43,15 @@ class Wpr_Product_Description extends Widget_Base {
 		);
 
 		$this->add_control(
+			'description_html',
+			[
+				'label' => esc_html__( 'Render as HTML', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'no',
+			]
+		);
+
+		$this->add_control(
 			'description_color',
 			[
 				'label'     => esc_html__('Color', 'wpr-addons'),
@@ -51,7 +60,8 @@ class Wpr_Product_Description extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-product-description p' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .wpr-product-description li' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .wpr-product-description a' => 'color: {{VALUE}};'
+					'{{WRAPPER}} .wpr-product-description a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .wpr-product-description pre' => 'color: {{VALUE}};'
 				],
 			]
 		);
@@ -61,7 +71,7 @@ class Wpr_Product_Description extends Widget_Base {
 			array(
 				'name'           => 'description_typography',
 				'label'          => esc_html__('Typography', 'wpr-addons'),
-				'selector'       => '{{WRAPPER}} .wpr-product-description p, {{WRAPPER}} .wpr-product-description li, {{WRAPPER}} .wpr-product-description a',
+				'selector'       => '{{WRAPPER}} .wpr-product-description p, {{WRAPPER}} .wpr-product-description li, {{WRAPPER}} .wpr-product-description a, {{WRAPPER}} pre',
 				'exclude'        => ['text_decoration'],
 				'fields_options' => [
 					'typography'     => [
@@ -101,6 +111,7 @@ class Wpr_Product_Description extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-product-description p' => 'text-align: {{VALUE}}',
+					'{{WRAPPER}} .wpr-product-description pre' => 'text-align: {{VALUE}}'
 				],
 			]
 		);
@@ -125,7 +136,11 @@ class Wpr_Product_Description extends Widget_Base {
         
         if ($post) {
             // Get the product description
-            $description = $product->get_description();
+			if ( 'yes' === $settings['description_html'] ) {
+				$description = '<pre>' . $product->get_description() . '</pre>';
+			} else {
+				$description = $product->get_description();
+			}
         
             // Print the description
             echo '<div class="wpr-product-description">';

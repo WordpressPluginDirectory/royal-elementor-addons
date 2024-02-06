@@ -2631,17 +2631,31 @@ class Pricing_Table extends Widget_Base {
 
 			<?php elseif ( $item['type_select'] === 'button' && ( ! empty( $item['btn_text'] ) || '' !== $item['select_icon']['value'] ) ) :
 				
-				if (  '' !== $item['btn_url']['url'] ) {
-					$this->add_render_attribute( 'btn_attribute'. $item_count, 'href', $item['btn_url']['url'] );
+				// if (  '' !== $item['btn_url']['url'] ) {
+				// 	$this->add_render_attribute( 'btn_attribute'. $item_count, 'href', $item['btn_url']['url'] );
 	
-					if ( $item['btn_url']['is_external'] ) :
-						$this->add_render_attribute( 'btn_attribute'. $item_count, 'target', '_blank' );
-					endif;
+				// 	if ( $item['btn_url']['is_external'] ) :
+				// 		$this->add_render_attribute( 'btn_attribute'. $item_count, 'target', '_blank' );
+				// 	endif;
 	
-					if ( $item['btn_url']['nofollow'] ) :
-						$this->add_render_attribute( 'btn_attribute'. $item_count, 'nofollow', '' );
-					endif;
-				}
+				// 	if ( $item['btn_url']['nofollow'] ) :
+				// 		$this->add_render_attribute( 'btn_attribute'. $item_count, 'nofollow', '' );
+				// 	endif;
+				// }
+                
+                if ( '' !== $item['btn_url']['url'] ) {
+                    $this->add_render_attribute( 'btn_attribute' . $item_count, 'href', esc_url( $item['btn_url']['url'] ) );
+                
+                    if ( $item['btn_url']['is_external'] ) {
+                        $this->add_render_attribute( 'btn_attribute' . $item_count, 'target', '_blank' );
+                        $this->add_render_attribute( 'btn_attribute' . $item_count, 'rel', 'noopener noreferrer' );
+                    }
+                
+                    if ( $item['btn_url']['nofollow'] ) {
+                        $this->add_render_attribute( 'btn_attribute' . $item_count, 'rel', 'nofollow', true ); // true to append if rel already exists
+                    }
+                }
+                
 
 				if ( '' !== $item['btn_id'] ) :
 					$this->add_render_attribute( 'btn_attribute' . $item_count, 'id', esc_html( $item['btn_id']) );

@@ -1406,6 +1406,7 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 				'default' => '#FFD726',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-testimonial-rating i:before' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .wpr-rating-icon .wpr-rating-marked svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -2763,14 +2764,38 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 			</div>
 		</div>
 
-	<?php
+	    <?php
 	}
+
+    public function render_rating_icon( $class ) {
+        $settings = $this->get_settings();
+        ?>
+
+        <span class="wpr-rating-icon <?php echo esc_attr($class); ?>">
+            <span class="wpr-rating-marked">
+                <?php \Elementor\Icons_Manager::render_icon( [ 'value' => 'fas fa-star', 'library' => 'fa-solid' ], [ 'aria-hidden' => 'true' ] ); ?>
+            </span>
+
+            <span class="wpr-rating-unmarked">
+                <?php 
+                    if ( 'outline' === $settings['testimonial_unmarked_rating_style'] ) {
+                        \Elementor\Icons_Manager::render_icon( [ 'value' => 'far fa-star', 'library' => 'fa-regular' ], [ 'aria-hidden' => 'true' ] );
+                    } else {
+                        \Elementor\Icons_Manager::render_icon( [ 'value' => 'fas fa-star', 'library' => 'fa-solid' ], [ 'aria-hidden' => 'true' ] );
+                    }
+                 ?>
+            </span>
+        </span>
+
+        <?php
+    }
 
 	public function render_testimonial_rating( $item ) {
 		$settings = $this->get_settings();
 		$rating_amount = $item['testimonial_rating_amount'];
 		$round_rating = (int)$rating_amount;
 		$rating_icon = '&#xE934;';
+        $rating_icon_entity = '&#9733;';
 
 		if ( 'style_1' === $settings['testimonial_rating_style'] ) {
 			if ( 'outline' === $settings['testimonial_unmarked_rating_style'] ) {
@@ -2784,17 +2809,49 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 			}
 		}
 
+        if ( 'outline' === $settings['testimonial_unmarked_rating_style'] ) {
+            $rating_icon_entity = '&#9734;';
+        }
+
 		if ( 'yes' === $settings['testimonial_rating'] && ! empty( $rating_amount ) ) : ?>	
 
 			<div class="wpr-testimonial-rating">
 			<?php for( $i = 1; $i <= $settings['testimonial_rating_scale']; $i++ ) : ?>
-				<?php if ( $i <= $rating_amount ) : ?>
-					<i class="wpr-rating-icon-full"><?php echo esc_html($rating_icon); ?></i>
-				<?php elseif ( $i === $round_rating + 1 && $rating_amount !== $round_rating ) : ?>
-					<i class="wpr-rating-icon-<?php echo esc_attr(( $rating_amount - $round_rating ) * 10); ?>"><?php echo esc_html($rating_icon); ?></i>
-				<?php else : ?>
-					<i class="wpr-rating-icon-empty"><?php echo esc_html($rating_icon); ?></i>
-				<?php endif; ?>
+
+
+                <?php if ( \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_font_icon_svg' ) ) : ?>
+                    <?php if ( 'style_1' === $settings['testimonial_rating_style'] ) : ?>
+
+                        <?php if ( $i <= $rating_amount ) : ?>
+                            <?php $this->render_rating_icon( 'wpr-rating-icon-full' ); ?>
+                        <?php elseif ( $i === $round_rating + 1 && $rating_amount !== $round_rating ) : ?>
+                            <?php $this->render_rating_icon( 'wpr-rating-icon-'. (( $rating_amount - $round_rating ) * 10) ); ?>
+                        <?php else : ?>
+                            <?php $this->render_rating_icon( 'wpr-rating-icon-empty' ); ?>
+                        <?php endif; ?>
+
+                    <?php else: ?>
+
+                        <?php if ( $i <= $rating_amount ) : ?>
+                            <i class="wpr-rating-icon-full"><?php echo esc_html($rating_icon_entity); ?></i>
+                        <?php elseif ( $i === $round_rating + 1 && $rating_amount !== $round_rating ) : ?>
+                            <i class="wpr-rating-icon-<?php echo esc_attr(( $rating_amount - $round_rating ) * 10); ?>"><?php echo esc_html($rating_icon_entity); ?></i>
+                        <?php else : ?>
+                            <i class="wpr-rating-icon-empty"><?php echo esc_html($rating_icon_entity); ?></i>
+                        <?php endif; ?>
+
+                    <?php endif; ?>
+                <?php else : ?>
+                    <?php if ( $i <= $rating_amount ) : ?>
+                        <i class="wpr-rating-icon-full"><?php echo esc_html($rating_icon); ?></i>
+                    <?php elseif ( $i === $round_rating + 1 && $rating_amount !== $round_rating ) : ?>
+                        <i class="wpr-rating-icon-<?php echo esc_attr(( $rating_amount - $round_rating ) * 10); ?>"><?php echo esc_html($rating_icon); ?></i>
+                    <?php else : ?>
+                        <i class="wpr-rating-icon-empty"><?php echo esc_html($rating_icon); ?></i>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+
 	     	<?php endfor; ?>
 
 	     	<?php $this->render_pro_element_testimonial_score($rating_amount); ?>

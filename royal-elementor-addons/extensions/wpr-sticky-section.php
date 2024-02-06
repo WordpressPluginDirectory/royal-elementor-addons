@@ -179,7 +179,8 @@ class Wpr_Sticky_Section {
 					'mobile_default' => 0,
                     'selectors' => [
                         '{{WRAPPER}}' => 'top: auto; bottom: auto; {{position_location.VALUE}}: {{VALUE}}px;',
-                        '{{WRAPPER}} + .wpr-hidden-header' => 'top: {{VALUE}}px;'
+                        '{{WRAPPER}} + .wpr-hidden-header' => 'top: {{VALUE}}px;',
+                        '{{WRAPPER}} + .wpr-hidden-header-flex' => 'top: {{VALUE}}px;'
                     ],
 					'condition' => [
 						'enable_sticky_section' => 'yes'
@@ -198,7 +199,8 @@ class Wpr_Sticky_Section {
                     'default' => 10,
                     'selectors' => [
 						'{{WRAPPER}}' => 'z-index: {{VALUE}};',
-                        '.wpr-hidden-header' => 'z-index: {{VALUE}};'
+                        '.wpr-hidden-header' => 'z-index: {{VALUE}};',
+                        '.wpr-hidden-header-flex' => 'z-index: {{VALUE}};'
                     ],
 					'condition' => [
 						'enable_sticky_section' => 'yes'

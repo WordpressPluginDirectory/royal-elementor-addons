@@ -1,9 +1,9 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.87
+Stable tag: 1.3.88
 Requires at least: 5.0
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -149,6 +149,7 @@ and other custom branding related settings)
 - [**Personal Blog v1**](https://demosites.royal-elementor-addons.com/personal-blog-v1/?ref=rea-wpo-pp-details-tab)
 - [**Personal Blog v2**](https://demosites.royal-elementor-addons.com/personal-blog-v2/?ref=rea-wpo-pp-details-tab)
 - [**Personal Blog v3**](https://demosites.royal-elementor-addons.com/personal-blog-v3/?ref=rea-wpo-pp-details-tab)
+- [**Personal Blog v4**](https://demosites.royal-elementor-addons.com/personal-blog-v4/?ref=rea-wpo-pp-details-tab)
 - [**Magazine Blog v1**](https://demosites.royal-elementor-addons.com/magazine-blog-v1/?ref=rea-wpo-pp-details-tab)
 - [**Magazine Blog v2**](https://demosites.royal-elementor-addons.com/magazine-blog-v2/?ref=rea-wpo-pp-details-tab)
 - [**Magazine Blog v3**](https://demosites.royal-elementor-addons.com/magazine-blog-v3/?ref=rea-wpo-pp-details-tab)
@@ -179,6 +180,8 @@ and other custom branding related settings)
 - [**Wedding**](https://demosites.royal-elementor-addons.com/wedding-v1/?ref=rea-wpo-pp-details-tab)
 - [**Restaurant**](https://demosites.royal-elementor-addons.com/restaurant-v1/?ref=rea-wpo-pp-details-tab)
 - [**Portfolio**](https://demosites.royal-elementor-addons.com/portfolio-v1/?ref=rea-wpo-pp-details-tab)
+- [**Developer Portfolio**](https://demosites.royal-elementor-addons.com/developer-portfolio-v1/?ref=rea-wpo-pp-details-tab)
+- [**Designer Bio**](https://demosites.royal-elementor-addons.com/designer-bio-v1/?ref=rea-wpo-pp-details-tab)
 - [**Pizza Restaurant**](https://demosites.royal-elementor-addons.com/pizza-v1/?ref=rea-wpo-pp-details-tab)
 - [**Wine Bar**](https://demosites.royal-elementor-addons.com/winebar-v1/?ref=rea-wpo-pp-details-tab)
 - [**Photographer Portfolio Dark**](https://demosites.royal-elementor-addons.com/photographer-v1/?ref=rea-wpo-pp-details-tab)
@@ -442,6 +445,10 @@ memory_limit 256M or more
 post_max_size 64M
 
 == Changelog ==
+= Royal Elementor Addons v1.3.88 - 2024-02-06 =
+* FIXED: Minor Bugs.
+* ADDED: Designer Bio Template Kit [**Designer Bio**](https://demosites.royal-elementor-addons.com/designer-bio-v1/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.3.87 - 2024-01-25 =
 * ADDED: Developer Portfolio Template Kit [**Developer Portfolio**](https://demosites.royal-elementor-addons.com/developer-portfolio-v1/?ref=rea-wpo-pp-details-tab).
 

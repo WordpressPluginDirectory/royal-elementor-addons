@@ -9388,7 +9388,15 @@ class Wpr_Grid extends Widget_Base {
 
 		global $paged;
 		$pages = $this->get_max_num_pages( $settings );
-		$paged = empty( $paged ) ? 1 : $paged;
+        
+		// $paged = empty( $paged ) ? 1 : $paged;
+        if ( get_query_var('paged') ) {
+            $paged = get_query_var('paged');
+        } elseif ( get_query_var('page') ) {
+            $paged = get_query_var('page');
+        } else {
+            $paged = 1;
+        }
 
 		if ( ! wpr_fs()->can_use_premium_code() ) {
 			$settings['pagination_type'] = 'pro-is' == $settings['pagination_type'] ? 'default' : $settings['pagination_type'];

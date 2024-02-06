@@ -1102,7 +1102,7 @@ class Wpr_Dual_Button extends Widget_Base {
 
 			$btn_a_element = 'a';
 
-			$this->add_render_attribute( 'button_a_attribute', 'href', $settings['button_a_url']['url'] );
+			$this->add_render_attribute( 'button_a_attribute', 'href',esc_url( $settings['button_a_url']['url'] ));
 
 			if ( $settings['button_a_url']['is_external'] ) {
 				$this->add_render_attribute( 'button_a_attribute', 'target', '_blank' );
@@ -1155,7 +1155,7 @@ class Wpr_Dual_Button extends Widget_Base {
 
 			$btn_b_element = 'a';
 
-			$this->add_render_attribute( 'button_b_attribute', 'href', $settings['button_b_url']['url'] );
+			$this->add_render_attribute( 'button_b_attribute', 'href', esc_url( $settings['button_b_url']['url'] ));
 
 			if ( $settings['button_b_url']['is_external'] ) {
 				$this->add_render_attribute( 'button_b_attribute', 'target', '_blank' );

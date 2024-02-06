@@ -732,6 +732,9 @@ class Wpr_Posts_Timeline extends Widget_Base {
 			[
 				'label' => __( 'Choose Image', 'wpr-addons' ),
 				'type' => \Elementor\Controls_Manager::MEDIA,
+                'dynamic' => [
+                    'active'=> true
+                ],
 				'description' => __('Image Size will not work with default image','wpr-addons'),
 				'condition' => [
 					'repeater_media' => 'image'
@@ -981,6 +984,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-wrapper {{CURRENT_ITEM}} .wpr-description' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .wpr-wrapper {{CURRENT_ITEM}} .wpr-description p' => 'color: {{VALUE}};'
 				],
 				'default' => '#333333',
 				'condition' => [
@@ -3319,6 +3323,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-wrapper .wpr-description' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-wrapper .wpr-description p' => 'color: {{VALUE}}'
 				],
 				'default' => '#808080',
 			]

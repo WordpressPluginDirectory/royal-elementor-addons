@@ -79,6 +79,27 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		return $post_types;
 	}
 
+	public function get_available_taxonomies() {
+		$post_taxonomies = [];
+		$post_taxonomies['category'] = esc_html__( 'Categories', 'wpr-addons' );
+		$post_taxonomies['post_tag'] = esc_html__( 'Tags', 'wpr-addons' );
+
+		$custom_post_taxonomies = Utilities::get_custom_types_of( 'tax', true );
+		foreach( $custom_post_taxonomies as $slug => $title ) {
+			if ( 'product_tag' === $slug || 'product_cat' === $slug ) {
+				continue;
+			}
+
+			if ( !wpr_fs()->can_use_premium_code() ) {
+				$post_taxonomies['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
+			} else {
+				$post_taxonomies[$slug] = esc_html( $title );
+			}
+		}
+
+		return $post_taxonomies;
+	}
+
 	public function add_control_open_links_in_new_tab() {
 		$this->add_control(
 			'open_links_in_new_tab',
@@ -403,7 +424,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		unset( $post_types['e-landing-page'] );
 
 		// Get Available Taxonomies
-		$post_taxonomies = Utilities::get_custom_types_of( 'tax', false );
+		$post_taxonomies = $this->get_available_taxonomies();
 
 		// Get Available Meta Keys
 		$post_meta_keys = Utilities::get_custom_meta_keys();

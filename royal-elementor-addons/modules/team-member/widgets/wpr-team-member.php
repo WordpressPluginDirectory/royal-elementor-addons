@@ -91,7 +91,7 @@ class Wpr_Team_Member extends Widget_Base {
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => 'John Doe',
+				'default' => __('John Doe', 'wpr-addons'),
 			]
 		);
 
@@ -123,7 +123,7 @@ class Wpr_Team_Member extends Widget_Base {
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => 'Sony CEO',
+				'default' => __('Sony CEO', 'wpr-addons'),
 			]
 		);
 
@@ -1826,9 +1826,8 @@ class Wpr_Team_Member extends Widget_Base {
 	?>
 
 	<div class="wpr-team-member">
-		
 		<?php if ( '' !== $settings['member_image']['url'] ) : ?>
-			<?php 
+			<?php
 				$image_src = Group_Control_Image_Size::get_attachment_image_src( $settings['member_image']['id'], 'image_size', $settings );
 
 				if ( ! $image_src ) {
