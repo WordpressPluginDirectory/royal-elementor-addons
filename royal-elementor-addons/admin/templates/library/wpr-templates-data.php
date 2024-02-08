@@ -55,6 +55,20 @@ class WPR_Templates_Data {
 					'priority' => 50,
 				],
 			],
+			'amazon-landing-page' => [
+				'v1' => [
+					'name' => 'Amazon Product Landing Page',
+					'pages' => 'home,',
+					'plugins' => '{}',
+					'tags' => 'amazon product sale coupon free page landing page one page onepage landingpage marketing promotion landing page for amazon single product digital product coupon',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 50,
+				],
+			],
 			'coming-soon-pack' => [
 				'v1' => [
 					'name' => 'Coming Soon Pack',
