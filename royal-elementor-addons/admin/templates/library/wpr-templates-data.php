@@ -1059,6 +1059,20 @@ class WPR_Templates_Data {
 					'priority' => 260,
 				],
 			],
+			'aimatrix' => [
+				'v1' => [
+					'name' => 'AI Matrix - Data, Machines & AI ',
+					'pages' => 'home,about,features,resources,case-study,contact,',
+					'plugins' => '{}',
+					'tags' => 'free data analysis machine learning ai automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web IT tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 261,
+				],
+			],
 			'carwash' => [
 				'v1' => [
 					'name' => 'Car Wash',

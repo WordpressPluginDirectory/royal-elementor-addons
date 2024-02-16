@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.89
+Stable tag: 1.3.90
 Requires at least: 5.0
 Tested up to: 6.4.3
 Requires PHP: 5.6
@@ -446,6 +446,9 @@ memory_limit 256M or more
 post_max_size 64M
 
 == Changelog ==
+= Royal Elementor Addons v1.3.90 - 2024-02-15 =
+* ADDED: AI Matrix - Data, Machines & AI Template Kit [**AI Matrix - Data, Machines & AI**](https://demosites.royal-elementor-addons.com/aimatrix-v1/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.3.89 - 2024-02-08 =
 * ADDED: Amazon Product Landing Page Template Kit [**Amazon Product Landing Page**](https://demosites.royal-elementor-addons.com/amazon-landing-page-v1/?ref=rea-wpo-pp-details-tab).
 
