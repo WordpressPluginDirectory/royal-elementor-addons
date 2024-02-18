@@ -284,7 +284,7 @@ class WPR_Templates_Data {
 			],
 			'wooshop' => [
 				'v1' => [
-					'name' => 'Woo Shop',
+					'name' => 'Woo Shop V1',
 					'pages' => 'home,shop,single-product,about,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
 					'tags' => 'free shop shopping woo-commerce woocommerce estore ecommerce shop ecommerce product online shop online store boutique clothes eshopping fashion designer market reseller digital purchases e commerce',
@@ -294,6 +294,20 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => '',
 					'priority' => 3,
+				],
+			],
+			'shop-wooshop' => [
+				'v2' => [
+					'name' => 'Woo Shop V2',
+					'pages' => 'home,shop,single-product,about,cart,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'free shop shopping woo-commerce woocommerce estore ecommerce shop ecommerce product online shop online store boutique clothes eshopping fashion designer market reseller digital purchases e commerce',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'New',
+					'priority' => 4,
 				],
 			],
 			'woo-auto-parts' => [
