@@ -117,7 +117,7 @@ class WPR_WooCommerce_Config {
 		ob_start();
 		$items_count = WC()->cart->get_cart_contents_count();
 		?>
-		<span class="wpr-mini-cart-icon-count <?php echo $items_count ? '' : 'wpr-mini-cart-icon-count-hidden'; ?>"><?php echo $items_count ? $items_count : '0'; ?></span>
+		<span class="wpr-mini-cart-icon-count <?php echo $items_count ? '' : 'wpr-mini-cart-icon-count-hidden'; ?>"><span><?php echo $items_count ? $items_count : '0'; ?></span></span>
 		<?php
 		$fragments['.wpr-mini-cart-icon-count'] = ob_get_clean();
 

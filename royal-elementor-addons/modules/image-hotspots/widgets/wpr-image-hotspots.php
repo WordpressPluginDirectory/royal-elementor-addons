@@ -982,7 +982,7 @@ class Wpr_Image_Hotspots extends Widget_Base {
 
 						$hotspot_tag = 'a';
 
-						$this->add_render_attribute( 'hotspot_content_attribute'. $item_count, 'href', $item['hotspot_link']['url'] );
+						$this->add_render_attribute( 'hotspot_content_attribute'. $item_count, 'href', esc_url( $item['hotspot_link']['url'] ) );
 
 						if ( $item['hotspot_link']['is_external'] ) {
 							$this->add_render_attribute( 'hotspot_content_attribute'. $item_count, 'target', '_blank' );

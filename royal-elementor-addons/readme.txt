@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.91
+Stable tag: 1.3.92
 Requires at least: 5.0
 Tested up to: 6.4.3
 Requires PHP: 5.6
@@ -447,6 +447,9 @@ memory_limit 256M or more
 post_max_size 64M
 
 == Changelog ==
+= Royal Elementor Addons v1.3.92 - 2024-02-20 =
+* FIXED: Minor Bugs.
+
 = Royal Elementor Addons v1.3.91 - 2024-02-18 =
 * ADDED: Wooshop V2 Template Kit [**Wooshop V2**](https://demosites.royal-elementor-addons.com/shop-wooshop-v2/?ref=rea-wpo-pp-details-tab).
 

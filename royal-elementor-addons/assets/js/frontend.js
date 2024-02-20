@@ -743,8 +743,8 @@
 				subMenuDeep = $navMenu.find( '.wpr-sub-menu li.menu-item-has-children' );
 
 			if ( $scope.find('.wpr-mobile-toggle').length ) {
-				$scope.find('a').on('click', function() {
-					if (this.pathname == window.location.pathname && !($(this).parent('li').children().length > 1)) {
+				$scope.find('a').on('click', function() { // GOGA - sub mega menu condition needs testing
+                    if ( this.pathname == window.location.pathname && !($(this).parent('li').children().length > 1)  && !($(this).closest('.wpr-sub-mega-menu').length > 0) ) {
 						$scope.find('.wpr-mobile-toggle').trigger('click');
 					}
 				});
@@ -832,7 +832,8 @@
 			var mobileMenu = $mobileNavMenu.find( '.wpr-mobile-nav-menu' );
 
 			// Toggle Button
-			$mobileNavMenu.find( '.wpr-mobile-toggle' ).on( 'click', function() {
+			$mobileNavMenu.find( '.wpr-mobile-toggle' ).on( 'click', function(e) {
+                console.log(e.target);
 				// Change Toggle Text
 				if ( ! $(this).hasClass('wpr-mobile-toggle-open') ) {
 					$(this).addClass('wpr-mobile-toggle-open');
@@ -1434,8 +1435,12 @@
 						postSharing();
 
 						lazyLoadObserver();
+
 						// Maybe there is some other way
-						window.dispatchEvent(new Event('resize'));
+                        setTimeout(function() {
+                            setEqualHeight(settings);
+                            window.dispatchEvent(new Event('resize'));
+                        }, 500);
 					});
 
 					pagination.find( '.wpr-load-more-btn' ).on( 'click', function() {
@@ -9927,6 +9932,10 @@
 		},
 
 		widgetDataTable: function($scope) {
+            
+            const ps = new PerfectScrollbar($scope.find('.wpr-table-inner-container')[0], {
+                // suppressScrollX: true
+            });
 			
 			var beforeFilter = $scope.find("tbody .wpr-table-row"),
 				itemsPerPage = +$scope.find('.wpr-table-inner-container').attr('data-rows-per-page'),

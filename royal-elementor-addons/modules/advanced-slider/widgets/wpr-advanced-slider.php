@@ -945,6 +945,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-advanced-slider' => 'height: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .wpr-slider-item' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .slick-list' => 'height: {{SIZE}}{{UNIT}};'
 				],
 				'separator' => 'before',
 				'condition' => [
@@ -2891,7 +2892,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 
 				$item_type = $item['slider_item_link_type'];
 				$item_url = isset($item['slider_item_bg_image_url']) ? $item['slider_item_bg_image_url']['url'] : '';
-				$btn_url_1 = $item['slider_item_btn_url_1']['url'];
+				$btn_url_1 = isset($item['slider_item_btn_url_1']) ? $item['slider_item_btn_url_1']['url'] : '';
 				$btn_element_1 = 'div';
 				$btn_attribute_1 = '';
 				$icon_html_1 = $item['slider_item_btn_text_1'];
@@ -2914,7 +2915,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					$item_video_src = $item['hosted_url']['url'];
 				}
 
-				if ( '' !== $item['slider_item_btn_icon_1']['value'] ) {
+				if ( isset($item['slider_item_btn_icon_1']) && '' !== $item['slider_item_btn_icon_1']['value'] ) {
 					ob_start();
 					Icons_Manager::render_icon( $item['slider_item_btn_icon_1'], [ 'aria-hidden' => 'true' ] );
 					$icon_html_1 .= ob_get_clean();

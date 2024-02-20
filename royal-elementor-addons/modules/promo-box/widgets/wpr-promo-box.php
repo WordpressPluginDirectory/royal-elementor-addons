@@ -1517,7 +1517,7 @@ class Wpr_Promo_Box extends Widget_Base {
 
 			$content_btn_element = 'a';
 
-			$this->add_render_attribute( 'link_attribute', 'href', $settings['content_link']['url'] );
+			$this->add_render_attribute( 'link_attribute', 'href', esc_url( $settings['content_link']['url'] ) );
 
 			if ( $settings['content_link']['is_external'] ) {
 				$this->add_render_attribute( 'link_attribute', 'target', '_blank' );

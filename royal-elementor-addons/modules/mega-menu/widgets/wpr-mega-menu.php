@@ -897,8 +897,8 @@ class Wpr_Mega_Menu extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}}:not(.wpr-pointer-border-fx) .wpr-pointer-item:before' => 'transform: translateY(-{{SIZE}}{{UNIT}});',
-					'{{WRAPPER}}:not(.wpr-pointer-border-fx) .wpr-pointer-item:after' => 'transform: translateY({{SIZE}}{{UNIT}});',
+					'{{WRAPPER}}:not(.wpr-pointer-border-fx) .wpr-menu-item.wpr-pointer-item:before' => 'transform: translateY(-{{SIZE}}{{UNIT}});',
+					'{{WRAPPER}}:not(.wpr-pointer-border-fx) .wpr-menu-item.wpr-pointer-item:after' => 'transform: translateY({{SIZE}}{{UNIT}});',
 				],
 				'condition' => [
 					'menu_items_pointer!' => 'background',

@@ -678,7 +678,7 @@ class Wpr_Button extends Widget_Base {
 
 			$btn_element = 'a';
 
-			$this->add_render_attribute( 'button_attribute', 'href', $settings['button_url']['url'] );
+			$this->add_render_attribute( 'button_attribute', 'href', esc_url( $settings['button_url']['url'] ) );
 
 			if ( $settings['button_url']['is_external'] ) {
 				$this->add_render_attribute( 'button_attribute', 'target', '_blank' );

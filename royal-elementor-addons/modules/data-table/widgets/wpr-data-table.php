@@ -42,7 +42,7 @@ class Wpr_Data_Table extends Widget_Base {
 	}
 
 	public function get_script_depends() {
-		return ['wpr-table-to-excel-js'];
+		return ['wpr-table-to-excel-js', 'wpr-perfect-scroll-js'];
 	}
 
     public function get_custom_help_url() {

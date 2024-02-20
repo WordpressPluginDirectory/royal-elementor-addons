@@ -2048,7 +2048,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 
 			$heading_element = 'a';
 
-			$this->add_render_attribute( 'heading_attribute', 'href', $settings['heading_link']['url'] );
+			$this->add_render_attribute( 'heading_attribute', 'href', esc_url( $settings['heading_link']['url'] ) );
 
 			if ( $settings['heading_link']['is_external'] ) {
 				$this->add_render_attribute( 'heading_attribute', 'target', '_blank' );

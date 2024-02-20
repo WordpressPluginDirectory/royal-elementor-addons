@@ -268,6 +268,7 @@ template {
   }*/
 
 .lg-outer { 
+  direction: ltr;
   z-index: 999999 !important;
 }
 
@@ -2323,7 +2324,10 @@ div[class*="wpr-sub-menu-fx"] .wpr-mega-menu .wpr-sub-mega-menu.wpr-animate-sub 
     float: left;
     position: relative;
     text-align: center;
-    /* background-color: dodgerblue; */
+}
+
+.wpr-grid-item.post {
+    margin: 0;
 }
 
 .elementor-widget-wpr-grid:not(.wpr-item-styles-wrapper) .wpr-grid-item {
@@ -10120,11 +10124,11 @@ select.wpr-category-select {
   == Flip Box
   --------------------------------------------------------------*/
 
-  .elementor-widget-wpr-flip-box {
-    -webkit-box-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
-  }
+.e-con-inner .elementor-widget-wpr-flip-box {
+-webkit-box-flex: 1;
+    -ms-flex: 1;
+        flex: 1;
+}
 
 .wpr-flip-box {
     position: relative;
@@ -14968,6 +14972,19 @@ ul.wpr-woo-mini-cart {
     display: inline-block;
 }
 
+.wpr-mini-cart-inner,
+.wpr-mini-cart-toggle-wrap {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+
 .wpr-mini-cart {
     position: absolute;
     display: none;
@@ -15166,6 +15183,24 @@ ul.wpr-woo-mini-cart {
             animation-fill-mode: forwards;  
 }
 
+.wpr-inline-svg,
+.wpr-mini-cart-btn-icon {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+
+.wpr-mini-cart-btn-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
 .wpr-mini-cart-btn-icon i {
     position: relative;
 }
@@ -15199,6 +15234,11 @@ ul.wpr-woo-mini-cart {
 
 .wpr-toggle-icon-none .wpr-mini-cart-btn-icon i::before {
     content: "";
+}
+
+.wpr-mini-cart-btn-icon .wpr-inline-svg::before {
+    content: "" !important;
+    font-style: normal;
 }
 
 .wpr-toggle-icon-bag-light .wpr-mini-cart-btn-icon i::before {

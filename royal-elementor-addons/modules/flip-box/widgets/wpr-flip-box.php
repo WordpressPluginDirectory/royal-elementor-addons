@@ -1873,7 +1873,7 @@ class Wpr_Flip_Box extends Widget_Base {
 
 			$back_btn_element = 'a';
 
-			$this->add_render_attribute( 'link_attribute', 'href', $settings['back_link']['url'] );
+			$this->add_render_attribute( 'link_attribute', 'href', esc_url( $settings['back_link']['url'] ) );
 
 			if ( $settings['back_link']['is_external'] ) {
 				$this->add_render_attribute( 'link_attribute', 'target', '_blank' );

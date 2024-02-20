@@ -2696,7 +2696,7 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 
 					$logo_element = 'a';
 
-					$this->add_render_attribute( 'logo_attribute'. $item_count, 'href', $item['testimonial_logo_url']['url'] );
+					$this->add_render_attribute( 'logo_attribute'. $item_count, 'href', esc_url( $item['testimonial_logo_url']['url'] ) );
 
 					if ( $item['testimonial_logo_url']['is_external'] ) {
 						$this->add_render_attribute( 'logo_attribute'. $item_count, 'target', '_blank' );

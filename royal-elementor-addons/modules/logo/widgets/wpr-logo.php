@@ -639,7 +639,7 @@ class Wpr_Logo extends Widget_Base {
 			$this->add_render_attribute( 'url_attr', 'nofollow', '' );
 		}
 
-		$this->add_render_attribute( 'url_attr', 'href',  $settings['custom_url']['url'] );
+		$this->add_render_attribute( 'url_attr', 'href',  esc_url( $settings['custom_url']['url'] ) );
 	}
 
 	?>

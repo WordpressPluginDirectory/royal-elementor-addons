@@ -863,7 +863,7 @@ class Advanced_Text extends Widget_Base {
 			<?php
 
 			if ( '' !== $settings['text_link']['url'] ) {
-				$this->add_render_attribute( 'text_link', 'href', $settings['text_link']['url'] );
+				$this->add_render_attribute( 'text_link', 'href', esc_url( $settings['text_link']['url'] ) );
 
 				if ( $settings['text_link']['is_external'] ) {
 					$this->add_render_attribute( 'text_link', 'target', '_blank' );
