@@ -195,6 +195,20 @@ class WPR_Templates_Data {
 					'priority' => 50,
 				],
 			],
+			'school' => [
+				'v1' => [
+					'name' => 'Children School V1',
+					'pages' => 'home,about,classes,class-details,teachers,teacher-details,events,event-details,blog,single-blog,gallery,contact,',
+					'plugins' => '{}',
+					'tags' => 'free kids school education online-education learning homework educator teacher classes dance daycare elementary school home school kindergarten nursery preschool child children babysister childcare day care preschool baby sister daycare',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 50,
+				],
+			],
 			'furniture-shop' => [
 				'v1' => [
 					'name' => 'Furniture Shop',
@@ -1571,6 +1585,36 @@ class WPR_Templates_Data {
 				'pages' => ['home','about','services','projects','contact'],
 				'preview' => ['home','about','services','projects','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'dental-v1' => [
+				'name' => 'Dental Clinic',
+				'pages' => ['home','about','services','reviews','contact'],
+				'preview' => ['home','about','services','reviews','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'music-band-v1' => [
+				'name' => 'Music Band',
+				'pages' => ['home','bio','shop','news','events','contact'],
+				'preview' => ['home','bio','shop','news','events','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'coming-soon-pack-v1' => [
+				'name' => 'Coming Soon Pack',
+				'pages' => ['home','coming-soon-v2','coming-soon-v3','coming-soon-v4','coming-soon-v5'],
+				'preview' => ['home','coming-soon-v2','coming-soon-v3','coming-soon-v4','coming-soon-v5'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'shop-wooshop-v2' => [
+				'name' => 'Shop WooShop V2',
+				'pages' => ['home','shop','about','cart','contact'],
+				'preview' => ['home','shop','about','cart','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'school-v1' => [
+				'name' => 'School - V1',
+				'pages' => ['home','about','classes','class-details','teachers','teacher-details','events','event-details','blog','gallery','contact'],
+				'preview' => ['home','about','classes','class-details','teachers','teacher-details','events','event-details','blog','gallery','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'photographer-v1' => [
 				'name' => 'Photographer Dark',

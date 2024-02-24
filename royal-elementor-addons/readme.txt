@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.92
+Stable tag: 1.3.93
 Requires at least: 5.0
 Tested up to: 6.4.3
 Requires PHP: 5.6
@@ -169,6 +169,7 @@ and other custom branding related settings)
 - [**Construction v1**](https://demosites.royal-elementor-addons.com/construction-v1/?ref=rea-wpo-pp-details-tab)
 - [**Construction v2**](https://demosites.royal-elementor-addons.com/construction-v2/?ref=rea-wpo-pp-details-tab)
 - [**Construction v3**](https://demosites.royal-elementor-addons.com/construction-v3/?ref=rea-wpo-pp-details-tab)
+- [**Children School v1**](https://demosites.royal-elementor-addons.com/school-v1/?ref=rea-wpo-pp-details-tab)
 - [**Architecture**](https://demosites.royal-elementor-addons.com/architecture-v1/?ref=rea-wpo-pp-details-tab)
 - [**It Technology 2**](https://demosites.royal-elementor-addons.com/ittech-v2/?ref=rea-wpo-pp-details-tab)
 - [**Drone**](https://demosites.royal-elementor-addons.com/drone-v1/?ref=rea-wpo-pp-details-tab)
@@ -447,6 +448,9 @@ memory_limit 256M or more
 post_max_size 64M
 
 == Changelog ==
+= Royal Elementor Addons v1.3.93 - 2024-02-24 =
+* ADDED: Children School Template Kit [**School V1**](https://demosites.royal-elementor-addons.com/school-v1/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.3.92 - 2024-02-20 =
 * FIXED: Minor Bugs.
 
