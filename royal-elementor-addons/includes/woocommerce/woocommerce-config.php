@@ -63,10 +63,13 @@ class WPR_WooCommerce_Config {
 	}
 
 	function wpr_custom_quantity_step( $args, $product ) {
-		$args['input_value'] = 8; // Start from this value
-		$args['max_value'] = 80;  // Maximum value
-		$args['min_value'] = 8;   // Minimum value
-		$args['step'] = 8;        // Increment/decrement by this value
+    if ( $args['input_value'] < 8 ) {
+      $args['input_value'] = 8;  // Start from this value
+    }
+		// $args['max_value'] = 80;  // Maximum value
+		$args['min_value'] = 8;  // Minimum value
+		$args['step'] = 8;  // Increment/decrement by this value
+
 		return $args;
 	}
 		

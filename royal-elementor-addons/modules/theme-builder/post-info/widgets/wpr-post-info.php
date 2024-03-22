@@ -378,6 +378,20 @@ class Wpr_Post_Info extends Widget_Base {
 		);
 
 		$repeater->add_control(
+			'post_info_apply_individually',
+			[
+				'label' => esc_html__( 'Apply Individually', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+				'return_value' => 'yes',
+				'condition' => [
+					'post_info_select' => [ 'taxonomy' ],
+          'post_info_extra_icon!' => ''
+				]
+			]
+		);
+
+		$repeater->add_control(
 			'post_info_extra_text',
 			[
 				'label' => esc_html__( 'Extra Text', 'wpr-addons' ),
@@ -1208,12 +1222,18 @@ class Wpr_Post_Info extends Widget_Base {
 		$count = 0;
 
 		// Extra Icon & Text 
-		$this->render_extra_icon_text( $settings );
+    if ( 'yes' !== $settings['post_info_apply_individually'] ) {
+      $this->render_extra_icon_text( $settings );
+    }
 		
 		// Taxonomies
 		foreach ( $terms as $term ) {
 			if ( isset($settings['post_info_link_wrap']) && 'yes' === $settings['post_info_link_wrap'] ) {
 				echo '<a href="'. esc_url(get_term_link( $term->term_id )) .'">';
+          if ( 'yes' == $settings['post_info_apply_individually'] ) {
+            $this->render_extra_icon_text( $settings );
+          }
+
 					// Term Name
 					echo esc_html( $term->name );
 
@@ -1224,6 +1244,10 @@ class Wpr_Post_Info extends Widget_Base {
 				echo '</a>';
 			} else {
 				echo '<span>';
+          if ( 'yes' == $settings['post_info_apply_individually'] ) {
+            $this->render_extra_icon_text( $settings );
+          }
+
 					// Term Name
 					echo esc_html( $term->name );
 
@@ -1241,7 +1265,7 @@ class Wpr_Post_Info extends Widget_Base {
 
 	// Extra Icon & Text 
 	public function render_extra_icon_text( $settings ) {
-		if ( '' !== $settings['post_info_extra_icon'] || '' !== $settings['post_info_extra_text'] ) {
+		if ( ( isset( $settings['post_info_extra_icon'] ) && '' !== $settings['post_info_extra_icon']['value'] ) || '' !== $settings['post_info_extra_text'] ) {
 			echo '<span class="wpr-post-info-text">';
 				// Extra Icon
 				if ( '' !== $settings['post_info_extra_icon'] ) {

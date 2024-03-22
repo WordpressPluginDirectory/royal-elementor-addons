@@ -1217,7 +1217,15 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 
 	public function wpr_accordion_template( $id ) {
 		if ( empty( $id ) ) {
-		return '';
+			return '';
+		}
+
+		if ( defined('ICL_LANGUAGE_CODE') ) {
+			$default_language_code = apply_filters('wpml_default_language', null);
+
+			if ( ICL_LANGUAGE_CODE !== $default_language_code ) {
+				$id = icl_object_id($id, 'elementor_library', false, ICL_LANGUAGE_CODE);
+			}
 		}
 
 		$edit_link = '<span class="wpr-template-edit-btn" data-permalink="'. get_permalink( $id ) .'">Edit Template</span>';

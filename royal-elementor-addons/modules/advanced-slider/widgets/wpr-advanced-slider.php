@@ -2842,6 +2842,14 @@ class Wpr_Advanced_Slider extends Widget_Base {
 			return '';
 		}
 
+		if ( defined('ICL_LANGUAGE_CODE') ) {
+			$default_language_code = apply_filters('wpml_default_language', null);
+
+			if ( ICL_LANGUAGE_CODE !== $default_language_code ) {
+				$id = icl_object_id($id, 'elementor_library', false, ICL_LANGUAGE_CODE);
+			}
+		}
+
 		$edit_link = '<span class="wpr-template-edit-btn" data-permalink="'. esc_url(get_permalink( $id )) .'">Edit Template</span>';
 		
 		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true);
@@ -2945,7 +2953,9 @@ class Wpr_Advanced_Slider extends Widget_Base {
 						
 						preg_match('![?&]{1}v=([^&]+)!', $item_video_src, $item_video_id );
 
-						$item_bg_image_url = 'https://i.ytimg.com/vi_webp/'. $item_video_id[1] .'/maxresdefault.webp';
+            if ( empty($item_bg_image_url) ) {
+              $item_bg_image_url = 'https://i.ytimg.com/vi_webp/'. $item_video_id[1] .'/maxresdefault.webp';
+            }
 						
 						if ( 'yes' === $item['slider_item_video_autoplay'] ) {
 							// GOGA - if there is no way to autoplay with api we need mute=1 for this purpose

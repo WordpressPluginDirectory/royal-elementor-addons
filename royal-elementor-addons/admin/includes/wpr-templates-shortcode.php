@@ -24,14 +24,24 @@ class WPR_Templates_Shortcode {
 	public function shortcode( $attributes = [] ) {
 		if ( empty( $attributes['id'] ) ) {
 			return '';
+		} else {
+			$id = $attributes['id'];
 		}
 
-		$edit_link = '<span class="wpr-template-edit-btn" data-permalink="'. esc_url(get_permalink($attributes['id'])) .'">Edit Template</span>';
+		if ( defined('ICL_LANGUAGE_CODE') ) {
+			$default_language_code = apply_filters('wpml_default_language', null);
+
+			if ( ICL_LANGUAGE_CODE !== $default_language_code ) {
+				$id = icl_object_id($id, 'elementor_library', false, ICL_LANGUAGE_CODE);
+			}
+		}
+
+		$edit_link = '<span class="wpr-template-edit-btn" data-permalink="'. esc_url(get_permalink($id)) .'">Edit Template</span>';
 		
 		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true);
 		$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
 
-		return Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $attributes['id'], $has_css ) . $edit_link;
+		return Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $id, $has_css ) . $edit_link;
 	}
 
 	public function extend_shortcode( $section, $section_id, $args ) {

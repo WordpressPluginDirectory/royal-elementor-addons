@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.94
+Stable tag: 1.3.95
 Requires at least: 5.0
 Tested up to: 6.4.3
 Requires PHP: 5.6
@@ -14,7 +14,7 @@ Elementor Post Grid, Portfolio, Woocommerce Grid builder Widgets. Slider, Carous
 
 **Royal Elementor addons** is the most versatile, intuitive, and easy to use [Popular Page Builder](https://wordpress.org/plugins/elementor/) extension. Our goal is to provide you with the tools to make things happen, efficiently, and fast compare to other elementor addons. Choosing us is not only a mindset, but it is also a requirement if you intend to gain an edge over your competitors when creating your website. The best part is that you can design anything **without having to touch a single line of code**.
 
-Comes with **90+ Elementor addons, 70+ Elementor Templates KIT (Growing Each Week), Theme Builder, WooCommerce Builder, Elementor Mega Menu Builder, Popup Builder, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
+Comes with **90+ Elementor addons, 90+ Elementor Templates KIT (Growing Each Week), Theme Builder, WooCommerce Builder, Elementor Mega Menu Builder, Popup Builder, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
 
 *Free and Pro functionalities are mixed in the Widget Demos below.*
 
@@ -449,6 +449,9 @@ memory_limit 256M or more
 post_max_size 64M
 
 == Changelog ==
+= Royal Elementor Addons v1.3.95 - 2024-03-22 =
+* FIXED: Minor Bugs.
+
 = Royal Elementor Addons v1.3.94 - 2024-03-21 =
 * ADDED: Magazine Blog V6 Kit - [**Magazine Blog V6**](https://demosites.royal-elementor-addons.com/magazine-blog-v6/?ref=rea-wpo-pp-details-tab).
 

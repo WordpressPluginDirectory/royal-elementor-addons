@@ -1120,6 +1120,14 @@ class Wpr_Content_Toggle extends Widget_Base {
 			return '';
 		}
 
+		if ( defined('ICL_LANGUAGE_CODE') ) {
+			$default_language_code = apply_filters('wpml_default_language', null);
+
+			if ( ICL_LANGUAGE_CODE !== $default_language_code ) {
+				$id = icl_object_id($id, 'elementor_library', false, ICL_LANGUAGE_CODE);
+			}
+		}
+		
 		$edit_link = '<span class="wpr-template-edit-btn" data-permalink="'. esc_url(get_permalink( $id )) .'">Edit Template</span>';
 		
 		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true);

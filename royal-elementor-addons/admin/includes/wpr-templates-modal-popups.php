@@ -114,6 +114,15 @@ class WPR_Templates_Modal_Popups {
 		$template_name = '';
 
 		$template_id = Utilities::get_template_id( $slug );
+
+		if ( defined('ICL_LANGUAGE_CODE') ) {
+			$default_language_code = apply_filters('wpml_default_language', null);
+
+			IF ( ICL_LANGUAGE_CODE !== $default_language_code ) {
+				$template_id = apply_filters('wpml_object_id', $template_id, 'wpr_templates', true, $default_language_code);
+			}
+		}
+
 		$get_settings = WPR_Templates_Modal_Popups::get_template_settings( $slug );
 		$get_elementor_content = self::$elementor_instance->frontend->get_builder_content( $template_id, false );
 

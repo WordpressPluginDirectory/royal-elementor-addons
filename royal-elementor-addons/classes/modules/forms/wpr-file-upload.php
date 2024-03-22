@@ -103,6 +103,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	// private function file_validity( $field, $file ) {
 	private function file_validity( $file ) {
+		$whitelist = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'odt', 'avi', 'ogg', 'm4a', 'mov', 'mp3', 'mp4', 'mpg', 'wav', 'wmv', 'txt'];
+		
 		// File type validation
 		if ( empty( $_POST['allowed_file_types'] ) ) {
 			$allowed_file_types = 'jpg,jpeg,png,gif,pdf,doc,docx,ppt,pptx,odt,avi,ogg,m4a,mov,mp3,mp4,mpg,wav,wmv,txt';
@@ -115,13 +117,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		$f_extension = pathinfo( $file['name'], PATHINFO_EXTENSION );
+		$f_extension = strtolower( $f_extension );
+
 		$allowed_file_types = explode( ',', $allowed_file_types );
 		$allowed_file_types = array_map( 'trim', $allowed_file_types );
 		$allowed_file_types = array_map( 'strtolower', $allowed_file_types );
 
-		$f_extension = strtolower( $f_extension );
-
-		return ( in_array( $f_extension, $allowed_file_types ) && !in_array( $f_extension, $this->get_exclusion_list() ) );
+		return ( in_array( $f_extension, $allowed_file_types ) && in_array( $f_extension, $whitelist ) && !in_array( $f_extension, $this->get_exclusion_list() ) );
 	}
 
     private function get_exclusion_list() {
@@ -162,6 +164,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'tmp',
 				'cgi',
 				'svg',
+        		'svgz'
 			];
 		}
 

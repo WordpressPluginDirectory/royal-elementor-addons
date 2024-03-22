@@ -271,8 +271,6 @@ class WPR_Post_Likes {
 	public function get_IP() {
 		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 			$ip = sanitize_text_field(wp_unslash($_SERVER['HTTP_CLIENT_IP']));
-		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			$ip = sanitize_text_field(wp_unslash($_SERVER['HTTP_X_FORWARDED_FOR']));
 		} else {
 			$ip = ( isset( $_SERVER['REMOTE_ADDR'] ) ) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '0.0.0.0';
 		}

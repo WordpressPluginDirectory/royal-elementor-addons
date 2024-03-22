@@ -236,6 +236,17 @@ class Wpr_Taxonomy_List extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'highlight_active',
+			[
+				'label' => esc_html__( 'Highlight Active', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'label_block' => false,
+				'default' => ''
+			]
+		);
+
         $this->end_controls_section();
 
 		// Section: Request New Feature
@@ -357,8 +368,10 @@ class Wpr_Taxonomy_List extends Widget_Base {
 				'label'  => esc_html__( 'Color', 'wpr-addons' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .wpr-taxonomy-list li a:hover' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .wpr-taxonomy-list li>span:hover' => 'color: {{VALUE}}'
+					'{{WRAPPER}} .wpr-taxonomy-list li a:hover' => 'color: {{VALUE}} !important',
+					'{{WRAPPER}} .wpr-taxonomy-list li>span:hover' => 'color: {{VALUE}} !important',
+					'{{WRAPPER}} .wpr-taxonomy-list li.wpr-taxonomy-active a' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-taxonomy-list li.wpr-taxonomy-active>span' => 'color: {{VALUE}}'
 				],
 			]
 		);
@@ -369,8 +382,10 @@ class Wpr_Taxonomy_List extends Widget_Base {
 				'label'  => esc_html__( 'Background Color', 'wpr-addons' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .wpr-taxonomy-list li a:hover' => 'background-color: {{VALUE}}',
-					'{{WRAPPER}} .wpr-taxonomy-list li>span:hover' => 'background-color: {{VALUE}}'
+					'{{WRAPPER}} .wpr-taxonomy-list li a:hover' => 'background-color: {{VALUE}} !important',
+					'{{WRAPPER}} .wpr-taxonomy-list li>span:hover' => 'background-color: {{VALUE}} !important',
+					'{{WRAPPER}} .wpr-taxonomy-list li.wpr-taxonomy-active a' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-taxonomy-list li.wpr-taxonomy-active>span' => 'background-color: {{VALUE}}'
 				]
 			]
 		);
@@ -381,11 +396,14 @@ class Wpr_Taxonomy_List extends Widget_Base {
 				'label'  => esc_html__( 'Border Color', 'wpr-addons' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .wpr-taxonomy-list li a:hover' => 'border-color: {{VALUE}}',
-					'{{WRAPPER}} .wpr-taxonomy-list li>span:hover' => 'border-color: {{VALUE}}'
+					'{{WRAPPER}} .wpr-taxonomy-list li a:hover' => 'border-color: {{VALUE}} !important',
+					'{{WRAPPER}} .wpr-taxonomy-list li>span:hover' => 'border-color: {{VALUE}} !important',
+					'{{WRAPPER}} .wpr-taxonomy-list li.wpr-taxonomy-active a' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-taxonomy-list li.wpr-taxonomy-active>span' => 'border-color: {{VALUE}}'
 				],
 			]
 		);
+
 		$this->end_controls_tab();
 
 		$this->end_controls_tabs();
@@ -604,7 +622,11 @@ class Wpr_Taxonomy_List extends Widget_Base {
 		$terms = get_terms( $settings['query_tax_selection'], [ 'hide_empty' => 'yes' === $settings['query_hide_empty'], 'parent' => 0, 'child_of' => 0 ] );
 
         foreach ($terms as $key => $term) {
-        	$cat_class = ' class="wpr-taxonomy"';
+			if ( $term->term_id == get_queried_object()->term_taxonomy_id && 'yes' == $settings['highlight_active'] ) {
+				$cat_class = ' class="wpr-taxonomy wpr-taxonomy-active"';
+			} else {
+				$cat_class = ' class="wpr-taxonomy"';
+			}
 			$data_parent_term_id = $term->term_id;
 
 			if ( 'yes' === $settings['show_sub_categories'] ) {
@@ -623,7 +645,11 @@ class Wpr_Taxonomy_List extends Widget_Base {
 
 			foreach ($children as $term) :
 				$hidden_class = $settings['show_sub_categories_on_click'] == 'yes' ? ' wpr-sub-hidden' : '';
-				$sub_class = $term->parent > 0 ? ' class="wpr-sub-taxonomy' . $hidden_class . '"' : '';
+				if ( $term->term_id == get_queried_object()->term_taxonomy_id && 'yes' == $settings['highlight_active'] ) {
+					$sub_class = $term->parent > 0 ? ' class="wpr-sub-taxonomy wpr-taxonomy-active' . $hidden_class . '"' : '';
+				} else {
+					$sub_class = $term->parent > 0 ? ' class="wpr-sub-taxonomy' . $hidden_class . '"' : '';
+				}
 				$data_child_term_id = $data_parent_term_id;
 				$data_item_id = $term->term_id;
 
@@ -643,7 +669,11 @@ class Wpr_Taxonomy_List extends Widget_Base {
 	
 				foreach ($grand_children as $term) :
 					$hidden_class = $settings['show_sub_categories_on_click'] == 'yes' ? ' wpr-sub-hidden' : '';
-					$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy' . $hidden_class . '"' : '';
+					if ( $term->term_id == get_queried_object()->term_taxonomy_id && 'yes' == $settings['highlight_active'] ) {
+						$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy wpr-taxonomy-active' . $hidden_class . '"' : '';
+					} else {
+						$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy' . $hidden_class . '"' : '';
+					}
 					$data_grandchild_term_id = ' data-parent-id="'. $data_item_id .'" data-term-id="grandchild-'. $data_child_term_id .'"';
 					$grandchild_id = $term->term_id;
 
@@ -661,7 +691,11 @@ class Wpr_Taxonomy_List extends Widget_Base {
 					echo '</li>';
 
 					foreach($great_grand_children as $term) :
-						$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy-2' . $hidden_class . '"' : '';
+						if ( $term->term_id == get_queried_object()->term_taxonomy_id && 'yes' == $settings['highlight_active'] ) {
+							$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy-2 wpr-taxonomy-active' . $hidden_class . '"' : '';
+						} else {
+							$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy-2' . $hidden_class . '"' : '';
+						}
 						$data_great_grandchild_term_id = ' data-parent-id="'. $grandchild_id .'" data-term-id="great-grandchild-'. $data_child_term_id .'"';
 					
 						echo '<li'. $sub_class . $data_great_grandchild_term_id .'>';

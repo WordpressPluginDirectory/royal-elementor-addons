@@ -272,6 +272,10 @@ template {
   z-index: 999999 !important;
 }
 
+button.lg-icon {
+  font-family: lg;
+}
+
 .wpr-body-overflow-hidden {
     overflow: hidden;
 }

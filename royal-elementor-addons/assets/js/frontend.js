@@ -170,7 +170,7 @@
 
 					var distanceFromTop = $scope.offset().top;
 
-					if ( $scope.data('settings').sticky_animation ) {
+					if ( $scope.data('settings') && $scope.data('settings').sticky_animation ) {
 						stickyAnimation = $scope.data('settings').sticky_animation;
 					} else {
 						stickyAnimation = $scope.find('.wpr-sticky-section-yes-editor').attr('data-wpr-sticky-animation');
@@ -370,7 +370,6 @@
 					}
 
 					if ( 'yes' == $scope.data('wpr-replace-header') ) {
-                        console.log($scope.next());
                         if ( 0 != $scope.next().length ) {
                             $scope.next().get(0).style.setProperty('--wpr-animation-duration', stickyAnimDuration);
                         }
@@ -4046,7 +4045,6 @@
 					$scope.find('.wpr-advanced-slider').css('height', $scope.find('.slick-current').outerHeight());
 				
 					$scope.find('.wpr-slider-arrow').on('click', function() {
-						console.log('works resize');
 						$scope.find('.wpr-advanced-slider').css('height', $scope.find('.slick-current').outerHeight());
 					});
 		

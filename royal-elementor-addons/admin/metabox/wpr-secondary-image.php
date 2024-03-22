@@ -9,7 +9,7 @@ function secondary_image_add_metabox () {
     $post_types = Utilities::get_custom_types_of( 'post', false );
 
     foreach ( $post_types as $key => $value ) {
-        $meta_option = get_option( 'wpr_meta_secondary_image_' . $key );
+        $meta_option = get_option( 'wpr_meta_secondary_image_' . $key, 'on' );
 
         if ( 'page' !== $key && 'e-landing-page' !== $key && $meta_option === 'on' ) {
             add_meta_box( 'wpr-secondary-image', __( 'Secondary Image', 'wpr-addons' ), 'secondary_image_metabox', $key, 'side', 'low');

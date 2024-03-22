@@ -360,15 +360,15 @@ class Plugin {
 			Plugin::instance()->get_version()
 		);
 
-        // Load FontAwesome - TODO: Check if necessary (maybe elementor is already loading this)
-        wp_enqueue_style(
+    // Load FontAwesome - TODO: Check if necessary (maybe elementor is already loading this)
+    wp_enqueue_style(
 			'font-awesome-5-all',
 			ELEMENTOR_ASSETS_URL . 'lib/font-awesome/css/all'. $this->script_suffix() .'.css',
 			false,
 			Plugin::instance()->get_version()
 		);
 
-        if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+    if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
 			wp_enqueue_style(
 				'wpr-addons-library-frontend-css',
 				WPR_ADDONS_URL . 'assets/css/admin/library-frontend'. $this->script_suffix() .'.css',
@@ -985,7 +985,7 @@ class Plugin {
 	}
 
 	public function wpr_custom_posts_per_page( $query ) {
-		if ( isset($query->query['post_type']) ) {
+		if ( $query->is_main_query() && isset($query->query['post_type']) ) {
 			if (is_admin() ) {
 				if (\Elementor\Plugin::$instance->editor && !\Elementor\Plugin::$instance->editor->is_edit_mode()) {
 					return;

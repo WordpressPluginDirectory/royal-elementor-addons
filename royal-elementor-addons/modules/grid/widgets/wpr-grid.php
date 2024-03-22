@@ -8301,7 +8301,7 @@ class Wpr_Grid extends Widget_Base {
 
 		// Change Posts Per Page for Slider Layout
 		if ( 'slider' === $settings['layout_select'] && Utilities::is_new_free_user() ) {
-			$settings['query_posts_per_page'] = $settings['query_slides_to_show'];
+			$settings['query_posts_per_page'] = $settings['query_slides_to_show'] ? $settings['query_slides_to_show'] : -1;
 			$settings['query_posts_per_page'] = $settings['query_posts_per_page'] > 4 ? 4 : $settings['query_posts_per_page'];
 		}
 
@@ -9711,7 +9711,7 @@ class Wpr_Grid extends Widget_Base {
 			'pauseOnHover' => $settings['layout_slider_pause_on_hover'],
 			'prevArrow' => '#wpr-grid-slider-prev-'. $this->get_id(),
 			'nextArrow' => '#wpr-grid-slider-next-'. $this->get_id(),
-			'sliderSlidesToScroll' => $settings['layout_slides_to_scroll'],
+			'sliderSlidesToScroll' => $settings['layout_slides_to_scroll'] ? absint( $settings['layout_slides_to_scroll'] ) : 1,
 		];
 
 		if ( ! wpr_fs()->can_use_premium_code() ) {

@@ -63,6 +63,10 @@
   background: #535353;
 }
 
+.button.wpr-translate-templates.tutorial  {
+  margin-left: 10px !important;
+}
+
 .button.wpr-translate-templates {
   font-size: 13px !important;
 }
