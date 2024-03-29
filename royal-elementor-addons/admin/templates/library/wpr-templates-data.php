@@ -1199,7 +1199,7 @@ class WPR_Templates_Data {
 			],
 			'solar-energy' => [
 				'v1' => [
-					'name' => 'Solar Energy',
+					'name' => 'Solar Energy v1',
 					'pages' => 'home,about,services,detail-service,projects,team,blog,contact,',
 					'plugins' => '{}',
 					'tags' => 'wind turbines photovoltaic green energy solar energy panel sustainable clean eco technology solar solutions solar power electronic electricity sun solar panels solar cells solar inverters solar batteries renewable energy sustainable energy solar module solar system solar inverter solar charger residential solar commercial solar water heating wind energy Renewable energy Wind power Wind farm',
@@ -1209,6 +1209,18 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 500,
+				],
+				'v2' => [
+					'name' => 'Solar Energy v2',
+					'pages' => 'home,about-us,services,projects,team,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'wind turbines photovoltaic green energy solar energy panel sustainable clean eco technology solar solutions solar power electronic electricity sun solar panels solar cells solar inverters solar batteries renewable energy sustainable energy solar module solar system solar inverter solar charger residential solar commercial solar water heating wind energy Renewable energy Wind power Wind farm',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 501,
 				],
 			],
 			'winebar' => [
@@ -1237,6 +1249,20 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 200,
+				],
+			],
+			'school' => [
+				'v1' => [
+					'name' => 'Children School V1',
+					'pages' => 'home,about,classes,class-details,teachers,teacher-details,events,event-details,blog,single-blog,gallery,contact,',
+					'plugins' => '{}',
+					'tags' => 'free school education online-education learning homework educator teacher classes dance daycare elementary school home school kindergarten nursery preschool child children babysister childcare day care preschool baby sister daycare',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 10,
 				],
 			],
 			'barbershop' => [
@@ -1347,9 +1373,15 @@ class WPR_Templates_Data {
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'solar-energy-v1' => [
-				'name' => 'Solar Energy',
+				'name' => 'Solar Energy 1',
 				'pages' => ['home','about','services','detail-service','projects','team','blog','contact'],
 				'preview' => ['home','about','services','detail-service','projects','team','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'solar-energy-v2' => [
+				'name' => 'Solar Energy 2',
+				'pages' => ['home','about-us','services','projects','team','faq','blog','contact,'],
+				'preview' => ['home','about-us','services','projects','team','faq','blog','contact,'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'construction-v3' => [
@@ -1644,6 +1676,12 @@ class WPR_Templates_Data {
 				'name' => 'Wedding',
 				'pages' => ['home','about','services','blog','gallery','contact'],
 				'preview' => ['home','about','services','blog','gallery','rsvp'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'school-v1' => [
+				'name' => 'School - V1',
+				'pages' => ['home','about','classes','class-details','teachers','teacher-details','events','event-details','blog','gallery','contact'],
+				'preview' => ['home','about','classes','class-details','teachers','teacher-details','events','event-details','blog','gallery','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'portfolio-v1' => [
