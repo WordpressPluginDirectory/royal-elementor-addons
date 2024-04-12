@@ -832,6 +832,18 @@ class WPR_Templates_Data {
 					'label' => '',
 					'priority' => 100,
 				],
+				'v3' => [
+					'name' => 'Travel V3',
+					'pages' => 'home,about,tours,tours-details,gallery,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'nature influencer travel content slider tourism influencers creator travel forest slider generic multipurpose national-park nature-park sanctuary wilderness hitchhiking mountain river lakes outdoors travel agency company office travel service',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 10,
+				]
 			],
 			'cybersecurity' => [
 				'v1' => [
@@ -979,6 +991,35 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => '',
 					'priority' => 2,
+				],
+			],
+			'digital-marketing' => [
+				'v1' => [
+					'name' => 'Digital Marketing V1 - One Page',
+					'pages' => 'home,features,analytics,pricing,book-demo,contact',
+					'plugins' => '{}',
+					'tags' => 'digital agency company corporate digital services office agency web digital marketing seo social media branding landing page onepage one page',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 10,
+				],
+			],
+			'jewelry' => [
+				'v1' => [
+					'name' => 'Jewelry Shop',
+					'pages' => 'home,shop,single-product,cart,compare,wishlist,about,about-me,faq,blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 5,
 				],
 			],
 			'drone' => [
@@ -1688,6 +1729,18 @@ class WPR_Templates_Data {
 				'name' => 'Portfolio/CV',
 				'pages' => ['home','about','portfolio','contact'],
 				'preview' => ['home','about','portfolio','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'jewelry-v1' => [
+				'name' => 'Jewelry Shop',
+				'pages' => ['home','shop','cart','compare','wishlist','about','about-me','faq','blog','contact'],
+				'preview' => ['home','shop','cart','compare','wishlist','about','about-me','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'travel-v3' => [
+				'name' => 'Travel V3',
+				'pages' => ['home','about','tours','tours-details','gallery','blog','contact'],
+				'preview' => ['home','about','tours','tours-details','gallery','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'pizza-v1' => [
