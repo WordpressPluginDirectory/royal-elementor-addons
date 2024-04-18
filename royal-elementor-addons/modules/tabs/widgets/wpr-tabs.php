@@ -200,19 +200,16 @@ class Wpr_Tabs extends Widget_Base {
 		Utilities::upgrade_pro_notice( $repeater, Controls_Manager::RAW_HTML, 'tabs', 'tab_content_type', ['pro-tmp'] );
 		Utilities::upgrade_expert_notice( $repeater, Controls_Manager::RAW_HTML, 'tabs', 'tab_content_type', ['pro-cf'] );
 
-		// Get Available Meta Keys
-		$post_meta_keys = Utilities::get_custom_meta_keys();
-
 		if ( wpr_fs()->is_plan( 'expert' ) ) {
 			$repeater->add_control(
 				'tab_custom_field',
 				[
 					'label' => esc_html__( 'Select Custom Field', 'wpr-addons' ),
-					'type' => Controls_Manager::SELECT2,
+					'type' => 'wpr-ajax-select2',
 					'label_block' => true,
 					'default' => 'default',
 					'description' => '<strong>Note:</strong> This option only accepts String(Text) or Numeric Custom Field Values.',
-					'options' => $post_meta_keys[1],
+					'options' => 'ajaxselect2/get_custom_meta_keys',
 					'condition' => [
 						'tab_content_type' => 'acf'
 					],

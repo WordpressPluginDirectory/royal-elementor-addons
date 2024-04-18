@@ -271,7 +271,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		];
 	}
 
-	public function add_repeater_args_element_custom_field($meta) {
+	public function add_repeater_args_element_custom_field( $meta ) {
 		return [
 			'type' => Controls_Manager::HIDDEN,
 			'default' => ''
@@ -427,7 +427,6 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		$post_taxonomies = $this->get_available_taxonomies();
 
 		// Get Available Meta Keys
-		$post_meta_keys = Utilities::get_custom_meta_keys();
 		$tax_meta_keys = Utilities::get_custom_meta_keys_tax();
 
 		$this->add_control(
@@ -636,14 +635,6 @@ class Wpr_Magazine_Grid extends Widget_Base {
 			[
 				'type' => Controls_Manager::HIDDEN,
 				'default' => $this->get_related_taxonomies(),
-			]
-		);
-
-		$this->add_control(
-			'post_meta_keys_filter',
-			[
-				'type' => Controls_Manager::HIDDEN,
-				'default' => json_encode( $post_meta_keys[0] ),
 			]
 		);
 
@@ -1300,7 +1291,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 
 		$repeater->add_control( 'element_sharing_tooltip', $this->add_repeater_args_element_sharing_tooltip() );
 
-		$repeater->add_control( 'element_custom_field', $this->add_repeater_args_element_custom_field($post_meta_keys[1]) );
+		$repeater->add_control( 'element_custom_field', $this->add_repeater_args_element_custom_field( [] ) );
 
 		$repeater->add_control( 'element_custom_field_btn_link', $this->add_repeater_args_element_custom_field_btn_link() );
 
@@ -5208,7 +5199,10 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		$class .= ' wpr-pointer-'. $title_pointer;
 		$class .= ' wpr-pointer-line-fx wpr-pointer-fx-'. $title_pointer_animation;
 
-		echo '<'. esc_html($settings['element_title_tag']) .' class="'. esc_attr($class) .'">';
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$element_title_tag = Utilities::validate_html_tags_wl( $settings['element_title_tag'], 'h2', $tags_whitelist );
+
+		echo '<'. esc_html($element_title_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				echo '<a  target="'. $open_links_in_new_tab .'" '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
 				if ( 'word_count' === $settings['element_trim_text_by'] ) {
@@ -5218,7 +5212,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 				}
 				echo '</a>';
 			echo '</div>';
-		echo '</'. esc_html($settings['element_title_tag']) .'>';
+		echo '</'. esc_html($element_title_tag) .'>';
 	}
 
 	// Render Post Content

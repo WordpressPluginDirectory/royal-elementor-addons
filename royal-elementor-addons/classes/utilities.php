@@ -1199,4 +1199,17 @@ class Utilities {
 	// 	return wpr_fs()->is_plan( 'pro' ) && (intval(get_option('royal_elementor_addons_pro_activation_time')) > 1680264265);
 	// }
 
+	/**
+	** HTML Tags Whitelist
+	*/
+	public static function validate_html_tags_wl( $setting, $default, $tags_whitelist ) {
+		$value = $setting;
+
+		if ( ! in_array($value, $tags_whitelist) ) {
+			$value = $default;
+		}
+
+		return $value;
+	}
+
 }

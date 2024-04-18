@@ -1742,11 +1742,9 @@ class Wpr_Woo_Grid extends Widget_Base {
 			'element_lightbox_pfa_meta',
 			[
 				'label' => esc_html__( 'Audio Meta Value', 'wpr-addons' ),
-				// 'type' => Controls_Manager::SELECT2,
 				'type' => 'wpr-ajax-select2',
 				'label_block' => true,
 				'default' => 'default',
-				// 'options' => $post_meta_keys[1],
 				'options' => 'ajaxselect2/get_custom_meta_keys',
 				'query_slug' => 'product_cat',
 				'condition' => [
@@ -1776,11 +1774,9 @@ class Wpr_Woo_Grid extends Widget_Base {
 			'element_lightbox_pfv_meta',
 			[
 				'label' => esc_html__( 'Video Meta Value', 'wpr-addons' ),
-				// 'type' => Controls_Manager::SELECT2,
 				'type' => 'wpr-ajax-select2',
 				'label_block' => true,
 				'default' => 'default',
-				// 'options' => $post_meta_keys[1],
 				'options' => 'ajaxselect2/get_custom_meta_keys',
 				'query_slug' => 'product_cat',
 				'condition' => [
@@ -8887,7 +8883,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 		}
 
 		if ( has_post_thumbnail() ) {
-			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'"  data-img-on-hover="'. $settings['secondary_img_on_hover'] .'" data-src-secondary="'. esc_url( $src2 ) .'">';
+			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'"  data-img-on-hover="'. esc_attr( $settings['secondary_img_on_hover'] ) .'" data-src-secondary="'. esc_url( $src2 ) .'">';
 				echo '<img src="'. esc_url( $src ) .'" alt="'. esc_attr( $alt ) .'" class="wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
 				if ( 'yes' == $settings['secondary_img_on_hover'] ) {
 					echo '<img src="'. esc_url( $src2 ) . '" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-img wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
@@ -8919,7 +8915,10 @@ class Wpr_Woo_Grid extends Widget_Base {
 		$class .= ' wpr-pointer-'. $title_pointer;
 		$class .= ' wpr-pointer-line-fx wpr-pointer-fx-'. $title_pointer_animation;
 
-		echo '<'. esc_attr($settings['element_title_tag']) .' class="'. esc_attr($class) .'">';
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$element_title_tag = Utilities::validate_html_tags_wl( $settings['element_title_tag'], 'h2', $tags_whitelist );
+
+		echo '<'. esc_attr($element_title_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				echo '<a target="'. $open_links_in_new_tab .'"  '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
 				if ( 'word_count' === $settings['element_trim_text_by'] ) {
@@ -8929,7 +8928,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				}
 				echo '</a>';
 			echo '</div>';
-		echo '</'. esc_attr($settings['element_title_tag']) .'>';
+		echo '</'. esc_attr($element_title_tag) .'>';
 	}
 
 	// Render Post Excerpt
@@ -10352,9 +10351,12 @@ class Wpr_Woo_Grid extends Widget_Base {
 
 		$post_index = 0;
 
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$grid_linked_products_heading_tag = Utilities::validate_html_tags_wl( $settings['grid_linked_products_heading_tag'], 'h2', $tags_whitelist );
+
 		if ( ('upsell' === $settings['query_selection'] && '' !== $settings['grid_linked_products_heading']) || ('cross-sell' === $settings['query_selection'] && '' !== $settings['grid_linked_products_heading']) ) {
 			echo '<div class="wpr-grid-linked-products-heading">';
-				echo '<'. $settings['grid_linked_products_heading_tag'] .'>'. esc_html( $settings['grid_linked_products_heading'] ) .'</'. $settings['grid_linked_products_heading_tag'] .'>';
+				echo '<'. $grid_linked_products_heading_tag .'>'. esc_html( $settings['grid_linked_products_heading'] ) .'</'. $grid_linked_products_heading_tag .'>';
 			echo '</div>';
 		}
 		

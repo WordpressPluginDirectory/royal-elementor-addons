@@ -831,6 +831,7 @@ class Wpr_Author_Box extends Widget_Base {
 		$author_title_link = 'website' === $settings['author_title_links_to'] ? $website : $archive_url;
 		$author_title_target = 'yes' === $settings['author_title_link_tab'] ? '_blank' : '_self';
 		$author_title_has_website = 'website' === $settings['author_title_links_to'] && '' !== $website ? true : false;
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
 
 		// HTML
 		echo '<div class="wpr-author-box">';
@@ -851,24 +852,28 @@ class Wpr_Author_Box extends Widget_Base {
 
 			// Author Name
 			if ( '' !== $settings['author_name'] && '' !== $name ) {
-				echo '<'. esc_attr($settings['author_name_tag']) .' class="wpr-author-box-name">';
+				$author_name_tag = Utilities::validate_html_tags_wl( $settings['author_name_tag'], 'h3', $tags_whitelist );
+
+				echo '<'. esc_attr($author_name_tag) .' class="wpr-author-box-name">';
 					if ( 'posts' === $settings['author_name_links_to'] || $author_name_has_website ) {
 						echo '<a href="'. esc_url( $author_name_link ) .'" target="'. esc_attr($author_name_target) .'">'. esc_html($name) .'</a>';
 					} else {
 						echo esc_html($name);
 					}
-				echo '</'. esc_attr($settings['author_name_tag']) .'>';
+				echo '</'. esc_attr($author_name_tag) .'>';
 			}
 
 			// Author Title
 			if ( '' !== $title && 'yes' === $settings['author_title'] ) {
-				echo '<'. esc_attr($settings['author_title_tag']) .' class="wpr-author-box-title">';
+				$author_title_tag = Utilities::validate_html_tags_wl( $settings['author_title_tag'], 'h3', $tags_whitelist );
+
+				echo '<'. esc_attr($author_title_tag) .' class="wpr-author-box-title">';
 					if ( 'posts' === $settings['author_title_links_to'] || $author_title_has_website ) {
 						echo '<a href="'. esc_url( $author_title_link ) .'" target="'. esc_attr($author_title_target) .'">'. wp_kses_post($title) .'</a>';
 					} else {
 						echo wp_kses_post($title);
 					}
-				echo '</'. esc_attr($settings['author_title_tag']) .'>';
+				echo '</'. esc_attr($author_title_tag) .'>';
 			}
 
 			// Author Biography

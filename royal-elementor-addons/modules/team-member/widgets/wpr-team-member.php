@@ -1780,9 +1780,14 @@ class Wpr_Team_Member extends Widget_Base {
 		<div class="wpr-member-content">
 			<?php
 				if ( '' !== $settings['member_name'] && 'below' === $settings['member_name_location'] ) {
-					echo '<'. esc_attr( $settings['member_name_tag'] ) .' class="wpr-member-name">';
+		
+					$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+					$member_name_tag = Utilities::validate_html_tags_wl( $settings['member_name_tag'], 'h3', $tags_whitelist );
+
+					echo '<'. esc_attr( $member_name_tag ) .' class="wpr-member-name">';
 						echo wp_kses_post( $settings['member_name'] );
-					echo '</'. esc_attr( $settings['member_name_tag'] ) .'>';
+					echo '</'. esc_attr( $member_name_tag ) .'>';
+
 				}
 			?>
 

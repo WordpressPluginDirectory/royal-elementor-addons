@@ -295,11 +295,14 @@ class Wpr_Twitter_Feed extends Widget_Base {
 
 	// Render User Name
 	public function render_post_username( $settings, $class, $item ) {
-		echo '<'. esc_attr($settings['element_username_tag']) .' class="'. esc_attr($class) .'">';
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$element_username_tag = Utilities::validate_html_tags_wl( $settings['element_username_tag'], 'h2', $tags_whitelist );
+
+		echo '<'. esc_attr($element_username_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
                 echo '<a>'. $item['user']['name'] .'</a>';
 			echo '</div>';
-		echo '</'. esc_attr($settings['element_username_tag']) .'>';
+		echo '</'. esc_attr($element_username_tag) .'>';
 	}
 
 	// Render User Account

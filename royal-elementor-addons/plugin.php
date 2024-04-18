@@ -102,6 +102,9 @@ class Plugin {
 		// Twitter
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-load-more-tweets.php';
 
+		// Twitter
+		require WPR_ADDONS_PATH . 'classes/wpr-custom-meta-keys.php';
+
 		// Particles
 		if ( 'on' === get_option('wpr-particles', 'on') ) {//TODO: make this check automatic(loop through) for all extensions
 			require WPR_ADDONS_PATH . 'extensions/wpr-particles.php';
@@ -631,10 +634,14 @@ class Plugin {
 			true
 		);
 
+		$args = ['nonce' => wp_create_nonce( 'wpr-addons-editor-js' )];
+
+		$args = array_merge($args, Utilities::get_registered_modules());
+
 		wp_localize_script(
 			'wpr-addons-editor-js',
 			'registered_modules',
-			Utilities::get_registered_modules()
+			$args
 		);
 	}
 

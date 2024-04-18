@@ -1283,7 +1283,7 @@ class WPR_Templates_Data {
 					'name' => 'Landing Page - Dance Studio',
 					'pages' => 'home,classes,instructors,gallery,blog,contact',
 					'plugins' => '{}',
-					'tags' => 'free single-page landing page one page onepage landingpage dance studio dancing dance school ballet contempo dance club fitness salsa zumba academy courses dancer music tango academy street dance jazz hiphop',
+					'tags' => 'free single-page landing page one page onepage landingpage dance studio dancing dance school ballet contempo dance club fitness salsa zumba academy courses dancer music tango academy street dance jazz hiphop education',
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,

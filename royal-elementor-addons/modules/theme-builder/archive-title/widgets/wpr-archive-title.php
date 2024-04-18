@@ -420,6 +420,9 @@ class Wpr_Archive_Title extends Widget_Base {
 		// Get Settings
 		$settings = $this->get_settings();
 		$tax = get_queried_object();
+		
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$post_title_tag = Utilities::validate_html_tags_wl( $settings['post_title_tag'], 'h1', $tags_whitelist );
 
 		if ( !is_null($tax) ) {
 			$title = isset($tax->post_title) ? $tax->post_title : $tax->name;
@@ -430,9 +433,9 @@ class Wpr_Archive_Title extends Widget_Base {
 			}
 
 			if ( '' !== $title ) {
-				echo '<'. esc_attr($settings['post_title_tag']) .' class="wpr-archive-title">';
+				echo '<'. esc_attr($post_title_tag) .' class="wpr-archive-title">';
 					echo '<span>'. wp_kses_post($settings['post_title_before_text']) .'</span>'. esc_html($title);
-				echo '</'. esc_attr($settings['post_title_tag']) .'>';
+				echo '</'. esc_attr($post_title_tag) .'>';
 			}
 
 			if ( wpr_fs()->can_use_premium_code() ) {
@@ -441,9 +444,9 @@ class Wpr_Archive_Title extends Widget_Base {
 				}
 			}
 		} elseif ( is_search() ) {
-			echo '<'. esc_attr($settings['post_title_tag']) .' class="wpr-archive-title">';
+			echo '<'. esc_attr($post_title_tag) .' class="wpr-archive-title">';
 				echo '<span>'. esc_html($settings['post_title_before_text']) .'</span>'. esc_html(get_search_query());
-			echo '</'. esc_attr($settings['post_title_tag']) .'>';	
+			echo '</'. esc_attr($post_title_tag) .'>';	
 		}
 
 	}

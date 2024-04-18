@@ -35,7 +35,7 @@ function secondary_image_metabox ( $post ) {
 
         if ( ! empty( $thumbnail_html ) ) {
             $content = $thumbnail_html;
-            $content .= '<p class="hide-if-no-js"><a href="javascript:;" id="remove_secondary_image_button" >' . esc_html__( 'Remove secondary image', 'text-domain' ) . '</a></p>';
+            $content .= '<p class="hide-if-no-js"><a href="javascript:;" id="remove_secondary_image_button" >' . esc_html__( 'Remove secondary image', 'wpr-addons' ) . '</a></p>';
             $content .= '<input type="hidden" id="upload_secondary_image" name="wpr_secondary_cover_image" value="' . esc_attr( $image_id ) . '" />';
         }
 
@@ -43,7 +43,7 @@ function secondary_image_metabox ( $post ) {
     } else {
 
         $content = '<img src="" style="width:' . esc_attr( $content_width ) . 'px;height:auto;border:0;display:none;" />';
-        $content .= '<p class="hide-if-no-js"><a title="' . esc_attr__( 'Set secondary image', 'text-domain' ) . '" href="javascript:;" id="upload_secondary_image_button" id="set-secondary-image" data-uploader_title="' . esc_attr__( 'Choose an image', 'text-domain' ) . '" data-uploader_button_text="' . esc_attr__( 'Set secondary image', 'text-domain' ) . '">' . esc_html__( 'Set secondary image', 'text-domain' ) . '</a></p>';
+        $content .= '<p class="hide-if-no-js"><a title="' . esc_attr__( 'Set secondary image', 'wpr-addons' ) . '" href="javascript:;" id="upload_secondary_image_button" id="set-secondary-image" data-uploader_title="' . esc_attr__( 'Choose an image', 'wpr-addons' ) . '" data-uploader_button_text="' . esc_attr__( 'Set secondary image', 'wpr-addons' ) . '">' . esc_html__( 'Set secondary image', 'wpr-addons' ) . '</a></p>';
         $content .= '<input type="hidden" id="upload_secondary_image" name="wpr_secondary_cover_image" value="" />';
 
     }

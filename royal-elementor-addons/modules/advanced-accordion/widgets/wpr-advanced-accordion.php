@@ -1269,6 +1269,13 @@ class Wpr_Advanced_Accordion extends Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$accordion_title_tag = $settings['accordion_title_tag'];
+
+		if ( !in_array( $accordion_title_tag, $tags_whitelist ) ) {
+			$accordion_title_tag = 'span';
+		}
+
 		$this->add_render_attribute(
 			'accordion_attributes',
 			[
@@ -1326,7 +1333,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 									$this->render_first_icon($settings, $acc); 
 								endif ; ?>
 
-								<<?php echo $settings['accordion_title_tag'] ?> class="wpr-acc-title-text"><?php echo $acc['accordion_title'] ?></<?php echo $settings['accordion_title_tag'] ?>>
+								<<?php echo $accordion_title_tag ?> class="wpr-acc-title-text"><?php echo $acc['accordion_title'] ?></<?php echo $accordion_title_tag ?>>
 							</span>
 							<?php $this->render_second_icon($settings, $acc); ?>
 						</button>

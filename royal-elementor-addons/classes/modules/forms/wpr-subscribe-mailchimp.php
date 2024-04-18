@@ -52,9 +52,22 @@ if ( ! defined( 'ABSPATH' ) ) {
             'FNAME' => !empty( $fields['first_name_field'] ) ? sanitize_text_field($fields['first_name_field']) : '',
             'LNAME' => !empty( $fields['last_name_field'] ) ? sanitize_text_field($fields['last_name_field']) : '',
 			'PHONE' => !empty ( $fields['phone_field'] ) ? sanitize_text_field($fields['phone_field']) : '',
-			'ADDRESS' => !empty ( $fields['address_field'] ) ? sanitize_text_field($fields['address_field']) : '',
 			'BIRTHDAY' => !empty ( $fields['birthday_field'] ) ? sanitize_text_field($fields['birthday_field']) : '',
 		];
+
+		$requiredKeys = ['address_field', 'country_field', 'city_field', 'state_field', 'zip_field'];
+		
+		if ( !empty(array_intersect_key($fields, array_flip($requiredKeys))) ) {
+			$merge_fields = array_merge($merge_fields, [
+				'ADDRESS' => [
+					'addr1' => !empty ( $fields['address_field'] ) ? sanitize_text_field($fields['address_field']) : 'none',
+					'country' =>  !empty ( $fields['country_field'] ) ? sanitize_text_field($fields['country_field']) : 'none',
+					'city' => !empty ( $fields['city_field'] ) ? sanitize_text_field($fields['city_field']) : 'none',
+					'state' => !empty ( $fields['state_field'] ) ? sanitize_text_field($fields['state_field']) : 'none',
+					'zip' =>!empty ( $fields['zip_field'] ) ? sanitize_text_field($fields['zip_field']) : 'none',
+				]
+			]);
+		}
 
         // API URL
         $api_url = 'https://'. $api_key_sufix .'.api.mailchimp.com/3.0/lists/'. $list_id .'/members/'. md5(strtolower(sanitize_text_field($fields['email_field'])));

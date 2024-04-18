@@ -210,6 +210,7 @@ class Wpr_Form_Builder extends Widget_Base {
 			[
 				'label' => esc_html__( 'From Email', 'wpr-addons' ),
 				'type' => Controls_Manager::TEXT,
+				'description' => esc_html__( 'Shortcode like [id="email"] can be inserted according ID of the associated mail field.', 'wpr-addons' ),
 				'default' => 'email@' . $site_domain,
 				'render_type' => 'none',
 				'dynamic' => [
@@ -425,16 +426,6 @@ class Wpr_Form_Builder extends Widget_Base {
 			]
 		);
 
-		// Doesn't work even in other plugins that I've checked
-		// $this->add_control(
-		// 	'address_field',
-		// 	[
-		// 		'label' => esc_html__( 'Address', 'wpr-addons' ),
-		// 		'type' => Controls_Manager::SELECT,
-		// 		'options' => []
-		// 	]
-		// );
-
 		$this->add_control(
 			'phone_field',
 			[
@@ -448,6 +439,51 @@ class Wpr_Form_Builder extends Widget_Base {
 			'birthday_field',
 			[
 				'label' => esc_html__( 'Birthday', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => []
+			]
+		);
+
+		$this->add_control(
+			'address_field',
+			[
+				'label' => esc_html__( 'Address', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => []
+			]
+		);
+
+		$this->add_control(
+			'country_field',
+			[
+				'label' => esc_html__( 'Country', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => []
+			]
+		);
+
+		$this->add_control(
+			'city_field',
+			[
+				'label' => esc_html__( 'City', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => []
+			]
+		);
+
+		$this->add_control(
+			'state_field',
+			[
+				'label' => esc_html__( 'State', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => []
+			]
+		);
+
+		$this->add_control(
+			'zip_field',
+			[
+				'label' => esc_html__( 'Zip', 'wpr-addons' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => []
 			]
@@ -3704,6 +3740,7 @@ class Wpr_Form_Builder extends Widget_Base {
 				$step_icon = [];
 				$step_label = [];
 				$step_sub_label = [];
+				$whitelist = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'odt', 'avi', 'ogg', 'm4a', 'mov', 'mp3', 'mp4', 'mpg', 'wav', 'wmv', 'txt'];
 
 				foreach ( $instance['form_fields'] as $key => $value ) {
 					if ( 'step' === $value['field_type'] ) {
@@ -3765,6 +3802,7 @@ class Wpr_Form_Builder extends Widget_Base {
 
 				$step_count = 0;
 				$field_count = 0;
+
 				foreach ( $instance['form_fields'] as $item_index => $item ) :
 					if ( 'step' !== $item['field_type'] ) {
 						$field_count++;
@@ -3858,6 +3896,28 @@ class Wpr_Form_Builder extends Widget_Base {
 								}
 
 								if ( !empty( $item['file_types'] )) {
+
+									// Convert string to array
+									$file_types = explode(',', $item['file_types']);
+									
+									// Check for non-whitelisted file types
+									$non_whitelisted = array_diff($file_types, $whitelist);
+									
+									if ( !empty($non_whitelisted) ) {
+										$item['file_types'] = 'jpg,jpeg,png,gif,pdf,doc,docx,ppt,pptx,odt,avi,ogg,m4a,mov,mp3,mp4,mpg,wav,wmv,txt';
+										if ( is_admin() ) {
+											echo '<br>';
+											echo '<ul class="wpr-file-type-error">';
+												echo esc_html__( 'Remove following types: ', 'wpr-addons' );
+												foreach ( $non_whitelisted as $type ) {
+													if ( !empty($type) ) {
+														echo '<li>'. $type .' <li/>';
+													}
+												}
+											echo '</ul>';
+										}
+									}
+
 									$this->add_render_attribute(
 										'input' . $item_index,
 										[

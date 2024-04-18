@@ -59,7 +59,7 @@
  *       'anchor': (Array) The anchor position of the label text.
  *       'textColor': (string) The text color.
  *       'textSize': (number) The text size.
- *       'backgroundPosition': (string) The position of the backgound x, y.
+ *       'backgroundPosition': (string) The position of the background x, y.
  * @constructor
  * @extends google.maps.OverlayView
  */

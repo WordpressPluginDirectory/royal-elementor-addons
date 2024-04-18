@@ -179,10 +179,13 @@ class Wpr_Product_Title extends Widget_Base {
 			return;
 		}
 
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$product_title_tag = Utilities::validate_html_tags_wl( $settings['product_title_tag'], 'h1', $tags_whitelist );
+
 		// Output
-		echo '<'. $settings['product_title_tag'] .' class="wpr-product-title">';
+		echo '<'. $product_title_tag .' class="wpr-product-title">';
 			echo $product->get_title();
-		echo '</'. $settings['product_title_tag'] .'>';
+		echo '</'. $product_title_tag .'>';
 
 	}
 	

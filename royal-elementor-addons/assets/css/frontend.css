@@ -280,6 +280,10 @@ button.lg-icon {
     overflow: hidden;
 }
 
+.wpr-z-index {
+    z-index: 9999 !important;
+}
+
 .wpr-inline-flex-center {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
@@ -18357,6 +18361,20 @@ dl.variation dd {
 
 .wpr-custom-styles-yes .wpr-form-field-type-radio .wpr-form-field-option.wpr-checked label::before {
     content: "⬤" !important;
+}
+
+.wpr-file-type-error {
+    flex-basis: 100%;
+    padding: 5px 0;
+    margin: 0 0 5px 0;
+    list-style-type: none;
+    color: red;
+    font-size: 13px;
+}
+
+.wpr-file-type-error li {
+    color: #000;
+    display: inline;
 }
 
 .wpr-form-field-type-hidden {

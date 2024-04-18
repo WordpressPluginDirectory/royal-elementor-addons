@@ -238,9 +238,6 @@ class Wpr_Content_Ticker extends Widget_Base {
 		// Get Available Taxonomies
 		$post_taxonomies = Utilities::get_custom_types_of( 'tax', false );
 
-		// Get Available Meta Keys
-		$post_meta_keys = Utilities::get_custom_meta_keys();
-
 		$this->add_control(
 			'query_selection',
 			[
@@ -417,14 +414,6 @@ class Wpr_Content_Ticker extends Widget_Base {
 			[
 				'type' => Controls_Manager::HIDDEN,
 				'default' => $this->get_related_taxonomies(),
-			]
-		);
-
-		$this->add_control(
-			'post_meta_keys_filter',
-			[
-				'type' => Controls_Manager::HIDDEN,
-				'default' => json_encode( $post_meta_keys[0] ),
 			]
 		);
 

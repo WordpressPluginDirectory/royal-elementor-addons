@@ -2197,13 +2197,18 @@ class Wpr_Image_Accordion extends Widget_Base {
 	public function render_repeater_title( $settings, $class, $item ) {
 
 		if (!empty($item['accordion_item_title'])) :
-		echo '<'. $settings['element_title_tag'] .' class="'. esc_attr($class) .'">';
+
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$element_title_tag = Utilities::validate_html_tags_wl( $settings['element_title_tag'], 'h2', $tags_whitelist );
+
+		echo '<'. $element_title_tag .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				echo '<a class="wpr-pointer-item">';
 					echo $item['accordion_item_title'];
 				echo '</a>';
 			echo '</div>';
-		echo '</'. $settings['element_title_tag'] .'>';
+		echo '</'. $element_title_tag .'>';
+
 		endif;
 	}
 

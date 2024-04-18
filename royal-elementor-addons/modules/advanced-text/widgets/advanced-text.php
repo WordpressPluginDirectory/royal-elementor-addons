@@ -856,9 +856,19 @@ class Advanced_Text extends Widget_Base {
 
 	protected function render() {
 		// Get Settings
-		$settings = $this->get_settings();	?>
+		$settings = $this->get_settings();
 
-		<<?php echo esc_attr( $settings['text_tag'] ); ?> class="wpr-advanced-text">
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+
+		$text_tag = $settings['text_tag'];
+
+		if ( !in_array( $text_tag, $tags_whitelist ) ) {
+			$text_tag = 'h3';
+		}
+
+		?>
+
+		<<?php echo esc_attr( $text_tag ); ?> class="wpr-advanced-text">
 
 			<?php
 
@@ -900,7 +910,7 @@ class Advanced_Text extends Widget_Base {
 
 			?>
 		
-		</<?php echo esc_attr( $settings['text_tag'] ); ?>>
+		</<?php echo esc_attr( $text_tag ); ?>>
 		
 		<?php
 

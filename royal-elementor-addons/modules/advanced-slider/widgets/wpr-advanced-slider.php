@@ -2868,12 +2868,20 @@ class Wpr_Advanced_Slider extends Widget_Base {
 		if ( empty( $settings['slider_items'] ) ) {
 			return;
 		}
+
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+
+		$settings_slider_title_tag = Utilities::validate_html_tags_wl( $settings['slider_title_tag'], 'h2', $tags_whitelist );
+		$settings_slider_sub_title_tag = Utilities::validate_html_tags_wl( $settings['slider_sub_title_tag'], 'h3', $tags_whitelist );
 		
 		foreach ( $settings['slider_items'] as $key => $item ) {
 
 			if ( ! wpr_fs()->can_use_premium_code() && $key === 4 ) {
 				break;
 			}
+
+			$item_slider_title_tag = Utilities::validate_html_tags_wl( $item['slider_title_tag'], 'h2', $tags_whitelist );
+			$item_slider_sub_title_tag = Utilities::validate_html_tags_wl( $item['slider_sub_title_tag'], 'h3', $tags_whitelist );
 
 			if ( ! wpr_fs()->can_use_premium_code() ) {
 				if ( 'pro-3' == $settings['slider_amount'] || 'pro-4' == $settings['slider_amount'] || 'pro-5' == $settings['slider_amount'] || 'pro-6' == $settings['slider_amount'] ) {
@@ -3105,10 +3113,10 @@ class Wpr_Advanced_Slider extends Widget_Base {
 								//  Slider Title
 								if ( $settings['slider_title'] === 'yes' && ! empty( $item['slider_item_title'] ) ) {
 								$slider_html .= '<div class="wpr-slider-title">';
-									if ( '' !== $item['slider_title_tag'] ) {
-										$slider_html .= '<' . $item['slider_title_tag'] . '>'. wp_kses_post($item['slider_item_title']) .'</'. $item['slider_title_tag'] .'>';
+									if ( '' !== $item_slider_title_tag ) {
+										$slider_html .= '<' . $item_slider_title_tag . '>'. wp_kses_post($item['slider_item_title']) .'</'. $item_slider_title_tag .'>';
 									} else {
-										$slider_html .= '<' . $settings['slider_title_tag'] . '>'. wp_kses_post($item['slider_item_title']) .'</'. $settings['slider_title_tag'] .'>';
+										$slider_html .= '<' . $settings_slider_title_tag . '>'. wp_kses_post($item['slider_item_title']) .'</'. $settings_slider_title_tag .'>';
 									}
 								$slider_html .= '</div>';
 								}	
@@ -3116,10 +3124,10 @@ class Wpr_Advanced_Slider extends Widget_Base {
 								// Slider Sub Title
 								if ( $settings['slider_sub_title'] === 'yes' && ! empty( $item['slider_item_sub_title'] ) ) {
 								$slider_html .= '<div class="wpr-slider-sub-title">';
-									if ( '' !== $item['slider_sub_title_tag'] ) {
-										$slider_html .= '<' . $item['slider_sub_title_tag'] . '>'. wp_kses_post($item['slider_item_sub_title']) .'</' . $item['slider_sub_title_tag'] . '>';
+									if ( '' !== $item_slider_sub_title_tag ) {
+										$slider_html .= '<' . $item_slider_sub_title_tag . '>'. wp_kses_post($item['slider_item_sub_title']) .'</' . $item_slider_sub_title_tag . '>';
 									} else {
-										$slider_html .= '<' . $settings['slider_sub_title_tag'] . '>'. wp_kses_post($item['slider_item_sub_title']) .'</' . $settings['slider_sub_title_tag'] . '>';
+										$slider_html .= '<' . $settings_slider_sub_title_tag . '>'. wp_kses_post($item['slider_item_sub_title']) .'</' . $settings_slider_sub_title_tag . '>';
 									}
 								$slider_html .= '</div>';
 								}							

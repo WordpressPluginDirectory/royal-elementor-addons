@@ -46,9 +46,6 @@ class Wpr_Post_Media extends Widget_Base {
 
 	protected function register_controls() {
 
-		// Get Available Meta Keys
-		$post_meta_keys = Utilities::get_custom_meta_keys();
-
 		// Tab: Content ==============
 		// Section: General ----------
 		$this->start_controls_section(

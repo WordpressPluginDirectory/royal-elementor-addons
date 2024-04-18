@@ -900,7 +900,11 @@ class Wpr_Feature_List extends Widget_Base {
         $settings = $this->get_settings_for_display();
 
         if ( $settings['list'] ) {
+			$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+			$feature_list_title_tag = Utilities::validate_html_tags_wl( $settings['feature_list_title_tag'], 'h2', $tags_whitelist );
+
 			$count_items = 0;
+
 			echo '<div class="wpr-feature-list-wrap">';
                 echo '<ul class="wpr-feature-list">';
                     foreach (  $settings['list'] as $item ) {
@@ -919,9 +923,9 @@ class Wpr_Feature_List extends Widget_Base {
                             echo '</div>';
                             echo '<div class="wpr-feature-list-content-wrap">';
 								if ( empty($item['list_title_url']) ) {
-									echo '<'. esc_attr($settings['feature_list_title_tag']) .' class="wpr-feature-list-title">'. wp_kses_post($item['list_title']) .'</'. esc_attr($settings['feature_list_title_tag']) .'>';
+									echo '<'. esc_attr($feature_list_title_tag) .' class="wpr-feature-list-title">'. wp_kses_post($item['list_title']) .'</'. esc_attr($feature_list_title_tag) .'>';
 								} else {
-									echo '<'. esc_attr($settings['feature_list_title_tag']) .' class="wpr-feature-list-title"><a class="wpr-feature-list-url" '. $this->get_render_attribute_string( 'list_title_url'. $count_items ) .'>'. wp_kses_post($item['list_title']) .'</a></'. esc_attr($settings['feature_list_title_tag']) .'>';
+									echo '<'. esc_attr($feature_list_title_tag) .' class="wpr-feature-list-title"><a class="wpr-feature-list-url" '. $this->get_render_attribute_string( 'list_title_url'. $count_items ) .'>'. wp_kses_post($item['list_title']) .'</a></'. esc_attr($feature_list_title_tag) .'>';
 								}
                                 echo '<p class="wpr-feature-list-description">'. wp_kses_post($item['list_content']) .'</p>';
                             echo '</div>';

@@ -595,8 +595,8 @@ class Wpr_Instagram_Feed extends Widget_Base {
 			'instagram_access_token_authorize',
 			[
 				'type' => Controls_Manager::RAW_HTML,
-				// 'raw' => '<a class="wpr-authorize-instagram" href="https://www.instagram.com/oauth/authorize?client_id=819922469680194&redirect_uri=https://reastats.kinsta.cloud/token/social-network.php&scope=user_profile,user_media&response_type=code" target="popup">'. esc_html__( 'Authorize Instagram','wpr-addons' ) .'</a>',
-				'raw' => '<a class="wpr-authorize-instagram" href="https://www.instagram.com/oauth/authorize?client_id=1551600955281199&redirect_uri=https://reastats.kinsta.cloud/token/social-network.php&scope=user_profile,user_media&response_type=code" target="popup">'. esc_html__( 'Authorize Instagram','wpr-addons' ) .'</a>',
+				// 'raw' => '<a class="wpr-authorize-instagram" href="https://www.instagram.com/oauth/authorize?client_id=1551600955281199&redirect_uri=https://reastats.kinsta.cloud/token/social-network.php&scope=user_profile,user_media&response_type=code" target="popup">'. esc_html__( 'Authorize Instagram','wpr-addons' ) .'</a>',
+				'raw' => '<a class="wpr-authorize-instagram" href="https://youtu.be/EGwuqWK-s9E?t=56" target="popup">'. esc_html__( 'Get Access Token','wpr-addons' ) .'</a>',
 				// 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
 			]
 		);
@@ -5009,13 +5009,16 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 		$target = 'yes' == $this->get_settings()['open_in_new_tab'] ? '_blank' : '_self';
 
-		echo '<'. esc_attr($settings['element_username_tag']) .' class="'. esc_attr($class) .'">';
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$element_username_tag = Utilities::validate_html_tags_wl( $settings['element_username_tag'], 'h2', $tags_whitelist );
+
+		echo '<'. esc_attr($element_username_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				echo '<a href="'. $result->permalink .'" target="'. $target .'">';
 					echo esc_html($result->username);
 				echo '</a>';
 			echo '</div>';
-		echo '</'. esc_attr($settings['element_username_tag']) .'>';
+		echo '</'. esc_attr($element_username_tag) .'>';
 	}
 
 	public function render_post_caption($settings, $class, $result) {
@@ -5510,7 +5513,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 		if ( '' === $access_token ) {
 			if ( current_user_can('administrator') ) {
-				echo '<p class="wpr-token-missing">'. esc_html__('Please click on the Authorize Instagram button to get instagram access token and expiry date!', 'wpr-addons') .'</p>';
+				echo '<p class="wpr-token-missing">'. esc_html__('Please insert Access Token and Expiry Date in associated fields', 'wpr-addons') .'</p>';
 			}
 			return;
 		}

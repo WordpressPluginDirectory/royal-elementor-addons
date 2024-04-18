@@ -58,9 +58,6 @@ class Wpr_Post_Info extends Widget_Base {
 
 	protected function register_controls() {
 
-		// Get Available Meta Keys
-		$post_meta_keys = Utilities::get_custom_meta_keys();
-
 		// Tab: Content ==============
 		// Section: General ----------
 		$this->start_controls_section(
@@ -261,10 +258,10 @@ class Wpr_Post_Info extends Widget_Base {
 				'post_info_cf',
 				[
 					'label' => esc_html__( 'Select Custom Field', 'wpr-addons' ),
-					'type' => Controls_Manager::SELECT2,
+					'type' => 'wpr-ajax-select2',
 					'label_block' => true,
 					'default' => 'default',
-					'options' => $post_meta_keys[1],
+					'options' => 'ajaxselect2/get_custom_meta_keys',
 					'condition' => [
 						'post_info_select' => 'custom-field'
 					],

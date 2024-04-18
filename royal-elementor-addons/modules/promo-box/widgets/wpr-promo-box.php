@@ -1594,8 +1594,11 @@ class Wpr_Promo_Box extends Widget_Base {
 				<?php
 
 				if ( '' !== $settings['content_title'] ) {
+		
+					$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+					$content_title_tag = Utilities::validate_html_tags_wl( $settings['content_title_tag'], 'h3', $tags_whitelist );
 
-					echo '<'. esc_attr($settings['content_title_tag']) .' '. $this->get_render_attribute_string( 'title_attribute' ) .'>';
+					echo '<'. esc_attr($content_title_tag) .' '. $this->get_render_attribute_string( 'title_attribute' ) .'>';
 					if ( 'title' === $settings['content_link_type'] || 'btn-title' === $settings['content_link_type']  ) {
 						echo '<a '. $this->get_render_attribute_string( 'link_attribute' ).'>';
 					}
@@ -1606,7 +1609,7 @@ class Wpr_Promo_Box extends Widget_Base {
 						echo '</a>';
 					}
 
-					echo '</'. esc_attr($settings['content_title_tag']) .'>';
+					echo '</'. esc_attr($content_title_tag) .'>';
 				}
 
 				?>

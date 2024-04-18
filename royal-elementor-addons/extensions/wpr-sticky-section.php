@@ -281,12 +281,21 @@ class Wpr_Sticky_Section {
 		$wpr_sticky_effects_offset_mobile_extra =  isset($settings['wpr_sticky_effects_offset_mobile_extra']) && !empty($settings['wpr_sticky_effects_offset_mobile_extra']) ? $settings['wpr_sticky_effects_offset_mobile_extra'] : $wpr_sticky_effects_offset_tablet;
 		$wpr_sticky_effects_offset_mobile =  isset($settings['wpr_sticky_effects_offset_mobile']) && !empty($settings['wpr_sticky_effects_offset_mobile']) ? $settings['wpr_sticky_effects_offset_mobile'] : $wpr_sticky_effects_offset_mobile_extra;
 		
+		$allowed_positions = ['top', 'bottom']; // Define allowed positions
+		$position_location = isset( $_POST['position_location'] ) ? $_POST['position_location'] : '';
+
+		if ( ! in_array( $position_location, $allowed_positions ) ) {
+			$position_location = 'top';
+		} else {
+			$position_location = sanitize_text_field( $position_location );
+		}
+		
         if ( $settings['enable_sticky_section'] === 'yes' ) {
             $element->add_render_attribute( '_wrapper', [
                 'data-wpr-sticky-section' => $settings['enable_sticky_section'],
                 'data-wpr-position-type' => $settings['position_type'],
                 'data-wpr-position-offset' => $settings['position_offset'],
-                'data-wpr-position-location' => $settings['position_location'],
+                'data-wpr-position-location' => $position_location,
 				'data-wpr-sticky-devices' => $settings['enable_on_devices'],
 				'data-wpr-custom-breakpoints' => $settings['custom_breakpoints'],
 				'data-wpr-active-breakpoints' => $this->breakpoints_manager_active(),
@@ -318,8 +327,12 @@ class Wpr_Sticky_Section {
 		?>
 
 		<# if ( 'yes' === settings.enable_sticky_section) { #>
+			<# if ( 'top' !== settings.position_location && 'bottom' !== settings.position_location ) {
+				settings.position_location = 'top';
+			} #>
+
 			<div class="wpr-sticky-section-yes-editor" data-wpr-z-index={{{settings.wpr_z_index}}} data-wpr-sticky-section={{{settings.enable_sticky_section}}} data-wpr-position-type={{{settings.position_type}}} data-wpr-position-offset={{{settings.position_offset}}} data-wpr-position-location={{{settings.position_location}}} data-wpr-sticky-devices={{{settings.enable_on_devices}}} data-wpr-custom-breakpoints={{{settings.custom_breakpoints}}} data-wpr-active-breakpoints={{{settings.active_breakpoints}}} data-wpr-sticky-animation={{{settings.sticky_animation}}}  data-wpr-offset-settings={{{settings.wpr_sticky_effects_offset}}} data-wpr-sticky-type={{{settings.sticky_type}}}></div>
-		<# } #>   
+		<# } #>
 
 		<?php
 		

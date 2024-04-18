@@ -1900,7 +1900,7 @@ class Wpr_Flip_Box extends Widget_Base {
 					</div>
 					<?php elseif ( 'image' === $settings['front_icon_type'] && $front_image_src ) : ?>
 					<div class="wpr-flip-box-image">
-						<img alt="<?php echo $front_alt_text; ?>" src="<?php echo esc_url( $front_image_src ); ?>" >
+						<img alt="<?php echo esc_attr( $front_alt_text ); ?>" src="<?php echo esc_url( $front_image_src ); ?>" >
 					</div>
 					<?php endif; ?>
 					
@@ -1947,7 +1947,7 @@ class Wpr_Flip_Box extends Widget_Base {
 					</div>
 					<?php elseif ( 'image' === $settings['back_icon_type'] && $back_image_src ) : ?>
 						<div class="wpr-flip-box-image">
-							<img alt="<?php echo $back_alt_text; ?>" src="<?php echo esc_url( $back_image_src ); ?>" >
+							<img alt="<?php echo esc_attr( $back_alt_text ); ?>" src="<?php echo esc_url( $back_image_src ); ?>" >
 						</div>
 					<?php endif; ?>
 					
