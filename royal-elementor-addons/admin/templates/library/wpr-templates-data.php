@@ -474,7 +474,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 6,
 				],
