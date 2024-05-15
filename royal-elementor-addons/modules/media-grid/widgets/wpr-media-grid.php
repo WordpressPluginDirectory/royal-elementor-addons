@@ -1660,6 +1660,17 @@ class Wpr_Media_Grid extends Widget_Base {
 			]
 		);
 
+		$repeater->add_control(
+			'element_disable_link',
+			[
+				'label' => esc_html__( 'Disable Link', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'condition' => [
+					'element_select' => 'title'
+				],
+			]
+		);
+
 		$repeater->add_responsive_control(
 			'element_show_on',
 			[
@@ -2951,6 +2962,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'default' => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span' => 'color: {{VALUE}}'
 				],
 			]
 		);
@@ -2962,6 +2974,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span' => 'background-color: {{VALUE}}'
 				]
 			]
 		);
@@ -2974,6 +2987,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'default' => '#E8E8E8',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span' => 'border-color: {{VALUE}}',
 				],
 				'separator' => 'after',
 			]
@@ -2996,6 +3010,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'default' => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span:hover' => 'color: {{VALUE}}'
 				],
 			]
 		);
@@ -3007,6 +3022,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a:hover' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span:hover' => 'background-color: {{VALUE}}'
 				]
 			]
 		);
@@ -3019,6 +3035,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'default' => '#E8E8E8',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a:hover' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span:hover' => 'border-color: {{VALUE}}'
 				],
 			]
 		);
@@ -3046,6 +3063,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'step' => 0.1,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .wpr-grid-item-title .wpr-pointer-item:before' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .wpr-grid-item-title .wpr-pointer-item:after' => 'transition-duration: {{VALUE}}s',
 				],
@@ -3057,7 +3075,7 @@ class Wpr_Media_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'title_typography',
-				'selector' => '{{WRAPPER}} .wpr-grid-item-title a'
+				'selector' => '{{WRAPPER}} .wpr-grid-item-title a, {{WRAPPER}} .wpr-grid-item-title span'
 			]
 		);
 
@@ -3077,6 +3095,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				'default' => 'none',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a' => 'border-style: {{VALUE}};',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span' => 'border-style: {{VALUE}};'
 				],
 				'render_type' => 'template',
 				'separator' => 'before',
@@ -3097,6 +3116,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
 				],
 				'render_type' => 'template',
 				'condition' => [
@@ -3119,6 +3139,7 @@ class Wpr_Media_Grid extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-item-title .inner-block a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-grid-item-title .inner-block span' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
 				],
 				'render_type' => 'template',
 				'separator' => 'before',
@@ -6719,9 +6740,15 @@ class Wpr_Media_Grid extends Widget_Base {
 
 		echo '<'. esc_attr($element_title_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				echo '<a '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
-					echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
-				echo '</a>';
+				if ( 'yes' === $settings['element_disable_link'] ) {
+					echo '<span '. $pointer_item_class .'>';
+						echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
+					echo '</span>';
+				} else {
+					echo '<a '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
+						echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
+					echo '</a>';
+				}
 			echo '</div>';
 		echo '</'. esc_attr($element_title_tag) .'>';
 	}

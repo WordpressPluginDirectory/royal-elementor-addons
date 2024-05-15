@@ -54,6 +54,8 @@ class Wpr_Image_Accordion extends Widget_Base {
     		return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
     }
 
+	public $item_bg_image_url;
+
 	public function add_section_lightbox_popup() {}
 
 	public function add_section_lightbox_styles() {}

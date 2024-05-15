@@ -55,6 +55,20 @@ class WPR_Templates_Data {
 					'priority' => 50,
 				],
 			],
+			'online-course' => [
+				'v1' => [
+					'name' => 'Online Courses',
+					'pages' => 'home,about,courses,course-details,blog,blog-single,contact,cart,checkout,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'online course learning tutorials education coaching academy elearning udemy tutor lms training center lifter lms learnpress learndash instructor online lessons distance learning',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 30,
+				],
+			],
 			'amazon-landing-page' => [
 				'v1' => [
 					'name' => 'Amazon Product Landing Page',
@@ -208,6 +222,20 @@ class WPR_Templates_Data {
 					'expert' => $is_expert ? 'free' : 'expert',
 					'label' => 'trending',
 					'priority' => 5,
+				],
+			],
+			'electrician' => [
+				'v1' => [
+					'name' => 'Electrician',
+					'pages' => 'home,about,services,service-details,gallery,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free electrician electrical services repair maintenance electric electricity electrical repairer maintenance business engineering handyman plumbing repair',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 300,
 				],
 			],
 			'ecommerce' => [
@@ -927,6 +955,20 @@ class WPR_Templates_Data {
 					'priority' => 160,
 				],
 			],
+			'nail-salon' => [
+				'v1' => [
+					'name' => 'Nail Salon',
+					'pages' => 'home,about,services,gallery,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free nail salon style beauty workshop hygiene manicure pedicure health wellness nail art makeup brow bar saloon',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 161,
+				],
+			],
 			'lawyer' => [
 				'v1' => [
 					'name' => 'Lawyer',
@@ -1401,6 +1443,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','properties','about','services','faq','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'online-course-v1' => [
+				'name' => 'Online Courses',
+				'pages' => ['home','about','courses','course-details','blog','contact','cart','checkout'],
+				'preview' => ['home','about','courses','course-details','blog','contact','cart','checkout'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
 			'barbershop-v1' => [
 				'name' => 'Barbershop V1',
 				'pages' => ['home','shop','barbers','schedule','services','blog','contact'],
@@ -1423,6 +1471,12 @@ class WPR_Templates_Data {
 				'name' => 'Solar Energy 2',
 				'pages' => ['home','about-us','services','projects','team','faq','blog','contact,'],
 				'preview' => ['home','about-us','services','projects','team','faq','blog','contact,'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'electrician-v1' => [
+				'name' => 'Electrician',
+				'pages' => ['home','about','services','service-details','gallery','blog','contact'],
+				'preview' => ['home','about','services','service-details','gallery','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'construction-v3' => [
@@ -1495,6 +1549,12 @@ class WPR_Templates_Data {
 				'name' => 'Skin Care',
 				'pages' => ['home','about','services','procedures','gallery','pricing','contact'],
 				'preview' => ['home','about','services','procedures','gallery','pricing','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'nail-salon-v1' => [
+				'name' => 'Nail Salon',
+				'pages' => ['home','about','services','gallery','blog','contact'],
+				'preview' => ['home','about','services','gallery','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'travel-v1' => [

@@ -11,6 +11,9 @@
   opacity: 0 !important;
 }
 
+#elementor-panel-get-pro-elements-sticky {
+  display: none;
+}
 
 /*--------------------------------------------------------------
 == WPR Widgets

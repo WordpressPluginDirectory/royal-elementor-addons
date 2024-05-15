@@ -3459,7 +3459,7 @@ class Wpr_Form_Builder extends Widget_Base {
 		if ( $options ) {
 			$html .= '<div class="wpr-field-sub-group ' . esc_attr( $item['css_classes'] ) . ' ' . $item['inline_list'] . '">';
 			foreach ( $options as $key => $option ) {
-				$element_id = ($item['field_id'] ? $item['field_id'] : $item['field_type']) . $key;
+				$element_id = ($item['field_id'] ? esc_attr( $item['field_id'] ) : $item['field_type']) . $key;
 				$html_id = $this->get_attribute_id( $item ) . '-' . $key;
 				$option_label = $option;
 				$option_value = $option;
@@ -3486,7 +3486,7 @@ class Wpr_Form_Builder extends Widget_Base {
 					$this->add_required_attribute( $element_id );
 				}
 
-				$html .= '<span class="wpr-form-field-option" data-key="form-field-'. $item['field_id'] .'"><input ' . $this->get_render_attribute_string( $element_id ) . '> <label for="' . $html_id . '">'. $option_label .'</label></span>';
+				$html .= '<span class="wpr-form-field-option" data-key="form-field-'. esc_attr( $item['field_id'] ).'"><input ' . $this->get_render_attribute_string( $element_id ) . '> <label for="' . esc_attr( $html_id ) . '">'. $option_label .'</label></span>';
 			}
 			$html .= '</div>';
 		}
@@ -3502,7 +3502,7 @@ class Wpr_Form_Builder extends Widget_Base {
 						'wpr-form-field-type-' . $item['field_type'],
 						'wpr-field-group',
 						'wpr-column',
-						'wpr-field-group-' . $item['field_id'],
+						'wpr-field-group-' . esc_attr( $item['field_id'] ),
 					],
 				],
 				'input' . $i => [
@@ -3679,7 +3679,7 @@ class Wpr_Form_Builder extends Widget_Base {
 						json_encode($submit_actions)
 					],
 					'data-redirect-url' => [
-						in_array('redirect', $submit_actions) ? $instance['redirect_to'] : ''
+						in_array('redirect', $submit_actions) ? esc_url( $instance['redirect_to'] ) : ''
 					],
 					'data-mailchimp-fields' => [
 						json_encode($fieldsArray)
@@ -3908,7 +3908,7 @@ class Wpr_Form_Builder extends Widget_Base {
 										if ( is_admin() ) {
 											echo '<br>';
 											echo '<ul class="wpr-file-type-error">';
-												echo esc_html__( 'Remove following types: ', 'wpr-addons' );
+												echo esc_html__( 'Please remove unsupported file type(s):', 'wpr-addons' );
 												foreach ( $non_whitelisted as $type ) {
 													if ( !empty($type) ) {
 														echo '<li>'. $type .' <li/>';
@@ -3929,7 +3929,7 @@ class Wpr_Form_Builder extends Widget_Base {
 								echo '<input size="1 "'. $this->get_render_attribute_string( 'input' . $item_index ) .'>';
 								break;
 							case 'step':
-								echo '<input type="hidden" class="wpr-step-input" id=form-field-'. $item['field_id'] .' value='. $item['field_label'] .'>';
+								echo '<input type="hidden" class="wpr-step-input" id=form-field-'. esc_attr( $item['field_id'] ) .' value='. $item['field_label'] .'>';
 								break;
 							default:
 								$field_type = $item['field_type'];

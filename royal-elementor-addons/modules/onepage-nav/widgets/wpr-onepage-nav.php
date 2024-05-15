@@ -629,7 +629,7 @@ class Wpr_OnepageNav extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-onepage-active-item i' => 'transform: scale({{SIZE}}); -webkit-transform: scale({{SIZE}});',
 					'{{WRAPPER}} .wpr-onepage-active-item i:before' => 'transform: scale({{SIZE}}); -webkit-transform: scale({{SIZE}});',
-					'{{WRAPPER}} .wpr-onepage-active-item svg' => 'width: {{SIZE}}{{UNIT}};height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-onepage-active-item svg' => 'transform: scale({{SIZE}}); -webkit-transform: scale({{SIZE}});',
 				],
 				'condition' => [
 					'nav_item_highlight' => 'yes',

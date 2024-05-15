@@ -634,7 +634,7 @@ class Plugin {
 			true
 		);
 
-		$args = ['nonce' => wp_create_nonce( 'wpr-addons-editor-js' )];
+		$args = ['nonce' => wp_create_nonce( 'wpr-addons-editor-js' ), 'adminURL' => admin_url(), 'isWooCommerceActive' => class_exists('WooCommerce') ? true : false];
 
 		$args = array_merge($args, Utilities::get_registered_modules());
 

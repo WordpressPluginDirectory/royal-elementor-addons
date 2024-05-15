@@ -50,6 +50,16 @@ class Wpr_Page_Cart extends Widget_Base {
 		);
 
 		$this->add_control(
+			'cart_notice_video_tutorial',
+			[
+				'type' => Controls_Manager::RAW_HTML,
+				'raw' => __( 'Build WooCommerce Shop <strong>completely with Elementor and Royal Addons !</strong> <ul><li><a href="https://www.youtube.com/watch?v=f_3tNiBC3dw" target="_blank" style="color: #93003c;"><strong>Watch Video Tutorial <span class="dashicons dashicons-video-alt3"></strong></a></li></ul>', 'wpr-addons' ),
+				'separator' => 'after',
+				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+			]
+		);
+
+		$this->add_control(
 			'cart_layout',
 			[
 				'label' => esc_html__( 'Select Layout', 'wpr-addons' ),

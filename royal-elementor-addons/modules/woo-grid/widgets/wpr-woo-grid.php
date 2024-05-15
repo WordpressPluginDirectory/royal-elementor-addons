@@ -763,7 +763,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => 'No Posts Found!',
+				'default' => 'No Products Found!',
 				'condition' => [
 					'query_selection' => [ 'dynamic', 'current' ],
 				]

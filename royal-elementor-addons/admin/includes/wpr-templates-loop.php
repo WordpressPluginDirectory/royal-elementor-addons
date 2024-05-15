@@ -463,8 +463,8 @@ class WPR_Templates_Loop {
             <?php
            	// Pro Notice
 			if ( ! wpr_fs()->can_use_premium_code() ) {
-				echo '<span style="color: #7f8b96;"><br>Conditions are fully suppoted in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-backend-conditions-upgrade-pro#purchasepro" target="_blank">Pro and Expert versions.</a></strong></span>';
-				// echo '<span style="color: #7f8b96;"><br>Conditions are fully suppoted in the <strong><a href="'. admin_url('admin.php?page=wpr-addons-pricing') .'" target="_blank">Pro version</a></strong></span>';
+				echo '<span style="color: #7f8b96;"><br>Conditions are fully supported in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-backend-conditions-upgrade-pro#purchasepro" target="_blank">Pro and Expert versions.</a></strong></span>';
+				// echo '<span style="color: #7f8b96;"><br>Conditions are fully supported in the <strong><a href="'. admin_url('admin.php?page=wpr-addons-pricing') .'" target="_blank">Pro version</a></strong></span>';
 			}
 
             ?>

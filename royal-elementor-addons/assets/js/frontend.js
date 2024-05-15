@@ -1143,7 +1143,7 @@
 				});
 			
 				$(window).on("scroll", function(event) {
-					event.preventDefaut();
+					event.preventDefault();
 					event.stopPropagation();
 					// Get the current scroll position
 					var scrollPos = $(this).scrollTop();

@@ -337,6 +337,24 @@ class Utilities {
 	}
 
     /**
+    ** Check Single Conditions Array
+    */
+	public static function check_id_in_path($path, $id) {
+		// Step 1: Remove any prefix up to and including the last slash if present
+		$last_slash_position = strrpos($path, '/');
+		$numeric_part = $last_slash_position !== false ? substr($path, $last_slash_position + 1) : $path;
+	
+		// Step 2: Extract numbers (assuming they are separated by commas or spaces)
+		preg_match_all('/\d+/', $numeric_part, $matches);
+		
+		// The numbers are now in $matches[0] as an array
+		$ids = $matches[0];
+	
+		// Step 3: Check if the specific $id is in the array of IDs
+		return in_array($id, $ids);
+	}
+
+    /**
     ** Get Library Template Slug
     */
 	public static function get_template_slug( $data, $page, $post_id = '' ) {
@@ -354,6 +372,14 @@ class Utilities {
 				$template = $id;
 			} elseif ( in_array( $page, $conditions)  && !in_array( $page .'/'. $post_id, $conditions)  ) {
 				$template = $id;
+			}
+
+			if ( wpr_fs()->can_use_premium_code() && defined('WPR_ADDONS_PRO_VERSION') ) {
+				foreach ( $conditions as $key => $value ) {
+					if ( Utilities::check_id_in_path( $value, $post_id ) ) {
+						$template = $id;
+					}
+				}
 			}
 		}
 		
