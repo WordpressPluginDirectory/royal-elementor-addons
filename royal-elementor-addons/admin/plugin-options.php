@@ -646,10 +646,16 @@ function wpr_addons_settings_page() {
     
                         ?>  
                             <div class="wpr-setting">
-                                <h4>
-                                    <span><?php esc_html_e( $value . ' : Posts Per Page', 'wpr-addons' ); ?></span>
-                                    <br>
-                                </h4>
+                            <h4>
+                                <span>
+                                    <?php 
+                                    // Translators: %s is replaced with the custom post type (CPT) name
+                                    echo esc_html( sprintf( __( '%s : Posts Per Page', 'wpr-addons' ), $value ) ); 
+                                    ?>
+                                </span>
+                                <br>
+                            </h4>
+
     
                                 <input type="text" name="wpr_cpt_ppp_<?php echo $key ?>" id="wpr_cpt_ppp_<?php echo $key ?>" value="<?php echo esc_attr(get_option('wpr_cpt_ppp_'. $key, 10)); ?>">
                             </div>

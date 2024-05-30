@@ -678,37 +678,35 @@ class Wpr_Back_To_Top extends Widget_Base {
 	}
 
 	protected function render() {
-	// Get Settings
-	$settings = $this->get_settings();
+		
+		// Get Settings
+		$settings = $this->get_settings();
 
-	// Widget JSON Settings
-	$stt_settings = [
-		'animation' 		=> $settings['animation_type_select'],
-		'animationOffset' 	=> $settings['button_offset'],
-		'animationDuration' => $settings['stt_animation_duration'],
-		'fixed' => $settings['button_position'],
-		'scrolAnim' => $settings['stt_animation_duration_top'],
+		// Widget JSON Settings
+		$stt_settings = [
+			'animation'			=> $settings['animation_type_select'],
+			'animationOffset' 	=> $settings['button_offset'],
+			'animationDuration' => $settings['stt_animation_duration'],
+			'fixed' 			=> $settings['button_position'],
+			'scrolAnim' 		=> $settings['stt_animation_duration_top'],
 
-	];
-	
+		];
 
-	echo '<div class="wpr-stt-wrapper">';
-	echo "<div class='wpr-stt-btn' data-settings='". wp_json_encode($stt_settings) ."'>";
+		echo '<div class="wpr-stt-wrapper">';
+		echo "<div class='wpr-stt-btn' data-settings='". esc_attr(wp_json_encode($stt_settings)) ."'>";
 
-	if ( '' !== $settings['select_icon']['value'] ) {
-		echo '<span class="wpr-stt-icon">';
-		 \Elementor\Icons_Manager::render_icon( $settings['select_icon'] );
-	echo '</span>';
+		if ( '' !== $settings['select_icon']['value'] ) {
+			echo '<span class="wpr-stt-icon">';
+			\Elementor\Icons_Manager::render_icon( $settings['select_icon'] );
+		echo '</span>';
+			}
+
+		if ( '' !== $settings['button_text'] && $settings['button_txt_show'] == 'yes' ) {
+			echo '<div class="wpr-stt-content">'.  esc_html($settings['button_text']) .'</div>';
 		}
-
-	if ( '' !== $settings['button_text'] && $settings['button_txt_show'] == 'yes' ) {
-		echo '<div class="wpr-stt-content">'.  esc_html($settings['button_text']) .'</div>';
-	}
-			
-	echo '</div>';
-	echo '</div>';
-
-
+				
+		echo '</div>';
+		echo '</div>';
 
 	}
 

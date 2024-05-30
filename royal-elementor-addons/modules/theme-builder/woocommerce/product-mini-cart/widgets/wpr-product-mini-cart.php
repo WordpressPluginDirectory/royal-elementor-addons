@@ -602,7 +602,7 @@ class Wpr_Product_Mini_Cart extends Widget_Base {
 						<?php } 
 				endif; ?>
 				<span class="wpr-mini-cart-btn-icon" <?php echo $counter_attr; ?>>
-					<i class="<?php echo $icon_class ?>">
+					<i class="<?php echo esc_attr( $icon_class ) ?>">
                         <?php 
                             if ( \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_font_icon_svg' ) ) {
                                 $this->render_svg_inline_icons($settings);

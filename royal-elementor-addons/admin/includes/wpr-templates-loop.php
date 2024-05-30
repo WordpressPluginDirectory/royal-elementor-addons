@@ -61,7 +61,7 @@ class WPR_Templates_Loop {
 							// Delete
 							$one_time_nonce = wp_create_nonce( 'delete_post-' . $slug );
 
-							echo '<span class="wpr-delete-template button button-primary"  data-nonce="'. $one_time_nonce .'" data-slug="'. esc_attr($slug) .'" data-warning="'. esc_html__( 'Are you sure you want to delete this template?', 'wpr-addons' ) .'"><span class="dashicons dashicons-no-alt"></span></span>';
+							echo '<span class="wpr-delete-template button button-primary"  data-nonce="'. esc_attr($one_time_nonce) .'" data-slug="'. esc_attr($slug) .'" data-warning="'. esc_html__( 'Are you sure you want to delete this template?', 'wpr-addons' ) .'"><span class="dashicons dashicons-no-alt"></span></span>';
 
 
 				        echo '</div>';

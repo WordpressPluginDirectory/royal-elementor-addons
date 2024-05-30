@@ -1280,10 +1280,10 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 			'accordion_attributes',
 			[
 				'class' => [ 'wpr-advanced-accordion' ],
-				'data-accordion-type' => $settings['accordion_type'],
-				'data-active-index' => $settings['active_item'],
-				'data-accordion-trigger' => isset($settings['accordion_trigger']) ? $settings['accordion_trigger'] : 'click',
-				'data-interaction-speed' => isset($settings['interaction_speed']) ? $settings['interaction_speed'] : 0.4
+				'data-accordion-type' => esc_attr($settings['accordion_type']),
+				'data-active-index' => intval($settings['active_item']),
+				'data-accordion-trigger' => isset($settings['accordion_trigger']) ? esc_attr($settings['accordion_trigger']) : 'click',
+				'data-interaction-speed' => isset($settings['interaction_speed']) ? floatval($settings['interaction_speed']) : 0.4
 			]
 		);
 
@@ -1291,7 +1291,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 
 			$this->add_render_attribute(
 				'input', [
-					'placeholder' => $settings['acc_search_placeholder'],
+					'placeholder' => esc_attr($settings['acc_search_placeholder']),
 					'class' => 'wpr-acc-search-input',
 					'type' => 'search',
 					'title' => esc_html__( 'Search', 'wpr-addons' ),

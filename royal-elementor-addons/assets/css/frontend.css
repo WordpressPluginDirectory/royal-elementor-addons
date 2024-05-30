@@ -8067,7 +8067,9 @@ select.wpr-category-select {
 }
 
 .wpr-member-social {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 45px;
     height: 45px;
     line-height: 45px;
@@ -16602,6 +16604,14 @@ dl.variation dd {
     overflow: hidden;
 }
 
+.woocommerce.woocommerce-checkout .wpr-checkout-order-review-table-inner #order_review,
+.woocommerce.woocommerce-checkout .wpr-checkout-order-review-table-inner #order_review_heading,
+.woocommerce-page.woocommerce-checkout .wpr-checkout-order-review-table-inner #order_review,
+.woocommerce-page.woocommerce-checkout .wpr-checkout-order-review-table-inner #order_review_heading {
+    float: none;
+    width: auto;
+}
+
 .wpr-checkout-order-review-table #order_review table {
   border: none !important;
 }
@@ -18094,6 +18104,10 @@ dl.variation dd {
 .wpr-field-group .wpr-submit-error {
     position: absolute;
     top: 100%;
+}
+
+.wpr-field-group input {
+    margin: 0;
 }
 
 .wpr-form-fields-wrap {

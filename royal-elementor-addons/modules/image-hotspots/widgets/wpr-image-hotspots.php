@@ -1003,11 +1003,10 @@ class Wpr_Image_Hotspots extends Widget_Base {
 							<?php if ( '' !== $item['hotspot_text'] ) : ?>
 								<span class="wpr-hotspot-text"><?php echo esc_html( $item['hotspot_text'] ); ?></span>
 							<?php endif; ?>
-
 							<?php if ( '' !== $item['hotspot_icon']['value'] && 'svg' !== $item['hotspot_icon']['library'] ) : ?>
-								<i class="<?php echo esc_attr($item['hotspot_icon']['value']); ?>"></i>
+								<i class="<?php echo esc_attr( $item['hotspot_icon']['value'] ); ?>"></i>
 							<?php elseif ( '' !== $item['hotspot_icon']['value'] && 'svg' == $item['hotspot_icon']['library'] ) : ?>
-								<img src="<?php echo $item['hotspot_icon']['value']['url'] ?>">
+								<img src="<?php echo esc_url( $item['hotspot_icon']['value']['url'] ) ?>">
 							<?php endif; ?>
 
 						</<?php echo esc_attr( $hotspot_tag ); ?>>

@@ -102,7 +102,7 @@ class Plugin {
 		// Twitter
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-load-more-tweets.php';
 
-		// Twitter
+		// Meta Keys
 		require WPR_ADDONS_PATH . 'classes/wpr-custom-meta-keys.php';
 
 		// Particles

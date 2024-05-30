@@ -154,7 +154,16 @@ class WPR_Count_Wishlist_Compare_Items {
                 if ( ! $product ) {
                     continue;
                 }
-                echo '<th data-product-id="' . $product->get_id() . '"><button class="wpr-compare-remove" data-product-id="' . $product->get_id() . '">'. esc_html__($settings['remove_from_compare_text'], 'wpr-addons') .'</button></th>';
+                
+                $remove_text = $settings['remove_from_compare_text'];
+                
+                // Translators: %s will be replaced by the text for removing from compare
+                $remove_text_tr = sprintf( __( '%s', 'wpr-addons' ), $remove_text );
+                
+                echo '<th data-product-id="' . esc_attr( $product->get_id() ) . '">
+                        <button class="wpr-compare-remove" data-product-id="' . esc_attr( $product->get_id() ) . '">' . esc_html( $remove_text_tr ) . '</button>
+                      </th>';
+                
             }
             echo '</tr>';
             

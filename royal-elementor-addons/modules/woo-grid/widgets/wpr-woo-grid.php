@@ -9224,7 +9224,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			'aria-label="'. esc_attr($product->add_to_cart_description()) .'"',
 			'data-product_id="'. esc_attr($product->get_id()) .'"',
 			'data-product_sku="'. esc_attr($product->get_sku()) .'"',
-			'data-atc-popup="'. $settings['element_show_added_tc_popup']  .'"',
+			'data-atc-popup="'. esc_attr( $settings['element_show_added_tc_popup'] ) .'"',
 			'data-atc-animation="'. $popup_notification_animation  .'"',
 			'data-atc-fade-out-in="'. $popup_notification_fade_out_in  .'"',
 			'data-atc-animation-time="'. $popup_notification_animation_duration  .'"'
@@ -9593,7 +9593,8 @@ class Wpr_Woo_Grid extends Widget_Base {
 			echo '<div class="inner-block">';
 
 			echo '<span>'. wp_kses_post($product->get_price_html()) .'</span>';
-			$sale_price_dates_to    = ( $date = get_post_meta( $product->get_id(), '_sale_price_dates_to', true ) ) ? date_i18n( 'Y-m-d', $date ) : '';
+
+			$sale_price_dates_to = ( $date = get_post_meta( $product->get_id(), '_sale_price_dates_to', true ) ) ? date_i18n( 'Y-m-d', $date ) : '';
 		
 			// Apply filter to $sale_price_dates_to
 			$sale_price_dates_to = apply_filters( 'wpr_custom_sale_price_dates_to_filter', $sale_price_dates_to, $product );

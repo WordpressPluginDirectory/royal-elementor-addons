@@ -1203,8 +1203,8 @@ class Wpr_Offcanvas extends Widget_Base {
 				<?php endif; ?>
 			</button>
 
-			<div class="wpr-offcanvas-wrap wpr-offcanvas-wrap-<?php echo $settings['offcanvas_position'] ?>">
-				<div class="wpr-offcanvas-content wpr-offcanvas-content-<?php echo $settings['offcanvas_position'] ?>">
+			<div class="wpr-offcanvas-wrap wpr-offcanvas-wrap-<?php echo esc_attr( $settings['offcanvas_position'] ) ?>">
+				<div class="wpr-offcanvas-content wpr-offcanvas-content-<?php echo esc_attr( $settings['offcanvas_position'] ) ?>">
 					<div class="wpr-offcanvas-header">
 						<span class="wpr-close-offcanvas">
 							<i class="fa fa-times" aria-hidden="true"></i>

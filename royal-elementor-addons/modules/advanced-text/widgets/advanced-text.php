@@ -803,7 +803,7 @@ class Advanced_Text extends Widget_Base {
 		$anim_duration_value = $settings['highlighted_duration'];
 
 		if ( 'animated' === $settings['text_style'] ) {
-			if ( 'typing' === $settings['text_type'] || 'rotate-2' === $settings['text_type'] || 'rotate-3' === $settings['text_type'] || 'scale' === $settings['text_type'] ) {
+			if ( in_array($settings['text_type'], ['typing', 'rotate-2', 'rotate-3', 'scale']) ) {
 				$anim_duration_value = $settings['animated_duration_a'];
 			} else {
 				$anim_duration_value = $settings['animated_duration_b'];
@@ -818,7 +818,7 @@ class Advanced_Text extends Widget_Base {
 		$anim_duration = implode( ',', $anim_duration );
 		
 		
-		$this->add_render_attribute( 'wpr-anim-text', 'class', 'wpr-anim-text wpr-anim-text-type-'. $settings['text_type'] );
+		$this->add_render_attribute( 'wpr-anim-text', 'class', 'wpr-anim-text wpr-anim-text-type-'. esc_attr($settings['text_type']) );
 
 		$is_anim_letters = in_array( $settings['text_type'], [ 'typing', 'rotate-2', 'rotate-3', 'scale' ] );
 
@@ -828,7 +828,7 @@ class Advanced_Text extends Widget_Base {
 
 		$this->add_render_attribute( 'wpr-anim-text', 'data-anim-duration', $anim_duration );
 
-		$this->add_render_attribute( 'wpr-anim-text', 'data-anim-loop', $settings['anim_loop'] );
+		$this->add_render_attribute( 'wpr-anim-text', 'data-anim-loop', esc_attr($settings['anim_loop']) );
 
 		?>
 

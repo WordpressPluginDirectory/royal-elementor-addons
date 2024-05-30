@@ -9244,8 +9244,7 @@ class Wpr_Grid extends Widget_Base {
 			echo '<span data-filter="*" class="wpr-active-filter '. $pointer_item_class_name .'">'. $left_icon . esc_html($settings['filters_all_text']) . $right_icon . $post_count .'</span>'. $right_separator; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '</li>';
 		}
-		
-		// var_dump(get_the_archive_title());
+
 		$q = get_queried_object();
 		// category title : custom post type archive title
 		$category_name = is_category() ? strtolower($q->name) : 'no-category';

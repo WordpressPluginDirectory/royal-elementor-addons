@@ -205,7 +205,11 @@ class Wpr_Post_Content extends Widget_Base {
 
 		echo '<div class="wpr-post-content">';
 			if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
-			     \Elementor\Plugin::$instance->modules_manager->get_modules( 'page-templates' )->print_content();
+				$page_templates_module = \Elementor\Plugin::$instance->modules_manager->get_modules( 'page-templates' );
+				
+				if ( $page_templates_module ) {
+					$page_templates_module->print_content();
+				}
 			} else {
 				if ( 'content' === $settings['post_content_display'] ) {
 					the_content();

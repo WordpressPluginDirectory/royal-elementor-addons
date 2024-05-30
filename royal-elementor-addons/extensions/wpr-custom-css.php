@@ -23,10 +23,11 @@ class Wpr_Custom_CSS {
 			return;
 		}
 
+		// Translators: %s is replaced with the plugin name
 		$widget->start_controls_section(
 			'wpr_section_custom_css',
 			[
-				'label' =>  sprintf(esc_html__('Custom CSS - %s', 'wpr-addons'), Utilities::get_plugin_name()),
+				'label' => sprintf(esc_html__('Custom CSS - %s', 'wpr-addons'), Utilities::get_plugin_name()),
 				'tab' => Controls_Manager::TAB_ADVANCED
 			]
 		);

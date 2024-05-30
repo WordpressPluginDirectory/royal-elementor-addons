@@ -1257,7 +1257,7 @@ class Wpr_Tabs extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'content_typography',
-				'selector' => '{{WRAPPER}} '. $css_selector['content_list'],
+				'selector' => '{{WRAPPER}} '. $css_selector['content_list'] .', {{WRAPPER}} '. $css_selector['content_list'] .' ul',
 			]
 		);
 
