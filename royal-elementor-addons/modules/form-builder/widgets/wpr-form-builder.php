@@ -3457,7 +3457,7 @@ class Wpr_Form_Builder extends Widget_Base {
 		$options = preg_split( "/\\r\\n|\\r|\\n/", $item['field_options'] );
 		$html = '';
 		if ( $options ) {
-			$html .= '<div class="wpr-field-sub-group ' . esc_attr( $item['css_classes'] ) . ' ' . $item['inline_list'] . '">';
+			$html .= '<div class="wpr-field-sub-group ' . esc_attr( $item['css_classes'] ) . ' ' . esc_attr( $item['inline_list'] ). '">';
 			foreach ( $options as $key => $option ) {
 				$element_id = ($item['field_id'] ? esc_attr( $item['field_id'] ) : $item['field_type']) . $key;
 				$html_id = $this->get_attribute_id( $item ) . '-' . $key;

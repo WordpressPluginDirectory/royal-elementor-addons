@@ -989,6 +989,22 @@ class Plugin {
 		}
 
 		add_filter( 'pre_get_posts', [$this, 'wpr_custom_posts_per_page'] );
+		add_filter('excerpt_more', [$this, 'wpr_custom_excerpt_more']);
+		add_filter('excerpt_length', [$this, 'wpr_custom_excerpt_length']);
+	}
+	
+	/*
+	** Custom function to modify excerpt more text
+	*/
+	function wpr_custom_excerpt_more($more) { // TODO: check
+		return ''; // Change to '...' or any other text if desired
+	}
+
+	/*
+	** Custom function to modify excerpt more length
+	*/
+	function wpr_custom_excerpt_length($length) {
+		return 999;
 	}
 
 	public function wpr_custom_posts_per_page( $query ) {

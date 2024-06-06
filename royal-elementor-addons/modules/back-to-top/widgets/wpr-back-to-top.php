@@ -684,11 +684,11 @@ class Wpr_Back_To_Top extends Widget_Base {
 
 		// Widget JSON Settings
 		$stt_settings = [
-			'animation'			=> $settings['animation_type_select'],
-			'animationOffset' 	=> $settings['button_offset'],
-			'animationDuration' => $settings['stt_animation_duration'],
-			'fixed' 			=> $settings['button_position'],
-			'scrolAnim' 		=> $settings['stt_animation_duration_top'],
+			'animation'			=> esc_attr($settings['animation_type_select']),
+			'animationOffset' 	=> esc_attr($settings['button_offset']),
+			'animationDuration' => esc_attr($settings['stt_animation_duration']),
+			'fixed' 			=> esc_attr($settings['button_position']),
+			'scrolAnim' 		=> esc_attr($settings['stt_animation_duration_top']),
 
 		];
 

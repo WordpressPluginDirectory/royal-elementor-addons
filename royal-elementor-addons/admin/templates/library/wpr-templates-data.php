@@ -805,6 +805,21 @@ class WPR_Templates_Data {
 					'priority' => 201,
 				],
 			],
+			'car-rent' => [
+				'v1' => [
+					'name' => 'Car Rent',
+					'pages' => 'home,cars,car-details,about,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'expert car rental service driver rent car delivery jorney luxary airport transfer car booking car hire',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 4,
+				],
+			],
 			'car-repair' => [
 				'v1' => [
 					'name' => 'Car Repair',
@@ -816,7 +831,7 @@ class WPR_Templates_Data {
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
-					'priority' => 4,
+					'priority' => 10,
 				],
 			],
 			'pet-care' => [
@@ -1221,7 +1236,21 @@ class WPR_Templates_Data {
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => '',
-					'priority' => 4,
+					'priority' => 15,
+				],
+			],
+			'cleaning' => [
+				'v1' => [
+					'name' => 'Cleaning Service',
+					'pages' => 'home,about,services,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free cleaning services solutions outdoor cleaning eco friendly home cleaning industrial cleaning santization house cleaning cleaner washing meintenance house keeping window cleaning laundry',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 15,
 				],
 			],
 			'realestate' => [
@@ -1350,7 +1379,7 @@ class WPR_Templates_Data {
 			],
 			'school' => [
 				'v1' => [
-					'name' => 'Children School V1',
+					'name' => 'Children School',
 					'pages' => 'home,about,classes,class-details,teachers,teacher-details,events,event-details,blog,single-blog,gallery,contact,',
 					'plugins' => '{}',
 					'tags' => 'free school education online-education learning homework educator teacher classes dance daycare elementary school home school kindergarten nursery preschool child children babysister childcare day care preschool baby sister daycare',
@@ -1589,6 +1618,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','shop','cart','blog','about','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
+			'car-rent-v1' => [
+				'name' => 'Car Rent V1',
+				'pages' => ['home','cars','about','contact'],
+				'preview' => ['home','cars','about','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'car-repair-v1' => [
 				'name' => 'Car Repair',
 				'pages' => ['home','about','contact','services','team'],
@@ -1720,6 +1755,12 @@ class WPR_Templates_Data {
 				'pages' => ['home','about','services','contact'],
 				'preview' => ['home','about','services','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'cleaning-v1' => [
+				'name' => 'Cleaning Service V1',
+				'pages' => ['home','about','services','blog','contact'],
+				'preview' => ['home','about','services','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'digitalagency-v2' => [
 				'name' => 'Digital Agency',
