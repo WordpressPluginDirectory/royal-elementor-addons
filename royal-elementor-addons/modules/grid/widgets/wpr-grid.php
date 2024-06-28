@@ -535,6 +535,13 @@ class Wpr_Grid extends Widget_Base {
 		];
 	}
 
+	public function add_repeater_args_element_cf_tag() {
+		return [
+			'type' => Controls_Manager::HIDDEN,
+			'default' => ''
+		];
+	}
+
 	public function add_repeater_args_element_custom_field_style() {
 		return [
 			'type' => Controls_Manager::HIDDEN,
@@ -2086,6 +2093,8 @@ class Wpr_Grid extends Widget_Base {
 		$repeater->add_control( 'element_custom_field_wrapper_html', $this->add_repeater_args_element_custom_field_wrapper_html() );
 
 		$repeater->add_control( 'custom_field_wrapper_html_divider2', $this->add_repeater_args_custom_field_wrapper_html_divider2() );
+
+		$repeater->add_control( 'element_cf_tag', $this->add_repeater_args_element_cf_tag() );
 
 		$repeater->add_control( 'element_custom_field_style', $this->add_repeater_args_element_custom_field_style() );
 

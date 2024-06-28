@@ -18263,7 +18263,7 @@ dl.variation dd {
   padding-right: 20px;
 }
 
-.wpr-field-group .wpr-select-wrap:before {
+.wpr-field-group .wpr-select-wrap.wpr-fi-svg-no:before {
   content: "\e92a";
   font-family: "eicons";
   font-size: 15px;
@@ -18279,6 +18279,21 @@ dl.variation dd {
 
 .wpr-field-group.wpr-form-field-type-select-multiple .wpr-select-wrap:before {
   content: "";
+}
+
+.wpr-select-wrap svg {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  pointer-events: none;
+}
+  
+.wpr-select-wrap svg path {
+  width: 15px;
+  height: 15px;
 }
 
 .wpr-field-sub-group {

@@ -125,8 +125,8 @@ class Wpr_Lottie_Animations extends Widget_Base {
 		$this->add_control(
 			'reverse',
 			[
-				'label'        => __( 'Reverse', 'wpr-addons' ),
-				'type'         => Controls_Manager::SWITCHER,
+				'label' => __( 'Reverse', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
 				'return_value' => 'true',
 				'condition' => [
 					'trigger!' => 'scroll'
@@ -294,7 +294,7 @@ class Wpr_Lottie_Animations extends Widget_Base {
 			'link_switcher',
 			[
 				'label' => __( 'Wrapper Link', 'wpr-addons' ),
-				'type'  => Controls_Manager::SWITCHER,
+				'type' => Controls_Manager::SWITCHER,
 			]
 		);
 

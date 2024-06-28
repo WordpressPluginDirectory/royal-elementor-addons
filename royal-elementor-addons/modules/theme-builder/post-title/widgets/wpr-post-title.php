@@ -193,7 +193,7 @@ class Wpr_Post_Title extends Widget_Base {
 
 	protected function render() {
 		// Get Settings
-		$settings = $this->get_settings();
+		$settings = $this->get_settings_for_display();
 
 		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
 		$post_title_tag = Utilities::validate_html_tags_wl( $settings['post_title_tag'], 'h1', $tags_whitelist );

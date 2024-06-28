@@ -703,6 +703,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'condition' => [
 					'slider_show_content' => 'yes',
 				],
+				'render_type' => 'template'
 			]
 		);
 
@@ -1041,6 +1042,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					'{{WRAPPER}} .wpr-slider-title' => 'display:{{VALUE}};',
 				],
 				'separator' => 'before',
+				'render_type' => 'template'
 			]
 		);
 
@@ -1083,6 +1085,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-slider-sub-title' => 'display:{{VALUE}};',
 				],
+				'render_type' => 'template'
 			]
 		);
 
@@ -1125,7 +1128,8 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-slider-description' => 'display:{{VALUE}};',
 				],
-				'separator' => 'after'
+				'separator' => 'after',
+				'render_type' => 'template'
 			]
 		);
 
@@ -1148,6 +1152,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-slider-arrow' => 'display:{{VALUE}} !important;',
 				],
+				'render_type' => 'template'
 			]
 		);
 
@@ -1173,6 +1178,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					'slider_nav' => 'yes',
 				],
 				'separator' => 'after',
+				'render_type' => 'template'
 			]
 		);
 

@@ -206,8 +206,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'exclude_dataset_on_click',
 			[
-				'label'   => esc_html__('Exclude Data on Legend Click', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Exclude Data on Legend Click', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'yes',
 				'return_value' => 'yes',
 				'separator' => 'before'
@@ -217,8 +217,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'stacked_bar_chart',
 			[
-				'label'   => esc_html__('Enable Stacked Chart', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Enable Stacked Chart', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'yes',
 				'return_value' => 'yes',
 				'condition' => [
@@ -230,8 +230,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'inner_datalabels',
 			[
-				'label'   => esc_html__('Show Data Values', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Show Data Values', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'false',
 				'return_value' => 'true',
 				'condition' => [
@@ -577,8 +577,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'display_r_axis',
 			[
-				'label'   => esc_html__('Grid Lines', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Grid Lines', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true'
 			]
@@ -599,8 +599,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'display_r_ticks',
 			[
-				'label'   => esc_html__('Ticks (Labels)', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Ticks (Labels)', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true'
 			]
@@ -670,8 +670,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'display_x_axis',
 			[
-				'label'   => esc_html__('Grid Lines', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Grid Lines', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true',
 			]
@@ -692,8 +692,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'display_x_ticks',
 			[
-				'label'   => esc_html__('Ticks (Labels)', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Ticks (Labels)', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true'
 			]
@@ -716,9 +716,9 @@ class Wpr_Charts extends Widget_Base {
 
 		$this->add_control(
 			'display_x_axis_title',
-			[
-				'label'   => esc_html__('Show Title', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+			[ 
+				'label' => esc_html__('Show Title', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true'
 			]
@@ -764,8 +764,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'display_y_axis',
 			[
-				'label'   => esc_html__('Grid Lines', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Grid Lines', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true'
 			]
@@ -786,8 +786,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'display_y_ticks',
 			[
-				'label'   => esc_html__('Ticks (Labels)', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Ticks (Labels)', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true'
 			]
@@ -811,8 +811,8 @@ class Wpr_Charts extends Widget_Base {
 		$this->add_control(
 			'display_y_axis_title',
 			[
-				'label'   => esc_html__('Show Title', 'wpr-addons'),
-				'type'    => Controls_Manager::SWITCHER ,
+				'label' => esc_html__('Show Title', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER ,
 				'default' => 'true',
 				'return_value' => 'true'
 			]
@@ -1133,9 +1133,9 @@ class Wpr_Charts extends Widget_Base {
 
 		$this->add_control(
 			'tooltips_percent',
-			[
-				'label'              => __( 'Convert Values to Percents', 'wpr-addons' ),
-				'type'               => Controls_Manager::SWITCHER,
+			[ 
+				'label' => __( 'Convert Values to Percents', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
 				'return_value'       => 'true',
 				'default' => 'true',
 				'frontend_available' => true,

@@ -218,8 +218,8 @@ class Wpr_Product_Meta extends Widget_Base {
 		$this->add_control(
 			'meta_sku_hide',
 			[
-				'label'        => esc_html__('SKU', 'wpr-addons'),
-				'type'         => Controls_Manager::SWITCHER,
+				'label' => esc_html__('SKU', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__('Show', 'wpr-addons'),
 				'label_off'    => esc_html__('Hide', 'wpr-addons'),
 				'default'      => "yes",
@@ -235,9 +235,9 @@ class Wpr_Product_Meta extends Widget_Base {
 
 		$this->add_control(
 			'meta_category_hide',
-			[
-				'label'        => esc_html__('Category', 'wpr-addons'),
-				'type'         => Controls_Manager::SWITCHER,
+			[ 
+				'label' => esc_html__('Category', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__('Show', 'wpr-addons'),
 				'label_off'    => esc_html__('Hide', 'wpr-addons'),
 				'default'      => "yes",
@@ -253,8 +253,8 @@ class Wpr_Product_Meta extends Widget_Base {
 		$this->add_control(
 			'meta_tag_hide',
 			[
-				'label'        => esc_html__('Tag', 'wpr-addons'),
-				'type'         => Controls_Manager::SWITCHER,
+				'label' => esc_html__('Tag', 'wpr-addons'),
+				'type' => Controls_Manager::SWITCHER,
 				'label_on'     => esc_html__('Show', 'wpr-addons'),
 				'label_off'    => esc_html__('Hide', 'wpr-addons'),
 				'default'      => "yes",

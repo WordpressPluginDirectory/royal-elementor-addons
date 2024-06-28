@@ -764,9 +764,9 @@ class Wpr_Twitter_Feed extends Widget_Base {
 
         $this->add_control(
             'auto_clear_cache',
-            [
-                'label'        => esc_html__( 'Auto Cache Clear', 'wpr-addons' ),
-                'type'         => Controls_Manager::SWITCHER,
+            [ 
+                'label' => esc_html__( 'Auto Cache Clear', 'wpr-addons' ),
+                'type' => Controls_Manager::SWITCHER,
                 'label_on'     => __( 'Yes', 'wpr-addons' ),
                 'label_off'    => __( 'No', 'wpr-addons' ),
                 'default'      => 'yes',

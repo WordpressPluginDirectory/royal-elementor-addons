@@ -1482,7 +1482,6 @@ class Wpr_Product_Media extends Widget_Base {
 		
 		// Get Product
 		$product = wc_get_product();
-		// $this->get_hoodies();
 
 		if ( ! $product ) {
 			return;
@@ -1545,8 +1544,12 @@ class Wpr_Product_Media extends Widget_Base {
 				echo '<div class="wpr-thumbnail-slider-next-arrow wpr-tsa-hidden wpr-thumbnail-slider-arrow">'. Utilities::get_wpr_icon( $settings['thumbnail_slider_nav_icon'], 'right' ) .'</div>';
 		}
 
-        wc_get_template('single-product/product-image.php');
+		if ( is_a( $product, 'WC_Product' ) ) {
+			wc_get_template('single-product/product-image.php');
+		}
+
 		echo '</div>';
+
 		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
 			?>
 			<script>

@@ -443,6 +443,14 @@ class Plugin {
 			]
 		);
 
+		// wp_enqueue_script(
+		// 	'wpr-wrong-update-js',
+		// 	WPR_ADDONS_URL . 'assets/js/admin/wrong-update.js',
+		// 	[
+		// 		'jquery'
+		// 	]
+		// );
+
 		wp_localize_script(
 			'wpr-plugin-notice-js',
 			'WprPluginNotice',

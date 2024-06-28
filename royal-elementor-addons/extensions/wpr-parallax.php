@@ -58,7 +58,7 @@ class Wpr_Parallax_Scroll {
         $element->add_control(
             'wpr_enable_jarallax',
             [
-                'type'  => Controls_Manager::SWITCHER,
+                'type' => Controls_Manager::SWITCHER,
                 'label' => __('Enable Background Parallax', 'wpr-addons'),
                 'default' => 'no',
                 'label_on' => __('Yes', 'wpr-addons'),
@@ -171,7 +171,7 @@ class Wpr_Parallax_Scroll {
         $element->add_control(
             'wpr_enable_parallax_hover',
             [
-                'type'  => Controls_Manager::SWITCHER,
+                'type' => Controls_Manager::SWITCHER,
                 'label' => __('Enable Multi Layer Parallax', 'wpr-addons'),
                 'default' => 'no',
                 'label_on' => __('Yes', 'wpr-addons'),
@@ -185,7 +185,7 @@ class Wpr_Parallax_Scroll {
         $element->add_control(
             'invert_direction',
             [
-                'type'  => Controls_Manager::SWITCHER,
+                'type' => Controls_Manager::SWITCHER,
                 'label' => __('Invert Animation Direction', 'wpr-addons'),
                 'default' => 'no',
                 'label_on' => __('Yes', 'wpr-addons'),

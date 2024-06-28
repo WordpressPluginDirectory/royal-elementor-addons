@@ -10336,6 +10336,8 @@ class Wpr_Woo_Grid extends Widget_Base {
 		] );
 	}
 
+	public $my_upsells;
+
 	protected function render() {
 		// Get Settings
 		$settings = $this->get_settings();

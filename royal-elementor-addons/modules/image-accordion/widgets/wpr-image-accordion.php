@@ -338,7 +338,8 @@ class Wpr_Image_Accordion extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-image-accordion-wrap .wpr-image-accordion-item.wpr-image-accordion-item-grow' => 'flex: {{SIZE}};',
-				]
+				],
+				'render_type' => 'template'
 			]
 		);
 

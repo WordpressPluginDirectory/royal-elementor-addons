@@ -46,53 +46,66 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		
 		// Rest of your function code here (if needed)
-		
-		
+		$content_type = get_option('wpr_email_content_type_'. $_POST['wpr_form_id']);
+
+		$line_break = 'html' === $content_type ? '<br>' : "\n";
     
 		$email_fields = trim(get_option('wpr_email_fields_' . $_POST['wpr_form_id']));
 		
-		if ($email_fields === '[all-fields]') {
-			foreach ( $_POST['form_content'] as $key => $value ) {
-				if ( is_array($value[1]) ) {
-					$message_body[] = trim($value[2]) . ': ' . implode("\n", $value[1]);
-				} else {
-					$message_body[] = trim($value[2]) . ': ' . $value[1];
-				}
-			}
-		} else {
-			preg_match_all('/id="([^"]+)"/', $email_fields, $matches);
-			$field_ids = $matches[1];
+		if ( $email_fields === '[all-fields]' || str_contains($email_fields, '[all-fields]') ) {
 
-			foreach ( $_POST['form_content'] as $key => $value ) {
-				$key_parts = explode('-', $key);
-				$last_part = end($key_parts);
-
-				if (in_array($last_part, $field_ids)) {
-					if ( is_array($value[1]) ) {
-						$message_body[] = trim($value[2]) . ': ' . implode("\n", $value[1]);
-					} else {
-						$message_body[] = trim($value[2]) . ': ' . $value[1];
+			// Function to replace the shortcode with the form value
+			$replace_shortcode_with_value = function ($matches) {
+				$field_id = $matches[1];
+				foreach ($_POST['form_content'] as $key => $value) {
+					$key_parts = explode('-', $key);
+					$last_part = end($key_parts);
+					if ($last_part === $field_id) {
+						return is_array($value[1]) ? implode("\n", $value[1]) : $value[1];
 					}
 				}
-			}
+				return ''; // Return an empty string if the field id is not found
+			};
+
+			// Function to replace the shortcode with the form value
+			$all_fields_content = [];
+
+            foreach ($_POST['form_content'] as $key => $value) {
+                $all_fields_content[] = is_array($value[1]) ? trim($value[2]) . ': ' . implode("\n", $value[1]) : trim($value[2]) . ': ' . $value[1];
+            }
+            $all_fields_content = implode("\n", $all_fields_content);
+	
+			// Process user input to replace shortcodes
+            $processed_message = str_replace('[all-fields]', $all_fields_content, $email_fields);
+
+			$processed_message = preg_replace_callback(
+				'/\[id="([^"]+)"\]/',
+				$replace_shortcode_with_value,
+				$processed_message
+			);
+		} else {
+
+			// Function to replace the shortcode with the form value
+			$replace_shortcode_with_value = function ($matches) {
+				$field_id = $matches[1];
+				foreach ($_POST['form_content'] as $key => $value) {
+					$key_parts = explode('-', $key);
+					$last_part = end($key_parts);
+					if ($last_part === $field_id) {
+						return is_array($value[1]) ? trim($value[2]) . ': ' . implode("\n", $value[1]) : trim($value[2]) . ': ' . $value[1];
+					}
+				}
+				return ''; // Return an empty string if the field id is not found
+			};
+	
+			// Process user input to replace shortcodes
+			$processed_message = preg_replace_callback(
+				'/\[id="([^"]+)"\]/',
+				$replace_shortcode_with_value,
+				$email_fields
+			);
 		}
-
-		// public function replace_setting_shortcodes( $setting, $urlencode = false ) {
-		// 	// Shortcode can be `[id="fds21fd"]` or `[field title="Email" id="fds21fd"]`, multiple shortcodes are allowed
-		// 	return preg_replace_callback( '/(\[field[^]]*id="(\w+)"[^]]*\])/', function( $matches ) use ( $urlencode ) {
-		// 		$value = '';
-	   
-		// 		if ( isset( $this->fields[ $matches[2] ] ) ) {
-		// 			$value = $this->fields[ $matches[2] ]['value'];
-		// 		}
-	   
-		// 		if ( $urlencode ) {
-		// 			$value = urlencode( $value );
-		// 		}
-		// 		return $value;
-		// 	}, $setting );
-		// }
-
+		
         $meta_keys = get_option('wpr_meta_keys_'. $_POST['wpr_form_id']);
         $meta_fields = [];
 
@@ -151,10 +164,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 		}
 
-		$content_type = get_option('wpr_email_content_type_'. $_POST['wpr_form_id']);
-
-		$line_break = 'html' === $content_type ? '<br>' : "\n";
-
         $email_meta = [];
 
         foreach( $meta_fields as $key => $value ) {
@@ -171,6 +180,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			},
 			$subject
 		);
+
+		if ( $processed_message ) {
+			$message_body[] = $processed_message;
+		}
+		
+		// Prepare the message body with correct line breaks
+		if ($content_type === 'html') {
+			// Replace all instances of \n with <br> in each message body item
+			foreach ($message_body as &$item) {
+				$item = nl2br($item);
+			}
+			unset($item); // Break the reference with the last element
+		}
 
         $body = implode($line_break, $message_body) . $line_break . '-----' . $line_break . implode($line_break, $email_meta);
 

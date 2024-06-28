@@ -4418,7 +4418,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 					'{{WRAPPER}} .wpr-centered .wpr-one-sided-timeline .wpr-right-aligned .wpr-data-wrap:after' => 'border-right-color: {{VALUE}} !important; border-left-color: transparent !important;',
 				],
 				'default' => '#FFFFFF',
-				// 'separator' => 'after',
+				'render_type' => 'template'
 			]
 		);
 		
