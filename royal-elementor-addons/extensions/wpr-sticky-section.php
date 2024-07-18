@@ -204,7 +204,8 @@ class Wpr_Sticky_Section {
                     ],
 					'condition' => [
 						'enable_sticky_section' => 'yes'
-					]
+					],
+					'render_type' => 'template'
                 ]
             );
 
@@ -282,7 +283,8 @@ class Wpr_Sticky_Section {
 		$wpr_sticky_effects_offset_mobile =  isset($settings['wpr_sticky_effects_offset_mobile']) && !empty($settings['wpr_sticky_effects_offset_mobile']) ? $settings['wpr_sticky_effects_offset_mobile'] : $wpr_sticky_effects_offset_mobile_extra;
 		
 		$allowed_positions = ['top', 'bottom']; // Define allowed positions
-		$position_location = isset( $_POST['position_location'] ) ? $_POST['position_location'] : '';
+		// $position_location = isset( $_POST['position_location'] ) ? $_POST['position_location'] : ''; // TODO: Check if this is needed
+		$position_location = $settings['position_location'];
 
 		if ( ! in_array( $position_location, $allowed_positions ) ) {
 			$position_location = 'top';

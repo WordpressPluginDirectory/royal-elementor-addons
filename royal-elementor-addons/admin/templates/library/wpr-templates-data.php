@@ -14,6 +14,20 @@ class WPR_Templates_Data {
 		$is_woo_active = is_plugin_active('woocommerce/woocommerce.php') ? 'true' : 'false';
 
 		return [
+			'hosting' => [
+				'v1' => [
+					'name' => 'Hosting V1',
+					'pages' => 'home,about,shared,vps,reseller,dedicated,wordpress,domain,support,cart,checkout,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'web host hosting technology server wordpress shared vps reseller dedicated domain ssl support plans pricing woocommere IT web cloud',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 5,
+				],
+			],
 			'grocery-store' => [
 				'v1' => [
 					'name' => 'Grocery Store - Shop',
@@ -791,6 +805,20 @@ class WPR_Templates_Data {
 					'priority' => 3,
 				],
 			],
+			'software-company' => [
+				'v1' => [
+					'name' => 'Software Company V1',
+					'pages' => 'home,about,services,portfolio,portfolio-details,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free saas application mobile app IT services website business consulting software development enterprise solutions UI UX design testing maintenance support security data analytics web application cloud management business system digital agency portfolio business technology',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 2,
+				],
+			],
 			'nft-portfolio' => [
 				'v1' => [
 					'name' => 'NFT',
@@ -831,6 +859,18 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 51,
+				],
+				'v2' => [
+					'name' => 'Business Consulting V2',
+					'pages' => 'home,about,our-services,our-process,our-clients,pricing-plans,projects,project-details,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'cryptocurrency crypto blockchain advisor investment corporate finance finances financial penny grow financial consulting financial advisors fintech fintech startup business consultancy firm business consulting company financial consulting consultancy services sales marketing technology consulting business coach business consultant business guide mentor motivational speaker',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 5,
 				],
 			],
 			'fintech' => [
@@ -929,6 +969,20 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 10,
 				]
+			],
+			'financial-services' => [
+				'v1' => [
+					'name' => 'Financial Services V1',
+					'pages' => 'home,about,services,resources,blog,single-blog,faq,contact,',
+					'plugins' => '{}',
+					'tags' => 'advisor advsors blockchain business coach company consultancy consultant consulting corporate crypto cryptocurrency entrepreneur finance finances financial fintech firm free grow guide insurance investment management marketing mentor motivational penny planning sales service services solutions speaker startup strategy technology wealth',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 5,
+				],
 			],
 			'cybersecurity' => [
 				'v1' => [
@@ -1564,6 +1618,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about-us','services','projects','team','faq','blog','contact,'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
+			'hosting-v1' => [
+				'name' => 'Hosting V1',
+				'pages' => ['home','about','shared','vps','reseller','dedicated', 'wordpress', 'domain', 'support', 'blog', 'contact'],
+				'preview' => ['home','about','shared','vps','reseller','dedicated', 'wordpress', 'domain', 'support', 'blog', 'contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'electrician-v1' => [
 				'name' => 'Electrician',
 				'pages' => ['home','about','services','service-details','gallery','blog','contact'],
@@ -1586,6 +1646,12 @@ class WPR_Templates_Data {
 				'name' => 'Home Care',
 				'pages' => ['home','about','appointment','services','blog','contact'],
 				'preview' => ['home','about','appointment','services','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'financial-services-v1' => [
+				'name' => 'Financial Services V1',
+				'pages' => ['home','about','services','resources','blog','faq','contact'],
+				'preview' => ['home','about','services','resources','blog','faq','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'fintech-v1' => [
@@ -1684,6 +1750,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','blog','contact','services','contact','faq','history','pricing','team',],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'business-consulting-v2' => [
+				'name' => 'Business Consulting V2',
+				'pages' => ['home','about','our-services','our-process','our-clients','pricing-plans','projects','project-details','faq','blog','contact',],
+				'preview' => ['home','about','our-services','our-process','our-clients','pricing-plans','projects','project-details','faq','blog','contact',],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'travel-blog-v1' => [
 				'name' => 'Travel Blog',
 				'pages' => ['home','home-v1','home-v2','about','contact'],
@@ -1778,6 +1850,12 @@ class WPR_Templates_Data {
 				'name' => 'Developer Portfolio - v1',
 				'pages' => ['home','portfolio','about','services','resume','contact'],
 				'preview' => ['home','portfolio','about','services','resume','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'software-company-v1' => [
+				'name' => 'Software Company V1',
+				'pages' => ['home','about','services','portfolio','portfolio-details','blog','contact'],
+				'preview' => ['home','about','services','portfolio','portfolio-details','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'medical-v1' => [

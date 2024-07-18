@@ -18203,9 +18203,10 @@ dl.variation dd {
 }
 
 .wpr-field-group .wpr-form-field-textual:focus {
-  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset;
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset;
+  /* -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset;
+          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset; */
   outline: 0;
+  box-shadow: none;
 }
 
 .wpr-field-group .wpr-form-field-textual::-webkit-input-placeholder {

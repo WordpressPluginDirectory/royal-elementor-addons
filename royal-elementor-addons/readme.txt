@@ -1,9 +1,9 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.979
+Stable tag: 1.3.981
 Requires at least: 5.0
-Tested up to: 6.5.5
+Tested up to: 6.6
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -453,6 +453,15 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ==
+= Royal Elementor Addons v1.3.981 - 2024-07-18 =
+* FIXED: Minor Bugs.
+
+= Royal Elementor Addons v1.3.980 - 2024-07-10 =
+* ADDED: Elementor Business Consulting V2 Template Kit - [**Business Consulting**](https://demosites.royal-elementor-addons.com/business-consulting-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Financial Services Template Kit - [**Financial Services**](https://demosites.royal-elementor-addons.com/financial-services-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Hosting Template Kit - [**Hosting**](https://demosites.royal-elementor-addons.com/hosting-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Software Company Template Kit - [**Software Company**](https://demosites.royal-elementor-addons.com/software-company-v1/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.3.979 - 2024-06-27 =
 * FIXED: Minor Bugs.
 

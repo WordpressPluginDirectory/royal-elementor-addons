@@ -306,6 +306,7 @@ class Wpr_Post_Media extends Widget_Base {
 					'stacked' => esc_html__( 'Stacked Gallery', 'wpr-addons' ),
 				],
 				'default' => 'slider',
+				'render_type' => 'template'
 			]
 		);
 
@@ -327,7 +328,8 @@ class Wpr_Post_Media extends Widget_Base {
 				'separator' => 'before',
 				'condition' => [
 					'gallery_display_as' => 'slider'
-				]
+				],
+				'render_type' => 'template'
 			]
 		);
 
@@ -341,7 +343,8 @@ class Wpr_Post_Media extends Widget_Base {
 				'condition' => [
 					'gallery_slider_nav' => 'yes',
 					'gallery_display_as' => 'slider'
-				]
+				],
+				'render_type' => 'template'
 			]
 		);
 
