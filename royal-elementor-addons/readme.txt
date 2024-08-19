@@ -1,9 +1,9 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.981
+Stable tag: 1.3.982
 Requires at least: 5.0
-Tested up to: 6.6
+Tested up to: 6.6.1
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -453,6 +453,13 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ==
+= Royal Elementor Addons v1.3.981 - 2024-08-19 =
+* FIXED: Minor Bugs.
+* ADDED: Elementor Software Company V2 Template Kit - [**Software Company**](https://demosites.royal-elementor-addons.com/software-company-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Fashion (Shop) V3 Template Kit - [**Fashion**](https://demosites.royal-elementor-addons.com/fashion-v3/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Wedding V2 Template Kit - [**Wedding**](https://demosites.royal-elementor-addons.com/wedding-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Token Template Kit - [**Token**](https://demosites.royal-elementor-addons.com/token-v1/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.3.981 - 2024-07-18 =
 * FIXED: Minor Bugs.
 
