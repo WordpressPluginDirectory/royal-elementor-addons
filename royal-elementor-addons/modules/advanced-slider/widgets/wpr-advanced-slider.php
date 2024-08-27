@@ -787,6 +787,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'condition' => [
 					'slider_show_content' => 'yes',
 				],
+				'render_type' => 'template'
 			]
 		);
 

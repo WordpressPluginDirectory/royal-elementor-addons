@@ -175,7 +175,6 @@ class WPR_Render_Templates {
 				$current_language_code = apply_filters( 'wpml_current_language', NULL );
 
 				IF ( ICL_LANGUAGE_CODE !== $default_language_code ) {
-				
 					$template_id = apply_filters('wpml_object_id', $template_id, 'wpr_templates', true, $default_language_code);
 				}
 			}

@@ -1827,7 +1827,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				'default' => 'style-2',
 				'condition' => [
 					'element_select' => 'rating',
-				],
+				]
 			]
 		);
 
@@ -9547,30 +9547,40 @@ class Wpr_Woo_Grid extends Widget_Base {
 					echo '<span>'. esc_html($rating_amount) .'</span>';
 				} else {
 
-                    if ( \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_font_icon_svg' ) ) {
-                        for ( $b = 1; $b <= 5;  $b++ ) {
+                    // if ( \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_font_icon_svg' ) ) {
+                    //     for ( $b = 1; $b <= 5;  $b++ ) {
                         
-                            if ( $b <= $rating_amount ) :
-                                $this->render_rating_icon( 'wpr-rating-icon-full', $settings['element_rating_unmarked_style'] );
-                            elseif ( $b === $round_rating + 1 && $rating_amount !== $round_rating ) :
-                                $this->render_rating_icon( 'wpr-rating-icon-'. (( $rating_amount - $round_rating ) * 10), $settings['element_rating_unmarked_style'] );
-                            else :
-                                $this->render_rating_icon( 'wpr-rating-icon-0', $settings['element_rating_unmarked_style'] );
-                            endif;
-                            
-                        }
-                    } else {
-                        for ( $i = 1; $i <= 5; $i++ ) {
+                    //         if ( $b <= $rating_amount ) :
+                    //             $this->render_rating_icon( 'wpr-rating-icon-full', $settings['element_rating_unmarked_style'] );
+                    //         elseif ( $b === $round_rating + 1 && $rating_amount !== $round_rating ) :
+                    //             $this->render_rating_icon( 'wpr-rating-icon-'. (( $rating_amount - $round_rating ) * 10), $settings['element_rating_unmarked_style'] );
+                    //         else :
+                    //             $this->render_rating_icon( 'wpr-rating-icon-0', $settings['element_rating_unmarked_style'] );
+                    //         endif;
+                    //     }
+                    // } else {
+                    //     for ( $i = 1; $i <= 5; $i++ ) {
 
-                            if ( $i <= $rating_amount ) {
-                                echo '<i class="wpr-rating-icon-full">'. esc_html($rating_icon) .'</i>';
-                            } elseif ( $i === $round_rating + 1 && $rating_amount !== $round_rating ) {
-                                echo '<i class="wpr-rating-icon-'. esc_attr((( $rating_amount - $round_rating ) * 10)) .'">'. esc_html($rating_icon) .'</i>';
-                            } else {
-                                echo '<i class="wpr-rating-icon-empty">'. esc_html($rating_icon) .'</i>';
-                            }
-                         }
-                    }
+                    //         if ( $i <= $rating_amount ) {
+                    //             echo '<i class="wpr-rating-icon-full">'. esc_html($rating_icon) .'</i>';
+                    //         } elseif ( $i === $round_rating + 1 && $rating_amount !== $round_rating ) {
+                    //             echo '<i class="wpr-rating-icon-'. esc_attr((( $rating_amount - $round_rating ) * 10)) .'">'. esc_html($rating_icon) .'</i>';
+                    //         } else {
+                    //             echo '<i class="wpr-rating-icon-empty">'. esc_html($rating_icon) .'</i>';
+                    //         }
+                    //     }
+                    // }
+
+					for ( $i = 1; $i <= 5; $i++ ) {
+
+						if ( $i <= $rating_amount ) {
+							echo '<i class="wpr-rating-icon-full">'. esc_html($rating_icon) .'</i>';
+						} elseif ( $i === $round_rating + 1 && $rating_amount !== $round_rating ) {
+							echo '<i class="wpr-rating-icon-'. esc_attr((( $rating_amount - $round_rating ) * 10)) .'">'. esc_html($rating_icon) .'</i>';
+						} else {
+							echo '<i class="wpr-rating-icon-empty">'. esc_html($rating_icon) .'</i>';
+						}
+					}
 				}
 
 				echo '</div>';
@@ -10337,6 +10347,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 	}
 
 	public $my_upsells;
+	public $crossell_ids;
 
 	protected function render() {
 		// Get Settings

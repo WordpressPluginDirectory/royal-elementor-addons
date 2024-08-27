@@ -905,6 +905,20 @@ class Wpr_Search extends Widget_Base {
 
 	public function add_control_number_of_results() {}
 
+	public function add_control_show_password_protected() {
+		$this->add_control(
+			'ajax_show_ps_pt',
+			[
+				'label' => esc_html__( 'Show Password Protected', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+                'condition' => [
+                    'ajax_search' => 'yes'
+				],
+				'render_type' => 'template'
+			]
+		);
+	}
+
 	public function add_control_open_in_new_page() {
 		$this->add_control(
 			'ajax_search_link_target',
@@ -1066,6 +1080,8 @@ class Wpr_Search extends Widget_Base {
 		$this->add_control_ajax_search();
 
 		$this->add_control_number_of_results();
+
+		$this->add_control_show_password_protected();
 
 		$this->add_control_open_in_new_page();
 
@@ -2010,6 +2026,7 @@ class Wpr_Search extends Widget_Base {
 				'no-results' => isset($settings['no_results_text']) ? esc_html__($settings['no_results_text']) : '',
 				'exclude-without-thumb' => isset($settings['exclude_posts_without_thumbnail']) ? $settings['exclude_posts_without_thumbnail'] : '',
 				'link-target' => isset($settings['ajax_search_link_target']) && ( 'yes' === $settings['ajax_search_link_target'] ) ? '_blank'  : '_self',
+				'password-protected' => isset($settings['ajax_show_ps_pt']) ? $settings['ajax_show_ps_pt'] : 'no',
 				// 'ajax-search-img-size' => isset($settings['ajax_search_img_size']) ? $settings['ajax_search_img_size'] : ''
 			]
 		);

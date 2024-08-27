@@ -135,17 +135,19 @@ class Plugin {
 		
 		// Admin Files
 		if ( is_admin() ) {
-			// Pro Features Notice
-			require WPR_ADDONS_PATH . 'admin/notices/pro-features-notice.php';
-
-			// Plugin Update Notice
-			require WPR_ADDONS_PATH . 'admin/notices/plugin-update-notice.php';
-			
-			// Plugin Sale Notice
-			require WPR_ADDONS_PATH . 'admin/notices/plugin-sale-notice.php';
-			
-			// Rating Notice 
-			require WPR_ADDONS_PATH . 'admin/notices/rating-notice.php';
+			if ( get_option('wpr_hide_banners') !== 'on' ) {
+				// Pro Features Notice
+				require WPR_ADDONS_PATH . 'admin/notices/pro-features-notice.php';
+	
+				// Plugin Update Notice
+				require WPR_ADDONS_PATH . 'admin/notices/plugin-update-notice.php';
+				
+				// Plugin Sale Notice
+				require WPR_ADDONS_PATH . 'admin/notices/plugin-sale-notice.php';
+				
+				// Rating Notice 
+				require WPR_ADDONS_PATH . 'admin/notices/rating-notice.php';
+			}
 
 			// Plugin Options
 			require WPR_ADDONS_PATH . 'admin/plugin-options.php';

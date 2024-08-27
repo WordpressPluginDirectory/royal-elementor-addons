@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.982
+Stable tag: 1.3.985
 Requires at least: 5.0
 Tested up to: 6.6.1
 Requires PHP: 5.6
@@ -452,8 +452,23 @@ post_max_size 64M
 
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
-== Changelog ==
-= Royal Elementor Addons v1.3.981 - 2024-08-19 =
+== Changelog ===
+= Royal Elementor Addons v1.3.985 - 2024-08-26 =
+* FIXED: Minor Bugs.
+
+= Royal Elementor Addons v1.3.984 - 2024-08-26 =
+* FIXED: Mini Cart Browser Back/Forward arrows bug.
+* FIXED: CSV not importing properly in Data Tables widget.
+* FIXED: Back to Top Button SVG hover color issue.
+* FIXED: Compare table not fetching attributes from different languages.
+* FIXED: Mini Cart not expanding fully on sticky header.
+* ADDED: Hide All Banners options to admin settings.
+* ADDED: Option to display mobile mega menu content by default.
+
+= Royal Elementor Addons v1.3.983 - 2024-08-26 =
+* FIXED: Minor Bugs.
+
+= Royal Elementor Addons v1.3.982 - 2024-08-19 =
 * FIXED: Minor Bugs.
 * ADDED: Elementor Software Company V2 Template Kit - [**Software Company**](https://demosites.royal-elementor-addons.com/software-company-v2/?ref=rea-wpo-pp-details-tab).
 * ADDED: Elementor Fashion (Shop) V3 Template Kit - [**Fashion**](https://demosites.royal-elementor-addons.com/fashion-v3/?ref=rea-wpo-pp-details-tab).

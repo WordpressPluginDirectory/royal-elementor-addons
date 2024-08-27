@@ -2267,7 +2267,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 			echo '<div class="inner-block">';
 				$lightbox_source = $this->item_bg_image_url;
 
-				echo '<div style="opacity: 0;" class="wpr-accordion-image-wrap" data-src="'. $lightbox_source. '">';
+				echo '<div style="opacity: 0;" class="wpr-accordion-image-wrap" data-src="'. esc_attr( $lightbox_source ) .'">';
 					echo '<img src="'. esc_url( $lightbox_source ) .'" alt="'. esc_attr( $item['accordion_item_title'] ) .'">';
 				echo '</div>';
 	
@@ -2414,13 +2414,14 @@ class Wpr_Image_Accordion extends Widget_Base {
 				break;
 			}
 			
-			if ( !empty($item['accordion_item_bg_image']['id']) ) {
-				$this->item_bg_image_url = Group_Control_Image_Size::get_attachment_image_src( $item['accordion_item_bg_image']['id'], 'accordion_image_size', $settings );
-			} elseif ( !empty($item['accordion_item_bg_image']['url']) ) {
-				$this->item_bg_image_url = $item['accordion_item_bg_image']['url'];
+			if ( !empty( $item['accordion_item_bg_image']['id'] ) ) {
+				$image_url = Group_Control_Image_Size::get_attachment_image_src( $item['accordion_item_bg_image']['id'], 'accordion_image_size', $settings );
+				$this->item_bg_image_url = esc_url_raw( $image_url );
+			} elseif ( !empty( $item['accordion_item_bg_image']['url'] ) ) {
+				$this->item_bg_image_url = esc_url_raw( $item['accordion_item_bg_image']['url'] );
 			} else {
-				$this->item_bg_image_url = WPR_ADDONS_ASSETS_URL . 'img/logo-slider-450x450.png';
-			}
+				$this->item_bg_image_url = esc_url( WPR_ADDONS_ASSETS_URL . 'img/logo-slider-450x450.png' );
+			}			
 
 			$layout['activeItem'] = [
 				'activeWidth' => $settings['accordion_active_item_style']['size'],
@@ -2445,7 +2446,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 				<div data-src=<?php echo esc_url( $this->item_bg_image_url ) ?>   class="wpr-image-accordion-item elementor-repeater-item-<?php echo esc_attr($item['_id']) . $this->get_image_effect_class( $settings )?>">
 
-				<div class="wpr-accordion-background" style="background-image: url(<?php echo $this->item_bg_image_url ?>);"></div>
+				<div class="wpr-accordion-background" style="background-image: url(<?php echo esc_attr( $this->item_bg_image_url ) ?>);"></div>
 							
 							<?php
 								echo '<div '. $render_attribute .'>';

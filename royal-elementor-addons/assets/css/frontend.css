@@ -1354,6 +1354,13 @@ div[class*="wpr-sub-menu-fx"] .wpr-mega-menu .wpr-sub-mega-menu.wpr-animate-sub 
     display: none;
 }
 
+.wpr-mobile-mega-menu-wrap[toggle-backface="yes"] .wpr-mobile-sub-offcanvas-open li.menu-item > ul {
+    display: none !important;
+}
+
+.wpr-mobile-mega-menu-wrap[toggle-backface="yes"] .wpr-mobile-sub-offcanvas-open li.wpr-mobile-sub-open.menu-item > ul {
+    display: block !important;
+}
 
 /*--------------------------------------------------------------
 == Onepage Nav
@@ -8067,9 +8074,15 @@ select.wpr-category-select {
 }
 
 .wpr-member-social {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     width: 45px;
     height: 45px;
     line-height: 45px;
@@ -12228,13 +12241,13 @@ select.wpr-category-select {
 }
 
 /* Horizontal Timeline */
-.wpr-horizontal-bottom.swiper-container {
+.wpr-horizontal-bottom.swiper {
     position: unset;
     overflow: hidden;
     z-index: 10;
 }
 
-.wpr-horizontal.swiper-container {
+.wpr-horizontal.swiper {
     position: unset;
     overflow: hidden;
     z-index: 11;
@@ -15048,7 +15061,7 @@ ul.wpr-woo-mini-cart {
     top: 0;
     left: 0;
     width: 100% !important;
-    height: 100%;
+    height: 100vh;
     z-index: 999999;
     margin: 0 !important;
 }
@@ -18206,7 +18219,8 @@ dl.variation dd {
   /* -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset;
           box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset; */
   outline: 0;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .wpr-field-group .wpr-form-field-textual::-webkit-input-placeholder {
@@ -18287,7 +18301,9 @@ dl.variation dd {
   height: 15px;
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
   right: 10px;
   pointer-events: none;
 }
@@ -18394,7 +18410,8 @@ dl.variation dd {
 }
 
 .wpr-file-type-error {
-    flex-basis: 100%;
+    -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
     padding: 5px 0;
     margin: 0 0 5px 0;
     list-style-type: none;

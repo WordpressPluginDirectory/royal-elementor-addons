@@ -451,6 +451,7 @@ class Wpr_Back_To_Top extends Widget_Base {
 			'default' => '#fff',
 			'selectors' => [
 				'{{WRAPPER}} .wpr-stt-btn:hover > .wpr-stt-icon' => 'Color: {{VALUE}}',
+				'{{WRAPPER}} .wpr-stt-btn:hover > .wpr-stt-icon svg' => 'fill: {{VALUE}}',
 			],
 		]
 	);
@@ -506,6 +507,7 @@ class Wpr_Back_To_Top extends Widget_Base {
 				'default' => 0.3,
 				'selectors' => [
 				'{{WRAPPER}} .wpr-stt-btn' => 'transition:  all  {{VALUE}}s ease-in-out 0s;',
+				'{{WRAPPER}} .wpr-stt-btn svg' => 'transition:  all  {{VALUE}}s ease-in-out 0s;',
 				],
 				'separator' => 'before',
 			]

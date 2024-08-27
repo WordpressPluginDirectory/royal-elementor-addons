@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wpr-addons\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-06 12:34+0000\n"
+"PO-Revision-Date: 2024-08-06 12:06+0400\n"
+"Last-Translator: YOUR NAME <youremail@example.com>\n"
+"Language-Team: YOUR TEAM <teamemail@example.com>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.4\n"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Rating"
+msgstr "Note"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Price"
+msgstr "Prix"
+
+msgid "SKU"
+msgstr "SKU"
+
+msgid "Stock Status"
+msgstr "Stock"
+
+msgid "Dimensions"
+msgstr "Dimensions"
+
+msgid "Weight"
+msgstr "Poids"

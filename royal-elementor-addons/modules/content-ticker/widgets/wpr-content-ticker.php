@@ -133,6 +133,8 @@ class Wpr_Content_Ticker extends Widget_Base {
 
 	public function add_section_ticker_items() {}
 
+	public $post_types;
+
 	public function add_control_query_source () {
 		// Get Available Post Types
 		$this->post_types = [];

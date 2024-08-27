@@ -2338,9 +2338,10 @@ class Wpr_Mega_Menu extends Widget_Base {
 			echo '</div>';
 
 			$animation_class =  wpr_fs()->can_use_premium_code() ? 'wpr-anim-timing-'. $settings['mob_menu_offcanvas_animation_timing'] : '';
+			$toggle_offcanvas_backface = isset($settings['mob_menu_toggle_offcanvas_backface']) ? $settings['mob_menu_toggle_offcanvas_backface'] : '';
 
 			// Menu
-			echo '<div class="wpr-mobile-mega-menu-wrap '. $animation_class .'">';
+			echo '<div class="wpr-mobile-mega-menu-wrap '. $animation_class .'" toggle-backface="'. $toggle_offcanvas_backface .'">';
 				if ( wpr_fs()->can_use_premium_code() && 'offcanvas' === $settings['mob_menu_display_as'] ) {
 					echo '<div class="mobile-mega-menu-header">';
 						if ( ! empty( $settings['mob_menu_offcanvas_logo']['url'] ) ) {

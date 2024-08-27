@@ -622,7 +622,7 @@ class Wpr_Taxonomy_List extends Widget_Base {
 		$terms = get_terms( $settings['query_tax_selection'], [ 'hide_empty' => 'yes' === $settings['query_hide_empty'], 'parent' => 0, 'child_of' => 0 ] );
 
         foreach ($terms as $key => $term) {
-			if ( !empty(get_queried_object()) && $term->term_id == get_queried_object()->term_taxonomy_id && 'yes' == $settings['highlight_active'] ) {
+			if ( !empty(get_queried_object()) && isset(get_queried_object()->term_taxonomy_id) && $term->term_id == get_queried_object()->term_taxonomy_id && 'yes' == $settings['highlight_active'] ) {
 				$cat_class = ' class="wpr-taxonomy wpr-taxonomy-active"';
 			} else {
 				$cat_class = ' class="wpr-taxonomy"';

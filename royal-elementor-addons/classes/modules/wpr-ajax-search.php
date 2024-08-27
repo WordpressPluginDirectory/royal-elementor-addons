@@ -106,20 +106,39 @@ if ( ! defined( 'ABSPATH' ) ) {
                 }
             } 
         }
-
-        $the_query = new \WP_Query( 
-            [
-                'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
-                's' => sanitize_text_field( $_POST['wpr_keyword'] ), 
-                'post_type' => $_POST['wpr_query_type'] === 'all' || !wpr_fs()->can_use_premium_code() ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
-                'offset' => sanitize_text_field($_POST['wpr_search_results_offset']),
-                'meta_query' => 'yes' === sanitize_text_field($_POST['wpr_exclude_without_thumb']) ? [
-                    ['key' => '_thumbnail_id']
-                ] : '',
-                'tax_query' => $tax_query,
-                'post_status' => 'publish'
-            ]
-        );
+        
+        $can_view_protected_posts = current_user_can('read_private_posts');
+        
+        if ( 'yes' !== sanitize_text_field($_POST['wpr_show_ps_pt'] ) ) {
+            $the_query = new \WP_Query( 
+                [
+                    'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
+                    's' => sanitize_text_field( $_POST['wpr_keyword'] ), 
+                    'post_type' => $_POST['wpr_query_type'] === 'all' || !wpr_fs()->can_use_premium_code() ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
+                    'offset' => sanitize_text_field($_POST['wpr_search_results_offset']),
+                    'meta_query' => 'yes' === sanitize_text_field($_POST['wpr_exclude_without_thumb']) ? [
+                        ['key' => '_thumbnail_id']
+                    ] : '',
+                    'tax_query' => $tax_query,
+                    'post_status' => 'publish',
+                    'post_password' => ''
+                ]
+            );
+        } else {
+            $the_query = new \WP_Query( 
+                [
+                    'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
+                    's' => sanitize_text_field( $_POST['wpr_keyword'] ), 
+                    'post_type' => $_POST['wpr_query_type'] === 'all' || !wpr_fs()->can_use_premium_code() ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
+                    'offset' => sanitize_text_field($_POST['wpr_search_results_offset']),
+                    'meta_query' => 'yes' === sanitize_text_field($_POST['wpr_exclude_without_thumb']) ? [
+                        ['key' => '_thumbnail_id']
+                    ] : '',
+                    'tax_query' => $tax_query,
+                    'post_status' => 'publish',
+                ]
+            );
+        }
         
         if( $the_query->have_posts() ) :
             $number_of_queried_posts = $the_query->found_posts;
@@ -138,6 +157,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                 ?>
 
                 <li data-number-of-results = <?php echo $the_query->found_posts ?>>
+                    
                     <?php if ( 'yes' === sanitize_text_field($_POST['wpr_show_ajax_thumbnail']) ) :
                         if ( has_post_thumbnail() ) :
                             echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href="'. esc_url( get_the_permalink() ) .'">'.  $post_thumb .'</a>';
@@ -146,6 +166,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                             echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href='. esc_url( get_the_permalink() ) .'><img src='.Utils::get_placeholder_image_src().'></a>';
                         endif ;
                     endif ; ?>
+
                     <div class="wpr-ajax-search-content">
                         <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-ajax-title" href="<?php echo esc_url( the_permalink() ); ?>"><?php the_title();?></a>
 
@@ -157,6 +178,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                             <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-view-result" href="<?php echo esc_url( the_permalink() ); ?>"><?php echo sanitize_text_field($_POST['wpr_view_result_text']) ?></a>
                         <?php endif; ?>
                     </div>
+
                 </li>
                 <?php 
                 $post_count++;
