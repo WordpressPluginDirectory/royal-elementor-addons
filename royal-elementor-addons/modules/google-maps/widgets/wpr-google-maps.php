@@ -635,8 +635,11 @@ class Wpr_Google_Maps extends Widget_Base {
 		// Get Settings
 		$settings = $this->get_settings();
 
+		$google_map_locations = $settings['google_map_locations'];
+		$google_map_locations[0]['gm_location_title'] = esc_html($google_map_locations[0]['gm_location_title']);
+
 		$attributes  = ' data-settings="'. esc_attr( json_encode($this->get_map_settings( $settings )) ) .'"';
-		$attributes .= ' data-locations="'. esc_attr( json_encode($settings['google_map_locations']) ) .'"';
+		$attributes .= ' data-locations="'. esc_attr( json_encode($google_map_locations) ) .'"';
 		$attributes .= ' data-controls="'. esc_attr( json_encode($this->get_map_controls( $settings )) ) .'"';
 
 		echo '<div class="wpr-google-map" '. $attributes .'></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

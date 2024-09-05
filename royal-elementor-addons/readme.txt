@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.985
+Stable tag: 1.3.986
 Requires at least: 5.0
 Tested up to: 6.6.1
 Requires PHP: 5.6
@@ -453,6 +453,11 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.3.986 - 2024-09-04 =
+* FIXED: Countdown, Google Map and Media Grid minor vulnerability issues.
+* FIXED: Restrict Show Password Protected Posts Control only to appear for admins (Ajax Search).
+* FIXED: Add to Cart widget animation.
+
 = Royal Elementor Addons v1.3.985 - 2024-08-26 =
 * FIXED: Minor Bugs.
 

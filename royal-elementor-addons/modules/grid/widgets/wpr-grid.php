@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Wpr_Grid extends Widget_Base {
-	
+
 	public function get_name() {
 		return 'wpr-grid';
 	}
@@ -49,11 +49,11 @@ class Wpr_Grid extends Widget_Base {
 		return [ 'wpr-animations-css', 'wpr-link-animations-css', 'wpr-button-animations-css', 'wpr-loading-animations-css', 'wpr-lightgallery-css' ];
 	}
 
-    public function get_custom_help_url() {
-    	if ( empty(get_option('wpr_wl_plugin_links')) )
-        // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-grid-help-btn';
-    		return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
-    }
+	public function get_custom_help_url() {
+		if ( empty(get_option('wpr_wl_plugin_links')) )
+		// return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-grid-help-btn';
+			return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
+	}
 
 	public function add_option_query_source() {
 		$post_types = [];
@@ -156,7 +156,7 @@ class Wpr_Grid extends Widget_Base {
 	}
 
 	public function add_control_order_posts() {
-        $this->add_control(
+		$this->add_control(
 			'order_posts',
 			[
 				'label' => esc_html__( 'Order By', 'wpr-addons'),
@@ -848,7 +848,7 @@ class Wpr_Grid extends Widget_Base {
 		// Upgrade to Pro Notice
 		Utilities::upgrade_pro_notice( $this, Controls_Manager::RAW_HTML, 'grid', 'order_posts', ['pro-tl', 'pro-mf', 'pro-d', 'pro-ar', 'pro-cc'] );
 
-        $this->add_control(
+		$this->add_control(
 			'order_direction',
 			[
 				'label' => esc_html__( 'Order', 'wpr-addons'),
@@ -1112,26 +1112,26 @@ class Wpr_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-            'last_element_position',
-            [
-                'label' => esc_html__( 'Last Element Position', 'wpr-addons' ),
-                'type' => Controls_Manager::CHOOSE,
-                'label_block' => false,
-                'default' => 'left',
-                'options' => [
-                    'left' => [
-                        'title' => esc_html__( 'Left', 'wpr-addons' ),
-                        'icon' => 'eicon-h-align-left',
-                    ],
-                    'center' => [
-                        'title' => esc_html__( 'Center', 'wpr-addons' ),
-                        'icon' => 'eicon-h-align-center',
-                    ],
-                    'right' => [
-                        'title' => esc_html__( 'Right', 'wpr-addons' ),
-                        'icon' => 'eicon-h-align-right',
-                    ]
-                ],
+			'last_element_position',
+			[
+				'label' => esc_html__( 'Last Element Position', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default' => 'left',
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-right',
+					]
+				],
 				'selectors_dictionary' => [
 					'left' => 'left: 0; right: auto;',
 					'center' => 'left: 50%; transform: translateX(-50%);',
@@ -1142,8 +1142,8 @@ class Wpr_Grid extends Widget_Base {
 				],
 				'render_type' => 'template',
 				'separator' => 'after'
-            ]
-        );
+			]
+		);
 
 		$this->add_group_control(
 			Group_Control_Image_Size::get_type(),
@@ -1678,8 +1678,8 @@ class Wpr_Grid extends Widget_Base {
 
 		if ( ! wpr_fs()->can_use_premium_code() ) {
 			$repeater->add_control(
-	            'element_align_pro_notice',
-	            [
+				'element_align_pro_notice',
+				[
 					'raw' => 'Vertical Align option is available<br> in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-panel-grid-upgrade-pro#purchasepro" target="_blank">Pro version</a></strong>',
 					// 'raw' => 'Vertical Align option is available<br> in the <strong><a href="'. admin_url('admin.php?page=wpr-addons-pricing') .'" target="_blank">Pro version</a></strong>',
 					'type' => Controls_Manager::RAW_HTML,
@@ -1688,7 +1688,7 @@ class Wpr_Grid extends Widget_Base {
 						'element_location' => 'over',
 					],
 				]
-	        );
+			);
 		}
 
 		$repeater->add_control(
@@ -1697,7 +1697,7 @@ class Wpr_Grid extends Widget_Base {
 				'label' => esc_html__( 'Vertical Align', 'wpr-addons' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
-                'default' => 'middle',
+				'default' => 'middle',
 				'options' => [
 					'top' => [
 						'title' => esc_html__( 'Top', 'wpr-addons' ),
@@ -1719,33 +1719,33 @@ class Wpr_Grid extends Widget_Base {
 		);
 
 		$repeater->add_control(
-            'element_align_hr',
-            [
-                'label' => esc_html__( 'Horizontal Align', 'wpr-addons' ),
-                'type' => Controls_Manager::CHOOSE,
-                'label_block' => false,
-                'default' => 'left',
-                'options' => [
-                    'left' => [
-                        'title' => esc_html__( 'Left', 'wpr-addons' ),
-                        'icon' => 'eicon-h-align-left',
-                    ],
-                    'center' => [
-                        'title' => esc_html__( 'Center', 'wpr-addons' ),
-                        'icon' => 'eicon-h-align-center',
-                    ],
-                    'right' => [
-                        'title' => esc_html__( 'Right', 'wpr-addons' ),
-                        'icon' => 'eicon-h-align-right',
-                    ]
-                ],
+			'element_align_hr',
+			[
+				'label' => esc_html__( 'Horizontal Align', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default' => 'left',
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-right',
+					]
+				],
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'text-align: {{VALUE}}',
 				],
 				'render_type' => 'template',
 				'separator' => 'after'
-            ]
-        );
+			]
+		);
 
 		$repeater->add_control(
 			'element_title_tag',
@@ -9397,15 +9397,15 @@ class Wpr_Grid extends Widget_Base {
 
 		global $paged;
 		$pages = $this->get_max_num_pages( $settings );
-        
+		
 		// $paged = empty( $paged ) ? 1 : $paged;
-        if ( get_query_var('paged') ) {
-            $paged = get_query_var('paged');
-        } elseif ( get_query_var('page') ) {
-            $paged = get_query_var('page');
-        } else {
-            $paged = 1;
-        }
+		if ( get_query_var('paged') ) {
+			$paged = get_query_var('paged');
+		} elseif ( get_query_var('page') ) {
+			$paged = get_query_var('page');
+		} else {
+			$paged = 1;
+		}
 
 		if ( ! wpr_fs()->can_use_premium_code() ) {
 			$settings['pagination_type'] = 'pro-is' == $settings['pagination_type'] ? 'default' : $settings['pagination_type'];
@@ -9446,83 +9446,83 @@ class Wpr_Grid extends Widget_Base {
 
 			if ( 1 !== $pages ) {
 
-			    if ( 'yes' === $settings['pagination_prev_next'] || 'yes' === $settings['pagination_first_last'] ) {
-			    	echo '<div class="wpr-grid-pagi-left-arrows">';
+				if ( 'yes' === $settings['pagination_prev_next'] || 'yes' === $settings['pagination_first_last'] ) {
+					echo '<div class="wpr-grid-pagi-left-arrows">';
 
-				    if ( 'yes' === $settings['pagination_first_last'] ) {
-				    	if ( $paged >= 2 ) {
-					    	echo '<a href="'. esc_url(get_pagenum_link( 1, true )) .'" class="wpr-first-page">';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    		echo '<span>'. esc_html($settings['pagination_first_text']) .'</span>';
-					    	echo '</a>';
-				    	} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-					    	echo '<span class="wpr-first-page wpr-disabled-arrow">';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    		echo '<span>'. esc_html($settings['pagination_first_text']) .'</span>';
-					    	echo '</span>';
-				    	}
-				    }
+					if ( 'yes' === $settings['pagination_first_last'] ) {
+						if ( $paged >= 2 ) {
+							echo '<a href="'. esc_url(get_pagenum_link( 1, true )) .'" class="wpr-first-page">';
+								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo '<span>'. esc_html($settings['pagination_first_text']) .'</span>';
+							echo '</a>';
+						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
+							echo '<span class="wpr-first-page wpr-disabled-arrow">';
+								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo '<span>'. esc_html($settings['pagination_first_text']) .'</span>';
+							echo '</span>';
+						}
+					}
 
-				    if ( 'yes' === $settings['pagination_prev_next'] ) {
-				    	if ( $paged > 1 ) {
-					    	echo '<a href="'. esc_url(get_pagenum_link( $paged - 1, true )) .'" class="wpr-prev-page">';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    		echo '<span>'. esc_html($settings['pagination_prev_text']) .'</span>';
-					    	echo '</a>';
-				    	} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-					    	echo '<span class="wpr-prev-page wpr-disabled-arrow">';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    		echo '<span>'. esc_html($settings['pagination_prev_text']) .'</span>';
-					    	echo '</span>';
-				    	}
-				    }
+					if ( 'yes' === $settings['pagination_prev_next'] ) {
+						if ( $paged > 1 ) {
+							echo '<a href="'. esc_url(get_pagenum_link( $paged - 1, true )) .'" class="wpr-prev-page">';
+								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo '<span>'. esc_html($settings['pagination_prev_text']) .'</span>';
+							echo '</a>';
+						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
+							echo '<span class="wpr-prev-page wpr-disabled-arrow">';
+								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo '<span>'. esc_html($settings['pagination_prev_text']) .'</span>';
+							echo '</span>';
+						}
+					}
 
-				    echo '</div>';
-			    }
+					echo '</div>';
+				}
 
-			    for ( $i = 1; $i <= $pages; $i++ ) {
-			        if ( 1 !== $pages && ( ! ( $i >= $paged + $range + 1 || $i <= $paged - $range - 1 ) || $pages <= $showitems ) ) {
+				for ( $i = 1; $i <= $pages; $i++ ) {
+					if ( 1 !== $pages && ( ! ( $i >= $paged + $range + 1 || $i <= $paged - $range - 1 ) || $pages <= $showitems ) ) {
 						if ( $paged === $i ) {
 							echo '<span class="wpr-grid-current-page">'. esc_html($i) .'</span>';
 						} else {
 							echo '<a href="'. esc_url(get_pagenum_link( $i, true )) .'">'. esc_html($i) .'</a>';
 						}
-			        }
-			    }
+					}
+				}
 
-			    if ( 'yes' === $settings['pagination_prev_next'] || 'yes' === $settings['pagination_first_last'] ) {
-			    	echo '<div class="wpr-grid-pagi-right-arrows">';
+				if ( 'yes' === $settings['pagination_prev_next'] || 'yes' === $settings['pagination_first_last'] ) {
+					echo '<div class="wpr-grid-pagi-right-arrows">';
 
-				    if ( 'yes' === $settings['pagination_prev_next'] ) {
-				    	if ( $paged < $pages ) {
-					    	echo '<a href="'. esc_url(get_pagenum_link( $paged + 1, true )) .'" class="wpr-next-page">';
-					    		echo '<span>'. esc_html($settings['pagination_next_text']) .'</span>';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    	echo '</a>';
-				    	} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-					    	echo '<span class="wpr-next-page wpr-disabled-arrow">';
-					    		echo '<span>'. esc_html($settings['pagination_next_text']) .'</span>';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    	echo '</span>';
-				    	}
-				    }
+					if ( 'yes' === $settings['pagination_prev_next'] ) {
+						if ( $paged < $pages ) {
+							echo '<a href="'. esc_url(get_pagenum_link( $paged + 1, true )) .'" class="wpr-next-page">';
+								echo '<span>'. esc_html($settings['pagination_next_text']) .'</span>';
+								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo '</a>';
+						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
+							echo '<span class="wpr-next-page wpr-disabled-arrow">';
+								echo '<span>'. esc_html($settings['pagination_next_text']) .'</span>';
+								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo '</span>';
+						}
+					}
 
-				    if ( 'yes' === $settings['pagination_first_last'] ) {
-				    	if ( $paged <= $pages - 1 ) {
-					    	echo '<a href="'. esc_url(get_pagenum_link( $pages, true )) .'" class="wpr-last-page">';
-					    		echo '<span>'. esc_html($settings['pagination_last_text']) .'</span>';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    	echo '</a>';
-				    	} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-					    	echo '<span class="wpr-last-page wpr-disabled-arrow">';
-					    		echo '<span>'. esc_html($settings['pagination_last_text']) .'</span>';
-					    		echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					    	echo '</span>';
-				    	}
-				    }
+					if ( 'yes' === $settings['pagination_first_last'] ) {
+						if ( $paged <= $pages - 1 ) {
+							echo '<a href="'. esc_url(get_pagenum_link( $pages, true )) .'" class="wpr-last-page">';
+								echo '<span>'. esc_html($settings['pagination_last_text']) .'</span>';
+								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo '</a>';
+						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
+							echo '<span class="wpr-last-page wpr-disabled-arrow">';
+								echo '<span>'. esc_html($settings['pagination_last_text']) .'</span>';
+								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo '</span>';
+						}
+					}
 
-				    echo '</div>';
-			    }
+					echo '</div>';
+				}
 			}
 
 		// Load More / Infinite Scroll

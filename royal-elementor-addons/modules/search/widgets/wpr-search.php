@@ -906,17 +906,19 @@ class Wpr_Search extends Widget_Base {
 	public function add_control_number_of_results() {}
 
 	public function add_control_show_password_protected() {
-		$this->add_control(
-			'ajax_show_ps_pt',
-			[
-				'label' => esc_html__( 'Show Password Protected', 'wpr-addons' ),
-				'type' => Controls_Manager::SWITCHER,
-                'condition' => [
-                    'ajax_search' => 'yes'
-				],
-				'render_type' => 'template'
-			]
-		);
+		if ( current_user_can( 'administrator' ) ) {
+			$this->add_control(
+				'ajax_show_ps_pt',
+				[
+					'label' => esc_html__( 'Show Password Protected', 'wpr-addons' ),
+					'type' => Controls_Manager::SWITCHER,
+					'condition' => [
+						'ajax_search' => 'yes'
+					],
+					'render_type' => 'template'
+				]
+			);
+		}		
 	}
 
 	public function add_control_open_in_new_page() {

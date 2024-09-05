@@ -1617,8 +1617,8 @@ class WPR_Templates_Data {
 			],
 			'fashion-v3' => [
 				'name' => 'Fashion 3 - Shop',
-				'pages' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','cart','compare','wishlist','about','blog','contact','contact-v1','contact-v2',],
-				'preview' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','cart','compare','wishlist','about','blog','contact','contact-v1','contact-v2',],
+				'pages' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','simple-product','variable-product','grouped-product','external-product','cart','compare','wishlist','about','blog','single-blog','contact','contact-v1','contact-v2',],
+				'preview' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','simple-product','variable-product','grouped-product','external-product','cart','compare','wishlist','about','blog','single-blog','contact','contact-v1','contact-v2',],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'digitalagency-v3' => [

@@ -6709,7 +6709,7 @@ class Wpr_Media_Grid extends Widget_Base {
 		$alt = '' === wp_get_attachment_caption( $id ) ? get_the_title() : wp_get_attachment_caption( $id );
 
 		echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( wp_get_attachment_url( $id ) ) .'">';
-			echo '<img src="'. esc_url( $src ) .'" alt="'. esc_attr( $alt ) .'" class="wpr-anim-timing-'. esc_html($settings[ 'image_effects_animation_timing']) .'">';
+			echo '<img src="'. esc_url( $src ) .'" alt="'. wp_kses_post( $alt ) .'" class="wpr-anim-timing-'. esc_html($settings[ 'image_effects_animation_timing']) .'">';
 		echo '</div>';
 	}
 

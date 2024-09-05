@@ -137,9 +137,6 @@
 
 			if ( $scope.hasClass('wpr-jarallax') || $scope.hasClass('wpr-jarallax-yes') ) {
 				parallaxBackground();
-				// $(document).ready(function() {
-				// 	parallaxBackground();
-				// });
 			}
 
 			if ( $scope.hasClass('wpr-parallax-yes') ) {
@@ -8728,7 +8725,8 @@
 							
 								return Promise.all(updateMetaPromises).then(() => {
 									if (responsesArray.includes('error')) {
-										$scope.find('form').append('<p class="wpr-submit-error">'+ $scope.data('settings').error_message +'</p>');
+										var sanitizedErrorMessage = $('<div>').text($scope.data('settings').error_message).html();
+										$scope.find('form').append('<p class="wpr-submit-error">' + sanitizedErrorMessage + '</p>');
 									} else {
 										$scope.find('form').append('<p class="wpr-submit-success">'+ $scope.data('settings').success_message +'</p>');
 										$scope.find('button').attr('disabled', true);
@@ -9449,6 +9447,12 @@
 						// }, 1000 );
 					},
 				} );
+
+				$( 'body' ).on( 'added_to_cart', function(ev, fragments, hash, button) {
+					button.next().fadeTo( 700, 1 );
+
+					button.css('display', 'none');
+				});
 			}
 		}, // End of widgetProductAddToCart
 
