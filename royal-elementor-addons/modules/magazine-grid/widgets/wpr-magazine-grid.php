@@ -5024,6 +5024,10 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		$offset = ( $paged - 1 ) * $query_posts_per_page + $settings[ 'query_offset' ];
 		$query_order_by = '' != $settings['query_randomize'] ? $settings['query_randomize'] : $settings['order_posts'];
 
+		if ( is_front_page()  && ! Utilities::is_blog_archive() ) {
+			$query_order_by = $settings['order_posts'];
+		}
+
 		if ( 'yes' === $settings['slider_enable'] ) {
 			$offset = $offset + $query_posts_per_page * $slide_offset;
 		}
@@ -5753,6 +5757,10 @@ class Wpr_Magazine_Grid extends Widget_Base {
 
 		// Loop: Start
 		if ( $posts->have_posts() ) :
+		
+		if ( 'rand' == $settings['query_randomize'] && is_front_page() && ! Utilities::is_blog_archive()  ) {
+			shuffle($posts->posts);
+		}
 
 		while ( $posts->have_posts() ) : $posts->the_post();
 

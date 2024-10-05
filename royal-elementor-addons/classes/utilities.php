@@ -392,38 +392,40 @@ class Utilities {
 			}
 		}
 
-		// tmp remove after 2 months
-		$templates_loop = new \WP_Query([
-			'post_type' => 'wpr_templates',
-			'name' => $template,
-			'posts_per_page' => 1,
-		]);
-		
-		if ( ! $templates_loop->have_posts() ) {
-			if ( defined('ICL_LANGUAGE_CODE') ) {
-				$original_post = get_page_by_path($template, OBJECT, 'wpr_templates');
-				if ( $original_post ) {
-					$original_post_id = $original_post->ID;
-					$language_code = ICL_LANGUAGE_CODE;
-				
-					$translated_post_id = icl_object_id($original_post_id, 'wpr_templates', false, $language_code);
+		if ( !empty($template) ) {
+			// tmp remove after 2 months
+			$templates_loop = new \WP_Query([
+				'post_type' => 'wpr_templates',
+				'name' => $template,
+				'posts_per_page' => 1,
+			]);
+			
+			if ( ! $templates_loop->have_posts() ) {
+				if ( defined('ICL_LANGUAGE_CODE') ) {
+					$original_post = get_page_by_path($template, OBJECT, 'wpr_templates');
+					if ( $original_post ) {
+						$original_post_id = $original_post->ID;
+						$language_code = ICL_LANGUAGE_CODE;
 					
-					if ( $translated_post_id ) {
-						$translated_post = get_post($translated_post_id);
-						$translated_slug = $translated_post->post_name;
-					
-						if ( $translated_slug ) {
-							$template = $translated_slug;
-						} else {
-							$template = null;
+						$translated_post_id = icl_object_id($original_post_id, 'wpr_templates', false, $language_code);
+						
+						if ( $translated_post_id ) {
+							$translated_post = get_post($translated_post_id);
+							$translated_slug = $translated_post->post_name;
+						
+							if ( $translated_slug ) {
+								$template = $translated_slug;
+							} else {
+								$template = null;
+							}
 						}
 					}
+				} else {
+					$template = null;
 				}
 			} else {
-				$template = null;
+				$template = $template;
 			}
-		} else {
-			$template = $template;
 		}
 
 		return $template;
@@ -843,18 +845,20 @@ class Utilities {
 	** Get WPR Icon
 	*/
 	public static function get_wpr_icon( $icon, $dir ) {
-		if ( false !== strpos( $icon, 'svg-' ) ) {
-			return Utilities::get_svg_icon( $icon, $dir );
-
-		} elseif ( false !== strpos( $icon, 'fa-' ) ) {
-			$dir = '' !== $dir ? '-'. $dir : '';
-			return wp_kses('<i class="'. esc_attr($icon . $dir) .'"></i>', [
-				'i' => [
-					'class' => []
-				]
-			]);
-		} else {
-			return '';
+		if ( !empty($icon) ) {
+			if ( false !== strpos( $icon, 'svg-' ) ) {
+				return Utilities::get_svg_icon( $icon, $dir );
+	
+			} elseif ( false !== strpos( $icon, 'fa-' ) ) {
+				$dir = '' !== $dir ? '-'. $dir : '';
+				return wp_kses('<i class="'. esc_attr($icon . $dir) .'"></i>', [
+					'i' => [
+						'class' => []
+					]
+				]);
+			} else {
+				return '';
+			}
 		}
 	}
 

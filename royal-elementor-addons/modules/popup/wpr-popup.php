@@ -50,6 +50,7 @@ class Wpr_Popup extends Elementor\Core\Base\Document {
 					'pro-ex' => esc_html__( 'After User Exit Intent (Pro)', 'wpr-addons' ),
 					'pro-cs' => esc_html__( 'Custom Trigger (Button Click) (Pro)', 'wpr-addons' ),
 				],
+				'render_type' => 'template'
 			]
 		);	
 	}
@@ -82,7 +83,8 @@ class Wpr_Popup extends Elementor\Core\Base\Document {
 					'pro-262800' => esc_html__( '1 Month (Pro)', 'wpr-addons' ),
 				],
 				'description' => esc_html__( 'This option determines when to show popup again to a visitor after it is closed.', 'wpr-addons' ),
-				'separator' => 'before'
+				'separator' => 'before',
+				'render_type' => 'template'
 			]
 		);
 	}
@@ -176,6 +178,7 @@ class Wpr_Popup extends Elementor\Core\Base\Document {
 					'active' => true,
 				],
 				'default' => '',
+				'render_type' => 'template',
 				'condition' => [
 					'popup_trigger' => 'custom',
 				]

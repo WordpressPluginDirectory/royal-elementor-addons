@@ -438,7 +438,9 @@ function wpr_addons_settings_page() {
             <?php if ( wpr_fs()->is_plan( 'expert' ) ) : ?>
                 <a href="#cpt-tab">Custom Post Types</a> / 
             <?php endif; ?>
-            <a href="#metabox-tab">Metabox</a> /  
+            <?php if ( wpr_fs()->can_use_premium_code() ) : ?>
+                <a href="#metabox-tab">Metabox</a> /   
+            <?php endif; ?>
             <a href="#integrations-tab">Integrations</a> /  
             <a href="#lightbox-tab">Lightbox</a>
         </div> 

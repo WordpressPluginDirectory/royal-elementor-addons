@@ -32,9 +32,17 @@ if ( ! defined( 'ABSPATH' ) ) {
         
         foreach ( $_POST['form_content'] as $key => $value ) {
             if ( is_array($value[1]) ) {
-                $message_body[trim($value[2])] = implode("\n", $value[1]);
+				if ( empty($value[2]) ) {
+					$message_body[trim($key)] = implode("\n", $value[1]);
+				} else {
+					$message_body[trim($value[2])] = implode("\n", $value[1]);
+				}
             } else {
-                $message_body[trim($value[2])] = $value[1];
+				if ( empty($value2) ) {
+					$message_body[trim($key)] = $value[1];
+				} else {
+					$message_body[trim($value[2])] = $value[1];
+				}
             }
         }
 

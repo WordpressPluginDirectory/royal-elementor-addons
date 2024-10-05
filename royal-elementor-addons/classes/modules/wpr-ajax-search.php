@@ -109,7 +109,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         
         $can_view_protected_posts = current_user_can('read_private_posts');
         
-        if ( 'yes' !== sanitize_text_field($_POST['wpr_show_ps_pt'] ) ) {
+        if ( ( 'yes' !== sanitize_text_field($_POST['wpr_show_ps_pt'] ) ) || !$can_view_protected_posts ) {
             $the_query = new \WP_Query( 
                 [
                     'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
@@ -158,26 +158,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 
                 <li data-number-of-results = <?php echo $the_query->found_posts ?>>
                     
-                    <?php if ( 'yes' === sanitize_text_field($_POST['wpr_show_ajax_thumbnail']) ) :
-                        if ( has_post_thumbnail() ) :
-                            echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href="'. esc_url( get_the_permalink() ) .'">'.  $post_thumb .'</a>';
-                            // echo '<a class="wpr-ajax-img-wrap" target="'. sanitize_text_field($_POST['ajax_search_link_target']) .'" href="'. esc_url( get_the_permalink() ) .'">'.  '<img src="'. Group_Control_Image_Size::get_attachment_image_src( get_post_thumbnail_id(), 'ajax_search_image', [$_POST['ajax_search_image_size']] ) .'"/>' .'</a>';
-                        else :
+                    <?php if ( !post_password_required() || $can_view_protected_posts ) : ?>
+
+                        <?php if ( 'yes' === sanitize_text_field($_POST['wpr_show_ajax_thumbnail']) ) :
+                            if ( has_post_thumbnail() ) :
+                                echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href="'. esc_url( get_the_permalink() ) .'">'.  $post_thumb .'</a>';
+                                // echo '<a class="wpr-ajax-img-wrap" target="'. sanitize_text_field($_POST['ajax_search_link_target']) .'" href="'. esc_url( get_the_permalink() ) .'">'.  '<img src="'. Group_Control_Image_Size::get_attachment_image_src( get_post_thumbnail_id(), 'ajax_search_image', [$_POST['ajax_search_image_size']] ) .'"/>' .'</a>';
+                            else :
+                                echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href='. esc_url( get_the_permalink() ) .'><img src='.Utils::get_placeholder_image_src().'></a>';
+                            endif ;
+                        endif ; ?>
+
+                        <div class="wpr-ajax-search-content">
+                            <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-ajax-title" href="<?php echo esc_url( the_permalink() ); ?>"><?php the_title();?></a>
+
+                            <?php if ( sanitize_text_field($_POST['wpr_show_description']) == 'yes' ) : ?>
+                                <p class="wpr-ajax-desc"><a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" href="<?php echo esc_url( the_permalink() ); ?>"><?php echo wp_trim_words(get_the_content(), sanitize_text_field($_POST['wpr_number_of_words'])); ?></a></p>
+                            <?php endif; ?>
+
+                            <?php if ( sanitize_text_field($_POST['wpr_show_view_result_btn']) ) : ?>
+                                <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-view-result" href="<?php echo esc_url( the_permalink() ); ?>"><?php echo sanitize_text_field($_POST['wpr_view_result_text']) ?></a>
+                            <?php endif; ?>
+                        </div>
+                    
+                    <?php else: ?>
+
+                        <?php if ( 'yes' === sanitize_text_field($_POST['wpr_show_ajax_thumbnail']) ) :
                             echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href='. esc_url( get_the_permalink() ) .'><img src='.Utils::get_placeholder_image_src().'></a>';
-                        endif ;
-                    endif ; ?>
+                        endif ; ?>
 
-                    <div class="wpr-ajax-search-content">
-                        <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-ajax-title" href="<?php echo esc_url( the_permalink() ); ?>"><?php the_title();?></a>
-
-                        <?php if ( sanitize_text_field($_POST['wpr_show_description']) == 'yes' ) : ?>
-                            <p class="wpr-ajax-desc"><a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" href="<?php echo esc_url( the_permalink() ); ?>"><?php echo wp_trim_words(get_the_content(), sanitize_text_field($_POST['wpr_number_of_words'])); ?></a></p>
-                        <?php endif; ?>
-
-                        <?php if ( sanitize_text_field($_POST['wpr_show_view_result_btn']) ) : ?>
-                            <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-view-result" href="<?php echo esc_url( the_permalink() ); ?>"><?php echo sanitize_text_field($_POST['wpr_view_result_text']) ?></a>
-                        <?php endif; ?>
-                    </div>
+                        <div class="wpr-ajax-search-content">
+                            <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-ajax-title" href="<?php echo esc_url( the_permalink() ); ?>"><?php the_title();?></a>
+                        </div>
+                    
+                    <?php endif; ?>
 
                 </li>
                 <?php 

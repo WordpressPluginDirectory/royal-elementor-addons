@@ -1146,7 +1146,7 @@ class Wpr_Page_Checkout extends Widget_Base {
 					'{{WRAPPER}} table.shop_table thead th' => 'border-style: {{VALUE}}',
 					'{{WRAPPER}} table.shop_table tfoot th' => 'border-style: {{VALUE}}',
 					'{{WRAPPER}} table.shop_table td' => 'border-style: {{VALUE}}',
-					'{{WRAPPER}} #order_review' => 'border-style: {{VALUE}}; overflow: hidden;'
+					'{{WRAPPER}} #order_review' => 'border-style: {{VALUE}};'
 				],
 				'separator' => 'before',
 			]

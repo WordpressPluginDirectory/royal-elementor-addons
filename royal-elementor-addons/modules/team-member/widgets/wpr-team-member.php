@@ -1752,7 +1752,7 @@ class Wpr_Team_Member extends Widget_Base {
 		if ( '' !== $settings['member_btn_text'] ) {
 
 			$this->add_render_attribute( 'btn_attribute', 'class', 'wpr-member-btn wpr-button-effect '. $this->get_settings()['btn_animation'] );
-			$this->add_render_attribute( 'btn_attribute', 'href', $settings['member_btn_url']['url'] );
+			$this->add_render_attribute( 'btn_attribute', 'href', esc_url($settings['member_btn_url']['url']) );
 
 			if ( $settings['member_btn_url']['is_external'] ) {
 				$this->add_render_attribute( 'btn_attribute', 'target', '_blank' );

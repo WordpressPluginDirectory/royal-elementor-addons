@@ -214,6 +214,18 @@ class Wpr_Product_Mini_Cart extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'toggle_btn_icon_color_hover',
+			[
+				'label'  => esc_html__( 'Color (Hover)', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .wpr-mini-cart-btn-icon:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-mini-cart-btn-icon:hover svg' => 'fill: {{VALUE}}'
+				]
+			]
+		);
+
 		$this->add_responsive_control(
 			'toggle_btn_icon_size',
 			[

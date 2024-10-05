@@ -912,10 +912,11 @@ class Wpr_Search extends Widget_Base {
 				[
 					'label' => esc_html__( 'Show Password Protected', 'wpr-addons' ),
 					'type' => Controls_Manager::SWITCHER,
+					'description' => esc_html__( 'Only for users with capability to read private posts', 'wpr-addons' ),
 					'condition' => [
 						'ajax_search' => 'yes'
 					],
-					'render_type' => 'template'
+					'render_type' => 'template',
 				]
 			);
 		}		

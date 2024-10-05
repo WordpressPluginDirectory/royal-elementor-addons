@@ -2793,6 +2793,13 @@ div[class*="wpr-sub-menu-fx"] .wpr-mega-menu .wpr-sub-mega-menu.wpr-animate-sub 
     content: '\002605';
 }
 
+.wpr-woo-rating .wpr-rating-marked,
+.wpr-woo-rating .wpr-rating-unmarked {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+
 .wpr-woo-rating i:last-of-type {
     margin-right: 0 !important;
 }

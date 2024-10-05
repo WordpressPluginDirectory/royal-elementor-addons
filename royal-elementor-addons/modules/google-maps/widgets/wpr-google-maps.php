@@ -636,7 +636,8 @@ class Wpr_Google_Maps extends Widget_Base {
 		$settings = $this->get_settings();
 
 		$google_map_locations = $settings['google_map_locations'];
-		$google_map_locations[0]['gm_location_title'] = esc_html($google_map_locations[0]['gm_location_title']);
+
+		$google_map_locations[0]['gm_location_title'] = wp_kses_post(preg_replace('/\s*on\w+="[^"]*"/i', '', $google_map_locations[0]['gm_location_title']));
 
 		$attributes  = ' data-settings="'. esc_attr( json_encode($this->get_map_settings( $settings )) ) .'"';
 		$attributes .= ' data-locations="'. esc_attr( json_encode($google_map_locations) ) .'"';

@@ -299,13 +299,25 @@ class WPR_Templates_Data {
 					'name' => 'Electrician',
 					'pages' => 'home,about,services,service-details,gallery,blog,single-blog,contact,',
 					'plugins' => '{}',
-					'tags' => 'free electrician electrical services repair maintenance electric electricity electrical repairer maintenance business engineering handyman plumbing repair',
+					'tags' => 'free electrician electrical solutions energy services efficient repair residential industrial emergency maintenance electric electricity electrical repairer maintenance business engineering lighting repair handyman',
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 300,
+				],
+				'v2' => [
+					'name' => 'Electrician V2',
+					'pages' => 'home,about,services,gallery,blog,blog-details,contact,',
+					'plugins' => '{}',
+					'tags' => 'pro electrician electrical solutions energy services efficient repair residential industrial emergency maintenance electric electricity electrical repairer maintenance business engineering lighting repair',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 301,
 				],
 			],
 			'ecommerce' => [
@@ -983,6 +995,21 @@ class WPR_Templates_Data {
 					'priority' => 92,
 				],
 			],
+			'book-shop' => [
+				'v1' => [
+					'name' => 'Bookshop V1',
+					'pages' => 'home,shop,product-details,cart,wishlist,about-us,blog,blog-details,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'bookshop books store author sales e-book best-seller download shop shopping woo-commerce woocommerce estore ecommerce product eshopping ecommerce shop e commerce book shop',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 20,
+				],
+			],
 			'travel' => [
 				'v1' => [
 					'name' => 'Travel Blogger & Influencer',
@@ -1501,7 +1528,7 @@ class WPR_Templates_Data {
 			'dance-studio' => [
 				'v1' => [
 					'name' => 'Landing Page - Dance Studio',
-					'pages' => 'home,classes,instructors,gallery,blog,contact',
+					'pages' => 'home,classes,instructors,gallery,contact',
 					'plugins' => '{}',
 					'tags' => 'free single-page landing page one page onepage landingpage dance studio dancing dance school ballet contempo dance club fitness salsa zumba academy courses dancer music tango academy street dance jazz hiphop education',
 					'theme-builder' => true,
@@ -1686,6 +1713,12 @@ class WPR_Templates_Data {
 				'pages' => ['home','about','services','service-details','gallery','blog','contact'],
 				'preview' => ['home','about','services','service-details','gallery','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'electrician-v2' => [
+				'name' => 'Electrician V2',
+				'pages' => ['home','about','services','gallery','blog','contact'],
+				'preview' => ['home','about','services','gallery','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'construction-v3' => [
 				'name' => 'Construction v3',
@@ -1883,6 +1916,12 @@ class WPR_Templates_Data {
 				'name' => 'Digital Marketing Agency',
 				'pages' => ['home','seo','branding','marketing','social','about','contact'],
 				'preview' => ['home','seo-services','branding','digital-marketing','social-media','about','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'book-shop-v1' => [
+				'name' => 'Bookshop V1',
+				'pages' => ['home','shop','cart','wishlist','about-us','blog','contact'],
+				'preview' => ['home','shop','cart','wishlist','about-us','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'digital-agency-dark-v1' => [

@@ -171,8 +171,17 @@ if ( ! defined( 'ABSPATH' ) ) {
         }
 
         $to = get_option('wpr_email_to_'. $_POST['wpr_form_id']);
+
+		$to = preg_replace_callback(
+			'/\[id="(\w+)"\]/',
+			function ($matches) {
+				return $this->get_field_value($matches[1]);
+			},
+			$to
+		);
+
         $subject = get_option('wpr_email_subject_'. $_POST['wpr_form_id']);
-		
+
 		$subject = preg_replace_callback(
 			'/\[id="(\w+)"\]/',
 			function ($matches) {
@@ -199,11 +208,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$cc_header = '';
 		if ( !empty( get_option('wpr_cc_header_'. $_POST['wpr_form_id']) ) ) {
 			$cc_header = 'Cc: ' . get_option('wpr_cc_header_'. $_POST['wpr_form_id']);
+
+			$cc_header = preg_replace_callback(
+				'/\[id="(\w+)"\]/',
+				function ($matches) {
+					return $this->get_field_value($matches[1]);
+				},
+				$cc_header
+			);
 		}
 
 		$bcc_header = '';
 		if ( !empty( get_option('wpr_bcc_header_'. $_POST['wpr_form_id']) ) ) {
 			$bcc_header = 'Bcc: ' . get_option('wpr_bcc_header_'. $_POST['wpr_form_id']);
+
+			$bcc_header = preg_replace_callback(
+				'/\[id="(\w+)"\]/',
+				function ($matches) {
+					return $this->get_field_value($matches[1]);
+				},
+				$bcc_header
+			);
 		}
 		
 		if ( !empty( get_option('wpr_reply_to_'. $_POST['wpr_form_id']) ) && !empty(get_option('wpr_email_from_name_'. $_POST['wpr_form_id'])) && !empty(get_option('wpr_email_from_'. $_POST['wpr_form_id'])) ) {

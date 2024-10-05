@@ -5085,8 +5085,24 @@
 			
 			var $flipBox = $scope.find('.wpr-flip-box'),
 				flipBoxTrigger = $flipBox.data('trigger');
+			
+			// Listen for the pageshow event to prevent undesired cache
+			window.addEventListener('pageshow', function(event) {
+				if (event.persisted) {
+					if ( $flipBox.hasClass('wpr-flip-box-active') ) {
+						$flipBox.removeClass('wpr-flip-box-active');
+					}
+				}
+			});
 
-			 if ( 'box' === flipBoxTrigger ) {
+			// Listen for the popstate event same purpose
+			window.addEventListener('popstate', function(event) {
+				if ( $flipBox.hasClass('wpr-flip-box-active') ) {
+					$flipBox.removeClass('wpr-flip-box-active');
+				}
+			});
+
+			if ( 'box' === flipBoxTrigger ) {
 
 				$flipBox.find('.wpr-flip-box-front').on( 'click', function() {
 					$(this).closest('.wpr-flip-box').addClass('wpr-flip-box-active'); 
@@ -9709,6 +9725,7 @@
                     updateMiniCart();
                 }
             });
+
 			$( document.body ).on( 'updated_wc_div', function() {
 				updateMiniCart();
 			});

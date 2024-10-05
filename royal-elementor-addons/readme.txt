@@ -1,9 +1,9 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.986
+Stable tag: 1.3.987
 Requires at least: 5.0
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -453,6 +453,26 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.3.987 - 2024-10-04 =
+* ADDED: Elementor Electrician V2 Template Kit - [**Electrician**](https://demosites.royal-elementor-addons.com/electrician-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Book Shop (Shop) V1 Template Kit - [**Book Shop**](https://demosites.royal-elementor-addons.com/book-shop-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Taxonomy List Count Brackets option
+* ADDED: Video Tutorial for License Mismatch Solution
+* ADDED: Product Mini Cart Hover Color option
+* ADDED: Search Notice for Booking and Appointment in Dashboard, Editor Panel and Templates Window.
+* FIXED: Form Styler calling undefined wp forms function
+* FIXED: Form Builder Shortcodes doesn't work in to, cc and bcc fields of email action
+* FIXED: AJAX Search Show Password Protected vulnerability
+* FIXED: Magazine Grid Random Query Duplication on Front Page
+* FIXED: Flip Box Active Class Issue on Safari Browser
+* FIXED: Form Builder Webhook Action Label Issue
+* FIXED: Google Maps, Team Member minor vulnerabilities
+* FIXED: Post Grid post__not_in parameter passing empty string
+* FIXED: Checkout Overflow Hidden Removed
+* FIXED: Woo Grid Rating Icons in Incognito when Inline Fonts Activated
+* FIXED: Phone Call SVG Hover
+* FIXED: Some Controls used In JavaScript not Working due to Optimized Control Loading
+
 = Royal Elementor Addons v1.3.986 - 2024-09-04 =
 * FIXED: Countdown, Google Map and Media Grid minor vulnerability issues.
 * FIXED: Restrict Show Password Protected Posts Control only to appear for admins (Ajax Search).

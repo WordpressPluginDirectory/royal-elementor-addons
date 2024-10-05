@@ -113,6 +113,15 @@ function wpr_addons_theme_builder_page() {
         }
         echo '<a href="' . esc_url( $url ) . '" class="button button-primary wpr-translate-templates wpr-options-button"><span class="dashicons dashicons-admin-site"></span><span>Translate WPML Templates</span></a>';
         echo '<a href="https://www.youtube.com/watch?v=y7yjItsMBmw" class="button button-primary wpr-translate-templates wpr-options-button tutorial">'. esc_html__("Video Tutorial") .'</a>';
+    } else if ( is_plugin_active('polylang/polylang.php') ) {
+        $url = '';
+        if ( 'wpr_tab_my_templates' === $active_tab ) {
+            $url = admin_url( 'edit.php?post_type=elementor_library&tabs_group=library' );
+        } else {
+            $url = admin_url( 'edit.php?s&post_status=all&post_type=wpr_templates&wpr_template_type='. str_replace("wpr_tab_", "", $active_tab) .'&filter_action=Filter' );
+        }
+        echo '<a href="' . esc_url( $url ) . '" class="button button-primary wpr-translate-templates wpr-options-button"><span class="dashicons dashicons-admin-site"></span><span>Translate POLYLANG Templates</span></a>';
+        echo '<a href="https://www.youtube.com/watch?v=y7yjItsMBmw" class="button button-primary wpr-translate-templates wpr-options-button tutorial">'. esc_html__("Video Tutorial") .'</a>';
     }
 ?>
     <?php if ( $active_tab == 'wpr_tab_header' ) : ?>

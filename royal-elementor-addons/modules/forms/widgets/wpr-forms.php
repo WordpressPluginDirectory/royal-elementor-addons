@@ -2401,7 +2401,9 @@ class Wpr_Forms extends Widget_Base {
 	}
 
 	public function render_wpforms_template( $settings ) {
-		echo wpforms_display( $settings['wpforms_templates'], $settings['show_form_title'], $settings['show_form_description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( function_exists( 'wpforms_display' ) ) {
+			echo wpforms_display( $settings['wpforms_templates'], $settings['show_form_title'], $settings['show_form_description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 	}
 
 	public function render_ninja_forms_template( $settings ) {

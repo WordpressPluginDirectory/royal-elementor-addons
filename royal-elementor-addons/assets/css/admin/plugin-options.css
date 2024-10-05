@@ -284,12 +284,40 @@
 }
 
 .wpr-widgets-search {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+#wpr-info-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  max-width: 300px;
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  max-width: 500px;
+}
+
+#wpr-info-box a {
+  color: #6A4BFF;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#wpr-info-box a:hover {
+  text-decoration: underline;
 }
 
 .wpr-widgets-search input {
@@ -1647,6 +1675,12 @@ div.fs-notice.updated, div.fs-notice.success {
   display: none !important;
 }
 
+/* Freemius license error video */
+.wpr-fs-error-video-tutorial {
+  color: #000 !important;
+  text-decoration: none !important;
+  font-weight: bold !important;
+}
 
 /*--------------------------------------------------------------
 == Responsive

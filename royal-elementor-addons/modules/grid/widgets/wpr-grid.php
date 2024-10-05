@@ -8334,12 +8334,13 @@ class Wpr_Grid extends Widget_Base {
 		}
 
 		$query_order_by = '' != $settings['query_randomize'] ? $settings['query_randomize'] : $settings['order_posts'];
+		$post__not_in = isset($settings[ 'query_exclude_'. $settings[ 'query_source' ] ]) && !empty($settings[ 'query_exclude_'. $settings[ 'query_source' ] ]) ? $settings[ 'query_exclude_'. $settings[ 'query_source' ] ] : [];
 
 		// Dynamic
 		$args = [
 			'post_type' => $settings[ 'query_source' ],
 			'tax_query' => $this->get_tax_query_args(),
-			'post__not_in' => $settings[ 'query_exclude_'. $settings[ 'query_source' ] ],
+			'post__not_in' => $post__not_in,
 			'posts_per_page' => $settings['query_posts_per_page'],
 			'orderby' => $query_order_by,
 			'author' => $author,

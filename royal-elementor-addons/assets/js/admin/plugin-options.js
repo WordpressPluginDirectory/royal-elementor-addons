@@ -718,6 +718,29 @@ jQuery(document).ready(function( $ ) {
 			$('.wpr-widgets-not-found').hide();
 			$('.submit').show();
 
+			let keywords = ["appointment", "book"]; // Keywords to look for
+
+			// Check if any keyword matches the input
+			let keywordFound = keywords.some(function(keyword) {
+				return keyword.includes(val) || val.includes(keyword);
+			});
+	
+			// If a keyword is found and the div doesn't already exist
+			if (keywordFound && !($('body').find('#wpr-info-box').length > 0)) {
+				// Append the new div
+				let infoBox = `
+					<div id="wpr-info-box">
+						Looking for Booking Solution? Check out the <a href="https://www.youtube.com/watch?v=asdMBXpd2Nw" target="_blank">Video Tutorial</a>.
+					</div>
+				`;
+				$('.wpr-widgets-search').append(infoBox);
+			}
+
+			// If no keyword is found and the div exists, remove it
+			else if ( (!keywordFound || val === '') && $('body').find('#wpr-info-box').length > 0 ) {
+				$('body').find('#wpr-info-box').remove();
+			}
+
 			if ( '' !== val ) {
 				$('.wpr-elements, .wpr-element, .wpr-elements-heading').hide();
 				$('.wpr-widgets-not-found').hide();

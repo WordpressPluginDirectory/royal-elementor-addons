@@ -1471,7 +1471,7 @@ class Wpr_Product_Media extends Widget_Base {
 			'download' => $settings['lightbox_popup_download'],
 		];
 
-		return json_encode( $lightbox_settings );	
+		return json_encode( $lightbox_settings );
 	}
 
 	public function wpr_remove_woo_default_lightbox() {	 	 
