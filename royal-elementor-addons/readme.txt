@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.3.987
+Stable tag: 1.7.1
 Requires at least: 5.0
 Tested up to: 6.6.2
 Requires PHP: 5.6
@@ -451,6 +451,10 @@ post_max_size 64M
 = How can I report security bugs? =
 
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
+
+== Changelog ===
+= Royal Elementor Addons v1.7.1 - 2024-10-18 =
+* FIXED: Minor Bugs
 
 == Changelog ===
 = Royal Elementor Addons v1.3.987 - 2024-10-04 =
