@@ -224,10 +224,10 @@ class WPR_Render_Templates {
 			$elementor->frontend->enqueue_styles();
 		}
 
-		if ( class_exists( '\ElementorPro\Plugin' ) ) {
-			$elementor_pro = \ElementorPro\Plugin::instance();
-			$elementor_pro->enqueue_styles();
-		}
+		// if ( class_exists( '\ElementorPro\Plugin' ) ) {
+		// 	$elementor_pro = \ElementorPro\Plugin::instance();
+		// 	$elementor_pro->enqueue_styles();
+		// }
 
 		// Load Header Template CSS File
 		$heder_conditions = json_decode( get_option('wpr_header_conditions', '[]'), true );
