@@ -2,6 +2,8 @@
 namespace WprAddons\Admin\Includes;
 
 use WprAddons\Classes\Utilities;
+use Elementor\Core\Base\Elements_Iteration_Actions\Assets;
+use Elementor\Core\Files\CSS\Post as Post_CSS;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -219,14 +221,16 @@ class WPR_Render_Templates {
 	 */
 	public function enqueue_scripts() {
 
-		if ( class_exists( '\Elementor\Plugin' ) ) {
-			$elementor = \Elementor\Plugin::instance();
-			$elementor->frontend->enqueue_styles();
+		if ( !class_exists( '\Elementor\Plugin' ) ) {
+			return;
 		}
 
+		// Elementor Frontend // Maybe we dont need this (should be extra, because we have everything below)
+		self::$elementor_instance->frontend->enqueue_styles();
+		
 		// if ( class_exists( '\ElementorPro\Plugin' ) ) {
 		// 	$elementor_pro = \ElementorPro\Plugin::instance();
-		// 	$elementor_pro->enqueue_styles();
+		// 	$elementor_pro->enqueue_frontend_scripts();
 		// }
 
 		// Load Header Template CSS File
@@ -235,6 +239,19 @@ class WPR_Render_Templates {
 		$header_template_id = !is_null($heder_template) ? Utilities::get_template_id($heder_template) : false;
 
 		if ( false !== $header_template_id ) {
+
+			// Load Header Template Assets (Elementor Widget)
+			if ( ! self::$elementor_instance->preview->is_preview_mode() ) {
+				$page_assets = get_post_meta( $header_template_id, Assets::ASSETS_META_KEY, true );
+				if ( ! empty( $page_assets ) ) {
+					self::$elementor_instance->assets_loader->enable_assets( $page_assets );
+				}
+
+				$css_file = Post_CSS::create( get_the_ID() );
+				$css_file->enqueue();
+			}
+
+			// Header Template CSS File
 			if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
 				$header_css_file = new \Elementor\Core\Files\CSS\Post( $header_template_id );
 			} elseif ( class_exists( '\Elementor\Post_CSS_File' ) ) {
@@ -250,6 +267,18 @@ class WPR_Render_Templates {
 		$footer_template_id = !is_null($footer_template) ? Utilities::get_template_id($footer_template) : false;
 
 		if ( false !== $footer_template_id ) {
+			// Load Footer Template Assets (Elementor Widget)
+			if ( ! self::$elementor_instance->preview->is_preview_mode() ) {
+				$page_assets = get_post_meta( $footer_template_id, Assets::ASSETS_META_KEY, true );
+				if ( ! empty( $page_assets ) ) {
+					self::$elementor_instance->assets_loader->enable_assets( $page_assets );
+				}
+
+				$css_file = Post_CSS::create( get_the_ID() );
+				$css_file->enqueue();
+			}
+
+			// Footer Template CSS File
 			if ( class_exists( '\Elementor\Core\Files\CSS\Post' ) ) {
 				$footer_css_file = new \Elementor\Core\Files\CSS\Post( $footer_template_id );
 			} elseif ( class_exists( '\Elementor\Post_CSS_File' ) ) {

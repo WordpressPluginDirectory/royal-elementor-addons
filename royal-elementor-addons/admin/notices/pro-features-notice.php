@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WprProFeaturesNotice {
     public function __construct() {
 
-        if ( !wpr_fs()->is_plan( 'expert' ) ) {
+        if ( function_exists('wpr_fs') && !wpr_fs()->is_plan( 'expert' ) ) {
 
             if ( current_user_can('administrator') ) {
 

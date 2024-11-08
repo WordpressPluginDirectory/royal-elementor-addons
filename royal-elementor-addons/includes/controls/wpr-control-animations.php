@@ -296,5 +296,15 @@ class WPR_Control_Button_Animations extends Base_Data_Control {
 		<# } #>
 		<?php
 	}
+
+	public static function get_assets( $setting ) {
+		if ( ! $setting || 'none' === $setting || !str_contains($setting, 'elementor-animation') ) {
+			return [];
+		}
+
+		return [
+			'styles' => [ 'e-animation-' . str_replace('elementor-animation-', '', $setting) ],
+		];
+	}
 	
 }

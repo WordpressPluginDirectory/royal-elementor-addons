@@ -284,6 +284,34 @@
 	border-right-color: #fff;
 }
 
+.MuiBox-root button[value="document-settings"] {
+	position: relative;
+}
+
+#wpr-template-settings-notification.wpr-new-editor-bar {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	bottom: auto;
+	min-height: 100px;
+	min-width: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#wpr-template-settings-notification.wpr-new-editor-bar:before {
+	position: absolute;
+	left: 10px;
+	top: -12px;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-bottom-style: solid;
+	border-bottom-width: 6px;
+	border-bottom-color: #fff;
+}
+
 #wpr-template-settings-notification h4 {
 	margin-bottom: 10px;
 }

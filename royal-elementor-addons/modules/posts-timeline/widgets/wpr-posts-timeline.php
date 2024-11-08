@@ -84,6 +84,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 	public $description_key;
 	public $background_image;
 	public $background_class;
+	public $src;
 
 	public function wpr_aos_animation_array() {
 		return [

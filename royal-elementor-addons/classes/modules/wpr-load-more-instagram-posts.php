@@ -56,13 +56,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		$target = 'yes' == $_POST['wpr_load_more_settings']['open_in_new_tab'] ? '_blank' : '_self';
 
-		echo '<'. esc_attr($settings['element_username_tag']) .' class="'. esc_attr($class) .'">';
+		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+		$element_username_tag = Utilities::validate_html_tags_wl( $settings['element_username_tag'], 'h2', $tags_whitelist );
+
+		echo '<'. esc_attr($element_username_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				echo '<a href="'. $result->permalink .'" target="'. $target .'">';
 					echo esc_html($result->username);
 				echo '</a>';
 			echo '</div>';
-		echo '</'. esc_attr($settings['element_username_tag']) .'>';
+		echo '</'. esc_attr($element_username_tag) .'>';
 	}
 
 	public function render_post_caption($settings, $class, $result) {

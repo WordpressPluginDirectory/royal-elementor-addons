@@ -498,11 +498,11 @@
 						speed: $scope.attr('speed-data'),
 					});
 				} else if ( WprElements.editorCheck() ) {
-					$scope.css('background-image', 'url("' + $scope.find('.wpr-jarallax').attr('bg-image-editor') + '")');
+					$scope.css('background-image', 'url("' + $scope.find('> .wpr-jarallax').attr('bg-image-editor') + '")');
 					$scope.jarallax({
-						type: $scope.find('.wpr-jarallax').attr('scroll-effect-editor'),
-						speed: $scope.find('.wpr-jarallax').attr('speed-data-editor')
-					});
+						type: $scope.find('> .wpr-jarallax').attr('scroll-effect-editor'),
+						speed: $scope.find('> .wpr-jarallax').attr('speed-data-editor')
+					});									
 				}
 			}
 
@@ -1179,14 +1179,14 @@
 								if (scrollPos >= sectionPos - 50 && scrollPos < sectionPos + sectionHeight - 50) {
 								// if ( scrollPos >= sectionPos && scrollPos < sectionPos + sectionHeight ) {
 									// Get the id of the section
-									var sectionId = "#" + $(this).attr("id");
+									var sectionId = $(this).attr("id");
 							
 									// Remove the active class from all links
 									$navLinks.removeClass("wpr-onepage-active-item");
 							
 									// Add the active class to the corresponding link
 									$navLinks.filter(function(){
-										return $(this).find('a[href=' + sectionId + ']').length;
+										return $(this).find('a[href*=' + sectionId + ']').length;
 									}).addClass("wpr-onepage-active-item");
 								}
 							}
@@ -5105,7 +5105,7 @@
 			if ( 'box' === flipBoxTrigger ) {
 
 				$flipBox.find('.wpr-flip-box-front').on( 'click', function() {
-					$(this).closest('.wpr-flip-box').addClass('wpr-flip-box-active'); 
+					$(this).closest('.wpr-flip-box').addClass('wpr-flip-box-active');
 				});
 
 				$(window).on( 'click', function () {
@@ -7412,19 +7412,41 @@
 		}, // end widgetFlipCarousel
 
 		widgetFeatureList: function($scope) {
-			$scope.find('.wpr-feature-list-item:not(:last-of-type)').find('.wpr-feature-list-icon-wrap').each(function(index) {
-				var offsetTop = $scope.find('.wpr-feature-list-item').eq(index + 1).find('.wpr-feature-list-icon-wrap').offset().top;
-				
-				$(this).find('.wpr-feature-list-line').height(offsetTop - $(this).offset().top + 'px');
-			});
+            const target = document.querySelector('.e-n-tabs-content>div');
+            
+            if (target) {
+                const observer = new MutationObserver(function(mutationsList) {
+                    for (let mutation of mutationsList) {
+                        if (mutation.type === 'attributes' || mutation.type === 'childList') {
+                            featureList();
+                        }
+                    }
+                });
+        
+                observer.observe(target, {
+                    attributes: true,
+                    childList: true,
+                    subtree: true
+                });
+            }
 
-			$(window).resize(function() {
-				$scope.find('.wpr-feature-list-item:not(:last-of-type)').find('.wpr-feature-list-icon-wrap').each(function(index) {
-					var offsetTop = $scope.find('.wpr-feature-list-item').eq(index + 1).find('.wpr-feature-list-icon-wrap').offset().top;
-					
-					$(this).find('.wpr-feature-list-line').height(offsetTop - $(this).offset().top + 'px');
-				});
-			})
+            featureList();
+
+            function featureList() { 
+                $scope.find('.wpr-feature-list-item:not(:last-of-type)').find('.wpr-feature-list-icon-wrap').each(function(index) {
+                    var offsetTop = $scope.find('.wpr-feature-list-item').eq(index + 1).find('.wpr-feature-list-icon-wrap').offset().top;
+                    
+                    $(this).find('.wpr-feature-list-line').height(offsetTop - $(this).offset().top + 'px');
+                });
+
+                $(window).resize(function() {
+                    $scope.find('.wpr-feature-list-item:not(:last-of-type)').find('.wpr-feature-list-icon-wrap').each(function(index) {
+                        var offsetTop = $scope.find('.wpr-feature-list-item').eq(index + 1).find('.wpr-feature-list-icon-wrap').offset().top;
+                        
+                        $(this).find('.wpr-feature-list-line').height(offsetTop - $(this).offset().top + 'px');
+                    });
+                });
+            }
 		}, // end widgetFeatureList
 		
 		widgetAdvancedAccordion: function($scope) {
@@ -8026,7 +8048,7 @@
 					
 						// If the product ID is not in the wishlistProductIds array, remove the element
 						if (!wishlistProductIds.includes(productId)) {
-						$(this).remove();
+							$(this).remove();
 						}
 					});
 
@@ -8395,14 +8417,15 @@
 					action: 'count_compare_items',
 				},
 				success: function(response) {
-					if ( $scope.find('.wpr-compare-count').css('display') == 'none' && 0 < response.compare_count ) {
-						$scope.find('.wpr-compare-count').text(response.compare_count);
+					let compare_count = response.compare_count;
+					if ( $scope.find('.wpr-compare-count').css('display') == 'none' && 0 < compare_count ) {
+						$scope.find('.wpr-compare-count').text(compare_count);
 						$scope.find('.wpr-compare-count').css('display', 'inline-flex');
-					} else if ( 0 == response.compare_count ) {
+					} else if ( 0 == compare_count ) {
 						$scope.find('.wpr-compare-count').css('display', 'none');
-						$scope.find('.wpr-compare-count').text(response.compare_count);
+						$scope.find('.wpr-compare-count').text(compare_count);
 					} else {
-						$scope.find('.wpr-compare-count').text(response.compare_count);
+						$scope.find('.wpr-compare-count').text(compare_count);
 					}
 				},
 				error: function(error) {
@@ -8744,7 +8767,10 @@
 										var sanitizedErrorMessage = $('<div>').text($scope.data('settings').error_message).html();
 										$scope.find('form').append('<p class="wpr-submit-error">' + sanitizedErrorMessage + '</p>');
 									} else {
-										$scope.find('form').append('<p class="wpr-submit-success">'+ $scope.data('settings').success_message +'</p>');
+										$scope.find('form').append(
+											$('<p class="wpr-submit-success"></p>').text($scope.data('settings').success_message)
+										);										
+										// $scope.find('form').append('<p class="wpr-submit-success">'+ $scope.data('settings').success_message +'</p>');
 										$scope.find('button').attr('disabled', true);
 										$scope.find('button').css('opacity', 0.6);
 									}
@@ -8786,6 +8812,7 @@
 						data: {
                             action: 'wpr_update_form_action_meta',
                             nonce: WprConfig.nonce,
+							custom_token: WprConfig.token,
 							post_id: postId,
 							action_name: actionName,
 							status: status,
@@ -9729,6 +9756,18 @@
 			$( document.body ).on( 'updated_wc_div', function() {
 				updateMiniCart();
 			});
+			
+			// function updateVH() {
+			// 	let vh = window.innerHeight * 0.01;
+			// 	document.documentElement.style.setProperty('--vh', `${vh}px`);
+			// }
+			
+			// // Run the function initially
+			// updateVH();
+			
+			// // Recalculate on window resize (for when the user rotates the device or resizes the viewport)
+			// window.addEventListener('resize', updateVH);
+			
             
             function updateMiniCart() {
                 $.ajax({

@@ -133,7 +133,8 @@ class Wpr_Woo_Grid extends Widget_Base {
 					'slider' => esc_html__( 'Slider / Carousel', 'wpr-addons' ),
 					'pro-ms' => esc_html__( 'Masonry - Unlimited Height (Pro)', 'wpr-addons' ),
 				],
-				'label_block' => true
+				'label_block' => true,
+				'render_type' => 'template'
 			]
 		);
 	}
@@ -1275,6 +1276,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-slider-dots' => 'display:{{VALUE}};',
 				],
+				'render_type' => 'template',
 				'condition' => [
 					'layout_select' => 'slider',
 				],
@@ -9272,7 +9274,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			$button_HTML .= esc_html__('View Product', 'wpr-addons');
 			array_push( $attributes, 'href="'. esc_url( get_permalink() ) .'"' );
 		} else {
-			if ( !$product->get_product_url() ) {
+			if ( !is_callable( array( $product, 'get_product_url' ) ) ) {
 				$button_HTML .= esc_html__('View Product', 'wpr-addons');
 				array_push( $attributes, 'href="'. esc_url( get_permalink() ) .'"' );
 			} else {
@@ -10348,6 +10350,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			echo '<h2>'. esc_html__( 'WooCommerce is NOT active!', 'wpr-addons' ) .'</h2>';
 			return;
 		}
+		
 		// Get Posts
 		$posts = new \WP_Query( $this->get_main_query_args() );
 

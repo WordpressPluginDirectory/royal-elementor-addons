@@ -518,6 +518,7 @@ class Wpr_Google_Maps extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-google-map .gm-style-iw-d' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-google-map .gm-style .gm-style-iw-c' => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} .wpr-google-map .gm-style-iw-t:after' => 'background: {{VALUE}}',
 					'{{WRAPPER}} .wpr-google-map .gm-style-iw-tc:after' => 'background: {{VALUE}}'
 				],
@@ -634,21 +635,38 @@ class Wpr_Google_Maps extends Widget_Base {
 	protected function render() {
 		// Get Settings
 		$settings = $this->get_settings();
-
+	
+		// Access and sanitize gm_location_title
 		$google_map_locations = $settings['google_map_locations'];
-
-		$google_map_locations[0]['gm_location_title'] = wp_kses_post(preg_replace('/\s*on\w+="[^"]*"/i', '', $google_map_locations[0]['gm_location_title']));
-
-		$attributes  = ' data-settings="'. esc_attr( json_encode($this->get_map_settings( $settings )) ) .'"';
-		$attributes .= ' data-locations="'. esc_attr( json_encode($google_map_locations) ) .'"';
-		$attributes .= ' data-controls="'. esc_attr( json_encode($this->get_map_controls( $settings )) ) .'"';
-
+	
+		// Sanitize: Remove <img>, <script> tags and any attributes like onerror
+		$gm_location_title = $google_map_locations[0]['gm_location_title'];
+		$gm_location_title = preg_replace('/<\s*(img|script)[^>]*>/i', '', $gm_location_title); // Remove <img> and <script>
+		$gm_location_title = preg_replace('/\s*on\w+="[^"]*"/i', '', $gm_location_title);       // Remove inline event handlers
+	
+		// Final encode to escape any remaining HTML entities or unsafe characters
+		$gm_location_title = htmlspecialchars($gm_location_title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	
+		// Assign sanitized title back to location data
+		$google_map_locations[0]['gm_location_title'] = $gm_location_title;
+	
+		// Encode data for output, ensuring JSON strings are sanitized and properly escaped
+		$map_settings = json_encode($this->get_map_settings($settings), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+		$map_locations = json_encode($google_map_locations, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+		$map_controls = json_encode($this->get_map_controls($settings), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+	
+		// Set sanitized attributes
+		$attributes  = ' data-settings="'. esc_attr($map_settings) .'"';
+		$attributes .= ' data-locations="'. esc_attr($map_locations) .'"';
+		$attributes .= ' data-controls="'. esc_attr($map_controls) .'"';
+	
+		// Output the sanitized HTML container
 		echo '<div class="wpr-google-map" '. $attributes .'></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-		if ( current_user_can('manage_options') && '' == get_option('wpr_google_map_api_key') ) {
-			echo '<p class="wpr-api-key-missing">Please go to plugin <a href='. admin_url( 'admin.php?page=wpr-addons&tab=wpr_tab_settings' ) .' target="_blank">Settings</a> and Insert Google Map API Key in order to make Google Maps work</p>';
+	
+		// Additional admin notice for missing API key
+		if (current_user_can('manage_options') && '' == get_option('wpr_google_map_api_key')) { 
+			echo '<p class="wpr-api-key-missing">Please go to plugin <a href='. esc_url(admin_url( 'admin.php?page=wpr-addons&tab=wpr_tab_settings' )) .' target="_blank">Settings</a> and Insert Google Map API Key in order to make Google Maps work</p>'; 
 		}
-
-	}
+	}	
 	
 }

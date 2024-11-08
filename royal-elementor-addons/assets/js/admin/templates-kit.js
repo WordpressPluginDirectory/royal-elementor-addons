@@ -25,7 +25,7 @@ jQuery(document).ready(function( $ ) {
 					return false;
 				}
 
-				var confirmImport = confirm('For the best results, it is recommended to temporarily deactivate All other Active plugins Except Elementor and Royal Elementor Addons.\n\nElementor Header, Footer, Pages, Media Files, Menus and some required plugins will be installed on your website.');
+				var confirmImport = confirm('For the best results, it is recommended to temporarily deactivate All other Active plugins Except Elementor and Royal Elementor Addons.\n\nHere’s what will be imported: posts, pages, images in the media library, menu items, some basic settings (like which page will be the homepage), and any pre-made headers, footers, and pop-ups if the Template Kit includes them. You can always delete this imported content and return to your old site design. \n\nDon’t worry—none of your current data, like images, posts, pages, menus and anything else, won’t be deleted.');
 				
 				if ( confirmImport ) {
 					WprTemplatesKit.importTemplatesKit( $(this).attr('data-kit-id') );

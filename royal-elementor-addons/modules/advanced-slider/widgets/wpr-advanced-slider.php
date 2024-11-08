@@ -596,7 +596,10 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					'h3' => esc_html__( 'H3', 'wpr-addons' ),
 					'h4' => esc_html__( 'H4', 'wpr-addons' ),
 					'h5' => esc_html__( 'H5', 'wpr-addons' ),
-					'h6' => esc_html__( 'H6', 'wpr-addons' )
+					'h6' => esc_html__( 'H6', 'wpr-addons' ),
+					'div' => 'div',
+					'span' => 'span',
+					'P' => 'p'
 				],
 				'default' => 'h2',
 				'condition' => [
@@ -631,7 +634,10 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					'h3' => esc_html__( 'H3', 'wpr-addons' ),
 					'h4' => esc_html__( 'H4', 'wpr-addons' ),
 					'h5' => esc_html__( 'H5', 'wpr-addons' ),
-					'h6' => esc_html__( 'H6', 'wpr-addons' )
+					'h6' => esc_html__( 'H6', 'wpr-addons' ),
+					'div' => 'div',
+					'span' => 'span',
+					'P' => 'p'
 				],
 				'default' => 'h3',
 				'condition' => [

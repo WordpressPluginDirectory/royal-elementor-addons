@@ -296,7 +296,7 @@ class WPR_Templates_Data {
 			],
 			'electrician' => [
 				'v1' => [
-					'name' => 'Electrician',
+					'name' => 'Electrician V1',
 					'pages' => 'home,about,services,service-details,gallery,blog,single-blog,contact,',
 					'plugins' => '{}',
 					'tags' => 'free electrician electrical solutions energy services efficient repair residential industrial emergency maintenance electric electricity electrical repairer maintenance business engineering lighting repair handyman',
@@ -955,7 +955,7 @@ class WPR_Templates_Data {
 			],
 			'car-repair' => [
 				'v1' => [
-					'name' => 'Car Repair',
+					'name' => 'Car Repair V1',
 					'pages' => 'home,about,contact,services,team,',
 					'plugins' => '{}',
 					'tags' => 'free car repair cars car care car detailing car repair repair car service vehicle auto vehicle',
@@ -965,6 +965,18 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 10,
+				],
+				'v2' => [
+					'name' => 'Car Repair V2',
+					'pages' => 'home,about,services,pricing,faq,gallery,shop,product-details,cart,checkout,blog,blog-details,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'pro car repair cars car care car detailing car repair repair car service vehicle auto vehicle',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 5,
 				],
 			],
 			'pet-care' => [
@@ -1046,6 +1058,18 @@ class WPR_Templates_Data {
 					'woo-builder' => false,
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 5,
+				],
+				'v2' => [
+					'name' => 'Financial Services V2',
+					'pages' => 'home,about-us,services,pricing,news,news-details,consultation,contact,',
+					'plugins' => '{}',
+					'tags' => 'advisor advsors blockchain business coach company consultancy consultant consulting corporate crypto cryptocurrency entrepreneur finance finances financial fintech firm free grow guide insurance investment management marketing mentor motivational penny planning sales service services solutions speaker startup strategy technology wealth',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 5,
 				],
@@ -1403,16 +1427,28 @@ class WPR_Templates_Data {
 			],
 			'cleaning' => [
 				'v1' => [
-					'name' => 'Cleaning Service',
+					'name' => 'Cleaning Service V1',
 					'pages' => 'home,about,services,blog,single-blog,contact,',
 					'plugins' => '{}',
-					'tags' => 'free cleaning services solutions outdoor cleaning eco friendly home cleaning industrial cleaning santization house cleaning cleaner washing meintenance house keeping window cleaning laundry',
+					'tags' => 'free cleaning services solutions outdoor cleaning eco friendly home cleaning industrial cleaning santization house cleaning cleaner washing meintenance house keeping window cleaning laundry home care',
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 15,
+				],
+				'v2' => [
+					'name' => 'Cleaning Service V2',
+					'pages' => 'home,about,services,pricing,shop,product-details,cart,checkout,blog,blog-details,faq,contact,contact-v2,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'pro free cleaning services solutions outdoor cleaning eco friendly home cleaning industrial cleaning santization house cleaning cleaner washing meintenance house keeping window cleaning laundry home care',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 5,
 				],
 			],
 			'realestate' => [
@@ -1744,6 +1780,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','services','resources','blog','faq','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
+			'financial-services-v2' => [
+				'name' => 'Financial Services V2',
+				'pages' => ['home','about-us','services','pricing','news','consultation','contact'],
+				'preview' => ['home','about-us','services','pricing','news','consultation','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'fintech-v1' => [
 				'name' => 'Fintech Startup',
 				'pages' => ['home','about','services','blog','contact'],
@@ -1833,6 +1875,12 @@ class WPR_Templates_Data {
 				'pages' => ['home','about','contact','services','team'],
 				'preview' => ['home','about','contact','services','team'],
 				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'car-repair-v2' => [
+				'name' => 'Car Repair V2',
+				'pages' => ['home','about','services','pricing','faq','gallery','shop','cart','blog','contact'],
+				'preview' => ['home','about','services','pricing','faq','gallery','shop','cart','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'business-consulting-v1' => [
 				'name' => 'Business Consulting',
@@ -1995,6 +2043,12 @@ class WPR_Templates_Data {
 				'pages' => ['home','about','services','blog','contact'],
 				'preview' => ['home','about','services','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'cleaning-v2' => [
+				'name' => 'Cleaning Service V2',
+				'pages' => ['home','about','services','pricing','shop','cart','blog','faq','contact','contact-v2'],
+				'preview' => ['home','about','services','pricing','shop','cart','blog','faq','contact','contact-v2'],
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'digitalagency-v2' => [
 				'name' => 'Digital Agency',

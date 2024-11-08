@@ -433,6 +433,39 @@ class Plugin {
 			Plugin::instance()->get_version()
 		);
 	}
+	
+	public function set_guest_token_cookie() {
+		if ( ! isset( $_COOKIE['wpr_guest_token'] ) ) {
+			// Generate a unique token and store it in a cookie
+			$guest_id = bin2hex(random_bytes(32)); // Secure random string as guest "session"
+			setcookie( 'wpr_guest_token', $guest_id, time() + 3600, '/' ); // 1 hour expiration
+			$_COOKIE['wpr_guest_token'] = $guest_id; // Ensure it's immediately available in PHP
+		}
+	}
+
+	public function generate_custom_token() {
+		if ( is_user_logged_in() ) {
+			// For logged-in users, use their user ID to store a token
+			$user_id = get_current_user_id();
+			$token = bin2hex(random_bytes(32)); // Secure token generation
+			set_transient( 'wpr_custom_token_' . $user_id, $token, HOUR_IN_SECONDS ); // Store token for 1 hour
+			return $token;
+		} else {
+			// For non-logged-in users, check if the guest token cookie exists
+			if ( isset( $_COOKIE['wpr_guest_token'] ) ) {
+				$guest_id = sanitize_text_field( $_COOKIE['wpr_guest_token'] );
+			} else {
+				// If somehow the cookie isn't set, handle appropriately
+				return null;
+			}
+	
+			// Now use the guest ID to store a transient specific to this user
+			$token = bin2hex(random_bytes(32)); // Secure token generation
+			set_transient( 'wpr_custom_guest_token_' . $guest_id, $token, HOUR_IN_SECONDS ); // Store token for 1 hour
+			return $token;
+		}
+	}
+	
 
 	public function hide_theme_notice() {
 		wp_enqueue_style( 'hide-theme-notice', WPR_ADDONS_URL .'assets/css/admin/wporg-theme-notice.css', [] );
@@ -488,6 +521,8 @@ class Plugin {
 			true
 		);
 
+		$custom_token = $this->generate_custom_token();
+
 		wp_localize_script(
 			'wpr-addons-js',
 			'WprConfig', // This is used in the js file to group all of your scripts together
@@ -507,10 +542,11 @@ class Plugin {
 				'input_empty' => esc_html__('Please fill out this field', 'wpr-addons'),
 				'select_empty' => esc_html__('Nothing selected', 'wpr-addons'),
 				'file_empty' => esc_html__('Please upload a file', 'wpr-addons'),
-				'recaptcha_error' => esc_html__('Recaptcha Error', 'wpr-addons')
+				'recaptcha_error' => esc_html__('Recaptcha Error', 'wpr-addons'),
+				'token' => $custom_token
 			]
 		);
-	}
+	}	
 
 	public function register_scripts() {
 
@@ -955,6 +991,10 @@ class Plugin {
     }
 
 	protected function add_actions() {
+
+		// User Cookie
+		add_action( 'init', [$this, 'set_guest_token_cookie' ]);
+
 		// Register Widgets
 		add_action( 'elementor/init', [ $this, 'elementor_init' ] );
 

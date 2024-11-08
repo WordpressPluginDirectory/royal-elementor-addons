@@ -125,11 +125,19 @@ class WPR_Templates_Library_Sections {
 		}
 	}
 
-    public static function create_slug($str, $delimiter = '-'){
-
-        $slug = strtolower(trim(preg_replace('/[\s-]+/', $delimiter, preg_replace('/[^A-Za-z0-9-]+/', $delimiter, preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))))), $delimiter));
-        return $slug;
-    
-    } 
+	public static function create_slug($str, $delimiter = '-'){
+		// Try to convert the string with iconv
+		$converted_str = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+	
+		// If iconv fails, fallback to the original string
+		if ($converted_str === false) {
+			$converted_str = $str; // Fallback to the original string
+		}
+	
+		// Continue with the rest of the slug generation
+		$slug = strtolower(trim(preg_replace('/[\s-]+/', $delimiter, preg_replace('/[^A-Za-z0-9-]+/', $delimiter, preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', $converted_str)))), $delimiter));
+		
+		return $slug;
+	}	
 
 }

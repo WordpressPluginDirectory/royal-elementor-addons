@@ -1032,7 +1032,7 @@ class Wpr_Countdown extends Widget_Base {
 						break;
 
 					case 'redirect':
-						$actions['redirect'] = $settings['redirect_url'];
+						$actions['redirect'] = esc_url($settings['redirect_url']) ? esc_url($settings['redirect_url']) : '#';
 						break;
 
 					case 'load-template':
