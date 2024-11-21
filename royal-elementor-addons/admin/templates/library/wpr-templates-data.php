@@ -393,7 +393,20 @@ class WPR_Templates_Data {
 				],
 				'v3' => [
 					'name' => 'Fashion 3 - Shop',
-					'pages' => 'home,home-v2,shop,shop-v2,shop-grid-list-view,shop-grid-catalog-mode,simple-product,variable-product,grouped-product,external-product,cart,compare,wishlist,about,blog,single-blog,contact,contact-v1,contact-v2,',
+					'pages' => 'home,home-v2,shop,shop-v2,shop-grid-list-view,shop-grid-catalog-mode,cart,compare,wishlist,about,blog,single-blog,contact,contact-v1,contact-v2,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore store ecommerce product ecommerce shop online boutique clothes eshopping fashion designer market reseller digital purchases e commerce',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 3,
+				],
+				'v4' => [
+					'name' => 'Fashion 4 - Shop',
+					'pages' => 'home,about,shop,single-product,category,cart,compare,wishlist,blog,single-blog,faq,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
 					'tags' => 'shop shopping woo-commerce woocommerce estore store ecommerce product ecommerce shop online boutique clothes eshopping fashion designer market reseller digital purchases e commerce',
 					'theme-builder' => true,
@@ -1680,8 +1693,14 @@ class WPR_Templates_Data {
 			],
 			'fashion-v3' => [
 				'name' => 'Fashion 3 - Shop',
-				'pages' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','simple-product','variable-product','grouped-product','external-product','cart','compare','wishlist','about','blog','single-blog','contact','contact-v1','contact-v2',],
-				'preview' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','simple-product','variable-product','grouped-product','external-product','cart','compare','wishlist','about','blog','single-blog','contact','contact-v1','contact-v2',],
+				'pages' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','cart','compare','wishlist','about','blog','contact','contact-v1','contact-v2',],
+				'preview' => ['home','home-v2','shop','shop-v2','shop-grid-list-view','shop-grid-catalog-mode','cart','compare','wishlist','about','blog','contact','contact-v1','contact-v2',],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'fashion-v4' => [
+				'name' => 'Fashion 4 - Shop',
+				'pages' => ['home','about','shop','category','cart','compare','wishlist','blog','faq','contact',],
+				'preview' => ['home','about','shop','category','cart','compare','wishlist','blog','faq','contact',],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'digitalagency-v3' => [

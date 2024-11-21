@@ -1,9 +1,9 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1002
+Stable tag: 1.7.1003
 Requires at least: 5.0
-Tested up to: 6.6.2
+Tested up to: 6.7
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -453,7 +453,11 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
-= Royal Elementor Addons v1.7.1001 - 2024-11-08 =
+= Royal Elementor Addons v1.7.1003 - 2024-11-20 =
+* ADDED: Elementor Fashion (Shop) V4 Template Kit - [**Fashion**](https://demosites.royal-elementor-addons.com/fashion-v4/?ref=rea-wpo-pp-details-tab).
+* FIXED: Minor Bugs
+
+= Royal Elementor Addons v1.7.1002 - 2024-11-08 =
 * ADDED: Elementor Cleaning Services V2 Template Kit - [**Cleaning Services**](https://demosites.royal-elementor-addons.com/cleaning-v2/?ref=rea-wpo-pp-details-tab).
 * ADDED: Elementor Car Repair V2 Template Kit - [**Car Repair**](https://demosites.royal-elementor-addons.com/car-repair-v2/?ref=rea-wpo-pp-details-tab).
 * ADDED: Elementor Financial Services Template Kit - [**Financial Services**](https://demosites.royal-elementor-addons.com/financial-services-v2/?ref=rea-wpo-pp-details-tab).
