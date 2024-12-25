@@ -11,7 +11,8 @@
   opacity: 0 !important;
 }
 
-#elementor-panel-get-pro-elements-sticky {
+#elementor-panel-get-pro-elements-sticky,
+#elementor-panel-get-pro-elements {
   display: none;
 }
 
@@ -660,6 +661,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+	align-items: center;
 }
 
 .editor-wpr-preview-update button {

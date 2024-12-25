@@ -1,9 +1,9 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1003
+Stable tag: 1.7.1006
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.7.1
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -453,6 +453,20 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1006 - 2024-12-25 =
+* FIXED: Instagram Bug
+
+= Royal Elementor Addons v1.7.1005 - 2024-12-18 =
+* ADDED: New Year 2025 - Elementor Template Kit - [**New Year V1**](https://demosites.royal-elementor-addons.com/newyear-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Christmas (Shop) - Elementor Templates Kit - [**Christmas V1**](https://demosites.royal-elementor-addons.com/christmas-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Plumbing - Elementor Templates Kit - [**Plumbing V1**](https://demosites.royal-elementor-addons.com/plumbing-v1/?ref=rea-wpo-pp-details-tab).
+* FIXED: Minor Bugs
+
+= Royal Elementor Addons v1.7.1004 - 2024-11-23 =
+* ADDED: Magazine Blog V7 - Elementor Template Kit - [**Magazine V7**](https://demosites.royal-elementor-addons.com/magazine-blog-v7/?ref=rea-wpo-pp-details-tab).
+* ADDED: Business Landing Page V2 - Elementor Templates Kit - [**Landing Page Business V2**](https://demosites.royal-elementor-addons.com/landing-page-business-v2/?ref=rea-wpo-pp-details-tab).
+* FIXED: Minor Bugs
+
 = Royal Elementor Addons v1.7.1003 - 2024-11-20 =
 * ADDED: Elementor Fashion (Shop) V4 Template Kit - [**Fashion**](https://demosites.royal-elementor-addons.com/fashion-v4/?ref=rea-wpo-pp-details-tab).
 * FIXED: Minor Bugs

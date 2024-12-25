@@ -593,6 +593,7 @@ class Wpr_Taxonomy_List extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-taxonomy-list li i:not(.wpr-tax-dropdown)' => 'margin-right: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-taxonomy-list li svg:not(.wpr-tax-dropdown)' => 'margin-right: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);

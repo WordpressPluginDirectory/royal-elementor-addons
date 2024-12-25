@@ -762,6 +762,7 @@ class Wpr_Media_Grid extends Widget_Base {
 					'masonry' => esc_html__( 'Masonry - Unlimited Height', 'wpr-addons' ),
 					'slider' => esc_html__( 'Slider / Carousel', 'wpr-addons' ),
 				],
+				'render_type' => 'template',
 				'label_block' => true
 			]
 		);
@@ -1061,9 +1062,10 @@ class Wpr_Media_Grid extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-grid-slider-dots' => 'display:{{VALUE}};',
 				],
+				'render_type' => 'template',
 				'condition' => [
 					'layout_select' => 'slider',
-				],
+				]
 			]
 		);
 

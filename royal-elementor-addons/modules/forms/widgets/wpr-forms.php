@@ -1724,7 +1724,7 @@ class Wpr_Forms extends Widget_Base {
 						'default' => '#605BE5',
 					],
 				],
-				'selector' => '{{WRAPPER}} .wpcf7-submit, {{WRAPPER}} .submit-wrap .ninja-forms-field, {{WRAPPER}} .submit-wrap .ninja-forms-field, {{WRAPPER}} .wpforms-submit, {{WRAPPER}} .wpforms-page-next, {{WRAPPER}} .wpforms-page-previous, {{WRAPPER}} .caldera-grid .btn-default, {{WRAPPER}} .caldera-grid .cf2-dropzone button'
+				'selector' => '{{WRAPPER}} .wpcf7-submit, {{WRAPPER}} .submit-wrap .ninja-forms-field, {{WRAPPER}} .submit-wrap .ninja-forms-field, {{WRAPPER}} .wpforms-submit, {{WRAPPER}} .wpforms-page-next, {{WRAPPER}} .wpforms-page-previous, {{WRAPPER}} .caldera-grid .btn-default, {{WRAPPER}} .caldera-grid .cf2-dropzone button, {{WRAPPER}} #contact-btn'
 			]
 		);
 
@@ -1792,7 +1792,7 @@ class Wpr_Forms extends Widget_Base {
 						'default' => '#4A45D2',
 					],
 				],
-				'selector' => '{{WRAPPER}}  .wpcf7-submit:hover, {{WRAPPER}} .submit-wrap .ninja-forms-field:hover, {{WRAPPER}} .wpforms-submit:hover, {{WRAPPER}} .wpforms-page-next:hover, {{WRAPPER}} .wpforms-page-previous:hover, {{WRAPPER}} .caldera-grid .btn-default:hover, {{WRAPPER}} .caldera-grid .btn-success, {{WRAPPER}} .caldera-grid .cf2-dropzone button:hover'
+				'selector' => '{{WRAPPER}}  .wpcf7-submit:hover, {{WRAPPER}} .submit-wrap .ninja-forms-field:hover, {{WRAPPER}} .wpforms-submit:hover, {{WRAPPER}} .wpforms-page-next:hover, {{WRAPPER}} .wpforms-page-previous:hover, {{WRAPPER}} .caldera-grid .btn-default:hover, {{WRAPPER}} .caldera-grid .btn-success, {{WRAPPER}} .caldera-grid .cf2-dropzone button:hover, {{WRAPPER}} #contact-btn:hover'
 			]
 		);
 

@@ -9,6 +9,7 @@ use Elementor\Group_Control_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Group_Control_Image_Size;
+use Elementor\Group_Control_Border;
 use WprAddons\Classes\Utilities;
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -444,6 +445,45 @@ class Wpr_Product_Media extends Widget_Base {
 
 
 		// Styles ====================
+		// Section: Media ------------
+		$this->start_controls_section(
+			'section_style_media',
+			[
+				'label' => esc_html__( 'Media', 'wpr-addons' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'media_border',
+				'label' => esc_html__( 'Border', 'wpr-addons' ),
+				'selector' => '{{WRAPPER}} .woocommerce-product-gallery__image',
+			]
+		);
+
+		$this->add_responsive_control(
+			'media_border_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .woocommerce-product-gallery__image' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .woocommerce-product-gallery__image img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
 		// Section: Navigation -------
 		$this->start_controls_section(
 			'section_style_gallery_arrows_nav',
@@ -831,7 +871,35 @@ class Wpr_Product_Media extends Widget_Base {
 		// 			'{{WRAPPER}}.wpr-product-media-thumbs-vertical .wpr-product-media-wrap .wpr-fcn-wrap' => 'margin-right: {{SIZE}}{{UNIT}};',
 		// 		]
 		// 	]
-		// );
+		// );// Add in the section_style_gallery_thumb_nav section
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'gallery_thumb_border',
+				'label' => esc_html__( 'Border', 'wpr-addons' ),
+				'selector' => '{{WRAPPER}} .wpr-product-media-wrap .flex-control-nav li img',
+				'separator' => 'before'
+			]
+		);
+
+		$this->add_responsive_control(
+			'gallery_thumb_border_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-product-media-wrap .flex-control-nav li img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
 
 		$this->end_controls_section(); // End Controls Section
 

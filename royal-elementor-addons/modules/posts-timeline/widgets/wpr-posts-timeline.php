@@ -43,7 +43,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 	}
 
 	public function get_style_depends() {
-		return [ 'swiper', 'wpr-animations-css', 'wpr-loading-animations-css', 'wpr-aos-css' ];
+		return [ 'swiper', 'wpr-animations-css', 'wpr-loading-animations-css', 'wpr-aos-css', 'e-swiper' ];
 	}
 
     public function get_custom_help_url() {

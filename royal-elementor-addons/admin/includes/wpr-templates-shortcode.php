@@ -25,10 +25,23 @@ class WPR_Templates_Shortcode {
 		if ( empty( $attributes['id'] ) ) {
 			return '';
 		} else {
-			$id = $attributes['id'];
+			$id = intval($attributes['id']);
 		}
 
-		if ( defined('ICL_LANGUAGE_CODE') ) {
+		// Ensure only publicly published posts can be accessed
+		$post = get_post($id);
+
+		if (!$post || $post->post_status !== 'publish' || in_array($post->post_status, ['draft', 'private', 'future'])) {
+			return 'You do not have permission to view this post.';
+		}
+	
+		// Optionally check if the post is password protected
+		if (post_password_required($post)) {
+			return 'This post is password protected.';
+		}
+	
+		// WPML language handling
+		if (defined('ICL_LANGUAGE_CODE')) {
 			$default_language_code = apply_filters('wpml_default_language', null);
 
 			if ( ICL_LANGUAGE_CODE !== $default_language_code ) {

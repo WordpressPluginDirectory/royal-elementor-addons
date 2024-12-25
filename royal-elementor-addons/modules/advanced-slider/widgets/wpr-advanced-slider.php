@@ -286,6 +286,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
                 'type' => Controls_Manager::SELECT,
                 'default' => 'custom',
                 'options' => $this->add_repeater_args_slider_content_type(),
+				'render_type' => 'template'
             ]
         );
 
@@ -510,6 +511,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'label' => esc_html__( 'Background Overlay', 'wpr-addons' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
+				'render_type' => 'template',
 				'condition' => [
 					'slider_content_type' => 'custom'
 				]
@@ -556,6 +558,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					'color' => esc_html__( 'Color', 'wpr-addons' ),
 					'luminosity' => esc_html__( 'luminosity', 'wpr-addons' ),
 				],
+				'render_type' => 'template',
 				'selectors' => [
 					'{{WRAPPER}} {{CURRENT_ITEM}} .wpr-slider-item-overlay' => 'mix-blend-mode: {{VALUE}}',
 				],

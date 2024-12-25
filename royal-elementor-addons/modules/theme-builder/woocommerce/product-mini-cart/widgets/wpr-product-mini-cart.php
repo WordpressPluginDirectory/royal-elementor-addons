@@ -57,6 +57,16 @@ class Wpr_Product_Mini_Cart extends Widget_Base {
 		); 
 	}
 
+    public function get_custom_help_url() {
+        if ( empty(get_option('wpr_wl_plugin_links')) )
+        // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-progress-bar-help-btn';
+            return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
+    }
+
+	public function is_reload_preview_required() {
+		return true;
+	}
+
 	public function add_controls_group_mini_cart_style() {}
 
 	public function add_section_style_mini_cart() {}
@@ -74,15 +84,6 @@ class Wpr_Product_Mini_Cart extends Widget_Base {
 			[
 				'label' => esc_html__( 'General', 'wpr-addons' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
-			]
-		);
-
-		$this->add_control(
-			'wpr_particles_apply_changes',
-			[
-				'type' => Controls_Manager::RAW_HTML,
-				'raw' => '<div class="elementor-update-preview editor-wpr-preview-update"><span>Update changes to Preview</span><button class="elementor-button elementor-button-success" onclick="elementor.reloadPreview();">Apply</button>',
-				'separator' => 'after'
 			]
 		);
 

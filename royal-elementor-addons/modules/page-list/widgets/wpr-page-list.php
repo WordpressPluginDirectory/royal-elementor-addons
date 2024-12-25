@@ -516,6 +516,7 @@ class Wpr_Page_List extends Widget_Base {
 				'default' => '#605BE5',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-page-list-item a:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} li.wpr-page-list-item a:hover' => 'color: {{VALUE}}',
 				],
 			]
 		);

@@ -105,6 +105,12 @@ class Plugin {
 		// Meta Keys
 		require WPR_ADDONS_PATH . 'classes/wpr-custom-meta-keys.php';
 
+		// Grid
+		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-grid-posts.php';
+
+		// Woo Grid
+		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-woo-products.php';
+
 		// Particles
 		if ( 'on' === get_option('wpr-particles', 'on') ) {//TODO: make this check automatic(loop through) for all extensions
 			require WPR_ADDONS_PATH . 'extensions/wpr-particles.php';
@@ -135,20 +141,6 @@ class Plugin {
 		
 		// Admin Files
 		if ( is_admin() ) {
-			if ( get_option('wpr_hide_banners') !== 'on' ) {
-				// Pro Features Notice
-				require WPR_ADDONS_PATH . 'admin/notices/pro-features-notice.php';
-	
-				// Plugin Update Notice
-				require WPR_ADDONS_PATH . 'admin/notices/plugin-update-notice.php';
-				
-				// Plugin Sale Notice
-				require WPR_ADDONS_PATH . 'admin/notices/plugin-sale-notice.php';
-				
-				// Rating Notice 
-				require WPR_ADDONS_PATH . 'admin/notices/rating-notice.php';
-			}
-
 			// Plugin Options
 			require WPR_ADDONS_PATH . 'admin/plugin-options.php';
 
@@ -434,12 +426,29 @@ class Plugin {
 		);
 	}
 	
-	public function set_guest_token_cookie() {
+	public function wpr_some_init_actions() {
+		load_plugin_textdomain('wpr-addons', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+
 		if ( ! isset( $_COOKIE['wpr_guest_token'] ) ) {
 			// Generate a unique token and store it in a cookie
 			$guest_id = bin2hex(random_bytes(32)); // Secure random string as guest "session"
-			setcookie( 'wpr_guest_token', $guest_id, time() + 3600, '/' ); // 1 hour expiration
+			$secure = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' );
+			setcookie( 'wpr_guest_token', $guest_id, time() + 3600, '/', '', $secure, true ); // 1 hour expiration
 			$_COOKIE['wpr_guest_token'] = $guest_id; // Ensure it's immediately available in PHP
+		}
+		
+		if ( get_option('wpr_hide_banners') !== 'on' ) {
+			// Pro Features Notice
+			require WPR_ADDONS_PATH . 'admin/notices/pro-features-notice.php';
+
+			// Plugin Update Notice
+			require WPR_ADDONS_PATH . 'admin/notices/plugin-update-notice.php';
+			
+			// Plugin Sale Notice
+			require WPR_ADDONS_PATH . 'admin/notices/plugin-sale-notice.php';
+			
+			// Rating Notice 
+			require WPR_ADDONS_PATH . 'admin/notices/rating-notice.php';
 		}
 	}
 
@@ -993,7 +1002,7 @@ class Plugin {
 	protected function add_actions() {
 
 		// User Cookie
-		add_action( 'init', [$this, 'set_guest_token_cookie' ]);
+		add_action( 'init', [$this, 'wpr_some_init_actions' ]);
 
 		// Register Widgets
 		add_action( 'elementor/init', [ $this, 'elementor_init' ] );

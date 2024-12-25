@@ -33,6 +33,16 @@ class Wpr_Page_Checkout extends Widget_Base {
 		return [ 'woocommerce', 'checkout', 'product', 'page', 'checkout page', 'page checkout' ];
 	}
 
+    public function get_custom_help_url() {
+        if ( empty(get_option('wpr_wl_plugin_links')) )
+        // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-progress-bar-help-btn';
+            return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
+    }
+
+	public function is_reload_preview_required() {
+		return true;
+	}
+
 	protected function register_controls() {
 
 		// Tab: Style ==============
@@ -44,15 +54,6 @@ class Wpr_Page_Checkout extends Widget_Base {
 				'tab' => Controls_Manager::TAB_CONTENT,
 			]
 		);
-
-		$this->add_control(
-            'apply_changes',
-            [
-                'type' => Controls_Manager::RAW_HTML,
-                'raw' => '<div class="elementor-update-preview editor-wpr-preview-update"><span>Update changes to Preview</span><button class="elementor-button elementor-button-success" onclick="elementor.reloadPreview();">Apply</button>',
-                'separator' => 'after'
-            ]
-        );
 
 		$this->add_control(
 			'checkout_layout',

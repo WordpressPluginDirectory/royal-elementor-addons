@@ -596,97 +596,113 @@ class Wpr_Logo extends Widget_Base {
 
 	protected function render() {
 
-	$settings = $this->get_settings(); 
+			$settings = $this->get_settings(); 
 
-	$image_src = esc_url( $settings['image']['url'] );  
-	$mobile_image_src = esc_url( $settings['mobile_image']['url'] );
-	
-	// Title
-	$title = '';
-	if ( 'default' === $settings['title_type'] ) {
-		$title = get_bloginfo( 'name' );
-	} elseif ( 'custom' === $settings['title_type'] ) {
-		$title = $settings['custom_title'];
-	}
-
-	// Description
-	$description = '';
-	if ( 'default' === $settings['description_type'] ) {
-		$description =  get_bloginfo( 'description' );
-	} elseif ( 'custom' === $settings['description_type'] ) {
-		$description = $settings['custom_description'];
-	}
-
-	// Image hover animation
-	$this->add_render_attribute( 'image_attr', 'class', 'wpr-logo-image' );
-	if ( $settings['hv_animation'] ) {
-		$this->add_render_attribute( 'image_attr', 'class', 'elementor-animation-'. $settings['hv_animation'] );
-	}
-
-	// Logo URL
-	$this->add_render_attribute( 'url_attr', 'class', 'wpr-logo-url' );
-	$this->add_render_attribute( 'url_attr', 'rel', 'home' );
-	
-	if ( 'default' === $settings['url_type'] ) {
-		$this->add_render_attribute( 'url_attr', 'href',  home_url( '/' ) );
-	} elseif ( 'custom' === $settings['url_type'] ) {
-
-		if ( $settings['custom_url']['is_external'] ) {
-			$this->add_render_attribute( 'url_attr', 'target', '_blank' );
-		}
-
-		if ( $settings['custom_url']['nofollow'] ) {
-			$this->add_render_attribute( 'url_attr', 'nofollow', '' );
-		}
-
-		$this->add_render_attribute( 'url_attr', 'href',  esc_url( $settings['custom_url']['url'] ) );
-	}
-
-	?>
-	
-	<div class="wpr-logo elementor-clearfix">
-
-		<?php if ( !empty( $image_src ) ) : ?>
-		<picture <?php echo $this->get_render_attribute_string( 'image_attr' ); ?>>
-			<?php if ( ! empty( $mobile_image_src ) ) : ?>
-			<source media="(max-width: 767px)" srcset="<?php echo esc_attr( $mobile_image_src ); ?>">	
-			<?php endif; ?>
-
-			<?php if ( ! empty( $settings['retina_image']['url'] ) ) : ?>
-			<source srcset="<?php echo esc_attr( $image_src ); ?> 1x, <?php echo esc_attr( $settings['retina_image']['url'] ); ?> 2x">	
-			<?php endif; ?>
+			$image_src = esc_url( $settings['image']['url'] );  
+			$mobile_image_src = esc_url( $settings['mobile_image']['url'] );
 			
-			<img src="<?php echo esc_url($image_src); ?>" alt="<?php echo esc_attr( $title ); ?>">
+			// Title
+			$title = '';
+			if ( 'default' === $settings['title_type'] ) {
+				$title = get_bloginfo( 'name' );
+			} elseif ( 'custom' === $settings['title_type'] ) {
+				$title = $settings['custom_title'];
+			}
 
-			<?php if ( $this->logo_is_linked() ) : ?>
-				<a <?php echo $this->get_render_attribute_string( 'url_attr' ); ?>></a>
-			<?php endif; ?>
-		</picture>
-		<?php endif; ?>
+			// Description
+			$description = '';
+			if ( 'default' === $settings['description_type'] ) {
+				$description =  get_bloginfo( 'description' );
+			} elseif ( 'custom' === $settings['description_type'] ) {
+				$description = $settings['custom_description'];
+			}
 
-		<?php if ( ! empty( $title ) || ! empty( $description ) ) : ?>
-		<div class="wpr-logo-text">
-			<?php if ( ! empty( $title ) ) : ?>
-				<?php if ( is_home() || is_front_page() ) : ?>
-					<h1 class="wpr-logo-title"><?php echo esc_html__( $title ); ?></h1>
-				<?php else : ?>
-					<p class="wpr-logo-title"><?php echo esc_html__( $title ); ?></p>
+			// Retrieve Image Alt Text
+			$image_alt = '';
+			if ( ! empty( $image_src ) ) {
+				// Get the attachment ID from the image source URL
+				$attachment_id = attachment_url_to_postid( $image_src );
+				
+				if ( $attachment_id ) {
+					$image_alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+				}
+			}
+
+			// Fallback to title if alt is empty
+			if ( empty( $image_alt ) ) {
+				$image_alt = $title;
+			}
+
+			// Image hover animation
+			$this->add_render_attribute( 'image_attr', 'class', 'wpr-logo-image' );
+			if ( $settings['hv_animation'] ) {
+				$this->add_render_attribute( 'image_attr', 'class', 'elementor-animation-'. $settings['hv_animation'] );
+			}
+
+			// Logo URL
+			$this->add_render_attribute( 'url_attr', 'class', 'wpr-logo-url' );
+			$this->add_render_attribute( 'url_attr', 'rel', 'home' );
+			
+			if ( 'default' === $settings['url_type'] ) {
+				$this->add_render_attribute( 'url_attr', 'href',  home_url( '/' ) );
+			} elseif ( 'custom' === $settings['url_type'] ) {
+
+				if ( $settings['custom_url']['is_external'] ) {
+					$this->add_render_attribute( 'url_attr', 'target', '_blank' );
+				}
+
+				if ( $settings['custom_url']['nofollow'] ) {
+					$this->add_render_attribute( 'url_attr', 'nofollow', '' );
+				}
+
+				$this->add_render_attribute( 'url_attr', 'href',  esc_url( $settings['custom_url']['url'] ) );
+			}
+
+			?>
+			
+			<div class="wpr-logo elementor-clearfix">
+
+				<?php if ( !empty( $image_src ) ) : ?>
+				<picture <?php echo $this->get_render_attribute_string( 'image_attr' ); ?>>
+					<?php if ( ! empty( $mobile_image_src ) ) : ?>
+					<source media="(max-width: 767px)" srcset="<?php echo esc_attr( $mobile_image_src ); ?>">	
+					<?php endif; ?>
+
+					<?php if ( ! empty( $settings['retina_image']['url'] ) ) : ?>
+					<source srcset="<?php echo esc_attr( $image_src ); ?> 1x, <?php echo esc_attr( $settings['retina_image']['url'] ); ?> 2x">	
+					<?php endif; ?>
+					
+					<img src="<?php echo esc_url( $image_src ); ?>" alt="<?php echo esc_attr( $image_alt ); ?>">
+
+					<?php if ( $this->logo_is_linked() ) : ?>
+						<a <?php echo $this->get_render_attribute_string( 'url_attr' ); ?>></a>
+					<?php endif; ?>
+				</picture>
 				<?php endif; ?>
-			<?php endif; ?>
 
-			<?php
-			if ( ! empty( $description ) ) : ?>
-				<p class="wpr-logo-description"><?php echo esc_html__( $description ); ?></p>
-			<?php endif; ?>
-		</div>
-		<?php endif; ?>
+				<?php if ( ! empty( $title ) || ! empty( $description ) ) : ?>
+				<div class="wpr-logo-text">
+					<?php if ( ! empty( $title ) ) : ?>
+						<?php if ( is_home() || is_front_page() ) : ?>
+							<h1 class="wpr-logo-title"><?php echo esc_html__( $title ); ?></h1>
+						<?php else : ?>
+							<p class="wpr-logo-title"><?php echo esc_html__( $title ); ?></p>
+						<?php endif; ?>
+					<?php endif; ?>
 
-		<?php if ( $this->logo_is_linked() ) : ?>
-			<a <?php echo $this->get_render_attribute_string( 'url_attr' ); ?>></a>
-		<?php endif; ?>
+					<?php
+					if ( ! empty( $description ) ) : ?>
+						<p class="wpr-logo-description"><?php echo esc_html__( $description ); ?></p>
+					<?php endif; ?>
+				</div>
+				<?php endif; ?>
 
-	</div>
-		
-<?php
+				<?php if ( $this->logo_is_linked() ) : ?>
+					<a <?php echo $this->get_render_attribute_string( 'url_attr' ); ?>></a>
+				<?php endif; ?>
+
+			</div>
+				
+		<?php
 	}
 }
