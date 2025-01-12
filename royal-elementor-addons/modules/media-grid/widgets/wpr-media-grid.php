@@ -902,6 +902,42 @@ class Wpr_Media_Grid extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'filters_experiment',
+			[
+				'label' => esc_html__( 'Filters & Load More Experiment', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'no',
+				'return_value' => 'yes',
+				'render_type' => 'template',
+				'conditions' => [
+					'relation' => 'or',
+					'terms' => [
+						[
+							'relation' => 'and',
+							'terms' => [	
+								[
+									'name' => 'layout_pagination',
+									'operator' => '!=',
+									'value' => '',
+								],
+								[
+									'name' => 'pagination_type',
+									'operator' => 'in',
+									'value' => ['load-more', 'infinite'],
+								],
+							]
+						],
+						[
+							'name' => 'layout_filters',
+							'operator' => '!=',
+							'value' => '',
+						],
+					],
+				],
+			]
+		);
+
 		$this->add_control_layout_animation();
 
 		// Upgrade to Pro Notice
@@ -7604,6 +7640,11 @@ class Wpr_Media_Grid extends Widget_Base {
 			'fullScreen' => $settings['lightbox_popup_fullscreen'],
 			'download' => $settings['lightbox_popup_download'],
 		];
+
+		// $layout_settings['grid_settings'] = [esc_attr( json_encode( $settings ) )];
+		if ( 'yes' === $settings['filters_experiment'] ) {
+			$layout_settings['grid_settings'] = $settings;
+		}
 
 		$this->add_render_attribute( 'grid-settings', [
 			'data-settings' => wp_json_encode( $layout_settings ),

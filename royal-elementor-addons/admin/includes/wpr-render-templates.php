@@ -226,7 +226,7 @@ class WPR_Render_Templates {
 		}
 
 		// Elementor Frontend // Maybe we dont need this (should be extra, because we have everything below)
-		self::$elementor_instance->frontend->enqueue_styles();
+		// self::$elementor_instance->frontend->enqueue_styles();
 		
 		// if ( class_exists( '\ElementorPro\Plugin' ) ) {
 		// 	$elementor_pro = \ElementorPro\Plugin::instance();

@@ -1839,12 +1839,13 @@ class Wpr_Flip_Box extends Widget_Base {
 
 	protected function render() {
 
-		$settings = $this->get_settings();
+		$settings = $this->get_settings_for_display();
+		$settings_old = $this->get_settings();
 
-		$front_image_src = Group_Control_Image_Size::get_attachment_image_src( $settings['front_image']['id'], 'front_image_size', $settings );
+		$front_image_src = Group_Control_Image_Size::get_attachment_image_src( $settings_old['front_image']['id'], 'front_image_size', $settings_old );
 
 		if ( ! $front_image_src ) {
-			$front_image_src = $settings['front_image']['url'];
+			$front_image_src = $settings_old['front_image']['url'];
 		}
 
 		if ( isset($settings['front_image']['alt']) ) {
@@ -1853,10 +1854,10 @@ class Wpr_Flip_Box extends Widget_Base {
 			$front_alt_text = '';
 		}
 
-		$back_image_src = Group_Control_Image_Size::get_attachment_image_src( $settings['back_image']['id'], 'back_image_size', $settings );
+		$back_image_src = Group_Control_Image_Size::get_attachment_image_src( $settings_old['back_image']['id'], 'back_image_size', $settings_old );
 
 		if ( ! $back_image_src ) {
-			$back_image_src = $settings['back_image']['url'];
+			$back_image_src = $settings_old['back_image']['url'];
 		}
 
 		if ( isset($settings['back_image']['alt']) ) {

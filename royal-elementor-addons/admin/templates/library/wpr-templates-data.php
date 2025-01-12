@@ -564,6 +564,18 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 1,
 				],
+				'v5' => [
+					'name' => 'Personal Blog V5',
+					'pages' => 'home,blog,single-blog,categories,shop,single-product,cart,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'free blog blogger posts personal blog lifestyle blogger theme builder grid slider news magazine cute',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 5,
+				],
 			],
 			'hotel' => [
 				'v1' => [

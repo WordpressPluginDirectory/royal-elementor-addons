@@ -1128,7 +1128,7 @@
 				
 					// Smoothly scroll to the section
 					$('html, body').animate({
-					scrollTop: sectionPos
+					scrollTop: $('[data-wpr-sticky-section="yes"]').first().length ? sectionPos - $('[data-wpr-sticky-section="yes"]').first().height() : sectionPos
 					}, scrollSpeed);
 				}
 
@@ -1156,7 +1156,7 @@
 						var sectionPos = $section.offset().top;
 						// Smoothly scroll to the section
 						$('html, body').animate({
-							scrollTop: sectionPos
+							scrollTop: $('[data-wpr-sticky-section="yes"]').first().length ? sectionPos - $('[data-wpr-sticky-section="yes"]').first().height() : sectionPos
 						}, scrollSpeed);
 					});
 				});
@@ -1201,8 +1201,10 @@
 		widgetGrid: function( $scope ) {
 			var iGrid = $scope.find( '.wpr-grid' ),
 				loadedItems,
-				experimentActionCount = $scope.hasClass('elementor-widget-wpr-woo-grid') ? 'wpr_get_woo_filtered_count' : 'wpr_get_filtered_count',
-				experimentActionContent = $scope.hasClass('elementor-widget-wpr-woo-grid') ?  'wpr_filter_woo_products' : 'wpr_filter_grid_posts';
+				experimentActionCount = $scope.hasClass('elementor-widget-wpr-woo-grid') ? 'wpr_get_woo_filtered_count' : 
+									 $scope.hasClass('elementor-widget-wpr-media-grid') ? 'wpr_get_media_filtered_count' : 'wpr_get_filtered_count',
+				experimentActionContent = $scope.hasClass('elementor-widget-wpr-woo-grid') ? 'wpr_filter_woo_products' :
+									   $scope.hasClass('elementor-widget-wpr-media-grid') ? 'wpr_filter_grid_media' : 'wpr_filter_grid_posts';
 
 			if ( ! iGrid.length ) {
 				return;
@@ -1259,7 +1261,7 @@
 					}
 				
 					// Find the total number of items from the '.woocommerce-result-count' text
-					var totalItemsMatch = resultCountText.match(/of (\d+) results/);
+					var totalItemsMatch = resultCountText.match(/(\d+)(?!.*\d+)/);
 					var totalItems = totalItemsMatch ? parseInt(totalItemsMatch[1].trim()) : itemsPerPage;
 				
 					// Ensure totalItems is correctly parsed and is a valid number
@@ -7784,11 +7786,13 @@
 		
 		widgetAdvancedAccordion: function($scope) {
             var acc = $scope.find('.wpr-acc-button');
+			var accPanels = $scope.find('.wpr-acc-panel');
             var accItemWrap = $scope.find('.wpr-accordion-item-wrap');
 			var accordionType = $scope.find('.wpr-advanced-accordion').data('accordion-type');
 			var activeIndex = +$scope.find('.wpr-advanced-accordion').data('active-index') - 1;
 			var accordionTrigger = $scope.find('.wpr-advanced-accordion').data('accordion-trigger');
 			var interactionSpeed = +$scope.find('.wpr-advanced-accordion').data('interaction-speed') * 1000;
+			var scopeID = $scope.attr('data-id');
 
 			// ?active_panel=panel-index#your-id
 			var activeTabIndexFromLocation = window.location.href.indexOf("active_panel=");
@@ -7800,13 +7804,15 @@
 			if ('click' === accordionTrigger) {
 
 				if ( accordionType == 'accordion' ) {
-					acc.on("click", function() {
+					acc.off('click').on("click", function(e) {
+						e.preventDefault();
+						e.stopPropagation();
 						var thisIndex = acc.index(this);
 						acc.each(function(index){
-							index != thisIndex ? $(this).removeClass('wpr-acc-active') : '';
+							(index != thisIndex && $(this).closest('.elementor-widget-wpr-advanced-accordion').attr('data-id') == scopeID) ? $(this).removeClass('wpr-acc-active') : '';
 						});
 						$scope.find('.wpr-acc-panel').each(function(index) {
-							index != thisIndex ? $(this).removeClass('wpr-acc-panel-active') && $(this).slideUp(interactionSpeed) : '';
+							(index != thisIndex && $(this).closest('.elementor-widget-wpr-advanced-accordion').attr('data-id') == scopeID) ? $(this).removeClass('wpr-acc-panel-active') && $(this).slideUp(interactionSpeed) : '';
 						});
 						$(this).toggleClass("wpr-acc-active");
 						var panel = $(this).next();

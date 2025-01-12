@@ -108,6 +108,9 @@ class Plugin {
 		// Grid
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-grid-posts.php';
 
+		// Media Grid
+		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-grid-media.php';
+
 		// Woo Grid
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-woo-products.php';
 
@@ -456,7 +459,7 @@ class Plugin {
 		if ( is_user_logged_in() ) {
 			// For logged-in users, use their user ID to store a token
 			$user_id = get_current_user_id();
-			$token = bin2hex(random_bytes(32)); // Secure token generation
+			$token = bin2hex(\random_bytes(32)); // Secure token generation
 			set_transient( 'wpr_custom_token_' . $user_id, $token, HOUR_IN_SECONDS ); // Store token for 1 hour
 			return $token;
 		} else {
@@ -468,13 +471,34 @@ class Plugin {
 				return null;
 			}
 	
-			// Now use the guest ID to store a transient specific to this user
-			$token = bin2hex(random_bytes(32)); // Secure token generation
+			// Check if a token already exists for this guest
+			$existing_token = get_transient( 'wpr_custom_guest_token_' . $guest_id );
+			if ( $existing_token ) {
+				return $existing_token;
+			}
+	
+			// Only create new token if one doesn't exist
+			$token = bin2hex(\random_bytes(32)); // Secure token generation
 			set_transient( 'wpr_custom_guest_token_' . $guest_id, $token, HOUR_IN_SECONDS ); // Store token for 1 hour
+			
+			// Clean up old guest tokens periodically (1% chance)
+			if ( rand(1, 100) === 1 ) {
+				$this->cleanup_guest_tokens();
+			}
+			
 			return $token;
 		}
 	}
 	
+	private function cleanup_guest_tokens() {
+		global $wpdb;
+		$wpdb->query(
+			"DELETE FROM {$wpdb->options} 
+			WHERE option_name LIKE '_transient_wpr_custom_guest_token_%'
+			AND option_value = ''
+			LIMIT 100"
+		);
+	}
 
 	public function hide_theme_notice() {
 		wp_enqueue_style( 'hide-theme-notice', WPR_ADDONS_URL .'assets/css/admin/wporg-theme-notice.css', [] );

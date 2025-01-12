@@ -36,16 +36,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 		
 		// API Key
         $api_key = get_option('wpr_mailchimp_api_key') ? get_option('wpr_mailchimp_api_key') : '';
+        
+        // Validate API key format
+        if (!preg_match('/^[0-9a-f]{32}-[a-z]{2}[0-9]{1,2}$/', $api_key)) {
+            wp_send_json_error('Invalid API key format');
+            return;
+        }
 
-        $api_key_sufix = explode( '-', $api_key )[1];
+        $api_parts = explode('-', $api_key);
+        if (count($api_parts) !== 2) {
+            wp_send_json_error('Invalid API key format');
+            return;
+        }
 
-        // // List ID
+        // Validate datacenter suffix
+        $api_key_suffix = $api_parts[1];
+        if (!preg_match('/^[a-z]{2}[0-9]{1,2}$/', $api_key_suffix)) {
+            wp_send_json_error('Invalid API datacenter');
+            return;
+        }
+
+        // List ID with sanitization
         $list_id = isset($_POST['listId']) ? sanitize_text_field(wp_unslash($_POST['listId'])) : '';
 
-        // // Get Available Fileds (PHPCS - fields are sanitized later on input)
-		$fields = isset($_POST['form_data']) ? $_POST['form_data'] : []; // phpcs:ignore
+        // Get Available Fields (PHPCS - fields are sanitized later on input)
+        $fields = isset($_POST['form_data']) ? $_POST['form_data'] : []; // phpcs:ignore
 
-		$group_ids = isset($fields['group_id']) ? array_map('sanitize_text_field', array_map('trim', explode(',', wp_unslash($fields['group_id'])))) : [];
+        $group_ids = isset($fields['group_id']) ? array_map('sanitize_text_field', array_map('trim', explode(',', wp_unslash($fields['group_id'])))) : [];
 
         // Merge Additional Fields
         $merge_fields = [
@@ -70,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
         // API URL
-        $api_url = 'https://'. $api_key_sufix .'.api.mailchimp.com/3.0/lists/'. $list_id .'/members/'. md5(strtolower(sanitize_text_field($fields['email_field'])));
+        $api_url = 'https://'. $api_key_suffix .'.api.mailchimp.com/3.0/lists/'. $list_id .'/members/'. md5(strtolower(sanitize_text_field($fields['email_field'])));
 		
 		$api_body = [
 			'email_address' => sanitize_text_field($fields[ 'email_field' ]),

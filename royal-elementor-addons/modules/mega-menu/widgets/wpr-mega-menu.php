@@ -2300,6 +2300,17 @@ class Wpr_Mega_Menu extends Widget_Base {
 			'walker' => new \Wpr_Mobile_Menu_Walker(),
 		];
 
+		// Retrieve Image Alt Text
+		$image_alt = '';
+		if ( ! empty( $settings["mob_menu_offcanvas_logo"]["url"] ) ) {
+			// Get the attachment ID from the image source URL
+			$attachment_id = attachment_url_to_postid( $settings["mob_menu_offcanvas_logo"]["url"] );
+			
+			if ( $attachment_id ) {
+				$image_alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+			}
+		}
+
 		// Generate Mobile Menu HTML
 		$moible_menu_html = wp_nav_menu( $mobile_args );
 
@@ -2347,7 +2358,7 @@ class Wpr_Mega_Menu extends Widget_Base {
 						if ( ! empty( $settings['mob_menu_offcanvas_logo']['url'] ) ) {
 							echo '<div class="mobile-mega-menu-logo">';
 								echo '<a href="'. esc_url(home_url()) .'">';
-									echo '<img src="'. esc_url($settings["mob_menu_offcanvas_logo"]["url"]) .'" alt="">';
+									echo '<img src="'. esc_url($settings["mob_menu_offcanvas_logo"]["url"]) .'" alt="'. esc_attr( $image_alt ) .'">';
 								echo '</a>';
 							echo '</div>';
 						}

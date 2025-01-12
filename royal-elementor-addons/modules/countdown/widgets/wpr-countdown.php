@@ -981,20 +981,55 @@ class Wpr_Countdown extends Widget_Base {
 	}
 	
 	public function sanitize_no_js($input) {
-		// Remove all `<script>` and `<iframe>` tags
-		$input = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $input);
-		$input = preg_replace('#<iframe(.*?)>(.*?)</iframe>#is', '', $input);
-	
-		// Remove attributes like `onload`, `onclick`, etc.
-		$input = preg_replace('#on\w+="[^"]*"#i', '', $input); // Double-quoted
-		$input = preg_replace("#on\w+='[^']*'#i", '', $input); // Single-quoted
-		$input = preg_replace('#on\w+=\S+#i', '', $input);     // Unquoted
-	
-		// Remove styles containing `javascript:`
-		$input = preg_replace('#style="[^"]*javascript:[^"]*"#i', '', $input);
-		$input = preg_replace("#style='[^']*javascript:[^']*'#i", '', $input);
-	
+		// First decode HTML entities to catch encoded malicious content
+		$input = html_entity_decode($input, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		
+		// Remove script and iframe tags (case-insensitive)
+		$input = preg_replace('/<\s*script[^>]*>.*?<\s*\/\s*script\s*>/is', '', $input);
+		$input = preg_replace('/<\s*iframe[^>]*>.*?<\s*\/\s*iframe\s*>/is', '', $input);
+		
+		// Remove single script and iframe tags (self-closing or broken)
+		$input = preg_replace('/<\s*script[^>]*>/is', '', $input);
+		$input = preg_replace('/<\s*iframe[^>]*>/is', '', $input);
+		
+		// Remove event handlers (including encoded versions)
+		$evil_attributes = array(
+			'onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 
+			'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 
+			'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 
+			'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 
+			'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 
+			'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 
+			'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 
+			'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 
+			'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 
+			'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 
+			'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 
+			'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 
+			'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 
+			'onrowenter', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 
+			'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 
+			'onsubmit', 'onunload'
+		);
+		
+		$pattern = '/\s*(' . implode('|', $evil_attributes) . ')\s*=\s*([`\'"]*)[^>]*>/i';
+		$input = preg_replace($pattern, '>', $input);
+		
+		// Remove javascript: and data: protocols
+		$input = preg_replace('/([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:/i', '', $input);
+		$input = preg_replace('/([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*d[\x00-\x20]*a[\x00-\x20]*t[\x00-\x20]*a[\x00-\x20]*:/i', '', $input);
+		
+		// Remove any remaining encoded characters that might be malicious
+		$input = preg_replace('/(&#[xX]?[0-9A-Fa-f]+);?/i', '', $input);
+		
+		// Final cleanup of any remaining unwanted tags
+		$input = strip_tags($input, $this->get_allowed_html_tags());
+		
 		return $input;
+	}
+
+	protected function get_allowed_html_tags() {
+		return '<a><b><br><div><em><i><p><span><strong><u><h1><h2><h3><h4><h5><h6><ul><ol><li><img>';
 	}
 
 	public function get_expired_actions_json( $settings ) {
