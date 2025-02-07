@@ -1867,20 +1867,20 @@ class Wpr_Flip_Box extends Widget_Base {
 		}
 
 		$back_btn_element = 'div';
-		$back_link = $settings['back_link']['url'];
+		$back_link = $settings_old['back_link']['url'];
 
 
 		if ( '' !== $back_link ) {
 
 			$back_btn_element = 'a';
 
-			$this->add_render_attribute( 'link_attribute', 'href', esc_url( $settings['back_link']['url'] ) );
+			$this->add_render_attribute( 'link_attribute', 'href', esc_url( $back_link ) );
 
-			if ( $settings['back_link']['is_external'] ) {
+			if ( $settings_old['back_link']['is_external'] ) {
 				$this->add_render_attribute( 'link_attribute', 'target', '_blank' );
 			}
 
-			if ( $settings['back_link']['nofollow'] ) {
+			if ( $settings_old['back_link']['nofollow'] ) {
 				$this->add_render_attribute( 'link_attribute', 'nofollow', '' );
 			}
 		}

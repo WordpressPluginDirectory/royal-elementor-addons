@@ -584,7 +584,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 		$this->start_controls_section(
 			'section_insta_api',
 			[
-				'label' => 'Intergration <a href="#" onclick="window.open(\'https://www.youtube.com/watch?v=EGwuqWK-s9E\',\'_blank\').focus()">Video Tutorial <span class="dashicons dashicons-video-alt3"></span></a>',
+				'label' => 'Intergration <a href="#" onclick="window.open(\'https://www.youtube.com/watch?v=PP3V97nvNRk\',\'_blank\').focus()">Video Tutorial <span class="dashicons dashicons-video-alt3"></span></a>',
 				'tab' => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -596,7 +596,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 			[
 				'type' => Controls_Manager::RAW_HTML,
 				// 'raw' => '<a class="wpr-authorize-instagram" href="https://www.instagram.com/oauth/authorize?client_id=1551600955281199&redirect_uri=https://reastats.kinsta.cloud/token/social-network.php&scope=user_profile,user_media&response_type=code" target="popup">'. esc_html__( 'Authorize Instagram','wpr-addons' ) .'</a>',
-				'raw' => '<a class="wpr-authorize-instagram" href="https://youtu.be/EGwuqWK-s9E?t=56" target="popup">'. esc_html__( 'Get Access Token','wpr-addons' ) .'</a>',
+				'raw' => '<a class="wpr-authorize-instagram" href="https://www.youtube.com/watch?v=PP3V97nvNRk&t=52s" target="popup">'. esc_html__( 'Get Access Token','wpr-addons' ) .'</a>',
 				// 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
 			]
 		);

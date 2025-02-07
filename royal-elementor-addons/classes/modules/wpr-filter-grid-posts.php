@@ -388,7 +388,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$alt = '' === wp_get_attachment_caption( $id ) ? get_the_title() : wp_get_attachment_caption( $id );
 
 		if ( has_post_thumbnail() ) {
-			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'" data-img-on-hover="'. $settings['secondary_img_on_hover'] .'"  data-src-secondary="'. esc_url( $src2 ) .'">';
+			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'" data-img-on-hover="'. esc_attr( $settings['secondary_img_on_hover'] ) .'"  data-src-secondary="'. esc_url( $src2 ) .'">';
 				if ( 'yes' == $settings['grid_lazy_loading'] ) {
 					echo '<img data-no-lazy="1" src="'. WPR_ADDONS_ASSETS_URL . 'img/icon-256x256.png" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-image wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
 					if ( 'yes' == $settings['secondary_img_on_hover'] ) {
@@ -1411,6 +1411,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	public function wpr_get_filtered_count() {
+		$nonce = $_POST['nonce'];
+
+		if (!isset($nonce) || !wp_verify_nonce($nonce, 'wpr-addons-js')) {
+			wp_send_json_error(array(
+				'message' => esc_html__('Security check failed.', 'wpr-addons'),
+			));
+		}
+
 		$settings = $_POST['grid_settings'];
 		$page_count = $this->get_max_num_pages( $settings );
     
@@ -1422,6 +1430,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	public function wpr_filter_grid_posts() {
+		$nonce = $_POST['nonce'];
+
+		if (!isset($nonce) || !wp_verify_nonce($nonce, 'wpr-addons-js')) {
+			wp_send_json_error(array(
+				'message' => esc_html__('Security check failed.', 'wpr-addons'),
+			));
+		}
+
 		// Get Settings
 		$settings = $_POST['grid_settings'];
 		// Get Posts

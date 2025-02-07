@@ -267,6 +267,10 @@ template {
     margin: 0 auto;
   }*/
 
+.wpr-pointer-events-none {
+    pointer-events: none;
+}
+
 .wpr-grid-loader-wrap {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1256,6 +1260,10 @@ div[class*="wpr-sub-menu-fx"] .wpr-mega-menu .wpr-sub-mega-menu.wpr-animate-sub 
     visibility: visible;
     opacity: 1;
     z-index: 9999;
+}
+
+.wpr-animate-sub-fix {
+    left: -100%;
 }
 
 .wpr-sub-menu-fx-fade .wpr-sub-mega-menu {
@@ -6213,6 +6221,10 @@ body:not(.elementor-editor-active) .wpr-template-popup {
     font-size: 14px;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     cursor: pointer;
+}
+
+.wpr-popup-trigger-button svg {
+    display: block;
 }
 
 
@@ -13535,7 +13547,7 @@ select.wpr-category-select {
 }
 
 .wpr-dual-title {
-    margin: 0;
+    margin: 0 0 0 0;
 }
 
 .wpr-dual-title .first,
@@ -14163,9 +14175,10 @@ flex-grow: 0; */
 
   /* override twenty-twentyone margins */
 
+.ps.wpr-table-inner-container,
 .wpr-table-inner-container {
-    overflow-y: auto;
-    overflow-x: auto;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
 }
 
 .wpr-hide-table-before-arrange,
@@ -17444,7 +17457,8 @@ dl.variation dd {
    text-align: left;
 }
 
-.wpr-page-list li a {
+.wpr-page-list li a,
+.wpr-page-list .wpr-pl-title {
    display: inline-block;
    text-decoration: none;
    cursor: pointer;
@@ -17470,7 +17484,8 @@ dl.variation dd {
 }
 
 /* .wpr-page-list-horizontal .wpr-page-list li a, */
-.wpr-page-list .wpr-page-list-item {
+.wpr-page-list .wpr-page-list-item,
+.wpr-page-list .wpr-page-list-wrapper-link {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
     display: inline-flex;
@@ -17480,6 +17495,11 @@ dl.variation dd {
     -webkit-box-pack: start;
         -ms-flex-pack: start;
             justify-content: flex-start;
+}
+
+.wpr-page-list .wpr-page-list-wrapper-link {
+    width: 100%;
+    height: 100%;
 }
 
 .wpr-page-list-item {
@@ -18678,6 +18698,7 @@ dl.variation dd {
             align-items: center;
     width: 100%;
     margin-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .wpr-step-progress {

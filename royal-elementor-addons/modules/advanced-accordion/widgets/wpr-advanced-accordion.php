@@ -1230,7 +1230,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 
 		$edit_link = '<span class="wpr-template-edit-btn" data-permalink="'. get_permalink( $id ) .'">Edit Template</span>';
 		
-		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true);
+		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true) || get_post_meta($id, '_elementor_template_type', true);
 		$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
 
 		return Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $id, $has_css ) . $edit_link;

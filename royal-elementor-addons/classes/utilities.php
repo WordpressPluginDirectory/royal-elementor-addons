@@ -71,6 +71,7 @@ class Utilities {
 			'Reading Progress Bar' => ['reading-progress-bar', 'https://royal-elementor-addons.com/elementor-reading-progress-bar-widget/', '', ''],
 			'Twitter Feed' => ['twitter-feed', 'https://royal-elementor-addons.com/elementor-twitter-feed-widget/', '', ''],
 			'Image Scroll' => ['image-scroll', 'https://royal-elementor-addons.com/elementor-image-scroll-widget/', '', ''],
+			'Date' => ['date', 'https://royal-elementor-addons.com/elementor-date-widget/', '', ''],
 		];
 	}
 

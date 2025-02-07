@@ -981,18 +981,21 @@ class Wpr_Countdown extends Widget_Base {
 	}
 	
 	public function sanitize_no_js($input) {
-		// First decode HTML entities to catch encoded malicious content
+		// Decode HTML entities to catch encoded malicious content
 		$input = html_entity_decode($input, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-		
+
 		// Remove script and iframe tags (case-insensitive)
 		$input = preg_replace('/<\s*script[^>]*>.*?<\s*\/\s*script\s*>/is', '', $input);
 		$input = preg_replace('/<\s*iframe[^>]*>.*?<\s*\/\s*iframe\s*>/is', '', $input);
-		
+
 		// Remove single script and iframe tags (self-closing or broken)
 		$input = preg_replace('/<\s*script[^>]*>/is', '', $input);
 		$input = preg_replace('/<\s*iframe[^>]*>/is', '', $input);
-		
-		// Remove event handlers (including encoded versions)
+
+		// Escape HTML attributes to prevent XSS
+		$input = htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+		// Remove event handlers and javascript: or data: protocols
 		$evil_attributes = array(
 			'onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 
 			'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 
@@ -1011,20 +1014,20 @@ class Wpr_Countdown extends Widget_Base {
 			'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 
 			'onsubmit', 'onunload'
 		);
-		
+
 		$pattern = '/\s*(' . implode('|', $evil_attributes) . ')\s*=\s*([`\'"]*)[^>]*>/i';
 		$input = preg_replace($pattern, '>', $input);
-		
+
 		// Remove javascript: and data: protocols
 		$input = preg_replace('/([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:/i', '', $input);
 		$input = preg_replace('/([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*d[\x00-\x20]*a[\x00-\x20]*t[\x00-\x20]*a[\x00-\x20]*:/i', '', $input);
-		
+
 		// Remove any remaining encoded characters that might be malicious
 		$input = preg_replace('/(&#[xX]?[0-9A-Fa-f]+);?/i', '', $input);
-		
+
 		// Final cleanup of any remaining unwanted tags
 		$input = strip_tags($input, $this->get_allowed_html_tags());
-		
+
 		return $input;
 	}
 

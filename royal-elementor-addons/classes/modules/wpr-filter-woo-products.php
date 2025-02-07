@@ -284,6 +284,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$posts_per_page = intval(get_option('wpr_woo_shop_ppp', 9));
 			}
 			$args = $wp_query->query_vars;
+			$args['post_type'] = 'product';
 			$args['tax_query'] = $this->get_tax_query_args();
 			$args['meta_query'] = $this->get_meta_query_args();
 			$args['posts_per_page'] = $posts_per_page;
@@ -1226,7 +1227,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	// Render Wishlist Button
 	public function render_product_wishlist_button( $settings, $class ) {
 		global $product;
-		
+
 		if ( !wpr_fs()->is_plan( 'expert' ) ) {
 			return;
 		}
@@ -1882,6 +1883,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	public function wpr_get_woo_filtered_count() {
+		$nonce = $_POST['nonce'];
+
+		if (!isset($nonce) || !wp_verify_nonce($nonce, 'wpr-addons-js')) {
+			wp_send_json_error(array(
+				'message' => esc_html__('Security check failed.', 'wpr-addons'),
+			));
+		}
+		
 		$settings = $_POST['grid_settings'];
 		$page_count = $this->get_max_num_pages( $settings );
     
@@ -1893,6 +1902,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	public function wpr_filter_woo_products() {
+		$nonce = $_POST['nonce'];
+
+		if (!isset($nonce) || !wp_verify_nonce($nonce, 'wpr-addons-js')) {
+			wp_send_json_error(array(
+				'message' => esc_html__('Security check failed.', 'wpr-addons'),
+			));
+		}
+
 		// Get Settings
 		$settings = $_POST['grid_settings'];
 		// Get Posts

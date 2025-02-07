@@ -1087,7 +1087,12 @@
 				let title = selector.children('a').clone().children().remove().end().text();
 
 				selector.closest('.wpr-mobile-mega-menu').addClass('wpr-mobile-sub-offcanvas-open');
-				selector.find('.wpr-menu-offcanvas-back').find('h3').text(title);
+				
+				if (selector.find('.wpr-menu-offcanvas-back').find('h3').length > 0) {
+					selector.find('.wpr-menu-offcanvas-back').find('h3').text(title);
+				} else {
+					selector.find('.wpr-menu-offcanvas-back').append('<h3></h3>').find('h3').text(title);
+				}
 
 				let parentItem = $scope.find('.wpr-mobile-mega-menu').children('.wpr-mobile-sub-open'),
 				    subSelector = parentItem.children('ul').length ? parentItem.children('ul') : parentItem.children('.wpr-mobile-sub-mega-menu'),
@@ -1107,6 +1112,7 @@
 				// Get all the links with the class "nav-link"
 				var $navLinks = $scope.find( '.wpr-onepage-nav-item' ),
 					scrollSpeed = parseInt( $scope.find('.wpr-onepage-nav').attr( 'data-speed' ), 10 ),
+					considerHeader = $scope.find('.wpr-onepage-nav').attr( 'data-consider-header' ),
 					// sections = $( '.elementor-section' );
 					getSections = [];
 					$navLinks.each(function() {
@@ -1128,7 +1134,7 @@
 				
 					// Smoothly scroll to the section
 					$('html, body').animate({
-					scrollTop: $('[data-wpr-sticky-section="yes"]').first().length ? sectionPos - $('[data-wpr-sticky-section="yes"]').first().height() : sectionPos
+					scrollTop: 'yes' === considerHeader && $('[data-wpr-sticky-section="yes"]').first().length ? sectionPos - $('[data-wpr-sticky-section="yes"]').first().height() : sectionPos
 					}, scrollSpeed);
 				}
 
@@ -1156,7 +1162,7 @@
 						var sectionPos = $section.offset().top;
 						// Smoothly scroll to the section
 						$('html, body').animate({
-							scrollTop: $('[data-wpr-sticky-section="yes"]').first().length ? sectionPos - $('[data-wpr-sticky-section="yes"]').first().height() : sectionPos
+							scrollTop: 'yes' === considerHeader  && $('[data-wpr-sticky-section="yes"]').first().length ? sectionPos - $('[data-wpr-sticky-section="yes"]').first().height() : sectionPos
 						}, scrollSpeed);
 					});
 				});
@@ -2515,6 +2521,7 @@
 
 								let data = {
 									action: experimentActionCount,
+									nonce: WprConfig.nonce,
 									wpr_offset: 0,
 									wpr_filter: thisFilter,
 									wpr_taxonomy: thisTaxonomy,
@@ -3061,6 +3068,7 @@
 						url: WprConfig.ajaxurl,
 						data: {
 							action: experimentActionCount,
+							nonce: WprConfig.nonce,
 							wpr_offset: +settings.grid_settings.query_offset + $scope.find('.wpr-grid-item').length,
 							wpr_filter: thisFilter,
 							wpr_taxonomy: thisTaxonomy,
@@ -3074,6 +3082,7 @@
 								url: WprConfig.ajaxurl,
 								data: {
 									action: experimentActionContent,
+									nonce: WprConfig.nonce,
 									wpr_item_length: +settings.grid_settings.query_offset + $scope.find('.wpr-grid-item').length,
 									wpr_filter: thisFilter,
 									wpr_taxonomy: thisTaxonomy,
@@ -3157,6 +3166,7 @@
 						url: WprConfig.ajaxurl,
 						data: {
 							action: experimentActionCount,
+							nonce: WprConfig.nonce,
 							wpr_offset: +settings.grid_settings.query_offset + $scope.find('.wpr-grid-item').length,
 							wpr_filter: thisFilter,
 							wpr_taxonomy: thisTaxonomy,
@@ -3173,6 +3183,7 @@
 								url: WprConfig.ajaxurl,
 								data: {
 									action: experimentActionContent,
+									nonce: WprConfig.nonce,
 									wpr_offset: +settings.grid_settings.query_offset + $scope.find('.wpr-grid-item').length,
 									wpr_filter: thisFilter,
 									wpr_taxonomy: thisTaxonomy,
@@ -4835,6 +4846,7 @@
 							wpr_show_description: $scope.find('.wpr-search-form-input').attr('show-description'),
 							wpr_number_of_words: $scope.find('.wpr-search-form-input').attr('number-of-words'),
 							wpr_show_ajax_thumbnail: $scope.find('.wpr-search-form-input').attr('show-ajax-thumbnails'),
+							wpr_show_product_price: $scope.find('.wpr-search-form-input').attr('show-product-price'),
 							wpr_show_view_result_btn: $scope.find('.wpr-search-form-input').attr('show-view-result-btn'),
 							wpr_view_result_text: $scope.find('.wpr-search-form-input').attr('view-result-text'),
 							wpr_no_results: $scope.find('.wpr-search-form-input').attr('no-results'),

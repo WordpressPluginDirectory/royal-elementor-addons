@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1007
+Stable tag: 1.7.1008
 Requires at least: 5.0
 Tested up to: 6.7.1
 Requires PHP: 5.6
@@ -453,6 +453,12 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1008 - 2025-2-07 =
+* FIXED: Minor Bugs
+* ADDED: Furniture Shop V2 - Elementor Template Kit - [**Furniture Store V2**](https://demosites.royal-elementor-addons.com/furniture-shop-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Jewelry Store V2 - Elementor Template Kit - [**Jewelry Store V2**](https://demosites.royal-elementor-addons.com/jewelry-v2//?ref=rea-wpo-pp-details-tab).
+* ADDED: Date Widget
+
 = Royal Elementor Addons v1.7.1007 - 2025-1-12 =
 * FIXED: Minor Bugs
 * ADDED: Personal Blog V5 - Elementor Template Kit - [**Personal Blog V5**](https://demosites.royal-elementor-addons.com/personal-blog-v5/?ref=rea-wpo-pp-details-tab).

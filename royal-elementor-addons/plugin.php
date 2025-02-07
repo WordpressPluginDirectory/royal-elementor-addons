@@ -432,7 +432,7 @@ class Plugin {
 	public function wpr_some_init_actions() {
 		load_plugin_textdomain('wpr-addons', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 
-		if ( ! isset( $_COOKIE['wpr_guest_token'] ) ) {
+		if ( ! isset( $_COOKIE['wpr_guest_token'] ) && !headers_sent() ) {
 			// Generate a unique token and store it in a cookie
 			$guest_id = bin2hex(random_bytes(32)); // Secure random string as guest "session"
 			$secure = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' );

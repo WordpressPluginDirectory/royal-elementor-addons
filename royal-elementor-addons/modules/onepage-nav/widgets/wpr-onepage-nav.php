@@ -56,11 +56,22 @@ class Wpr_OnepageNav extends Widget_Base {
 		);
 
 		$this->add_control(
+			'nav_consider_header',
+			[
+				'label' => esc_html__( 'Consider Sticky Header', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+				'description' => esc_html__( 'Enable this to account for Royal Sticky Header when scrolling to sections.', 'wpr-addons' ),
+			]
+		);
+
+		$this->add_control(
 			'nav_item_show_tooltip',
 			[
 				'label' => sprintf( __( 'Show Tooltip %s', 'wpr-addons' ), '<i class="eicon-pro-icon"></i>' ),
 				'type' => Controls_Manager::SWITCHER,
-				'classes' => 'wpr-pro-control no-distance'
+				'classes' => 'wpr-pro-control no-distance',
+				'separator' => 'before'
 			]
 		);
 
@@ -746,7 +757,7 @@ class Wpr_OnepageNav extends Widget_Base {
 			$settings['nav_item_show_tooltip'] = '';
 		}
 
-		echo '<div class="wpr-onepage-nav" data-speed="'. esc_attr($settings['nav_item_scroll_speed']) .'" data-highlight="'. esc_attr($settings['nav_item_highlight']) .'">';
+		echo '<div class="wpr-onepage-nav" data-speed="'. esc_attr($settings['nav_item_scroll_speed']) .'" data-highlight="'. esc_attr($settings['nav_item_highlight']) .'" data-consider-header="'. esc_attr($settings['nav_consider_header']) .'">';
 		
 		// Nav Items
 		foreach ( $settings['nav_items'] as $item ) {

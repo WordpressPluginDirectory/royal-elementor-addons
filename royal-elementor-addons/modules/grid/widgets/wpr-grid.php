@@ -8700,13 +8700,22 @@ class Wpr_Grid extends Widget_Base {
 			return;
 		}
 
+		$excerpt = get_the_excerpt();
+
+		// Convert HTML entities to their respective characters
+		$decoded_excerpt = html_entity_decode($excerpt, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+		// Trim the string to the desired length
+		$trimmed_excerpt = mb_substr($decoded_excerpt, 0, $settings['element_letter_count'], 'UTF-8');
+
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 			  if ( 'word_count' === $settings['element_trim_text_by']) {
 				echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'] )) .'</p>';
 			  } else {
 				// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
-				echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';
+				// echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';	
+				echo '<p>' . esc_html($trimmed_excerpt) . '...' . '</p>';
 			  }
 			echo '</div>';
 		echo '</div>';

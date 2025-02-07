@@ -259,15 +259,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 			}
 
-			if ( !$reply_to_address ) {
+			if ( !isset($reply_to_address) || empty($reply_to_address) ) {
 				$reply_to_address = get_option('wpr_reply_to_'. $_POST['wpr_form_id']);
 			}
 
-			if ( !$email_from_name ) {
+			if ( !isset($email_from_name) || empty($email_from_name) ) {
 				$email_from_name = get_option('wpr_email_from_name_'. $_POST['wpr_form_id']);
 			}
 
-			if ( !$email_from_mail ) {
+			if ( !isset($email_from_mail) || empty($email_from_mail) ) {
 				$email_from_mail = get_option('wpr_email_from_'. $_POST['wpr_form_id']);
 			}
 			

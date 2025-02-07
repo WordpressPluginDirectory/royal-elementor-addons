@@ -45,7 +45,8 @@ class Wpr_Astra_Compat {
 
 		if ( $this->render_templates->is_template_available('header') ) {
 			add_action( 'template_redirect', [ $this, 'astra_setup_header' ], 10 );
-			add_action( 'astra_header', [$this->render_templates, 'replace_header'] );
+			// add_action( 'astra_header', [$this->render_templates, 'replace_header'] );
+			add_action( 'get_header', [ $this->render_templates, 'replace_header' ] );
 			add_action( 'elementor/page_templates/canvas/before_content', [ $this->render_templates, 'add_canvas_header' ] );
 		}
 

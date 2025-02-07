@@ -897,6 +897,7 @@ function wpr_addons_settings_page() {
                     <li><span>Team Member Widget</span></li>
                     <li><span>Button Widget</span></li>
                     <li><span>Dual Button Widget</span></li>
+                    <li><span>Date Widget</span></li>
                     <li><span>Price List Widget</span></li>
                     <li><span>Business Hours Widget</span></li>
                     <li><span>Sharing Buttons Widget</span></li>

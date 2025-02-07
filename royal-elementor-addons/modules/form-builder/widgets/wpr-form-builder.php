@@ -1756,6 +1756,7 @@ class Wpr_Form_Builder extends Widget_Base {
 				'default' => '#7a7a7a',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-field-group .wpr-form-field' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .wpr-field-group .wpr-form-field select' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .wpr-field-group .wpr-form-field svg' => 'fill: {{VALUE}};',
 					'{{WRAPPER}} .wpr-field-group input[type="radio"] + label' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .wpr-field-group input[type="checkbox"] + label' => 'color: {{VALUE}};'
@@ -2598,9 +2599,32 @@ class Wpr_Form_Builder extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'step_wrap_gutter_vertical',
+			[
+				'label' => esc_html__( 'Vertical Gutter', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => ['px'],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 50,
+					],
+				],				
+				'default' => [
+					'unit' => 'px',
+					'size' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-step' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				],
+				'separator' => 'before'
+			]
+		);
+
+		$this->add_responsive_control(
 			'step_wrap_gutter',
 			[
-				'label' => esc_html__( 'Gutter', 'wpr-addons' ),
+				'label' => esc_html__( 'Horizontal Gutter', 'wpr-addons' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => ['px'],
 				'range' => [

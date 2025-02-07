@@ -10235,7 +10235,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 	}
 
 	// Grid Settings
-	public function add_grid_settings( $settings ) {
+	public function add_grid_settings( $settings, $settings_new ) {
 		if ( ! wpr_fs()->can_use_premium_code() ) {
 			$settings['layout_select'] = 'pro-ms' == $settings['layout_select'] ? 'fitRows' : $settings['layout_select'];
 			$settings['filters_deeplinking'] = '';
@@ -10253,21 +10253,21 @@ class Wpr_Woo_Grid extends Widget_Base {
 			$stick_last_element_to_bottom = 'no';
 		}
 
-		$gutter_hr_widescreen = isset($settings['layout_gutter_hr_widescreen']['size']) ? $settings['layout_gutter_hr_widescreen']['size'] : $settings['layout_gutter_hr']['size'];
-		$gutter_hr_desktop = $settings['layout_gutter_hr']['size'];
-		$gutter_hr_laptop = isset($settings['layout_gutter_hr_laptop']['size']) ? $settings['layout_gutter_hr_laptop']['size'] : $gutter_hr_desktop;
-		$gutter_hr_tablet_extra = isset($settings['layout_gutter_hr_tablet_extra']['size']) ? $settings['layout_gutter_hr_tablet_extra']['size'] : $gutter_hr_laptop;
-		$gutter_hr_tablet = isset($settings['layout_gutter_hr_tablet']['size']) ? $settings['layout_gutter_hr_tablet']['size'] : $gutter_hr_tablet_extra;
-		$gutter_hr_mobile_extra = isset($settings['layout_gutter_hr_mobile_extra']['size']) ? $settings['layout_gutter_hr_mobile_extra']['size'] : $gutter_hr_tablet;
-		$gutter_hr_mobile = isset($settings['layout_gutter_hr_mobile']['size']) ? $settings['layout_gutter_hr_mobile']['size'] : $gutter_hr_mobile_extra;
+		$gutter_hr_widescreen = isset($settings_new['layout_gutter_hr_widescreen']['size']) ? $settings_new['layout_gutter_hr_widescreen']['size'] : $settings_new['layout_gutter_hr']['size'];
+		$gutter_hr_desktop = $settings_new['layout_gutter_hr']['size'];
+		$gutter_hr_laptop = isset($settings_new['layout_gutter_hr_laptop']['size']) ? $settings_new['layout_gutter_hr_laptop']['size'] : $gutter_hr_desktop;
+		$gutter_hr_tablet_extra = isset($settings_new['layout_gutter_hr_tablet_extra']['size']) ? $settings_new['layout_gutter_hr_tablet_extra']['size'] : $gutter_hr_laptop;
+		$gutter_hr_tablet = isset($settings_new['layout_gutter_hr_tablet']['size']) ? $settings_new['layout_gutter_hr_tablet']['size'] : $gutter_hr_tablet_extra;
+		$gutter_hr_mobile_extra = isset($settings_new['layout_gutter_hr_mobile_extra']['size']) ? $settings_new['layout_gutter_hr_mobile_extra']['size'] : $gutter_hr_tablet;
+		$gutter_hr_mobile = isset($settings_new['layout_gutter_hr_mobile']['size']) ? $settings_new['layout_gutter_hr_mobile']['size'] : $gutter_hr_mobile_extra;
 
-		$gutter_vr_widescreen = isset($settings['layout_gutter_vr_widescreen']['size']) ? $settings['layout_gutter_vr_widescreen']['size'] : $settings['layout_gutter_vr']['size'];
-		$gutter_vr_desktop = $settings['layout_gutter_vr']['size'];
-		$gutter_vr_laptop = isset($settings['layout_gutter_vr_laptop']['size']) ? $settings['layout_gutter_vr_laptop']['size'] : $gutter_vr_desktop;
-		$gutter_vr_tablet_extra = isset($settings['layout_gutter_vr_tablet_extra']['size']) ? $settings['layout_gutter_vr_tablet_extra']['size'] : $gutter_vr_laptop;
-		$gutter_vr_tablet = isset($settings['layout_gutter_vr_tablet']['size']) ? $settings['layout_gutter_vr_tablet']['size'] : $gutter_vr_tablet_extra;
-		$gutter_vr_mobile_extra = isset($settings['layout_gutter_vr_mobile_extra']['size']) ? $settings['layout_gutter_vr_mobile_extra']['size'] : $gutter_vr_tablet;
-		$gutter_vr_mobile = isset($settings['layout_gutter_vr_mobile']['size']) ? $settings['layout_gutter_vr_mobile']['size'] : $gutter_vr_mobile_extra;
+		$gutter_vr_widescreen = isset($settings_new['layout_gutter_vr_widescreen']['size']) ? $settings_new['layout_gutter_vr_widescreen']['size'] : $settings_new['layout_gutter_vr']['size'];
+		$gutter_vr_desktop = $settings_new['layout_gutter_vr']['size'];
+		$gutter_vr_laptop = isset($settings_new['layout_gutter_vr_laptop']['size']) ? $settings_new['layout_gutter_vr_laptop']['size'] : $gutter_vr_desktop;
+		$gutter_vr_tablet_extra = isset($settings_new['layout_gutter_vr_tablet_extra']['size']) ? $settings_new['layout_gutter_vr_tablet_extra']['size'] : $gutter_vr_laptop;
+		$gutter_vr_tablet = isset($settings_new['layout_gutter_vr_tablet']['size']) ? $settings_new['layout_gutter_vr_tablet']['size'] : $gutter_vr_tablet_extra;
+		$gutter_vr_mobile_extra = isset($settings_new['layout_gutter_vr_mobile_extra']['size']) ? $settings_new['layout_gutter_vr_mobile_extra']['size'] : $gutter_vr_tablet;
+		$gutter_vr_mobile = isset($settings_new['layout_gutter_vr_mobile']['size']) ? $settings_new['layout_gutter_vr_mobile']['size'] : $gutter_vr_mobile_extra;
 
 		$layout_settings = [
 			'layout' => $settings['layout_select'],
@@ -10411,6 +10411,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 	protected function render() {
 		// Get Settings
 		$settings = $this->get_settings();
+		$settings_new = $this->get_settings_for_display();
 
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			echo '<h2>'. esc_html__( 'WooCommerce is NOT active!', 'wpr-addons' ) .'</h2>';
@@ -10447,7 +10448,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				}
 			}
 
-			$this->add_grid_settings( $settings );
+			$this->add_grid_settings( $settings, $settings_new );
 			$render_attribute = $this->get_render_attribute_string( 'grid-settings' );
 
 		// Slider Settings

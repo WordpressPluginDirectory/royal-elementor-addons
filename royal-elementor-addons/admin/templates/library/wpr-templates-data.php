@@ -25,7 +25,7 @@ class WPR_Templates_Data {
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
-					'priority' => 1,
+					'priority' => 10,
 				],
 			],
 			'christmas' => [
@@ -335,7 +335,7 @@ class WPR_Templates_Data {
 			],
 			'furniture-shop' => [
 				'v1' => [
-					'name' => 'Furniture Shop',
+					'name' => 'Furniture Shop V1',
 					'pages' => 'home,shop-v1,shop-v2,single-product,my-account,about,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
 					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online furniture home office eshopping market reseller ecommerce shop e commerce',
@@ -345,6 +345,19 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'expert' => $is_expert ? 'free' : 'expert',
 					'label' => 'trending',
+					'priority' => 6,
+				],
+				'v2' => [
+					'name' => 'Furniture Shop V2',
+					'pages' => 'home,shop,single-product,cart,wishlist,compare,about,warranty,faq,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online furniture home designer chair shelf sofa bed eshopping market reseller ecommerce shop e commerce collection',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
 					'priority' => 5,
 				],
 			],
@@ -1357,8 +1370,21 @@ class WPR_Templates_Data {
 			],
 			'jewelry' => [
 				'v1' => [
-					'name' => 'Jewelry Shop',
+					'name' => 'Jewelry Shop V1',
 					'pages' => 'home,shop,single-product,cart,compare,wishlist,about,about-me,faq,blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 6,
+				],
+				'v2' => [
+					'name' => 'Jewelry Shop V2',
+					'pages' => 'home,shop,shop-grid,shop-list,single-product,cart,compare,wishlist,about-me,about-us,faq,blog,single-blog,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
 					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet',
 					'theme-builder' => true,
@@ -2034,9 +2060,15 @@ class WPR_Templates_Data {
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'furniture-shop-v1' => [
-				'name' => 'Furniture Shop',
+				'name' => 'Furniture Shop V1',
 				'pages' => ['home','shop-v1','shop-v2','about','contact'],
 				'preview' => ['home','shop-furniture-shop-v1','shop-v2','about','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'furniture-shop-v2' => [
+				'name' => 'Furniture Shop V2',
+				'pages' => ['home','shop','cart','compare','about','warranty','faq','blog','contact'],
+				'preview' => ['home','shop','cart','compare','about','warranty','faq','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'restaurant-v1' => [
@@ -2256,9 +2288,15 @@ class WPR_Templates_Data {
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'jewelry-v1' => [
-				'name' => 'Jewelry Shop',
+				'name' => 'Jewelry Shop V1',
 				'pages' => ['home','shop','cart','compare','wishlist','about','about-me','faq','blog','contact'],
 				'preview' => ['home','shop','cart','compare','wishlist','about','about-me','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'jewelry-v2' => [
+				'name' => 'Jewelry Shop V2',
+				'pages' => ['home','shop','shop-grid','shop-list','cart','about-us','about-me','faq','blog','contact'],
+				'preview' => ['home','shop','shop-grid','shop-list','cart','about-us','about-me','faq','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'travel-v3' => [

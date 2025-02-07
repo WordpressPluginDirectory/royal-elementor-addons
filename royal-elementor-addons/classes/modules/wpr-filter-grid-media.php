@@ -1008,6 +1008,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	public function wpr_get_media_filtered_count() {
+		$nonce = $_POST['nonce'];
+
+		if (!isset($nonce) || !wp_verify_nonce($nonce, 'wpr-addons-js')) {
+			wp_send_json_error(array(
+				'message' => esc_html__('Security check failed.', 'wpr-addons'),
+			));
+		}
+		
 		$settings = $_POST['grid_settings'];
 		$page_count = $this->get_max_num_pages( $settings );
     
@@ -1019,6 +1027,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	public function wpr_filter_grid_media() {
+		$nonce = $_POST['nonce'];
+
+		if (!isset($nonce) || !wp_verify_nonce($nonce, 'wpr-addons-js')) {
+			wp_send_json_error(array(
+				'message' => esc_html__('Security check failed.', 'wpr-addons'),
+			));
+		}
+
 		// Get Settings
 		$settings = $_POST['grid_settings'];
 		// Get Posts

@@ -262,6 +262,7 @@ class Wpr_Popup_Trigger extends Widget_Base {
 				'default' => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-popup-trigger-button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-popup-trigger-button svg' => 'fill: {{VALUE}}'
 				],
 			]
 		);
@@ -423,6 +424,29 @@ class Wpr_Popup_Trigger extends Widget_Base {
 				'condition' => [
 					'popup_trigger_border_type!' => 'none',
 				],
+			]
+		);
+
+		$this->add_control(
+			'popup_trigger_svg_icon_size',
+			[
+				'label' => esc_html__( 'SVG Icon Size', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => ['px'],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 50,
+					],
+				],				
+				'default' => [
+					'unit' => 'px',
+					'size' => 10,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-popup-trigger-button svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				],
+				'separator' => 'before'
 			]
 		);
 

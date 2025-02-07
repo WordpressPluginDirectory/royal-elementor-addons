@@ -57,6 +57,17 @@ class Wpr_Page_List extends Widget_Base {
 		);
 
 		$this->add_control(
+			'enable_wrapper_link',
+			[
+				'label' => esc_html__( 'Enable Wrapper Link', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'default' => '',
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
 			'taxonomy_list_layout',
 			[
 				'label' => esc_html__( 'Select Layout', 'wpr-addons' ),
@@ -430,6 +441,7 @@ class Wpr_Page_List extends Widget_Base {
 				'default' => '#605BE5',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-page-list-item a' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-page-list-item .wpr-pl-title' => 'color: {{VALUE}}'
 				],
 			]
 		);
@@ -469,7 +481,8 @@ class Wpr_Page_List extends Widget_Base {
 				'step' => 0.1,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-page-list-item' => 'transition-duration: {{VALUE}}s',
-					'{{WRAPPER}} .wpr-page-list-item a' => 'transition-duration: {{VALUE}}s'
+					'{{WRAPPER}} .wpr-page-list-item a' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .wpr-page-list-item .wpr-pl-title' => 'transition-duration: {{VALUE}}s'
 				]
 			]
 		);
@@ -478,7 +491,7 @@ class Wpr_Page_List extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'page_list_item_title_typo',
-				'selector' => '{{WRAPPER}} .wpr-page-list-item a',
+				'selector' => '{{WRAPPER}} .wpr-page-list-item a, {{WRAPPER}} .wpr-page-list-item .wpr-pl-title',
 				'fields_options' => [
 					'typography'      => [
 						'default' => 'custom',
@@ -515,8 +528,8 @@ class Wpr_Page_List extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#605BE5',
 				'selectors' => [
-					'{{WRAPPER}} .wpr-page-list-item a:hover' => 'color: {{VALUE}}',
 					'{{WRAPPER}} li.wpr-page-list-item a:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} li.wpr-page-list-item .wpr-pl-title:hover' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -563,6 +576,7 @@ class Wpr_Page_List extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-page-list-item div a' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-page-list-item div .wpr-pl-title' => 'margin-bottom: {{SIZE}}{{UNIT}};'
 				],
 				'separator' => 'before'
 			]
@@ -871,7 +885,7 @@ class Wpr_Page_List extends Widget_Base {
 		// Pointer Class
 		$page_title_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $settings['title_pointer'];
 		$page_title_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $settings['title_pointer_animation'];
-		$pointer_item_class = (isset($settings['title_pointer']) && 'none' !== $settings['title_pointer']) ? 'wpr-pointer-item' : 'wpr-no-pointer';
+		$pointer_item_class = (isset($settings['title_pointer']) && 'none' !== $settings['title_pointer']) ? 'wpr-pointer-item wpr-pl-title' : 'wpr-no-pointer wpr-pl-title';
 
 		$class .= ' wpr-pointer-'. $page_title_pointer;
 		$class .= ' wpr-pointer-line-fx wpr-pointer-fx-'. $page_title_pointer_animation;
@@ -902,39 +916,90 @@ class Wpr_Page_List extends Widget_Base {
                     }
 
                     if ( 'dynamic' === $item['page_list_item_type'] && isset($item['query_page_selection']) ) {
+                        $wrapper_link = 'yes' === $settings['enable_wrapper_link'] ? get_the_permalink($item['query_page_selection']) : '';
+                        
+                        if ($wrapper_link) {
+                            $this->add_link_attributes( 'wrapper_link'. $key, [
+                                'url' => $wrapper_link,
+                                'is_external' => 'yes' === $item['open_in_new_page'],
+                            ]);
+                        }
 
 						echo '<li '. $this->get_render_attribute_string('page_list_item'. $key) .'>';
+
+						if ($wrapper_link) {
+							echo '<a class="wpr-page-list-wrapper-link" '. $this->get_render_attribute_string( 'wrapper_link'. $key ) .'>';
+						}
+						
 						echo (isset($item['page_list_item_icon']) && '' !== $item['page_list_item_icon']['value']) ? '<span class="wpr-page-list-item-icon">'. $icon .'</span>' : '';
-                        	echo '<div>';
-                                echo '<a class="'. $pointer_item_class .'" href='. get_the_permalink($item['query_page_selection']) .' target='. $target .'>';
-                                    echo get_the_title($item['query_page_selection']);
-                                echo '</a>';
-                                if ( isset($item['page_list_item_sub_title']) && '' !== $item['page_list_item_sub_title']  ) {
-                                    echo '<p>'. $item['page_list_item_sub_title'] .'</p>';
-                                }
-							echo '</div>';
-							echo 'yes' === $item['show_page_list_item_badge'] ? '<span class="wpr-page-list-item-badge">'. $item['page_list_item_badge_text'] .'</span>' : '';
+						
+						echo '<div>';
+						if ($wrapper_link) {
+							echo '<span  class="'. $pointer_item_class .'">';
+								echo get_the_title($item['query_page_selection']);
+							echo '</span>';
+						} else {
+							echo '<a class="'. $pointer_item_class .'" href='. get_the_permalink($item['query_page_selection']) .' target='. $target .'>';
+								echo get_the_title($item['query_page_selection']);
+							echo '</a>';
+						}
+
+							if ( isset($item['page_list_item_sub_title']) && '' !== $item['page_list_item_sub_title']  ) {
+								echo '<p>'. $item['page_list_item_sub_title'] .'</p>';
+							}
+						echo '</div>';
+
+						echo 'yes' === $item['show_page_list_item_badge'] ? '<span class="wpr-page-list-item-badge">'. $item['page_list_item_badge_text'] .'</span>' : '';
+						
+						if ($wrapper_link) {
+							echo '</a>';
+						}
+
 						echo '</li>';
 
                     } else if ( 'custom' === $item['page_list_item_type'] && isset($item['page_list_item_title']) ) {
-
+                        $wrapper_link = 'yes' === $settings['enable_wrapper_link'] && !empty($item['page_list_item_title_url']['url']) ? $item['page_list_item_title_url']['url'] : '';
+                        
+                        if ($wrapper_link) {
+                            $this->add_link_attributes( 'wrapper_link'. $key, [
+                                'url' => $wrapper_link,
+                                'is_external' => 'yes' === $item['open_in_new_page'],
+                            ]);
+                        }
+                        
                         if ( ! empty( $item['page_list_item_title_url']['url'] ) ) {
                             $this->add_link_attributes( 'title_link_'. $key, $item['page_list_item_title_url'] );
-                        }
+						}
 
                         echo '<li '. $this->get_render_attribute_string('page_list_item'. $key) .'>';
-                            echo (isset($item['page_list_item_icon']) && '' !== $item['page_list_item_icon']['value']) ? '<span class="wpr-page-list-item-icon">'. $icon .'</span>' : '';
-                            echo '<div>';
-                                echo '<a  '. $this->get_render_attribute_string( 'title_link_'. $key ) .' class="'. $pointer_item_class .'">';
-                                    echo $item['page_list_item_title'];
-                                echo '</a>';
-                                if ( isset($item['page_list_item_sub_title']) && '' !== $item['page_list_item_sub_title'] ) {
-                                    echo '<p>'. $item['page_list_item_sub_title'] .'</p>';
-                                }
-                            echo '</div>';
-                            echo 'yes' === $item['show_page_list_item_badge'] ? '<span class="wpr-page-list-item-badge">'. $item['page_list_item_badge_text'] .'</span>' : '';
-                        echo '</li>';
 
+                        if ($wrapper_link) {
+                            echo '<a class="wpr-page-list-wrapper-link" '. $this->get_render_attribute_string( 'wrapper_link' . $key ) .'>';
+                        }
+                        echo (isset($item['page_list_item_icon']) && '' !== $item['page_list_item_icon']['value']) ? '<span class="wpr-page-list-item-icon">'. $icon .'</span>' : '';
+
+						echo '<div>';
+							if ($wrapper_link) {
+								echo '<span  class="'. $pointer_item_class .'">';
+									echo $item['page_list_item_title'];
+								echo '</span>';
+							} else {
+								echo '<a  '. $this->get_render_attribute_string( 'title_link_'. $key ) .' class="'. $pointer_item_class .'">';
+									echo $item['page_list_item_title'];
+								echo '</a>';
+							}
+							if ( isset($item['page_list_item_sub_title']) && '' !== $item['page_list_item_sub_title'] ) {
+								echo '<p>'. $item['page_list_item_sub_title'] .'</p>';
+							}
+                        echo '</div>';
+
+                        echo 'yes' === $item['show_page_list_item_badge'] ? '<span class="wpr-page-list-item-badge">'. $item['page_list_item_badge_text'] .'</span>' : '';
+
+                        if ($wrapper_link) {
+                            echo '</a>';
+                        }
+
+                        echo '</li>';
                     }
                 }
 

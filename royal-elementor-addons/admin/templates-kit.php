@@ -705,7 +705,9 @@ function setup_wpr_templates( $kit ) {
     $kit_name = substr($kit, 0, strripos($kit, '-v'));
     $kit_version = substr($kit, (strripos($kit, '-v') + 1), strlen($kit));
     $get_available_kits = WPR_Templates_Data::get_available_kits();
-    $get_custom_types = $get_available_kits[$kit_name][$kit_version]['custom-types'];
+    if ( isset($get_available_kits[$kit_name][$kit_version]['custom-types'] ) ) {
+        $get_custom_types = $get_available_kits[$kit_name][$kit_version]['custom-types'];
+    }
     $has_theme_builder = $get_available_kits[$kit_name][$kit_version]['theme-builder'];
     $has_woo_builder = $get_available_kits[$kit_name][$kit_version]['woo-builder'];
     $has_off_canvas = $get_available_kits[$kit_name][$kit_version]['off-canvas'];

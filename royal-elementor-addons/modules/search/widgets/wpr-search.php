@@ -822,6 +822,57 @@ class Wpr_Search extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'price_heading',
+			[
+				'label' => esc_html__( 'Price', 'wpr-addons' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before'
+			]
+		);
+
+		$this->add_control(
+			'product_price_color',
+			[
+				'label' => esc_html__( 'Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#666666',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-search-product-price' => 'color: {{VALUE}};',
+				],
+				'condition' => [
+					'show_product_price' => 'yes',
+					'ajax_search' => 'yes'
+				]
+			]
+		);
+
+		$this->add_control(
+			'product_price_spacing',
+			[
+				'label' => esc_html__( 'Distance', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => ['px'],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 25,
+					]
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => 5,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-search-product-price' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				],
+				'condition' => [
+					'show_product_price' => 'yes',
+					'ajax_search' => 'yes'
+				]
+			]
+		);
+
 		$this->end_controls_section();
 	}
 
@@ -1046,6 +1097,22 @@ class Wpr_Search extends Widget_Base {
 		);
 	}
 
+	public function add_control_show_product_price() {
+		$this->add_control(
+			'show_product_price',
+			[
+				'label' => esc_html__( 'Show Product Price', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'no',
+				'render_type' => 'template',
+				'condition' => [
+					'ajax_search' => 'yes',
+					'search_query' => ['all', 'product', 'pro-product']
+				]
+			]
+		);
+	}
+
 	protected function register_controls() {
 		
 		// Section: Search -----------
@@ -1099,6 +1166,8 @@ class Wpr_Search extends Widget_Base {
 		$this->add_control_show_description();
 
 		$this->add_control_number_of_words_in_excerpt();
+
+		$this->add_control_show_product_price();
 
 		$this->add_control_no_results_text();
 
@@ -2025,6 +2094,7 @@ class Wpr_Search extends Widget_Base {
 				'number-of-words' => isset($settings['number_of_words_in_excerpt']) ? $settings['number_of_words_in_excerpt'] : '',
 				'show-ajax-thumbnails' => isset($settings['show_ajax_thumbnails']) ? $settings['show_ajax_thumbnails'] : '',
 				'show-view-result-btn' => isset($settings['show_view_result_btn']) ? $settings['show_view_result_btn'] : '',
+				'show-product-price' => isset($settings['show_product_price']) ? $settings['show_product_price'] : '',
 				'view-result-text' => isset($settings['view_result_text']) ? $settings['view_result_text'] : '',
 				'no-results' => isset($settings['no_results_text']) ? esc_html__($settings['no_results_text']) : '',
 				'exclude-without-thumb' => isset($settings['exclude_posts_without_thumbnail']) ? $settings['exclude_posts_without_thumbnail'] : '',

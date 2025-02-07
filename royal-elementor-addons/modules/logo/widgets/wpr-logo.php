@@ -642,6 +642,7 @@ class Wpr_Logo extends Widget_Base {
 			// Logo URL
 			$this->add_render_attribute( 'url_attr', 'class', 'wpr-logo-url' );
 			$this->add_render_attribute( 'url_attr', 'rel', 'home' );
+			$this->add_render_attribute( 'url_attr', 'aria-label', $image_alt );
 			
 			if ( 'default' === $settings['url_type'] ) {
 				$this->add_render_attribute( 'url_attr', 'href',  home_url( '/' ) );
