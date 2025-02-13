@@ -181,6 +181,20 @@ class WPR_Templates_Data {
 					'priority' => 30,
 				],
 			],
+			'personal-coach' => [
+				'v1' => [
+					'name' => 'Personal Coach V1',
+					'pages' => 'home,coaching,details,services,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free personal coaching business training mentor consultation industry learning professional growth leadership skills productivity career strategy online courses lessons school study  tutor consultant life coach lifecoach',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 20,
+				],
+			],
 			'amazon-landing-page' => [
 				'v1' => [
 					'name' => 'Amazon Product Landing Page',
@@ -404,7 +418,7 @@ class WPR_Templates_Data {
 			],
 			'estore' => [
 				'v1' => [
-					'name' => 'Electronic Store - Shop',
+					'name' => 'Electronic Store - V1 - Shop',
 					'pages' => 'home,shop,single-product,blog,faq,about,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
 					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online market reseller ecommerce shop gadget iphone phone electronic e commerce',
@@ -414,6 +428,19 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'expert' => $is_expert ? 'free' : 'expert',
 					'label' => 'hot',
+					'priority' => 5,
+				],
+				'v2' => [
+					'name' => 'Electronic Store - V2 - Shop',
+					'pages' => 'home,shop,single-product,category,cart,compare,wishlist,blog,single-blog,about,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online market reseller ecommerce shop gadget iphone phone electronic gadgets tech e commerce',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
 					'priority' => 4,
 				],
 			],
@@ -2054,9 +2081,15 @@ class WPR_Templates_Data {
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'estore-v1' => [
-				'name' => 'Electronic Store',
+				'name' => 'Electronic Store - V1',
 				'pages' => ['home','shop','blog','faq','about','contact'],
 				'preview' => ['home','shop','blog','faq','about','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'estore-v2' => [
+				'name' => 'Electronic Store - V2',
+				'pages' => ['home','shop','cart','blog','about','contact'],
+				'preview' => ['home','shop','cart','blog','about','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'furniture-shop-v1' => [
@@ -2262,6 +2295,12 @@ class WPR_Templates_Data {
 				'pages' => ['home','about','gallery','classes','pricing','review','trainers','blog','contact','comingsoon'],
 				'preview' => ['home','about','gallery','classes','pricing','review','trainers','blog','contact','coming-soon'],
 				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'personal-coach-v1' => [
+				'name' => 'Personal Coach V1',
+				'pages' => ['home','coaching','details','services','blog','contact'],
+				'preview' => ['home','coaching','details','services','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'wedding-v1' => [
 				'name' => 'Wedding',
