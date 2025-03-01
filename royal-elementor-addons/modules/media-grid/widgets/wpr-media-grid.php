@@ -727,7 +727,7 @@ class Wpr_Media_Grid extends Widget_Base {
 
 		$this->add_control_query_randomize();
 
-		// if ( Utilities::is_new_free_user() && ! wpr_fs()->can_use_premium_code() ) {
+		// if ( Utilities::is_new_free_user() && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) {
 		// 	$this->add_control(
 		// 		'limit_grid_items_pro_notice',
 		// 		[
@@ -777,7 +777,7 @@ class Wpr_Media_Grid extends Widget_Base {
 
 		$this->add_control_layout_columns();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'grid_columns_pro_notice',
 				[
@@ -1240,7 +1240,7 @@ class Wpr_Media_Grid extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$repeater->add_control(
 	            'element_align_pro_notice',
 	            [
@@ -6619,7 +6619,7 @@ class Wpr_Media_Grid extends Widget_Base {
 		
 		$offset = ( $paged - 1 ) * $settings['query_posts_per_page'] + $settings[ 'query_offset' ];
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings[ 'query_randomize' ] = '';
 			$settings['order_posts'] = 'date';
 		}
@@ -6719,7 +6719,7 @@ class Wpr_Media_Grid extends Widget_Base {
 	public function get_image_effect_class( $settings ) {
 		$class = '';
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			if ( 'pro-zi' ==  $settings['image_effects'] || 'pro-zo' ==  $settings['image_effects'] || 'pro-go' ==  $settings['image_effects'] || 'pro-bo' ==  $settings['image_effects'] ) {
 				$settings['image_effects'] = 'none';
 			}
@@ -6755,7 +6755,7 @@ class Wpr_Media_Grid extends Widget_Base {
 	public function render_media_overlay( $settings ) {
 		echo '<div class="wpr-grid-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_url( get_the_permalink( get_the_ID() ) ) .'">';
 
-			if ( wpr_fs()->can_use_premium_code() ) {
+			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				if ( '' !== $settings['overlay_image']['url'] ) {
 					echo '<img src="'. esc_url( $settings['overlay_image']['url'] ) .'">';
 				}
@@ -6766,8 +6766,8 @@ class Wpr_Media_Grid extends Widget_Base {
 
 	// Render Post Title
 	public function render_post_title( $settings, $class ) {
-		$title_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['title_pointer'];
-		$title_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['title_pointer_animation'];
+		$title_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['title_pointer'];
+		$title_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['title_pointer_animation'];
 		$pointer_item_class = (isset($this->get_settings()['title_pointer']) && 'none' !== $this->get_settings()['title_pointer']) ? 'class="wpr-pointer-item"' : '';
 
 		$class .= ' wpr-pointer-'. $title_pointer;
@@ -7045,10 +7045,10 @@ class Wpr_Media_Grid extends Widget_Base {
 		$terms = wp_get_post_terms( $post_id, $settings['element_select'] );
 		$count = 0;
 
-		$tax1_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax1_pointer'];
-		$tax1_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax1_pointer_animation'];
-		$tax2_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax2_pointer'];
-		$tax2_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax2_pointer_animation'];
+		$tax1_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax1_pointer'];
+		$tax1_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax1_pointer_animation'];
+		$tax2_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax2_pointer'];
+		$tax2_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax2_pointer_animation'];
 		$pointer_item_class = (isset($this->get_settings()['tax1_pointer']) && 'none' !== $this->get_settings()['tax1_pointer']) || (isset($this->get_settings()['tax2_pointer']) && 'none' !== $this->get_settings()['tax2_pointer']) ? 'class="wpr-pointer-item"' : '';
 
 		// Pointer Class
@@ -7162,7 +7162,7 @@ class Wpr_Media_Grid extends Widget_Base {
 			$place = $data['element_location'];
 			$align_vr = $data['element_align_vr'];
 
-			if ( ! wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$align_vr = 'middle';
 			}
 
@@ -7239,7 +7239,7 @@ class Wpr_Media_Grid extends Widget_Base {
 		// Get Custom Filters
 		$custom_filters = $settings[ 'query_taxonomy_'. $taxonomy ];
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['filters_default_filter'] = '';
 			$settings['filters_icon_align'] = '';
 			$settings['filters_count'] = '';
@@ -7371,7 +7371,7 @@ class Wpr_Media_Grid extends Widget_Base {
 		$pages = $this->get_max_num_pages( $settings );
 		$paged = empty( $paged ) ? 1 : $paged;
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['pagination_type'] = 'pro-is' == $settings['pagination_type'] ? 'default' : $settings['pagination_type'];
 		}
 
@@ -7558,7 +7558,7 @@ class Wpr_Media_Grid extends Widget_Base {
 
 	// Grid Settings
 	public function add_grid_settings( $settings ) {
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['filters_deeplinking'] = '';
 			$settings['filters_count'] = '';
 			$settings['filters_default_filter'] = '';
@@ -7617,7 +7617,7 @@ class Wpr_Media_Grid extends Widget_Base {
 			'pagination_max_pages' => $this->get_max_num_pages( $settings ),
 		];
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['lightbox_popup_thumbnails'] = '';
 			$settings['lightbox_popup_thumbnails_default'] = '';
 			$settings['lightbox_popup_sharing'] = '';
@@ -7656,7 +7656,7 @@ class Wpr_Media_Grid extends Widget_Base {
 		$slider_is_rtl = is_rtl();
 		$slider_direction = $slider_is_rtl ? 'rtl' : 'ltr';
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['layout_slider_autoplay'] = '';
 			$settings['layout_slider_autoplay_duration'] = 0;
 			$settings['layout_slider_pause_on_hover'] = '';
@@ -7681,7 +7681,7 @@ class Wpr_Media_Grid extends Widget_Base {
 			'sliderRows' => isset($settings['layout_slider_rows']) ? $settings['layout_slider_rows'] : 1
 		];
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['lightbox_popup_thumbnails'] = '';
 			$settings['lightbox_popup_thumbnails_default'] = '';
 			$settings['lightbox_popup_sharing'] = '';

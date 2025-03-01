@@ -233,7 +233,7 @@ class Wpr_Sticky_Section {
 				]
 			);
 
-			if ( wpr_fs()->can_use_premium_code() && defined('WPR_ADDONS_PRO_VERSION') ) {
+			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				if ( class_exists('WprAddonsPro\Extensions\Wpr_Sticky_Section_Pro') ) {
 					\WprAddonsPro\Extensions\Wpr_Sticky_Section_Pro::add_control_group_sticky_advanced_options($element);
 				}

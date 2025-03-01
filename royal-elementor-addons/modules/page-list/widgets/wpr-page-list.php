@@ -883,8 +883,8 @@ class Wpr_Page_List extends Widget_Base {
         $class = '';
 
 		// Pointer Class
-		$page_title_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $settings['title_pointer'];
-		$page_title_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $settings['title_pointer_animation'];
+		$page_title_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $settings['title_pointer'];
+		$page_title_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $settings['title_pointer_animation'];
 		$pointer_item_class = (isset($settings['title_pointer']) && 'none' !== $settings['title_pointer']) ? 'wpr-pointer-item wpr-pl-title' : 'wpr-no-pointer wpr-pl-title';
 
 		$class .= ' wpr-pointer-'. $page_title_pointer;

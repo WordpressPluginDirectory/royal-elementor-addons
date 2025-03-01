@@ -1059,7 +1059,7 @@ class Wpr_Form_Builder extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'fields_to_show_pro_notice',
 				[
@@ -1438,7 +1438,7 @@ class Wpr_Form_Builder extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'submit_actions_notice',
 				[
@@ -3657,7 +3657,9 @@ class Wpr_Form_Builder extends Widget_Base {
 		update_option('wpr_reply_to_'. $this->get_id(), $instance['email_reply_to']);
 		update_option('wpr_meta_keys_'. $this->get_id(), $instance['form_metadata']);
 		update_option('wpr_referrer_'. $this->get_id(), home_url( $_SERVER['REQUEST_URI'] ));
-		update_option('wpr_referrer_title_'. $this->get_id(), get_the_title($post->ID));
+		if ($post && $post->ID) {
+			update_option('wpr_referrer_title_'. $this->get_id(), get_the_title($post->ID));
+		}
 		update_option('wpr_webhook_url_'. $this->get_id(), $instance['webhook_url']);
 
 		$emailField      = isset($instance['email_field']) ? $instance['email_field'] : '';
@@ -3731,9 +3733,10 @@ class Wpr_Form_Builder extends Widget_Base {
 		if ( ! empty( $instance['form_name'] ) ) {
 			$this->add_render_attribute( 'form', 'name', $instance['form_name'] );
 		}
-
-		$this->add_render_attribute( 'form', 'page', get_post()->post_title );
-		$this->add_render_attribute( 'form', 'page_id', get_post()->ID );
+		if ($post && $post->ID) {
+			$this->add_render_attribute( 'form', 'page', get_post()->post_title );
+			$this->add_render_attribute( 'form', 'page_id', get_post()->ID );
+		}
 
 		if ( ! empty( $instance['button_css_id'] ) ) {
 			$this->add_render_attribute( 'button', 'id', $instance['button_css_id'] );
@@ -3829,7 +3832,7 @@ class Wpr_Form_Builder extends Widget_Base {
 				foreach ( $instance['form_fields'] as $item_index => $item ) :
 					if ( 'step' !== $item['field_type'] ) {
 						$field_count++;
-						if ( !wpr_fs()->can_use_premium_code() && 3 < $field_count  ) {
+						if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && 3 < $field_count  ) {
 							continue;
 						}
 					}

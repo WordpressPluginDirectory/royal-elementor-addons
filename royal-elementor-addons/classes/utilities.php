@@ -372,11 +372,11 @@ class Utilities {
 				$template = $id;
 			} elseif ( in_array( $page .'/all', $conditions) && !in_array( $page .'/'. $post_id, $conditions) ) {
 				$template = $id;
-			} elseif ( in_array( $page, $conditions)  && !in_array( $page .'/'. $post_id, $conditions)  ) {
+			} elseif ( in_array( $page, $conditions)  && !in_array( $page .'/'. $post_id, $conditions) ) {
 				$template = $id;
 			}
 
-			if ( wpr_fs()->can_use_premium_code() && defined('WPR_ADDONS_PRO_VERSION') ) {
+			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				foreach ( $conditions as $key => $value ) {
 					if ( Utilities::check_id_in_path( $value, $post_id ) ) {
 						$template = $id;
@@ -1020,7 +1020,7 @@ class Utilities {
 			'pro-eiobk' => 'EIO Back (Pro)',
 		];
 
-		if ( wpr_fs()->can_use_premium_code() && defined('WPR_ADDONS_PRO_VERSION') ) {
+		if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 			$timing_functions = \WprAddonsPro\Includes\Controls\WPR_Control_Animations_Pro::wpr_animation_timings();
 		}
 
@@ -1056,7 +1056,7 @@ class Utilities {
 	** Upgrade to Pro Notice
 	*/
 	public static function upgrade_pro_notice( $module, $controls_manager, $widget, $option, $condition = [] ) {
-		if ( wpr_fs()->can_use_premium_code() ) {
+		if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 			return;
 		}
 
@@ -1077,7 +1077,7 @@ class Utilities {
 	}
 
 	public static function upgrade_expert_notice( $module, $controls_manager, $widget, $option, $condition = [] ) {
-		if ( wpr_fs()->is_plan( 'expert' ) ) {
+		if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 			return;
 		}
 
@@ -1124,7 +1124,7 @@ class Utilities {
 	** Pro Features List Section
 	*/
 	public static function pro_features_list_section( $module, $section, $type, $widget, $features ) {
-		if ( wpr_fs()->can_use_premium_code() ) {
+		if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 			return;
 		}
 
@@ -1216,11 +1216,11 @@ class Utilities {
 	** Check for New Free Users
 	*/
 	public static function is_new_free_user() {
-		return !wpr_fs()->can_use_premium_code() && (intval(get_option('royal_elementor_addons_activation_time')) > 1649247746);
+		return (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && (intval(get_option('royal_elementor_addons_activation_time')) > 1649247746);
 	}
 	
 	// public static function is_new_free_user2() {
-	// 	return !wpr_fs()->can_use_premium_code() && (intval(get_option('royal_elementor_addons_activation_time')) > 1670317149);
+	// 	return (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && (intval(get_option('royal_elementor_addons_activation_time')) > 1670317149);
 	// }
 
 	// public static function is_old_pro_user_or_expert() {

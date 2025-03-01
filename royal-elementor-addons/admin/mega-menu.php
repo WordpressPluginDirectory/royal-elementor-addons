@@ -118,7 +118,7 @@ function render_settings_popup() {
                 <span class="dashicons dashicons-no-alt wpr-mm-settings-close-popup-btn"></span>
             </div>
 
-            <?php $pro_active = wpr_fs()->can_use_premium_code() ? 'data-pro-active="true"' : 'data-pro-active="false"'; ?>
+            <?php $pro_active = defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ? 'data-pro-active="true"' : 'data-pro-active="false"'; ?>
             
             <div class="wpr-mm-settings-wrap" <?php echo $pro_active; ?>>
                 <h4><?php esc_html_e('General', 'wpr-addons'); ?></h4>
@@ -145,7 +145,7 @@ function render_settings_popup() {
                     <h4><?php esc_html_e('Dropdown Width', 'wpr-addons'); ?></h4>
                     <select id="wpr_mm_width">
                         <option value="default"><?php esc_html_e('Default', 'wpr-addons'); ?></option>
-                        <?php if ( ! wpr_fs()->can_use_premium_code() ) : ?>
+                        <?php if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) : ?>
                         <option value="pro-st"><?php esc_html_e('Fit to Section (Pro)', 'wpr-addons'); ?></option>
                         <?php else: ?>
                         <option value="stretch"><?php esc_html_e('Fit to Section', 'wpr-addons'); ?></option>
@@ -158,7 +158,7 @@ function render_settings_popup() {
                     <h4><?php esc_html_e('Custom Width (px)', 'wpr-addons'); ?></h4>
                     <input type="number" id="wpr_mm_custom_width" value="600">
                 </div>
-                <div class="wpr-mm-setting <?php echo !wpr_fs()->can_use_premium_code() ? 'wpr-mm-pro-setting' : ''; ?>">
+                <div class="wpr-mm-setting <?php echo !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'wpr-mm-pro-setting' : ''; ?>">
                     <h4><?php esc_html_e('Mobile Sub Content', 'wpr-addons'); ?></h4>
                     <div>
                         <select id="wpr_mm_mobile_content">
@@ -174,7 +174,7 @@ function render_settings_popup() {
                         </div>
                     </div>
                 </div>
-                <div class="wpr-mm-setting <?php echo !wpr_fs()->can_use_premium_code() ? 'wpr-mm-pro-setting' : ''; ?>">
+                <div class="wpr-mm-setting <?php echo !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'wpr-mm-pro-setting' : ''; ?>">
                     <h4><?php esc_html_e('Mobile Sub Render', 'wpr-addons'); ?></h4>
                     <div>
                         <select id="wpr_mm_render">
@@ -193,10 +193,10 @@ function render_settings_popup() {
 
                 <br>
 
-                <h4 <?php echo !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-heading"' : ''; ?>>
+                <h4 <?php echo !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-heading"' : ''; ?>>
                     <?php esc_html_e('Icon', 'wpr-addons'); ?>
                 </h4>
-                <div <?php echo !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-section"' : ''; ?>>
+                <div <?php echo !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-section"' : ''; ?>>
                     <div class="wpr-mm-setting wpr-mm-setting-icon">
                         <h4><?php esc_html_e('Icon Select', 'wpr-addons'); ?></h4>
                         <div><span class="wpr-mm-active-icon"><i class="fas fa-ban"></i></span><span><i class="fas fa-angle-down"></i></span></div>
@@ -214,10 +214,10 @@ function render_settings_popup() {
 
                 <br>
 
-                <h4 <?php echo !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-heading"' : ''; ?>>
+                <h4 <?php echo !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-heading"' : ''; ?>>
                     <?php esc_html_e('Badge', 'wpr-addons'); ?>
                 </h4>
-                <div <?php echo !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-section"' : ''; ?>>
+                <div <?php echo !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'class="wpr-mm-pro-section"' : ''; ?>>
                     <div class="wpr-mm-setting">
                         <h4><?php esc_html_e('Badge Text', 'wpr-addons'); ?></h4>
                         <input type="text" id="wpr_mm_badge_text" value="">

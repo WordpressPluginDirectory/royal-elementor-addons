@@ -65,7 +65,7 @@ class WPR_Templates_Modal_Popups {
     		}
 
     		// Custom
-			if ( wpr_fs()->can_use_premium_code() ) {
+			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				// Archive
 				\WprAddonsPro\Classes\Pro_Modules::archive_pages_popup_conditions( $conditions );
 

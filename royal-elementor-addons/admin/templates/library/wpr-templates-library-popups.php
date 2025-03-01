@@ -28,7 +28,7 @@ class WPR_Templates_Library_Popups {
 	** Template Library Popup
 	*/
 	public function render_library_templates_popups() {
-		$license = !wpr_fs()->can_use_premium_code() ? 'free' : 'premium';
+		$license = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'free' : 'premium';
 
 		?>
 
@@ -74,14 +74,14 @@ class WPR_Templates_Library_Popups {
 					$template_title = ucfirst($type) .' '. $template_slug;
 					$preview_type 	= $popups[$type][$template_slug]['type'];
 					$preview_url 	= $popups[$type][$template_slug]['url'];
-					$template_class = ( strpos($template_slug, 'pro') && ! wpr_fs()->can_use_premium_code() ) ? ' wpr-tplib-pro-wrap' : '';
+					$template_class = ( strpos($template_slug, 'pro') && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) ? ' wpr-tplib-pro-wrap' : '';
 
 			?>
 
 			<div class="wpr-tplib-template-wrap<?php echo esc_attr($template_class); ?>">
 				<div class="wpr-tplib-template" data-slug="<?php echo esc_attr($template_slug); ?>" data-filter="<?php echo esc_attr($type); ?>" data-preview-type="<?php echo esc_attr($preview_type); ?>" data-preview-url="<?php echo esc_attr($preview_url); ?>">
 					<div class="wpr-tplib-template-media">
-						<img src="<?php echo esc_url('https://royal-elementor-addons.com/library/premade-styles/popups/'. $type .'/'. $template_slug .'.jpg'); ?>">
+						<img class="lazy" src="<?php echo esc_url(WPR_ADDONS_ASSETS_URL .'img/icon-256x256.png'); ?>" data-src="<?php echo esc_url('https://royal-elementor-addons.com/library/premade-styles/popups/'. $type .'/'. $template_slug .'.jpg'); ?>">
 						<div class="wpr-tplib-template-media-overlay">
 							<i class="eicon-eye"></i>
 						</div>
@@ -89,7 +89,7 @@ class WPR_Templates_Library_Popups {
 					<div class="wpr-tplib-template-footer elementor-clearfix">
 						<h3><?php echo esc_html(str_replace('-pro', ' Pro', $template_title)); ?></h3>
 
-						<?php if ( strpos($template_slug, 'pro') && ! wpr_fs()->can_use_premium_code() ) : ?>
+						<?php if ( strpos($template_slug, 'pro') && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) : ?>
 							<span class="wpr-tplib-insert-template wpr-tplib-insert-pro"><i class="eicon-star"></i> <span><?php esc_html_e( 'Go Pro', 'wpr-addons' ); ?></span></span>
 						<?php else : ?>
 							<span class="wpr-tplib-insert-template"><i class="eicon-file-download"></i> <span><?php esc_html_e( 'Insert', 'wpr-addons' ); ?></span></span>

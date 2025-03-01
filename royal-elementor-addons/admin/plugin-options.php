@@ -31,7 +31,7 @@ function wpr_settings_link( $links ) {
 
     if ( !is_plugin_installed('wpr-addons-pro/wpr-addons-pro.php') ) { // GOGA - Check if ok
         $links[] = '<a href="https://royal-elementor-addons.com/?ref=rea-plugin-backend-wpplugindashboard-upgrade-pro#purchasepro" style="color:#93003c;font-weight:700" target="_blank">' . esc_html__('Go Pro', 'wpr-addons') . '</a>';
-    } elseif ( !wpr_fs()->is_plan( 'expert' ) ) {
+    } elseif ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
         $links[] = '<a href="https://royal-elementor-addons.com/?ref=rea-plugin-backend-wpplugindashboard-upgrade-expert#purchasepro" style="color:#93003c;font-weight:700" target="_blank">' . esc_html__('Go Expert', 'wpr-addons') . '</a>';
     }
 
@@ -133,7 +133,7 @@ function wpr_register_addons_settings() {
     }
 
     $woo_modules = Utilities::get_woocommerce_builder_modules();
-    $woo_modules_pro = (wpr_fs()->can_use_premium_code() && defined( 'WPR_ADDONS_PRO_VERSION' )) ? Pro_Modules::get_woocommerce_builder_modules() : [];
+    $woo_modules_pro = (defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) ? Pro_Modules::get_woocommerce_builder_modules() : [];
 
     // WooCommerce Builder
     foreach ( array_merge($woo_modules, $woo_modules_pro) as $title => $data ) {
@@ -231,14 +231,14 @@ function wpr_addons_settings_page() {
         </a>
         <?php endif; ?>
         
-        <?php if ( empty(get_option('wpr_wl_hide_free_pro_tab')) && !wpr_fs()->is_plan( 'expert' ) ) : ?>
+        <?php if ( empty(get_option('wpr_wl_hide_free_pro_tab')) && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' )) ) : ?>
         <a href="?page=wpr-addons&tab=wpr_tab_free_pro" data-title="Settings" class="nav-tab <?php echo ($active_tab == 'wpr_tab_free_pro') ? 'nav-tab-active' : ''; ?>">
             <?php esc_html_e( 'Free vs Pro', 'wpr-addons' ); ?>
         </a>
         <?php endif; ?>
 
         <?php // White Label
-            if ( wpr_fs()->is_plan( 'expert' ) ) {
+            if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
                 echo !empty(get_option('wpr_wl_hide_white_label_tab')) ? '<div style="display: none;">' : '<div>';
                         do_action('wpr_white_label_tab');
                 echo '</div>';
@@ -295,9 +295,9 @@ function wpr_addons_settings_page() {
             $default_value = 'on';
             $link_text = esc_html__('View Widget Demo', 'wpr-addons');
 
-            if ( 'pro' === $data[3] && !wpr_fs()->can_use_premium_code() ) {
+            if ( 'pro' === $data[3] && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) {
                 $class = 'wpr-pro-element';
-            } elseif ( 'expert' === $data[3] && !wpr_fs()->is_plan( 'expert' ) ) {
+            } elseif ( 'expert' === $data[3] && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' )) ) {
                 $class = 'wpr-expert-element';
             }
 
@@ -307,7 +307,7 @@ function wpr_addons_settings_page() {
                 $reff = '';
             }
 
-            if ( 'breadcrumbs-pro' == $data[0] && wpr_fs()->can_use_premium_code() ) {
+            if ( 'breadcrumbs-pro' == $data[0] && (defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) ) {
                 $url = '';
             }
 
@@ -381,10 +381,10 @@ function wpr_addons_settings_page() {
             $url  = $data[1];
             $reff = '?ref=rea-plugin-backend-elements-widget-prev'. $data[1];
             $class = 'new' === $data[3] ? 'wpr-new-element' : '';
-            $class = ('pro' === $data[3] && !wpr_fs()->can_use_premium_code()) ? 'wpr-pro-element' : '';
+            $class = ('pro' === $data[3] && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) ? 'wpr-pro-element' : '';
             $default_value = class_exists( 'WooCommerce' ) ? 'on' : 'off';
 
-            if ( 'pro' === $data[3] && !wpr_fs()->can_use_premium_code() ) {
+            if ( 'pro' === $data[3] && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) {
                 $class = 'wpr-pro-element';
             } elseif ( 'expert' === $data[3] && !wpr_fs()->is_plan( 'expert' ) ) {
                 $class = 'wpr-expert-element';
@@ -435,10 +435,10 @@ function wpr_addons_settings_page() {
             <a href="#general-tab">General</a> / 
             <a href="#optimizers-tab">Optimizers</a> / 
             <a href="#woocommerce-tab">WooCommerce</a> / 
-            <?php if ( wpr_fs()->is_plan( 'expert' ) ) : ?>
+            <?php if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) : ?>
                 <a href="#cpt-tab">Custom Post Types</a> / 
             <?php endif; ?>
-            <?php if ( wpr_fs()->can_use_premium_code() ) : ?>
+            <?php if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) : ?>
                 <a href="#metabox-tab">Metabox</a> /   
             <?php endif; ?>
             <a href="#integrations-tab">Integrations</a> /  
@@ -493,7 +493,7 @@ function wpr_addons_settings_page() {
             
             <div class="wpr-settings-group-inner">
 
-            <?php if ( !wpr_fs()->can_use_premium_code() ) : ?>
+            <?php if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) : ?>
                 <a href="https://royal-elementor-addons.com/?ref=rea-plugin-backend-settings-woo-pro#purchasepro" class="wpr-settings-pro-overlay" target="_blank">
                     <span class="dashicons dashicons-lock"></span>
                     <span class="dashicons dashicons-unlock"></span>
@@ -589,7 +589,7 @@ function wpr_addons_settings_page() {
                 <label for="wpr_enable_woo_flexslider_navigation"></label>
             </div>
 
-            <?php if ( wpr_fs()->is_plan( 'expert' ) ) : ?>
+            <?php if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) : ?>
             
             <div class="wpr-woo-template-info">
                 <div class="wpr-woo-template-title">
@@ -640,7 +640,7 @@ function wpr_addons_settings_page() {
         </div>
         
 
-        <?php if ( wpr_fs()->is_plan( 'expert' ) ) : ?>
+        <?php if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) : ?>
         <div class="wpr-settings-group wpr-settings-group-cpt">
             <h3 id="cpt-tab" class="wpr-settings-group-title"><?php esc_html_e( 'Custom Post Types', 'wpr-addons' ); ?></h3>
 
@@ -695,7 +695,7 @@ function wpr_addons_settings_page() {
         <?php endif; ?>
             
 
-        <?php if ( wpr_fs()->can_use_premium_code() ) : ?>
+        <?php if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) : ?>
         <div class="wpr-settings-group wpr-settings-group-meta">
             <h3 id="metabox-tab" class="wpr-settings-group-title"><?php esc_html_e( 'Metabox', 'wpr-addons' ); ?></h3>
 
@@ -1523,7 +1523,7 @@ function wpr_addons_settings_page() {
                     } elseif ( 'wpr-sticky-section' === $option_name ) {
                         echo '<br><span>Tip: Edit any Section > Navigate to Advanced tab</span>';
                         echo '<a href="https://www.youtube.com/watch?v=at0CPKtklF0&t=375s" target="_blank">Watch Video Tutorial</a>';
-                        if ( !wpr_fs()->can_use_premium_code() && !wpr_fs()->is_plan( 'expert') ) {
+                        if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && !wpr_fs()->is_plan( 'expert') ) {
                             echo '<h4 class="wpr-sticky-advanced-demos-title">Advanced Sticky Section (Pro)</h4>';
                             echo '<p class="wpr-sticky-advanced-demos">';
                                 echo '<span>View Demos: </span>';
@@ -1565,7 +1565,7 @@ function wpr_addons_settings_page() {
 
     elseif ( $active_tab == 'wpr_tab_white_label' ) :
 
-        if ( wpr_fs()->is_plan( 'expert' ) ) {
+        if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
             do_action('wpr_white_label_tab_content');
         }
 
@@ -1630,11 +1630,11 @@ add_action( 'admin_head', 'wpr_redirect_support_page' );
 
 // Add Upgrade Sub Menu item that will redirect to royal-elementor-addons.com
 function wpr_addons_add_upgrade_menu() {
-    if ( defined('WPR_ADDONS_PRO_VERSION') && !wpr_fs()->can_use_premium_code() ) return;
+    if ( defined('WPR_ADDONS_PRO_VERSION') && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) return;
 
-    if ( wpr_fs()->is_plan( 'expert' ) ) return;
+    if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) return;
 
-    if ( !wpr_fs()->can_use_premium_code() ) {
+    if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
         $label = 'Upgrade';
     } else if ( wpr_fs()->is_plan( 'pro' ) ) {
         $label = 'Upgrade to Expert';

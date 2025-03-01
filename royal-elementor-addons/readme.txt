@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1009
+Stable tag: 1.7.1011
 Requires at least: 5.0
 Tested up to: 6.7.2
 Requires PHP: 5.6
@@ -453,6 +453,13 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1011 - 2025-2-28 =
+* FIXED: Minor Bugs
+
+= Royal Elementor Addons v1.7.1010 - 2025-2-20 =
+* ADDED: Business Coaching V1 - Elementor Template Kit - [**Business Coaching V1**](https://demosites.royal-elementor-addons.com/business-coaching-v1/?ref=rea-wpo-pp-details-tab).
+* FIXED: Minor Bugs
+
 = Royal Elementor Addons v1.7.1009 - 2025-2-12 =
 * ADDED: Electronic Store V2 - Elementor Template Kit - [**Electronic Store V2**](https://demosites.royal-elementor-addons.com/estore-v2/?ref=rea-wpo-pp-details-tab).
 * ADDED: Personal Coach - Elementor Template Kit - [**Personal Coach**](https://demosites.royal-elementor-addons.com/personal-coach-v1/?ref=rea-wpo-pp-details-tab).

@@ -5,9 +5,9 @@ jQuery(document).ready(function( $ ) {
 
 		requiredTheme: false,
 		requiredPlugins: false,
+		lazyImages: [],
 
 		init: function() {
-
 			// Overlay Click
 			$(document).on('click', '.wpr-templates-kit-grid .image-overlay', function(){
 				WprTemplatesKit.showImportPage( $(this).closest('.grid-item') );
@@ -99,6 +99,8 @@ jQuery(document).ready(function( $ ) {
 			// 		WprTemplatesKit.importSingleTemplate( $('.import-kit').attr('data-kit-id'), $(this).attr('data-template-id') );
 			// 	}
 			// });
+
+			WprTemplatesKit.initializeLazyLoading();
 
 		},
 
@@ -428,6 +430,55 @@ jQuery(document).ready(function( $ ) {
 			$('.wpr-templates-kit-single').find('.preview-demo').attr('href', $('.wpr-templates-kit-single').find('.preview-demo').attr('href') +'/'+ id );
 		},
 
+		initializeLazyLoading: function() {
+			var lazyImages = $('img.lazy');
+		
+			if ("IntersectionObserver" in window) {
+				var lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+					entries.forEach(function(entry) {
+						if (entry.isIntersecting) {
+							var lazyImage = $(entry.target);
+							lazyImage.attr('src', lazyImage.data('src'));
+							lazyImage.removeClass('lazy');
+							lazyImageObserver.unobserve(entry.target);
+						}
+					});
+				});
+	
+				lazyImages.each(function() {
+					lazyImageObserver.observe(this);
+				});
+			} else {
+				// Fallback for browsers that do not support IntersectionObserver
+				var lazyLoadThrottleTimeout;
+				function lazyLoad() {
+					if (lazyLoadThrottleTimeout) {
+						clearTimeout(lazyLoadThrottleTimeout);
+					}
+	
+					lazyLoadThrottleTimeout = setTimeout(function() {
+						var scrollTop = $(window).scrollTop();
+						lazyImages.each(function() {
+							var img = $(this);
+							if (img.offset().top < (window.innerHeight + scrollTop)) {
+								img.attr('src', img.data('src'));
+								img.removeClass('lazy');
+							}
+						});
+						if (lazyImages.length == 0) {
+							$(document).off("scroll", lazyLoad);
+							$(window).off("resize", lazyLoad);
+							$(window).off("orientationChange", lazyLoad);
+						}
+					}, 20);
+				}
+	
+				$(document).on("scroll", lazyLoad);
+				$(window).on("resize", lazyLoad);
+				$(window).on("orientationChange", lazyLoad);
+			}
+		},
+
 		searchTemplatesKit: function( tag, html ) {
 			var price = $('.wpr-templates-kit-price-filter').children().first().attr( 'data-price' ),
 				priceAttr = 'mixed' === price ? '' : '[data-price*="'+ price +'"]';
@@ -458,6 +509,8 @@ jQuery(document).ready(function( $ ) {
 					}
 				}
 			});
+			
+			WprTemplatesKit.initializeLazyLoading();
 		},
 
 		fiterFreeProTemplates: function( price ) {

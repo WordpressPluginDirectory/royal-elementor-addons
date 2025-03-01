@@ -194,7 +194,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 			]
 		);
 
-		// if ( ! wpr_fs()->can_use_premium_code() ) {
+		// if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 		// 	$this->add_control(
 		// 		'acc_repeater_pro_notice',
 		// 		[
@@ -1309,7 +1309,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 
 						$acc_content_type = $acc['accordion_content_type'];
 					
-					if ( ! wpr_fs()->can_use_premium_code() ) {
+					if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 						$acc_content_type = 'editor';
 						// if ( $key === 3 ) {
 						// 	break;

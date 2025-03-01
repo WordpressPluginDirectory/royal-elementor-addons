@@ -46,6 +46,10 @@ class Wpr_Content_Toggle extends Widget_Base {
 		return [ 'wpr-animations-css' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
     public function get_custom_help_url() {
     	if ( empty(get_option('wpr_wl_plugin_links')) )
         // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-content-toggle-help-btn';
@@ -107,6 +111,17 @@ class Wpr_Content_Toggle extends Widget_Base {
 			'content_list' => '> .elementor-widget-container > .wpr-content-toggle > .wpr-switcher-content-wrap > .wpr-switcher-content',
 			'control_icon' => '.wpr-switcher-icon',
 		];
+
+		if ( ! $this->has_widget_inner_wrapper() ) {
+			$css_selector['general'] = '> .wpr-content-toggle';
+			$css_selector['control_container'] = '> .wpr-content-toggle > .wpr-switcher-container';
+			$css_selector['control_outer'] = '>  .wpr-content-toggle > .wpr-switcher-container > .wpr-switcher-outer';
+			$css_selector['control_wrap'] = '> .wpr-content-toggle > .wpr-switcher-container > .wpr-switcher-outer > .wpr-switcher-wrap';
+			$css_selector['control_list'] = '> .wpr-content-toggle > .wpr-switcher-container > .wpr-switcher-outer > .wpr-switcher-wrap > .wpr-switcher';
+			$css_selector['control_bg'] = '> .wpr-content-toggle > .wpr-switcher-container > .wpr-switcher-outer > .wpr-switcher-wrap > .wpr-switcher-bg';
+			$css_selector['content_wrap'] = '> .wpr-content-toggle > .wpr-switcher-content-wrap';
+			$css_selector['content_list'] = '> .wpr-content-toggle > .wpr-switcher-content-wrap > .wpr-switcher-content';
+		}
 
 
 		// Section: General ------------
@@ -1237,13 +1252,13 @@ class Wpr_Content_Toggle extends Widget_Base {
 
 		$settings = $this->get_settings();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['switcher_label_style'] = 'outer';
 			$settings['content_animation'] = 'none';
 			$settings['content_anim_size'] = 'large';
 		}
 		
-		$active_switcher = wpr_fs()->can_use_premium_code() ? $settings['active_switcher'] : 1;
+		$active_switcher = defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ? $settings['active_switcher'] : 1;
 
 		if ( $active_switcher > 2 ) {
 			$active_switcher = 2;
@@ -1314,7 +1329,7 @@ class Wpr_Content_Toggle extends Widget_Base {
 		// Get Settings
 		$settings = $this->get_settings();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['switcher_style'] = 'dual';
 		}
 

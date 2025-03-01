@@ -703,7 +703,7 @@ class Wpr_Sharing_Buttons extends Widget_Base {
 		// Get Settings
 		$settings = $this->get_settings();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['sharing_custom_colors'] = '';
 			$settings['sharing_show_label'] = '';
 			$settings['sharing_label_bg'] = '';

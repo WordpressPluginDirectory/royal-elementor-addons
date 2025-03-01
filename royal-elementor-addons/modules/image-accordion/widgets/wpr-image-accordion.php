@@ -602,7 +602,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'accordion_repeater_pro_notice',
 				[
@@ -680,7 +680,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$repeater->add_control(
 	            'element_align_pro_notice',
 	            [
@@ -2109,7 +2109,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 			$place = 'over';
 			$align_vr = $data['element_align_vr'];
 
-			if ( ! wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$align_vr = 'middle';
 			}
 
@@ -2144,7 +2144,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 							$class  = 'wpr-img-accordion-item-'. $data['element_select'];
 							$class .= ' elementor-repeater-item-'. $data['_id'];
 							$class .= ' wpr-img-accordion-item-display-'. $data['element_display'];
-							if  ( !wpr_fs()->can_use_premium_code() ) {
+							if  ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 								$class .= ' wpr-img-accordion-item-align-center';
 							} else {
 								$class .= ' wpr-img-accordion-item-align-'. $data['element_align_hr'];
@@ -2169,7 +2169,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 	public function render_media_overlay( $settings ) {
 		echo '<div class="wpr-img-accordion-hover-bg '. $this->get_animation_class( $settings, 'overlay' ) .'">';
 
-			// if ( wpr_fs()->can_use_premium_code() ) {
+			// if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 			// 	if ( '' !== $settings['overlay_image']['url'] ) {
 			// 		echo '<img src="'. esc_url( $settings['overlay_image']['url'] ) .'">';
 			// 	}
@@ -2231,7 +2231,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 	// Render Post Read More
 	public function render_repeater_button( $settings, $class, $item ) {
-		$button_animation = ! wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $this->get_settings_for_display()['button_animation'];
+		$button_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $this->get_settings_for_display()['button_animation'];
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
@@ -2336,7 +2336,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 	public function get_image_effect_class( $settings ) {
 		$class = '';
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			if ( 'pro-zi' ==  $settings['image_effects'] || 'pro-zo' ==  $settings['image_effects'] || 'pro-go' ==  $settings['image_effects'] || 'pro-bo' ==  $settings['image_effects'] ) {
 				$settings['image_effects'] = 'none';
 			}
@@ -2361,7 +2361,7 @@ class Wpr_Image_Accordion extends Widget_Base {
     protected function render() {
 		$settings = $this->get_settings_for_display();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['lightbox_popup_thumbnails'] = '';
 			$settings['lightbox_popup_thumbnails_default'] = '';
 			$settings['lightbox_popup_sharing'] = '';
@@ -2369,7 +2369,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 		$lightbox_settings = '';
 
-		if ( wpr_fs()->can_use_premium_code() ) {
+		if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 			$lightbox_settings = [
 				'selector' => '.wpr-accordion-image-wrap',
 				'iframeMaxWidth' => '60%',
@@ -2395,14 +2395,14 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 		$no_column = '';
 
-		if ( $settings['accordion_direction'] == 'column' && !wpr_fs()->can_use_premium_code() ) {
+		if ( $settings['accordion_direction'] == 'column' && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) {
 			$no_column = ' wpr-acc-no-column';
 		}
 		?>
 
 		<div class="wpr-image-accordion-wrap <?php echo $no_column ?>">
 
-			<?php if ( ! wpr_fs()->can_use_premium_code() ) : ?>
+			<?php if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) : ?>
 				<div class="wpr-image-accordion">
 			<?php else : ?>
 				<div class="wpr-image-accordion" <?php echo $this->get_render_attribute_string('lightbox-settings') ?>>
@@ -2410,7 +2410,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 			<?php foreach ( $settings['accordion_items'] as $key => $item ) :
 
-			if ( ! wpr_fs()->can_use_premium_code() && $key === 3 ) {
+			if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $key === 3 ) {
 				break;
 			}
 			
@@ -2426,7 +2426,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 			$layout['activeItem'] = [
 				'activeWidth' => $settings['accordion_active_item_style']['size'],
 				'defaultActive' => $settings['default_active'],
-				'interaction' => wpr_fs()->can_use_premium_code() ? $settings['accordion_interaction'] : 'hover',
+				'interaction' => defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ? $settings['accordion_interaction'] : 'hover',
 				'overlayLink' => 'yes' === $item['wrapper_link'] && isset($item['accordion_btn_url']) ? $item['accordion_btn_url']['url'] : '',
 				'overlayLinkTarget' => isset($item['accordion_btn_url']) && $item['accordion_btn_url']['is_external'] === 'on' ? '_blank' : '_self'
 			];

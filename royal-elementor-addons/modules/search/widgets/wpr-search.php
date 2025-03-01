@@ -1129,7 +1129,7 @@ class Wpr_Search extends Widget_Base {
 
 		Utilities::upgrade_pro_notice( $this, Controls_Manager::RAW_HTML, 'search', 'search_query', ['pro-post', 'pro-page', 'pro-product', 'pro-product', 'pro-e-landing-page'] );
 
-		if ( !wpr_fs()->is_plan( 'expert' ) ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
 			$this->add_control(
 				'search_query_exp_pro_notice',
 				[
@@ -2088,7 +2088,7 @@ class Wpr_Search extends Widget_Base {
 				'value' => get_search_query(),
 				'wpr-query-type' => $settings['search_query'],
 				'wpr-taxonomy-type' => isset($settings['query_taxonomy_'. $settings['search_query']]) ? $settings['query_taxonomy_'. $settings['search_query']] : '',
-				'number-of-results' => isset($settings['number_of_results']) && wpr_fs()->can_use_premium_code() ? $settings['number_of_results'] : 2,
+				'number-of-results' => isset($settings['number_of_results']) && (defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) ? $settings['number_of_results'] : 2,
 				'ajax-search' => isset($settings['ajax_search']) ? $settings['ajax_search'] : '',
 				'show-description' => isset($settings['show_description']) ? $settings['show_description'] : '',
 				'number-of-words' => isset($settings['number_of_words_in_excerpt']) ? $settings['number_of_words_in_excerpt'] : '',
@@ -2128,7 +2128,7 @@ class Wpr_Search extends Widget_Base {
 		<div class="wpr-data-fetch">
 			<span class="wpr-close-search"></span>
 			<ul></ul>
-			<?php if ( !wpr_fs()->can_use_premium_code() && current_user_can( 'administrator' ) ) : ?>
+			<?php if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && current_user_can( 'administrator' ) ) : ?>
 				<p class="wpr-search-admin-notice">More than 2 results are available in the PRO version (This notice is only visible to admin users)</p>
 			<?php endif; ?>
 		</div>

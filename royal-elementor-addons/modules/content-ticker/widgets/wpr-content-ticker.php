@@ -147,7 +147,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 				continue;
 			}
 
-			if ( !wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$this->post_types['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
 			} else {
 				$this->post_types[$slug] = esc_html( $title );
@@ -223,7 +223,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 		// Upgrade to Pro Notice
 		Utilities::upgrade_pro_notice( $this, Controls_Manager::RAW_HTML, 'content-ticker', 'query_source', ['pro-pd', 'pro-ft', 'pro-sl'] );
 
-		if ( !wpr_fs()->is_plan( 'expert' ) ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
 			$this->add_control(
 				'query_source_cpt_pro_notice',
 				[
@@ -2051,7 +2051,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 		}
 
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['heading_icon_type'] = ( 'pro-cc' == $settings['heading_icon_type'] ) ? 'none' : $settings['heading_icon_type'];
 		}
 
@@ -2077,7 +2077,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 		$settings = $this->get_settings();
 		$slider_is_rtl = is_rtl();
 		$slider_direction = $slider_is_rtl ? 'rtl' : 'ltr';
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['slider_effect'] = 'hr-slide';
 		}
 
@@ -2112,7 +2112,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 			$this->add_render_attribute( 'ticker-slider-attribute','class', 'wpr-ticker-gradient' );
 		}
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['post_type'] = 'dynamic';
 		}
 
@@ -2158,7 +2158,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 				
 				<?php
 
-				if ( ! wpr_fs()->can_use_premium_code() ) {
+				if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 					$settings['type_select'] = 'slider';
 				}
 

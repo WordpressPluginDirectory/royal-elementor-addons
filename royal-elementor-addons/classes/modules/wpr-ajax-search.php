@@ -114,7 +114,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                 [
                     'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
                     's' => sanitize_text_field( $_POST['wpr_keyword'] ), 
-                    'post_type' => $_POST['wpr_query_type'] === 'all' || !wpr_fs()->can_use_premium_code() ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
+                    'post_type' => $_POST['wpr_query_type'] === 'all' || (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code())  ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
                     'offset' => sanitize_text_field($_POST['wpr_search_results_offset']),
                     'meta_query' => 'yes' === sanitize_text_field($_POST['wpr_exclude_without_thumb']) ? [
                         ['key' => '_thumbnail_id']
@@ -129,7 +129,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                 [
                     'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
                     's' => sanitize_text_field( $_POST['wpr_keyword'] ), 
-                    'post_type' => $_POST['wpr_query_type'] === 'all' || !wpr_fs()->can_use_premium_code() ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
+                    'post_type' => $_POST['wpr_query_type'] === 'all' || (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code())  ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
                     'offset' => sanitize_text_field($_POST['wpr_search_results_offset']),
                     'meta_query' => 'yes' === sanitize_text_field($_POST['wpr_exclude_without_thumb']) ? [
                         ['key' => '_thumbnail_id']

@@ -66,7 +66,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 				continue;
 			}
 
-			if ( !wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$post_types['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
 			} else {
 				$post_types[$slug] = esc_html( $title );
@@ -90,7 +90,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 				continue;
 			}
 
-			if ( !wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$post_taxonomies['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
 			} else {
 				$post_taxonomies[$slug] = esc_html( $title );
@@ -442,7 +442,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		// Upgrade to Pro Notice
 		Utilities::upgrade_pro_notice( $this, Controls_Manager::RAW_HTML, 'magazine-grid', 'query_source', ['pro-rl', 'pro-cr'] );
 
-		if ( !wpr_fs()->is_plan( 'expert' ) ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
 			$this->add_control(
 				'query_source_cpt_pro_notice',
 				[
@@ -697,7 +697,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 	            'layout_select_pro_notice',
 	            [
@@ -972,7 +972,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$repeater->add_control(
 	            'element_align_pro_notice',
 	            [
@@ -4989,7 +4989,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 			$paged = 1;
 		}
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			if ( '1-2' === $settings['layout_select'] || '1-3' === $settings['layout_select'] || '1-4' === $settings['layout_select']
 				 || '1-1-2' === $settings['layout_select'] || '2-1-2' === $settings['layout_select'] || '1vh-3h' === $settings['layout_select'] ) {
 				$settings['layout_select'] = '1-1-3';
@@ -5184,7 +5184,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 	public function render_media_overlay( $settings ) {
 		echo '<div class="wpr-grid-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_url( get_the_permalink( get_the_ID() ) ) .'">';
 
-			if ( wpr_fs()->can_use_premium_code() ) {
+			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				if ( '' !== $settings['overlay_image']['url'] ) {
 					echo '<img src="'. esc_url( $settings['overlay_image']['url'] ) .'">';
 				}
@@ -5195,8 +5195,8 @@ class Wpr_Magazine_Grid extends Widget_Base {
 
 	// Render Post Title
 	public function render_post_title( $settings, $class ) {
-		$title_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['title_pointer'];
-		$title_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['title_pointer_animation'];
+		$title_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['title_pointer'];
+		$title_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['title_pointer_animation'];
 		$pointer_item_class = (isset($this->get_settings()['title_pointer']) && 'none' !== $this->get_settings()['title_pointer']) ? 'class="wpr-pointer-item"' : '';
 		$open_links_in_new_tab = 'yes' === $this->get_settings()['open_links_in_new_tab'] ? '_blank' : '_self';
 
@@ -5454,7 +5454,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 
 	// Render Post Read More
 	public function render_post_read_more( $settings, $class ) {
-		$read_more_animation = ! wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $this->get_settings()['read_more_animation'];
+		$read_more_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $this->get_settings()['read_more_animation'];
 		$open_links_in_new_tab = 'yes' === $this->get_settings()['open_links_in_new_tab'] ? '_blank' : '_self';
 
 		echo '<div class="'. esc_attr($class) .'">';
@@ -5512,10 +5512,10 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		$terms = wp_get_post_terms( $post_id, $settings['element_select'] );
 		$count = 0;
 
-		$tax1_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax1_pointer'];
-		$tax1_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax1_pointer_animation'];
-		$tax2_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax2_pointer'];
-		$tax2_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax2_pointer_animation'];
+		$tax1_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax1_pointer'];
+		$tax1_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax1_pointer_animation'];
+		$tax2_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['tax2_pointer'];
+		$tax2_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['tax2_pointer_animation'];
 		$pointer_item_class = (isset($this->get_settings()['tax1_pointer']) && 'none' !== $this->get_settings()['tax1_pointer']) || (isset($this->get_settings()['tax2_pointer']) && 'none' !== $this->get_settings()['tax2_pointer']) ? 'wpr-pointer-item' : '';
 
 		// Pointer Class
@@ -5547,7 +5547,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 				// Taxonomies
 				foreach ( $terms as $term ) {
 					// Custom Colors
-					$enable_custom_colors = ! wpr_fs()->can_use_premium_code() ? '' : $this->get_settings()['tax1_custom_color_switcher'];
+					$enable_custom_colors = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? '' : $this->get_settings()['tax1_custom_color_switcher'];
 					
 					if ( 'yes' === $enable_custom_colors ) {
 						$custom_tax_styles = '';
@@ -5654,7 +5654,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 			$place = 'over';
 			$align_vr = $data['element_align_vr'];
 
-			if ( ! wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$align_vr = 'bottom';
 			}
 
@@ -5746,7 +5746,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		// Get Posts
 		$posts = new \WP_Query( $this->get_main_query_args( $slide_offset ) );
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			if ( '1-2' === $settings['layout_select'] || '1-3' === $settings['layout_select'] || '1-4' === $settings['layout_select']
 				 || '1-1-2' === $settings['layout_select'] || '2-1-2' === $settings['layout_select'] || '1vh-3h' === $settings['layout_select'] ) {
 				$settings['layout_select'] = '1-1-3';
@@ -5758,7 +5758,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		// Loop: Start
 		if ( $posts->have_posts() ) :
 		
-		if ( 'rand' == $settings['query_randomize'] && is_front_page() && ! Utilities::is_blog_archive()  ) {
+		if ( 'rand' == $settings['query_randomize'] && is_front_page() && ! Utilities::is_blog_archive() ) {
 			shuffle($posts->posts);
 		}
 
@@ -5818,7 +5818,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		$settings = $this->get_settings();
 		$render_attribute = '';
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['slider_enable'] = '';
 			$settings['slider_effect'] = '';
 		}

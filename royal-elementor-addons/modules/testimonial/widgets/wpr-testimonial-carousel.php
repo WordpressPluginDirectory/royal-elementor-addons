@@ -484,7 +484,7 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 		);
 
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'testimonial_repeater_pro_notice',
 				[
@@ -517,7 +517,7 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 
 		$this->add_control_testimonial_amount();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'testimonial_columns_pro_notice',
 				[
@@ -2874,7 +2874,7 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 		
 		$is_rtl = is_rtl();
 		$direction = $is_rtl ? 'rtl' : 'ltr';
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 
 			$settings['testimonial_autoplay'] = '';
 			$settings['testimonial_autoplay_duration'] = 0;
@@ -2908,7 +2908,7 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 					
 					<?php foreach ( $settings['testimonial_items'] as $key => $item ) : ?>
 
-						<?php if ( ! wpr_fs()->can_use_premium_code() && $key === 4 ) { break; } ?>
+						<?php if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $key === 4 ) { break; } ?>
 					
 						<div class="wpr-testimonial-item elementor-repeater-item-<?php echo esc_attr( $item['_id'] ); ?> elementor-clearfix">
 							

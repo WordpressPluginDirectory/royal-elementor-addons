@@ -289,7 +289,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         $place = $data['element_location'];
         $align_vr = $data['element_align_vr'];
   
-        if ( ! wpr_fs()->can_use_premium_code() ) {
+        if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
           $align_vr = 'middle';
         }
   
@@ -427,7 +427,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         
                   foreach ( $items as $key=>$item) :
                 
-                    if ( $key >= 6 && !wpr_fs()->can_use_premium_code() ) {
+                    if ( $key >= 6 && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) {
                       break;
                     }
       

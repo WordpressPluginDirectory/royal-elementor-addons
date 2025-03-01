@@ -126,7 +126,7 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
                 // If has Settings
                 if ( $settings ) {
                     // Icon
-                    if ( wpr_fs()->can_use_premium_code() && '' !== $settings['wpr_mm_icon_picker'] ) {
+                    if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() && '' !== $settings['wpr_mm_icon_picker'] ) {
                         $color = '' !== $settings['wpr_mm_icon_color'] ? ' color: '. $settings['wpr_mm_icon_color'] : ';';
                         $font_size = '' !== $settings['wpr_mm_icon_size'] ? 'font-size: '. $settings['wpr_mm_icon_size'] .'px;' : '';
                         $item_icon_style = ( '' !== $font_size || '' !== $color || '' !== $distance ) ? ' style="'. $font_size . $color .'"' : '';
@@ -134,7 +134,7 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
                     }
 
                     // Badge
-                    if ( wpr_fs()->can_use_premium_code() && '' !== $settings['wpr_mm_badge_text'] ) {
+                    if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() && '' !== $settings['wpr_mm_badge_text'] ) {
 						$item_badge_class = 'true' === $settings['wpr_mm_badge_animation'] ? ' wpr-mega-menu-badge-animation' : '';
                         $item_badge_style = 'color: '. $settings['wpr_mm_badge_color'] .';';
                         $item_badge_style .= 'background-color: '. $settings['wpr_mm_badge_bg_color'] .';';

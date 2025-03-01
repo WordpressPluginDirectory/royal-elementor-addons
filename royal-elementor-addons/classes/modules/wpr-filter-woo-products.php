@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     	$term = $_POST['wpr_filter'];
 		$tax_query = [];
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['query_selection'] = 'pro-cr' == $settings['query_selection'] ? 'dynamic' : $settings['query_selection'];
 			$settings['query_orderby'] = 'pro-rn' == $settings['query_orderby'] ? 'date' : $settings['query_orderby'];
 		}
@@ -499,7 +499,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public function get_image_effect_class( $settings ) {
 		$class = '';
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			if ( 'pro-zi' ==  $settings['image_effects'] || 'pro-zo' ==  $settings['image_effects'] || 'pro-go' ==  $settings['image_effects'] || 'pro-bo' ==  $settings['image_effects'] ) {
 				$settings['image_effects'] = 'none';
 			}
@@ -572,7 +572,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public function render_media_overlay( $settings ) {
 		echo '<div class="wpr-grid-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_url( get_the_permalink( get_the_ID() ) ) .'">';
 
-			if ( wpr_fs()->can_use_premium_code() ) {
+			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				if ( '' !== $settings['overlay_image']['url'] ) {
 					echo '<img data-no-lazy="1" src="'. esc_url( $settings['overlay_image']['url'] ) .'">';
 				}
@@ -583,8 +583,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	// Render Post Title
 	public function render_product_title( $settings, $class ) {
-		$title_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $_POST['grid_settings']['title_pointer'];
-		$title_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $_POST['grid_settings']['title_pointer_animation'];
+		$title_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $_POST['grid_settings']['title_pointer'];
+		$title_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $_POST['grid_settings']['title_pointer_animation'];
 		$pointer_item_class = (isset($_POST['grid_settings']['title_pointer']) && 'none' !== $_POST['grid_settings']['title_pointer']) ? 'class="wpr-pointer-item"' : '';
 		$open_links_in_new_tab = 'yes' === $_POST['grid_settings']['open_links_in_new_tab'] ? '_blank' : '_self';
 
@@ -631,8 +631,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$count = 0;
 
 		// Pointer Class
-		$categories_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $_POST['grid_settings']['categories_pointer'];
-		$categories_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $_POST['grid_settings']['categories_pointer_animation'];
+		$categories_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $_POST['grid_settings']['categories_pointer'];
+		$categories_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $_POST['grid_settings']['categories_pointer_animation'];
 		$pointer_item_class = (isset($_POST['grid_settings']['categories_pointer']) && 'none' !== $_POST['grid_settings']['categories_pointer']) ? 'class="wpr-pointer-item"' : '';
 
 		$class .= ' wpr-pointer-'. $categories_pointer;
@@ -688,8 +688,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$count = 0;
 
 		// Pointer Class
-		$tags_pointer = ! wpr_fs()->can_use_premium_code() ? 'none' : $_POST['grid_settings']['tags_pointer'];
-		$tags_pointer_animation = ! wpr_fs()->can_use_premium_code() ? 'fade' : $_POST['grid_settings']['tags_pointer_animation'];
+		$tags_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $_POST['grid_settings']['tags_pointer'];
+		$tags_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $_POST['grid_settings']['tags_pointer_animation'];
 		$pointer_item_class = (isset($_POST['grid_settings']['tags_pointer']) && 'none' !== $_POST['grid_settings']['tags_pointer']) ? 'class="wpr-pointer-item"' : '';
 
 		$class .= ' wpr-pointer-'. $tags_pointer;
@@ -1108,7 +1108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$product->supports( 'ajax_add_to_cart' ) ? 'ajax_add_to_cart' : '',
 		] ) );
 
-		$add_to_cart_animation = ! wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $_POST['grid_settings']['add_to_cart_animation'];
+		$add_to_cart_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $_POST['grid_settings']['add_to_cart_animation'];
 
 		$popup_notification_animation = isset($_POST['grid_settings']['popup_notification_animation']) ? $_POST['grid_settings']['popup_notification_animation'] : '';
 		$popup_notification_fade_out_in = isset($_POST['grid_settings']['popup_notification_fade_out_in']) ? $_POST['grid_settings']['popup_notification_fade_out_in'] : '';
@@ -1228,7 +1228,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public function render_product_wishlist_button( $settings, $class ) {
 		global $product;
 
-		if ( !wpr_fs()->is_plan( 'expert' ) ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
 			return;
 		}
 
@@ -1305,7 +1305,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public function render_product_compare_button( $settings, $class ) {
 		global $product;
 		
-		if ( !wpr_fs()->is_plan( 'expert' ) ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
 			return;
 		}
 
@@ -1550,12 +1550,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$this->render_product_add_to_cart( $settings, $class );
 				break;
 			case 'wishlist-button':
-				if ( wpr_fs()->is_plan( 'expert' ) ) {
+				if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 					$this->render_product_wishlist_button( $settings, $class );
 				}
 				break;
 			case 'compare-button':
-				if ( wpr_fs()->is_plan( 'expert' ) ) {
+				if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 					$this->render_product_compare_button( $settings, $class );
 				}
 				break;
@@ -1598,7 +1598,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$place = $data['element_location'];
 			$align_vr = $data['element_align_vr'];
 
-			if ( ! wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$align_vr = 'middle';
 			}
 
@@ -1697,7 +1697,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$pages = $this->get_max_num_pages( $settings );
 		$paged = empty( $paged ) ? 1 : $paged;
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['pagination_type'] = 'pro-is' == $settings['pagination_type'] ? 'default' : $settings['pagination_type'];
 		}
 

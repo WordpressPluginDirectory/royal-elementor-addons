@@ -2042,7 +2042,7 @@ class Wpr_Data_Table extends Widget_Base {
 		
 		$x = 0;
 		
-		$sorting_icon = ('yes' === $settings['enable_table_sorting'] && wpr_fs()->can_use_premium_code() ) ? '<span class="wpr-sorting-icon"><i class="fas fa-sort"></i></span>' : ''; 
+		$sorting_icon = ('yes' === $settings['enable_table_sorting'] && (defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) ) ? '<span class="wpr-sorting-icon"><i class="fas fa-sort"></i></span>' : ''; 
 		
 		$this->add_render_attribute(
 			'wpr_table_inner_container_attributes',
@@ -2052,7 +2052,7 @@ class Wpr_Data_Table extends Widget_Base {
 				'data-table-sorting' => $settings['enable_table_sorting'],
 				'data-custom-pagination' => $settings['enable_custom_pagination'],
 				'data-row-pagination' => $settings['enable_row_pagination'],
-				'data-entry-info' => wpr_fs()->can_use_premium_code() ? $settings['enable_entry_info'] : 'no',
+				'data-entry-info' => defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ? $settings['enable_entry_info'] : 'no',
 				'data-rows-per-page' => isset($settings['table_items_per_page']) ? $settings['table_items_per_page'] : ''
 			]
 		);

@@ -2321,7 +2321,7 @@ class Wpr_Mega_Menu extends Widget_Base {
 			return;
 		}
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['menu_layout'] = 'horizontal';
 			$settings['toggle_btn_style'] = 'hamburger';
 		}
@@ -2348,12 +2348,12 @@ class Wpr_Mega_Menu extends Widget_Base {
 				echo '</div>';
 			echo '</div>';
 
-			$animation_class =  wpr_fs()->can_use_premium_code() ? 'wpr-anim-timing-'. $settings['mob_menu_offcanvas_animation_timing'] : '';
+			$animation_class =  defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ? 'wpr-anim-timing-'. $settings['mob_menu_offcanvas_animation_timing'] : '';
 			$toggle_offcanvas_backface = isset($settings['mob_menu_toggle_offcanvas_backface']) ? $settings['mob_menu_toggle_offcanvas_backface'] : '';
 
 			// Menu
 			echo '<div class="wpr-mobile-mega-menu-wrap '. $animation_class .'" toggle-backface="'. $toggle_offcanvas_backface .'">';
-				if ( wpr_fs()->can_use_premium_code() && 'offcanvas' === $settings['mob_menu_display_as'] ) {
+				if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() && 'offcanvas' === $settings['mob_menu_display_as'] ) {
 					echo '<div class="mobile-mega-menu-header">';
 						if ( ! empty( $settings['mob_menu_offcanvas_logo']['url'] ) ) {
 							echo '<div class="mobile-mega-menu-logo">';
@@ -2370,7 +2370,7 @@ class Wpr_Mega_Menu extends Widget_Base {
 				echo ''. $moible_menu_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '</div>';
 
-			if ( wpr_fs()->can_use_premium_code() && 'offcanvas' === $settings['mob_menu_display_as'] ) {
+			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() && 'offcanvas' === $settings['mob_menu_display_as'] ) {
 				echo '<div class="wpr-mobile-mega-menu-overlay"></div>';
 			}
 

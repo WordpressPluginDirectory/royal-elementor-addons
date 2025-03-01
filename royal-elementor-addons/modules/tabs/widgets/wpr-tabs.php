@@ -48,6 +48,10 @@ class Wpr_Tabs extends Widget_Base {
 		return [ 'wpr-animations-css' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
     public function get_custom_help_url() {
     	if ( empty(get_option('wpr_wl_plugin_links')) )
         // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-tabs-help-btn';
@@ -123,6 +127,13 @@ class Wpr_Tabs extends Widget_Base {
 			'control_icon' => '.wpr-tab-icon',
 			'control_image' => '.wpr-tab-image',
 		];
+
+		if ( ! $this->has_widget_inner_wrapper() ) {
+			$css_selector['general'] = '> .wpr-tabs';
+			$css_selector['control_list'] = '> .wpr-tabs > .wpr-tabs-wrap > .wpr-tab';
+			$css_selector['content_wrap'] = '> .wpr-tabs > .wpr-tabs-content-wrap';
+			$css_selector['content_list'] = '> .wpr-tabs > .wpr-tabs-content-wrap > .wpr-tab-content';
+		}
 	
 		// Section: Tabs Items -------
 		$this->start_controls_section(
@@ -200,7 +211,7 @@ class Wpr_Tabs extends Widget_Base {
 		Utilities::upgrade_pro_notice( $repeater, Controls_Manager::RAW_HTML, 'tabs', 'tab_content_type', ['pro-tmp'] );
 		Utilities::upgrade_expert_notice( $repeater, Controls_Manager::RAW_HTML, 'tabs', 'tab_content_type', ['pro-cf'] );
 
-		if ( wpr_fs()->is_plan( 'expert' ) ) {
+		if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 			$repeater->add_control(
 				'tab_custom_field',
 				[
@@ -303,7 +314,7 @@ class Wpr_Tabs extends Widget_Base {
 		);
 
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'tabs_repeater_pro_notice',
 				[
@@ -342,7 +353,7 @@ class Wpr_Tabs extends Widget_Base {
 
 		$this->add_control_tabs_hr_position();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 	            'tabs_align_pro_notice',
 	            [
@@ -1452,7 +1463,7 @@ class Wpr_Tabs extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['active_tab'] = 1;
 			$settings['tabs_trigger'] = 'click';
 			$settings['autoplay'] = '';
@@ -1483,7 +1494,7 @@ class Wpr_Tabs extends Widget_Base {
 			<div class="wpr-tabs-wrap">
 				<?php foreach ( $tabs as $index => $item ) :
 				
-				if ( ! wpr_fs()->can_use_premium_code() ) {
+				if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 					$item['tab_content_type'] = ('pro-tmp' == $item['tab_content_type']) ? 'editor' : $item['tab_content_type'];
 
 					if ( $index === 3 ) {

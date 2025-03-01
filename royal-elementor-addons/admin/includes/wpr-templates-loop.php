@@ -36,7 +36,7 @@ class WPR_Templates_Loop {
 		$user_templates = get_posts( $args );
 
 		// The Loop
-		echo '<ul class="wpr-'. esc_attr($template) .'-templates-list wpr-my-templates-list" data-pro="'. esc_attr(wpr_fs()->can_use_premium_code()) .'">';
+		echo '<ul class="wpr-'. esc_attr($template) .'-templates-list wpr-my-templates-list" data-pro="'. esc_attr(defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) .'">';
 
 			if ( ! empty( $user_templates ) ) {
 				foreach ( $user_templates as $user_template ) {
@@ -148,7 +148,7 @@ class WPR_Templates_Loop {
             <!-- Conditions -->
             <div class="wpr-conditions-wrap">
                 <div class="wpr-conditions-sample">
-                	<?php if ( wpr_fs()->can_use_premium_code() ) : ?>
+                	<?php if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) : ?>
 						<!-- Global -->
 						<select name="global_condition_select" class="global-condition-select">
 							<option value="global"><?php esc_html_e( 'Entire Site', 'wpr-addons' ); ?></option>
@@ -169,7 +169,7 @@ class WPR_Templates_Loop {
 												continue;
 											}
 
-											if ( wpr_fs()->is_plan( 'expert' ) || 'product' === $key ) {
+											if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) || 'product' === $key ) {
 												echo '<option value="'. esc_attr($key) .'">'. $value .' '. esc_html__( 'Archive', 'wpr-addons' ) .'</option>';
 											} else {
 												echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'">'. $value .' '. esc_html__( 'Archive (Expert)', 'wpr-addons' ) .'</option>';
@@ -187,7 +187,7 @@ class WPR_Templates_Loop {
 									<?php // Custom Taxonomies
 										$custom_taxonomies = Utilities::get_custom_types_of( 'tax', true );
 										foreach ($custom_taxonomies as $key => $value) {
-											if ( wpr_fs()->is_plan( 'expert' ) || 'product_cat' === $key || 'product_tag' === $key ) {
+											if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) || 'product_cat' === $key || 'product_tag' === $key ) {
 												echo '<option value="'. esc_attr($key) .'" class="custom-type-ids">'. esc_html($value) .'</option>';
 											} else {
 												echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'" class="custom-type-ids">'. esc_html($value) .' (Expert)</option>';
@@ -208,7 +208,7 @@ class WPR_Templates_Loop {
 													continue;
 												}
 
-												if ( wpr_fs()->is_plan( 'expert' ) ) {
+												if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 													echo '<option value="'. esc_attr($key) .'">'. $value .' '. esc_html__( 'Archive', 'wpr-addons' ) .'</option>';
 												} else {
 													echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'">'. $value .' '. esc_html__( 'Archive (Expert)', 'wpr-addons' ) .'</option>';
@@ -231,7 +231,7 @@ class WPR_Templates_Loop {
 													continue;
 												}
 
-												if ( wpr_fs()->is_plan( 'expert' ) ) {
+												if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 													echo '<option value="'. esc_attr($key) .'" class="custom-type-ids">'. esc_html($value) .'</option>';
 												} else {
 													echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'" class="custom-type-ids">'. esc_html($value) .' (Expert)</option>';
@@ -262,7 +262,7 @@ class WPR_Templates_Loop {
 											continue;
 										}
 
-										if ( wpr_fs()->is_plan( 'expert' ) || 'product' === $key ) {
+										if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) || 'product' === $key ) {
 											echo '<option value="'. esc_attr($key) .'" class="custom-type-ids">'. esc_html($value) .'</option>';
 										} else {
 											echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'" class="custom-type-ids">'. esc_html($value) .' (Expert)</option>';
@@ -283,7 +283,7 @@ class WPR_Templates_Loop {
 												continue;
 											}
 
-											if ( wpr_fs()->is_plan( 'expert' ) ) {
+											if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 												echo '<option value="'. esc_attr($key) .'" class="custom-type-ids">'. esc_html($value) .'</option>';
 											} else {
 												echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'" class="custom-type-ids">'. esc_html($value) .' (Expert)</option>';
@@ -441,7 +441,7 @@ class WPR_Templates_Loop {
 
 			<?php // Expert Notice
 
-			if ( !wpr_fs()->is_plan( 'expert' ) ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
 				echo '<span class="wpr-expert-notice" style="display:none;text-align:center;"><br>
 				<span style="color:#f44;font-size:18px;" class="dashicons dashicons-warning"></span>
 				<strong style="color:#f44;">Please Note:</strong>
@@ -462,7 +462,7 @@ class WPR_Templates_Loop {
 
             <?php
            	// Pro Notice
-			if ( ! wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				echo '<span style="color: #7f8b96;"><br>Conditions are fully supported in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-backend-conditions-upgrade-pro#purchasepro" target="_blank">Pro and Expert versions.</a></strong></span>';
 				// echo '<span style="color: #7f8b96;"><br>Conditions are fully supported in the <strong><a href="'. admin_url('admin.php?page=wpr-addons-pricing') .'" target="_blank">Pro version</a></strong></span>';
 			}

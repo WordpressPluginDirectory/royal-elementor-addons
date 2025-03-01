@@ -23,6 +23,10 @@ jQuery(document).ready(function( $ ) {
 		macy.recalculate(true);
 	}, 600 );
 
+	$(window).on('resize', function(){
+		macy.recalculate(true);
+	});
+
 
 	// Filters
 	$('.wpr-tplib-filters').on('click', function(){
@@ -89,5 +93,57 @@ jQuery(document).ready(function( $ ) {
 		var module = $(this).closest('.wpr-tplib-template').attr('data-filter');
 		window.open('https://royal-elementor-addons.com/?ref=rea-plugin-backend-premade-blocks-'+ module +'-upgrade-pro#purchasepro', '_blank');
 	});
+
+	var lazyImages = $('img.lazy');
+		
+	if ("IntersectionObserver" in window) {
+		var lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+			entries.forEach(function(entry) {
+				if (entry.isIntersecting) {
+					var lazyImage = $(entry.target);
+					lazyImage.attr('src', lazyImage.data('src'));
+					lazyImage.removeClass('lazy');
+					lazyImageObserver.unobserve(entry.target);
+
+					$(window).trigger('resize');
+				}
+			});
+		});
+
+		lazyImages.each(function() {
+			lazyImageObserver.observe(this);
+		});
+	} else {
+		// Fallback for browsers that do not support IntersectionObserver
+		var lazyLoadThrottleTimeout;
+		function lazyLoad() {
+			if (lazyLoadThrottleTimeout) {
+				clearTimeout(lazyLoadThrottleTimeout);
+			}
+
+			lazyLoadThrottleTimeout = setTimeout(function() {
+				var scrollTop = $(window).scrollTop();
+				lazyImages.each(function() {
+					var img = $(this);
+					if (img.offset().top < (window.innerHeight + scrollTop)) {
+						img.attr('src', img.data('src'));
+						img.removeClass('lazy');
+
+						$(window).trigger('resize');
+					}
+				});
+				if (lazyImages.length == 0) {
+					$(document).off("scroll", lazyLoad);
+					$(window).off("resize", lazyLoad);
+					$(window).off("orientationChange", lazyLoad);
+				}
+			}, 20);
+		}
+
+		$(document).on("scroll", lazyLoad);
+		$(window).on("resize", lazyLoad);
+		$(window).on("orientationChange", lazyLoad);
+		$(window).trigger('resize');
+	}
 
 }); // end dom ready

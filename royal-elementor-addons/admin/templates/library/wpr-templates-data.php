@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class WPR_Templates_Data {
 	public static function get_available_kits() {
-		$is_pro_active = wpr_fs()->can_use_premium_code() && defined('WPR_ADDONS_PRO_VERSION');
+		$is_pro_active = defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code();
 		$is_expert = $is_pro_active && wpr_fs()->is_plan( 'expert' );
 		$is_cf7_active = is_plugin_active('contact-form-7/wp-contact-form-7.php') ? 'true' : 'false';
 		$is_mla_active = is_plugin_active('media-library-assistant/index.php') ? 'true' : 'false';
@@ -190,7 +190,21 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 20,
+				],
+			],
+			'business-coaching' => [
+				'v1' => [
+					'name' => 'Business Coaching V1',
+					'pages' => 'home,about,courses,course-details,cart,services,service-details,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'pro business coaching coach assistent industry sucess strategy leadership skills training planning partner expert mastery free personal coaching business training mentor consultation industry learning professional growth leadership skills productivity career strategy online courses lessons school study  tutor consultant life coach lifecoach',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 20,
 				],
@@ -384,7 +398,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 300,
 				],
@@ -535,7 +549,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => false,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'New',
 					'priority' => 4,
 				],
@@ -916,7 +930,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 7,
 				],
@@ -984,7 +998,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 20,
 				],
@@ -1133,7 +1147,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => false,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 92,
 				],
@@ -1188,7 +1202,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => false,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 5,
 				],
@@ -1578,7 +1592,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 15,
 				],
@@ -1674,7 +1688,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 500,
 				],
@@ -1686,7 +1700,7 @@ class WPR_Templates_Data {
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
-					'price' => $is_pro_active ? 'free' : 'free',
+					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 501,
 				],
@@ -1777,7 +1791,7 @@ class WPR_Templates_Data {
 	}
 
 	public static function get_available_kits_for_pages() {
-		$is_pro_active = wpr_fs()->can_use_premium_code() && defined('WPR_ADDONS_PRO_VERSION');
+		$is_pro_active = defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code();
 		
 		return [
 			// 'woo-v1' => [
@@ -1880,13 +1894,13 @@ class WPR_Templates_Data {
 				'name' => 'Solar Energy 1',
 				'pages' => ['home','about','services','detail-service','projects','team','blog','contact'],
 				'preview' => ['home','about','services','detail-service','projects','team','blog','contact'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'solar-energy-v2' => [
 				'name' => 'Solar Energy 2',
-				'pages' => ['home','about-us','services','projects','team','faq','blog','contact,'],
-				'preview' => ['home','about-us','services','projects','team','faq','blog','contact,'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'pages' => ['home','about-us','services','projects','team','faq','blog','contact'],
+				'preview' => ['home','about-us','services','projects','team','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'hosting-v1' => [
 				'name' => 'Hosting V1',
@@ -1898,7 +1912,7 @@ class WPR_Templates_Data {
 				'name' => 'Electrician',
 				'pages' => ['home','about','services','service-details','gallery','blog','contact'],
 				'preview' => ['home','about','services','service-details','gallery','blog','contact'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'electrician-v2' => [
 				'name' => 'Electrician V2',
@@ -1928,7 +1942,7 @@ class WPR_Templates_Data {
 				'name' => 'Financial Services V1',
 				'pages' => ['home','about','services','resources','blog','faq','contact'],
 				'preview' => ['home','about','services','resources','blog','faq','contact'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'financial-services-v2' => [
 				'name' => 'Financial Services V2',
@@ -2012,7 +2026,7 @@ class WPR_Templates_Data {
 				'name' => 'Pet Shop V1',
 				'pages' => ['home','shop','cart','blog','about','contact'],
 				'preview' => ['home','shop','cart','blog','about','contact'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'car-rent-v1' => [
 				'name' => 'Car Rent V1',
@@ -2168,7 +2182,7 @@ class WPR_Templates_Data {
 				'name' => 'Software Company V1',
 				'pages' => ['home','about','services','portfolio','portfolio-details','blog','contact'],
 				'preview' => ['home','about','services','portfolio','portfolio-details','blog','contact'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'software-company-v2' => [
 				'name' => 'Software Company V2',
@@ -2216,7 +2230,7 @@ class WPR_Templates_Data {
 				'name' => 'Cleaning Service V1',
 				'pages' => ['home','about','services','blog','contact'],
 				'preview' => ['home','about','services','blog','contact'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'cleaning-v2' => [
 				'name' => 'Cleaning Service V2',
@@ -2300,7 +2314,13 @@ class WPR_Templates_Data {
 				'name' => 'Personal Coach V1',
 				'pages' => ['home','coaching','details','services','blog','contact'],
 				'preview' => ['home','coaching','details','services','blog','contact'],
-				'price' => $is_pro_active ? 'free' : 'free',
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'business-coaching-v1' => [
+				'name' => 'Business Coaching V1',
+				'pages' => ['home','about','courses','cart','services','service-details','blog','contact'],
+				'preview' => ['home','about','courses','cart','services','service-details','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'wedding-v1' => [
 				'name' => 'Wedding',

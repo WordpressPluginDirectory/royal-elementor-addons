@@ -1896,6 +1896,16 @@
 
 			// Init Media Hover Link
 			mediaHoverLink();
+				
+			function isValidHttpUrl(string) {
+				let url;
+				try {
+				  url = new URL(string);
+				} catch (_) {
+				  return false;
+				}
+				return url.protocol === "http:" || url.protocol === "https:";
+			}
 
 			// Media Hover Link
 			function mediaHoverLink() {
@@ -1935,16 +1945,6 @@
 							}
 						});
 				}
-				
-				function isValidHttpUrl(string) {
-					let url;
-					try {
-					  url = new URL(string);
-					} catch (_) {
-					  return false;
-					}
-					return url.protocol === "http:" || url.protocol === "https:";
-				}
 
 				if ( 'yes' === iGrid.find( '.wpr-grid-media-wrap' ).attr( 'data-overlay-link' ) && ! WprElements.editorCheck() ) {
 					iGrid.find( '.wpr-grid-media-wrap' ).css('cursor', 'pointer');
@@ -1955,12 +1955,17 @@
 						if ( -1 !== targetClass.indexOf( 'inner-block' ) || -1 !== targetClass.indexOf( 'wpr-cv-inner' ) || 
 							 -1 !== targetClass.indexOf( 'wpr-grid-media-hover' ) ) {
 							event.preventDefault();
+							event.stopPropagation();
 
 							var itemUrl = $(this).find( '.wpr-grid-media-hover-bg' ).attr( 'data-url' ),
 								itemUrl = itemUrl.replace('#new_tab', '');
 
 							if ( '_blank' === iGrid.find( '.wpr-grid-item-title a' ).attr('target') ) {
-								window.open(itemUrl, '_blank').focus();
+
+								console.log(itemUrl);
+								if (itemUrl) {
+									window.open(itemUrl, '_blank');
+								}
 							} else {
 								window.location.href = itemUrl;
 							}
@@ -3022,7 +3027,12 @@
 			}
 
 			function filtersExperiment() {
+				let currentRequest = null;
 				$scope.find('.wpr-grid-filters').on('click', 'span', function(event) {
+					if (currentRequest) {
+						currentRequest.abort(); // Abort the previous request
+					}
+
 					pagesLoadedExperiment = 0;
 					var thisTaxonomy,
 						thisFilter,
@@ -3058,10 +3068,12 @@
 					event.stopPropagation();
 					event.stopImmediatePropagation();
 
-					iGrid.isotopewpr('destroy');
-					$scope.find('.wpr-grid').html(loader);
-
-					console.log(+settings.grid_settings.query_offset + $scope.find('.wpr-grid-item').length, thisFilter, thisTaxonomy, settings.grid_settings);
+					// iGrid.isotopewpr('destroy');
+					// $scope.find('.wpr-grid').html(loader);
+					iGrid.isotopewpr('remove', iGrid.children('.wpr-grid-item'));
+					if ( iGrid.find('.wpr-grid-loader-wrap').length < 1 ) {
+						iGrid.append(loader);
+					}
 
 					$.ajax({
 						type: 'POST',
@@ -3069,15 +3081,18 @@
 						data: {
 							action: experimentActionCount,
 							nonce: WprConfig.nonce,
-							wpr_offset: +settings.grid_settings.query_offset + $scope.find('.wpr-grid-item').length,
+							// wpr_offset: +settings.grid_settings.query_offset + $scope.find('.wpr-grid-item').length,
+							wpr_offset: +settings.grid_settings.query_offset,
 							wpr_filter: thisFilter,
 							wpr_taxonomy: thisTaxonomy,
 							grid_settings: settings.grid_settings,
 						},
 						success: function(response) {
+                            console.log(response);
 							var pageCount = response.data.page_count;
+							var foundPosts = response.data.query_found;
 
-							$.ajax({
+							currentRequest = $.ajax({
 								type: 'POST',
 								url: WprConfig.ajaxurl,
 								data: {
@@ -3090,27 +3105,33 @@
 								},
 								success: function( response ) {
 									setTimeout(function() {
-										iGrid.addClass('wpr-zero-opacity');
-										$scope.find('.wpr-grid').html($(response));
-										isotopeLayout( settings, $(response), true);
+										// iGrid.addClass('wpr-zero-opacity');
+										// $scope.find('.wpr-grid').html($(response));
+										// isotopeLayout( settings, $(response), true);
+
+										var newItems = $(response);
+										iGrid.find('.wpr-grid-loader-wrap').remove();
+										iGrid.append(newItems).isotopewpr('appended', newItems).isotopewpr('layout');
+
 										if ( settings.pagination_type == 'load-more' && pagination ) { // needs check if more posts in tax
 											pagination.find( '.wpr-pagination-finish' ).fadeOut( 100 );
 											pagination.delay( 2000 ).fadeIn( 100 );
 											
-											if ( pageCount <= 1 ) {
-												// if ( items.length !== 0 ) {
+											if ( pageCount <= 1 && foundPosts <= newItems.length ) {
+												// if ( items.length !== 0 ) {}
 												if ( 'load-more' === settings.pagination_type ) {
 													pagination.find( '.wpr-load-more-btn' ).fadeOut();
 												}
 											}
 											
 											if ( pageCount > 1 ) {
-												// if ( items.length !== 0 ) {
+												// if ( items.length !== 0 ) {}
 												if ( 'load-more' === settings.pagination_type ) {
 													pagination.find( '.wpr-load-more-btn' ).fadeIn();
 												}
 											}
 										}
+
 										isotopeLayout( settings );
 										// isotopeFilters( settings, 'click' ); 
 
@@ -3121,7 +3142,8 @@
 											window.dispatchEvent(new Event('scroll'));
                                         }, 500);
 										mediaHoverLink();
-										iGrid.removeClass('wpr-zero-opacity');
+										// iGrid.removeClass('wpr-zero-opacity');
+										initialItems = 0;
 									}, 800);
 								},
 								error: function(error) {
@@ -3175,8 +3197,6 @@
 						success: function(response) {
                             console.log(response);
 							var pageCount = response.data.page_count;
-
-                            console.log(pageCount, response.data.max_num_pages);
 
 							$.ajax({
 								type: 'POST',
@@ -3254,6 +3274,7 @@
 									// Maybe there is some other way
 									window.dispatchEvent(new Event('resize'));
 									window.dispatchEvent(new Event('scroll'));
+									$(window).trigger('scroll');
 								},
 								error: function(error) {
 									console.log(error);
@@ -3783,7 +3804,7 @@
 		}, // End widgetProductMedia
 
 		widgetCountDown: function( $scope ) {
-			var countDownWrap = $scope.children( '.elementor-widget-container' ).children( '.wpr-countdown-wrap' ),
+			var countDownWrap = $scope.children( '.elementor-widget-container' ).children( '.wpr-countdown-wrap' ).length > 0 ? $scope.children( '.elementor-widget-container' ).children( '.wpr-countdown-wrap' ) : $scope.children( '.wpr-countdown-wrap' ),
 				countDownInterval = null,
 				dataInterval = countDownWrap.data( 'interval' ),
 				dataShowAgain = countDownWrap.data( 'show-again' ),
@@ -3896,7 +3917,7 @@
 					}
 					
 					if ( dataActions.hasOwnProperty( 'message' ) ) {
-						if ( ! $scope.children( '.elementor-widget-container' ).children( '.wpr-countdown-message' ).length ) {
+						if ( ! $scope.children( '.elementor-widget-container' ).children( '.wpr-countdown-message' ).length && ! $scope.children( '.wpr-countdown-message' ).length ) {
 							countDownWrap.after( '<div class="wpr-countdown-message">'+ dataActions['message'] +'</div>' );
 						}
 					}
@@ -9163,7 +9184,7 @@
 						data: {
                             action: 'wpr_update_form_action_meta',
                             nonce: WprConfig.nonce,
-							custom_token: WprConfig.token,
+							// custom_token: WprConfig.token,
 							post_id: postId,
 							action_name: actionName,
 							status: status,

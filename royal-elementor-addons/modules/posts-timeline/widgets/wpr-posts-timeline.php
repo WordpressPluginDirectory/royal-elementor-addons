@@ -349,7 +349,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 		
 		$this->add_control_slides_to_show();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'slides_to_show_pro_notice',
 				[
@@ -1350,7 +1350,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'timeline_repeater_pro_notice',
 				[
@@ -1394,7 +1394,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 		// Upgrade to Pro Notice
 		Utilities::upgrade_pro_notice( $this, Controls_Manager::RAW_HTML, 'posts-timeline', 'timeline_post_types', ['pro-rl'] );
 
-		if ( !wpr_fs()->is_plan( 'expert' ) ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->is_plan( 'expert' ) ) {
 			$this->add_control(
 				'query_source_cpt_pro_notice',
 				[
@@ -1519,7 +1519,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 
         $this->add_control_posts_per_page();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'posts_per_page_pro_notice',
 				[
@@ -5083,7 +5083,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 			$paged = 1;
 		}
 
-		$posts_per_page =  (!wpr_fs()->can_use_premium_code() && $settings['posts_per_page'] > 4) ? 4 : (empty($settings['posts_per_page']) ? 4 : $settings['posts_per_page']);
+		$posts_per_page =  ((!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $settings['posts_per_page'] > 4) ? 4 : (empty($settings['posts_per_page']) ? 4 : $settings['posts_per_page']);
 
 		// Dynamic
 		$args = [
@@ -5289,7 +5289,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 		
 		$this->slides_to_show = isset($settings['slides_to_show']) && !empty($settings['slides_to_show']) ? $settings['slides_to_show'] : 2;
 
-		if ( ! wpr_fs()->can_use_premium_code() && $this->slides_to_show > 4 ) {
+		if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $this->slides_to_show > 4 ) {
 			$this->slides_to_show = 4;
 		}
 
@@ -5315,7 +5315,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 			echo 'yes' === $this->timeline_fill ? '<div class="wpr-timeline-fill" data-layout="'. esc_attr($layout) .'"></div>' : '';
 			
 			foreach ( $data as $index => $content ) {
-				if ( ! wpr_fs()->can_use_premium_code() && $index === 4 ) {
+				if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $index === 4 ) {
 					break;
 				}
 
@@ -5523,7 +5523,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 		echo '<div class="swiper-wrapper '. esc_attr($this->horizontal_timeline_class) .'">';
 			if ( is_array($data) ) {
 					foreach( $data as $index => $content ) {
-						if ( ! wpr_fs()->can_use_premium_code() && $index === 4 ) {
+						if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $index === 4 ) {
 							break;
 						}
 
@@ -5697,7 +5697,7 @@ class Wpr_Posts_Timeline extends Widget_Base {
 				continue;
 			}
 
-			if ( !wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$post_types['pro-'. substr($slug, 0, 2)] = esc_html__( $title ) .' (Expert)';
 			} else {
 				$post_types[$slug] = esc_html__( $title );
@@ -5728,12 +5728,12 @@ class Wpr_Posts_Timeline extends Widget_Base {
 
 		$data = $settings['timeline_repeater_list'];
 		
-		$loop = ! wpr_fs()->can_use_premium_code() && !isset($settings['swiper_loop']) ? '' : $settings['swiper_loop'];
-		$autoplay = ! wpr_fs()->can_use_premium_code() && !isset($settings['swiper_autoplay']) ? '' : $settings['swiper_autoplay'];
+		$loop = (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && !isset($settings['swiper_loop']) ? '' : $settings['swiper_loop'];
+		$autoplay = (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && !isset($settings['swiper_autoplay']) ? '' : $settings['swiper_autoplay'];
 
-		// $this->pause_on_hover = ! wpr_fs()->can_use_premium_code() && !isset($settings['pause_on_hover']) ? '' : $settings['pause_on_hover'];
-		$swiper_delay = ! wpr_fs()->can_use_premium_code() && !isset($settings['swiper_delay']) ? 0 : $settings['swiper_delay'];
-		$swiper_pause_on_hover = ! wpr_fs()->can_use_premium_code() && !isset($settings['swiper_pause_on_hover']) ? '' : $settings['swiper_pause_on_hover'];
+		// $this->pause_on_hover = (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && !isset($settings['pause_on_hover']) ? '' : $settings['pause_on_hover'];
+		$swiper_delay = (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && !isset($settings['swiper_delay']) ? 0 : $settings['swiper_delay'];
+		$swiper_pause_on_hover = (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && !isset($settings['swiper_pause_on_hover']) ? '' : $settings['swiper_pause_on_hover'];
 		$swiper_speed = $settings['swiper_speed'];
 		$slidesHeight = $settings['equal_height_slides'];
 

@@ -25,7 +25,7 @@ class WprPluginSaleNotice {
 
         if ( current_user_can('administrator') ) {
             if ( !get_option('wpr_plugin_sale_dismiss_notice') ) {
-                if ( !wpr_fs()->can_use_premium_code() && !wpr_fs()->is_plan( 'expert' ) ) {
+                if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && !wpr_fs()->is_plan( 'expert' ) ) {
                     add_action( 'admin_init', [$this, 'render_notice'] );
                 }
             }

@@ -889,7 +889,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 			]
 		);
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'slider_repeater_pro_notice',
 				[
@@ -967,7 +967,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 
 		$this->add_control_slider_amount();
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$this->add_control(
 				'slider_columns_pro_notice',
 				[
@@ -2892,14 +2892,14 @@ class Wpr_Advanced_Slider extends Widget_Base {
 		
 		foreach ( $settings['slider_items'] as $key => $item ) {
 
-			if ( ! wpr_fs()->can_use_premium_code() && $key === 4 ) {
+			if ( (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $key === 4 ) {
 				break;
 			}
 
 			$item_slider_title_tag = Utilities::validate_html_tags_wl( $item['slider_title_tag'], 'h2', $tags_whitelist );
 			$item_slider_sub_title_tag = Utilities::validate_html_tags_wl( $item['slider_sub_title_tag'], 'h3', $tags_whitelist );
 
-			if ( ! wpr_fs()->can_use_premium_code() ) {
+			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				if ( in_array( $settings['slider_amount'], ['pro-3', 'pro-4', 'pro-5', 'pro-6'] ) ) {
 					$settings['slider_amount'] = 2;
 				}
@@ -2918,7 +2918,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 
 			// Or Build Custom
 			} elseif( 'custom' === $item['slider_content_type'] ) {
-				if ( ! wpr_fs()->can_use_premium_code() ) {
+				if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 					$item['slider_item_link_type'] = 'none';
 				}
 
@@ -3226,7 +3226,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 			}
 		}
 
-		if ( ! wpr_fs()->can_use_premium_code() ) {
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['slider_autoplay'] = '';
 			$settings['slider_autoplay_duration'] = 0;
 			$settings['slider_pause_on_hover'] = '';

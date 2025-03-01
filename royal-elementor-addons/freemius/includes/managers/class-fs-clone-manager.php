@@ -985,7 +985,7 @@
             $instances = Freemius::_get_all_instances();
 
             foreach ( $instances as $instance ) {
-                if ( ! $instance->is_registered()  ) {
+                if ( ! $instance->is_registered() ) {
                     continue;
                 }
 
