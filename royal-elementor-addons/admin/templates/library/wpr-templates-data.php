@@ -14,6 +14,20 @@ class WPR_Templates_Data {
 		$is_woo_active = is_plugin_active('woocommerce/woocommerce.php') ? 'true' : 'false';
 
 		return [
+			'news-magazine-x' => [ //TODO: News Magazine X Theme Banner (remove later)
+				'v1' => [
+					'name' => 'News Magazine X Theme',
+					'pages' => '',
+					'plugins' => '{}',
+					'tags' => 'blog news magazine',
+					'theme-builder' => false,
+					'woo-builder' => false,
+					'off-canvas' => false,
+					'price' => 'free',
+					'label' => 'trending',
+					'priority' => 1,
+				],
+			],
 			'newyear' => [
 				'v1' => [
 					'name' => 'Landing Page - New Year V1',

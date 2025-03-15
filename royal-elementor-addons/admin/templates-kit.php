@@ -24,6 +24,10 @@ add_action( 'wp_ajax_wpr_final_settings_setup', 'wpr_final_settings_setup' );
 add_action( 'wp_ajax_wpr_search_query_results', 'wpr_search_query_results' );
 add_action( 'init', 'disable_default_woo_pages_creation', 2 );
 
+
+// TODO: News Magazine X Theme Installation (remove later)
+add_action( 'wp_ajax_wpr_install_news_magazine_x_theme', 'wpr_install_news_magazine_x_theme' );
+
 // Set Image Timeout
 if ( version_compare( get_bloginfo( 'version' ), '5.1.0', '>=' ) ) {
     add_filter( 'http_request_timeout', 'set_image_request_timeout', 10, 2 );
@@ -1031,4 +1035,23 @@ function wpr_track_import_failed_kit( $kit ) {
             'imported_kit' => get_site_url()
         ]
     ] );
+}
+
+/**
+** Install News Magazine X Theme
+*/
+function wpr_install_news_magazine_x_theme() {
+    $nonce = $_POST['nonce'];
+
+    if ( !wp_verify_nonce( $nonce, 'wpr-templates-kit-js')  || !current_user_can( 'manage_options' ) ) {
+      exit; // Get out of here, the nonce is rotten!
+    }
+    
+    if (!current_user_can('switch_themes')) {
+        wp_send_json_error('Permission denied');
+    }
+
+    $theme = sanitize_text_field($_POST['theme']);
+    switch_theme($theme);
+    wp_send_json_success();
 }

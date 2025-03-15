@@ -10,6 +10,11 @@ jQuery(document).ready(function( $ ) {
 		init: function() {
 			// Overlay Click
 			$(document).on('click', '.wpr-templates-kit-grid .image-overlay', function(){
+				// TODO: News Magazine X Theme Banner (remove later)
+				if ( $(this).closest('.grid-item').data('kit-id') === 'news-magazine-x-v1' ) {
+					return;
+				}
+
 				WprTemplatesKit.showImportPage( $(this).closest('.grid-item') );
 				WprTemplatesKit.renderImportPage( $(this).closest('.grid-item') );
 			});
@@ -101,7 +106,6 @@ jQuery(document).ready(function( $ ) {
 			// });
 
 			WprTemplatesKit.initializeLazyLoading();
-
 		},
 
 		installRequiredTheme: function( kitID ) {
@@ -489,6 +493,9 @@ jQuery(document).ready(function( $ ) {
 			} else {
 				$('.main-grid').html( html );
 				$('.main-grid .grid-item'+ priceAttr).show();
+
+				// TODO: News Magazine X Theme Banner (remove later)
+				$('.wpr-templates-kit-grid .grid-item[data-kit-id="news-magazine-x-v1"]').hide();
 			}
 
 			if ( ! $('.main-grid .grid-item').is(':visible') ) {
@@ -509,6 +516,13 @@ jQuery(document).ready(function( $ ) {
 					}
 				}
 			});
+
+			// TODO: News Magazine X Theme Banner (remove later)
+			let $newsItem = $('.wpr-templates-kit-grid .grid-item[data-kit-id="news-magazine-x-v1"]');
+			if ($newsItem.length && $newsItem.is(':visible')) {
+				$('.main-grid').prepend($newsItem);
+			}
+			WprTemplatesKit.newsMagazineXThemeBanner();
 			
 			WprTemplatesKit.initializeLazyLoading();
 		},
@@ -528,6 +542,112 @@ jQuery(document).ready(function( $ ) {
 			}
 		},
 
+		// TODO: News Magazine X Theme Banner (remove later)
+		newsMagazineXThemeBanner: function() {
+			let $newsItem = $('.wpr-templates-kit-grid .grid-item[data-kit-id="news-magazine-x-v1"]'),
+				$footer = $newsItem.find('footer'),
+				$overlay = $newsItem.find('.image-overlay');
+			
+			// Add install button
+			if ( ! $newsItem.find('.wpr-templates-kit-install-newsx').length ) {
+				$footer.append('\
+					<div class="wpr-templates-kit-install-newsx">\
+						Install Theme\
+					</div>\
+				');
+			}
+
+			// Add info to Overlay
+			if ( ! $newsItem.find('.wpr-templates-kit-newsx-info').length ) {
+				$overlay.append('\
+					<div class="wpr-templates-kit-newsx-info">\
+						<h3>Blog/Magazine WordPress Theme</h3>\
+					<p>Due to high demand we designed a <strong>FREE</strong>, <strong>Lightning-fast</strong> and <strong>Easy to use</strong> WordPress theme for our users.</p>\
+						<p>Instead of importing an Elementor template, you can enjoy the full WordPress theme experience! Note: the theme <strong>does not require</strong> <strong>Elementor</strong> or <strong>Royal Addons plugins</strong>.</p>\
+					</div>\
+				');
+			}
+
+			// Change Overlay Icon
+			$overlay.find('.dashicons').removeClass('dashicons-search').addClass('dashicons-external');
+			// change image overlay tag to <a>
+			if ( ! $overlay.is('a') ) {
+				$overlay.wrap('<a href="https://news-magazine-x-free.wp-royal-themes.com/demo/?ref=rea-plugin-backend-templates" target="_blank"></a>');
+			}
+
+			// Reset
+			$('.wpr-templates-kit-install-newsx').off('click');
+
+			// Add click handler for theme installation
+			$('.wpr-templates-kit-install-newsx').on('click', function() {
+				let $button = $(this),
+					confirmInstall = confirm('This action will install News Magazine X WordPress theme and redirect you to the Appearance > Themes page.\n\nPlease DO NOT close or refresh the page until the installation is complete.');
+
+				if (!confirmInstall) {
+					return;
+				}
+
+				// Change button text
+				$button.text('Installing...');
+				
+				// Check if theme is already installed
+				if (wp.themes && wp.themes.data && wp.themes.data.themes && wp.themes.data.themes['news-magazine-x']) {
+					// Theme exists, just activate and redirect
+					$.ajax({
+						url: ajaxurl,
+						type: 'POST',
+						data: {
+							action: 'wpr_install_news_magazine_x_theme',
+							theme: 'news-magazine-x',
+							nonce: WprTemplatesKitLoc.nonce
+						},
+						success: function() {
+							window.location.href = 'themes.php';
+						}
+					});
+					return;
+				}
+				
+				// Theme not installed, install it first
+				wp.updates.installTheme({
+					slug: 'news-magazine-x',
+					success: function() {
+						$.ajax({
+							url: ajaxurl,
+							type: 'POST',
+							data: {
+								action: 'wpr_install_news_magazine_x_theme',
+								theme: 'news-magazine-x',
+								nonce: WprTemplatesKitLoc.nonce
+							},
+							success: function() {
+								window.location.href = 'themes.php';
+							}
+						});
+					},
+					error: function(xhr, ajaxOptions, thrownerror) {
+						if ('folder_exists' === xhr.errorCode) {
+							// Theme is already installed, proceed with activation
+							$.ajax({
+								url: ajaxurl,
+								type: 'POST',
+								data: {
+									action: 'wpr_install_news_magazine_x_theme',
+									theme: 'news-magazine-x',
+									nonce: WprTemplatesKitLoc.nonce
+								},
+								success: function() {
+									window.location.href = 'themes.php';
+								}
+							});
+						} else {
+							$button.text('Install Failed');
+							console.log('Theme installation failed:', xhr);
+						}
+					}
+				});
+			});
+		}
 	}
 
 	WprTemplatesKit.init();

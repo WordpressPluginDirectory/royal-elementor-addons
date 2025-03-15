@@ -345,6 +345,43 @@ span.wpr-woo-builder-label {
   display: block;
 }
 
+/* TODO: News Magazine X Theme Banner (remove later) */
+.wpr-templates-kit-grid .grid-item[data-kit-id="news-magazine-x-v1"] {
+  display: none;
+}
+
+.wpr-templates-kit-grid .grid-item[data-kit-id="news-magazine-x-v1"] .wpr-templates-kit-newsx-info {
+  position: absolute;
+  bottom: 0;
+  left: -10px;
+  width: calc(100% - 20px);
+  margin: 10px 20px;
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.wpr-templates-kit-grid .grid-item[data-kit-id="news-magazine-x-v1"] .wpr-templates-kit-install-newsx {
+  position: relative;
+  min-width: 77px;
+  height: 20px;
+  background-color: #f54c48;
+  box-shadow: 0 0 5px rgba(250, 51, 51, 0.3);
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 3px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.wpr-templates-kit-newsx-info p:last-child {
+  font-size: 12px;
+}
+
 /* New, Hot, Trending Labels */
 .grid-item .label {
   display: none;
