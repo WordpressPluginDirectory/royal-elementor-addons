@@ -413,13 +413,14 @@ class WXR_Parser_SimpleXML {
 
 		$libxml_disable_entity_loader_exists = function_exists( 'libxml_disable_entity_loader' );
 
-		if ( $libxml_disable_entity_loader_exists ) {
+		if ( PHP_VERSION_ID < 80000 && $libxml_disable_entity_loader_exists ) {
+			// Only call libxml_disable_entity_loader() for PHP versions before 8.0
 			$old_value = libxml_disable_entity_loader( true ); // phpcs:ignore Generic.PHP.DeprecatedFunctions.Deprecated
 		}
-
+		
 		$success = $dom->loadXML( file_get_contents( $file ) );
-
-		if ( $libxml_disable_entity_loader_exists && ! is_null( $old_value ) ) {
+		
+		if ( PHP_VERSION_ID < 80000 && $libxml_disable_entity_loader_exists && ! is_null( $old_value ) ) {
 			libxml_disable_entity_loader( $old_value ); // phpcs:ignore Generic.PHP.DeprecatedFunctions.Deprecated
 		}
 

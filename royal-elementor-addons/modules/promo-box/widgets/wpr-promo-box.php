@@ -43,6 +43,10 @@ class Wpr_Promo_Box extends Widget_Base {
 		return [ 'royal', 'image hover', 'image effects', 'image box', 'promo box', 'banner box', 'animated banner', 'interactive banner' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_style_depends() {
 		return [ 'wpr-animations-css' ];
 	}

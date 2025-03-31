@@ -36,6 +36,10 @@ class Wpr_Product_Media extends Widget_Base {
 		return [ 'woocommerce', 'product media', 'product', 'image', 'media' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'flexslider', 'zoom', 'wc-single-product', 'photoswipe', 'photoswipe-ui-default', 'wpr-lightgallery'];
 	}

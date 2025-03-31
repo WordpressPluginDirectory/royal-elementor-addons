@@ -39,6 +39,10 @@ class Wpr_Charts extends Widget_Base {
 		return [ 'royal', 'line charts', 'radar charts', 'doughnut charts', 'pie charts', 'polararea charts', 'polar charts', 'bar charts', 'horizontal charts', 'vertical charts' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-charts' ];
 	}

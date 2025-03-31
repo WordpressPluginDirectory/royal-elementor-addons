@@ -271,6 +271,9 @@ template {
     pointer-events: none;
 }
 
+.wpr-fix-grid-height {
+    min-height: 50vh;
+}
 .wpr-grid-loader-wrap {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -14715,6 +14718,12 @@ flex-grow: 0; */
     margin-bottom: 0;
 }
 
+.wpr-product-stock-icon,
+.wpr-product-stock-icon svg {
+    display: inline;
+    vertical-align: text-bottom;
+}
+
 /* == Compare */
 .wpr-compare-placeholder {
     opacity: 0;
@@ -19100,6 +19109,7 @@ dl.variation dd {
     -webkit-box-pack: justify;
         -ms-flex-pack: justify;
             justify-content: space-between;
+    flex-wrap: nowrap;
     margin-bottom: 5px;
 }
 

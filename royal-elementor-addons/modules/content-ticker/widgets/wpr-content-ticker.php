@@ -42,6 +42,10 @@ class Wpr_Content_Ticker extends Widget_Base {
 		return [ 'royal', 'blog', 'content ticker', 'news ticker', 'post ticker', 'posts ticker' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-slick', 'wpr-marquee' ];
 	}

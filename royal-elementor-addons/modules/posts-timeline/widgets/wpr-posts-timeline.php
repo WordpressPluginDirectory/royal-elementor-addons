@@ -37,6 +37,10 @@ class Wpr_Posts_Timeline extends Widget_Base {
 		return ['royal', 'post timeline', 'blog', 'post', 'posts', 'timeline', 'posts timeline', 'story timeline', 'content timeline'];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		// TODO: separate infinite-scroll from isotope
 		return [ 'swiper', 'wpr-aos-js', 'wpr-infinite-scroll' ];

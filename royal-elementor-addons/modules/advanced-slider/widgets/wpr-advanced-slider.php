@@ -42,6 +42,10 @@ class Wpr_Advanced_Slider extends Widget_Base {
 	public function get_keywords() {
 		return [ 'royal', 'image slider', 'slideshow', 'image carousel', 'template slider', 'posts slider' ];
 	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 	
 	public function get_script_depends() {
 		return [ 'imagesloaded', 'wpr-slick' ];
@@ -1032,6 +1036,57 @@ class Wpr_Advanced_Slider extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'slider_btn_heading',
+			[
+				'label' => esc_html__( 'Button', 'wpr-addons' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_responsive_control(
+			'slider_btn_icon_distance',
+			[
+				'type' => Controls_Manager::SLIDER,
+				'label' => esc_html__( 'Button Icon Distance', 'wpr-addons' ),
+				'size_units' => [ 'px' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 25,
+					]
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-slider-btns i' => 'margin-left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-slider-btns svg' => 'margin-left: {{SIZE}}{{UNIT}};',
+				],	
+			]
+		);
+		
+		$this->add_control(
+			'slider_btn_icon_align',
+			[
+				'label' => esc_html__( 'SVG Vertical Align', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'top' => esc_html__( 'Top', 'wpr-addons' ),
+					'middle' => esc_html__( 'Middle', 'wpr-addons' ),
+					'bottom' => esc_html__( 'Bottom', 'wpr-addons' ),
+					'text-top' => esc_html__( 'Text Top', 'wpr-addons' ),
+					'text-bottom' => esc_html__( 'Text Bottom', 'wpr-addons' ),
+				],
+				'default' => 'text-bottom',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-slider-btns svg' => 'vertical-align: {{VALUE}};',
+				],
+			]
+		);
+
 		$this->add_responsive_control(
 			'slider_title',
 			[
@@ -1272,6 +1327,18 @@ class Wpr_Advanced_Slider extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'slider_hide_video_content',
+			[
+				'label' => esc_html__( 'Hide Content', 'wpr-addons' ),
+				'description' => esc_html__( 'Hide the content of the slider when the video is playing', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'frontend_available' => true,
+				'separator' => 'before',
+			]
+		);
+
 		$this->add_control_slider_effect();
 
 		$this->add_control(
@@ -1376,6 +1443,17 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-slider-content' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'slider_content_border_color',
+			[
+				'label' => esc_html__( 'Border Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .wpr-slider-item' => 'border-color: {{VALUE}};',
 				],
 				'separator' => 'after',
 			]
@@ -1515,6 +1593,65 @@ class Wpr_Advanced_Slider extends Widget_Base {
 					'{{WRAPPER}} .wpr-slider-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 				'separator' => 'after',
+			]
+		);
+
+		$this->add_control(
+			'slider_content_border_type',
+			[
+				'label' => esc_html__( 'Border Type', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'none' => esc_html__( 'None', 'wpr-addons' ),
+					'solid' => esc_html__( 'Solid', 'wpr-addons' ),
+					'double' => esc_html__( 'Double', 'wpr-addons' ),
+					'dotted' => esc_html__( 'Dotted', 'wpr-addons' ),
+					'dashed' => esc_html__( 'Dashed', 'wpr-addons' ),
+					'groove' => esc_html__( 'Groove', 'wpr-addons' ),
+				],
+				'default' => 'none',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-slider-item' => 'border-style: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'slider_content_border_width',
+			[
+				'label' => esc_html__( 'Border Width', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', ],
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-slider-item' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'condition' => [
+					'slider_content_border_type!' => 'none',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'slider_content_border_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}}  .wpr-slider-item' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				]
 			]
 		);
 
@@ -3266,6 +3403,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 			'class' => 'wpr-advanced-slider',
 			'dir' => esc_attr( $slider_direction ),
 			'data-slick' => wp_json_encode( $slider_options ),
+			'data-hide-video-content' => esc_attr($settings['slider_hide_video_content']),
 			'data-video-btn-size' => wp_json_encode(
 				[
 					'widescreen' => esc_attr($slider_video_btn_widescreen),

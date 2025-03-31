@@ -41,6 +41,10 @@ class Wpr_Grid extends Widget_Base {
 		return [ 'royal', 'blog', 'portfolio grid', 'posts', 'post grid', 'posts grid', 'post slider', 'posts slider', 'post carousel', 'posts carousel', 'massonry grid', 'isotope', 'post gallery', 'posts gallery', 'filterable grid', 'loop grid' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-isotope', 'wpr-slick', 'wpr-lightgallery' ];
 	}
@@ -1872,6 +1876,20 @@ class Wpr_Grid extends Widget_Base {
 		);
 
 		$repeater->add_control(
+			'element_show_dots',
+			[
+				'label' => esc_html__( 'Show Dots', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'default' => 'yes',
+				'condition' => [
+					'element_select' => [ 'excerpt' ],
+					'element_trim_text_by' => 'word_count'
+				]
+			]
+		);
+
+		$repeater->add_control(
 			'element_show_avatar',
 			[
 				'label' => esc_html__( 'Show Avatar', 'wpr-addons' ),
@@ -2924,6 +2942,19 @@ class Wpr_Grid extends Widget_Base {
 				],
 			]
 		);
+		
+		$this->add_control(
+			'filters_hide_uncategorized',
+			[
+				'label' => esc_html__( 'Hide Uncategorized', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'return_value' => 'yes',
+				'condition' => [
+					'filters_linkable!' => 'yes',
+				],
+			]
+		);
 
 		$this->add_control_filters_deeplinking();
 
@@ -3625,7 +3656,7 @@ class Wpr_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'grid_item_radius',
 			[
 				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
@@ -3720,7 +3751,7 @@ class Wpr_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'grid_media_radius',
 			[
 				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
@@ -3762,7 +3793,7 @@ class Wpr_Grid extends Widget_Base {
 
 		$this->add_control_overlay_border_width();
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'overlay_radius',
 			[
 				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
@@ -8638,7 +8669,7 @@ class Wpr_Grid extends Widget_Base {
 
 	// Render Media Overlay
 	public function render_media_overlay( $settings ) {
-		echo '<div class="wpr-grid-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_url( get_the_permalink( get_the_ID() ) ) .'">';
+		echo '<div class="wpr-grid-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_attr( get_the_permalink( get_the_ID() ) ) .'">';
 
 			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				if ( '' !== $settings['overlay_image']['url'] ) {
@@ -8711,7 +8742,8 @@ class Wpr_Grid extends Widget_Base {
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 			  if ( 'word_count' === $settings['element_trim_text_by']) {
-				echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'] )) .'</p>';
+				$show_dots = $settings['element_show_dots'] === 'yes' ? '...' : '';
+				echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'], $show_dots )) .'</p>';
 			  } else {
 				// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
 				// echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';	
@@ -9361,10 +9393,22 @@ class Wpr_Grid extends Widget_Base {
 
 		// All Filters
 		} else {
+			$exclude_ids = [];
+
+			if ( 'yes' === $settings['filters_hide_uncategorized'] ) {
+				$uncategorized = get_term_by('slug', 'uncategorized', $taxonomy);
+
+				if ($uncategorized && !is_wp_error($uncategorized)) {
+					$exclude_ids[] = $uncategorized->term_id;
+				}
+			}
+
 			$all_filters = get_terms([
-				'taxonomy' => $taxonomy,
-				'hide_empty' => false, // Include empty taxonomies
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => false,
+				'exclude'    => $exclude_ids,
 			]);
+
 			$parent_filters = [];
 
 			foreach ( $all_filters as $key => $filter ) {
@@ -9407,7 +9451,7 @@ class Wpr_Grid extends Widget_Base {
 				$children = get_term_children( $parent_filter, $taxonomy );
 				$data_attr = 'post_tag' === $taxonomy ? 'tag-'. $parent->slug : $taxonomy .'-'. $parent->slug;
 				$tax_data_attr = 'post_tag' === $taxonomy ? 'tag' : $taxonomy;
-				$term_data_attr = $filter->slug;
+				$term_data_attr = $parent->slug;
 
 				echo '<ul data-parent=".'. esc_attr(urldecode( $data_attr )) .'" class="wpr-sub-filters">';
 
@@ -9422,7 +9466,7 @@ class Wpr_Grid extends Widget_Base {
 					$data_attr = 'post_tag' === $taxonomy ? 'tag-'. $sub_filter->slug : $taxonomy .'-'. $sub_filter->slug;
 
 					echo '<li data-role="sub" class="'. esc_attr($pointer_class) .'">';
-						echo ''. $left_separator .'<span '. $pointer_item_class .'  data-ajax-filter='. json_encode([$tax_data_attr, $term_data_attr]) .'  data-filter=".'. esc_attr(urldecode($data_attr)) .'">'. $left_icon . esc_html($sub_filter->name) . $right_icon . $post_count .'</span>'. $right_separator; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo ''. $left_separator .'<span '. $pointer_item_class .'  data-ajax-filter='. json_encode([$tax_data_attr, $sub_filter->slug]) .'  data-filter=".'. esc_attr(urldecode($data_attr)) .'">'. $left_icon . esc_html($sub_filter->name) . $right_icon . $post_count .'</span>'. $right_separator; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo '</li>';
 				}
 

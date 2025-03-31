@@ -41,6 +41,10 @@ class Wpr_Data_Table extends Widget_Base {
 		return ['royal', 'data table', 'advanced', 'table', 'data', 'comparison table', 'table comparison'];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return ['wpr-table-to-excel-js', 'wpr-perfect-scroll-js'];
 	}

@@ -32,6 +32,10 @@ class Wpr_Product_SalesBadge extends Widget_Base {
 		return [ 'woocommerce', 'product-sales-badge', 'product', 'sales-badge', 'sales', 'badge' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	protected function register_controls() {
 
 		$this->start_controls_section(

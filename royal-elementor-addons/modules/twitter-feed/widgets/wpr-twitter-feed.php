@@ -38,6 +38,10 @@ class Wpr_Twitter_Feed extends Widget_Base {
 		return [ 'royal', 'twitter feed', 'social', 'grid' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-isotope', 'wpr-lightgallery' ];
 	}

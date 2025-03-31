@@ -36,6 +36,10 @@ class Wpr_Page_List extends Widget_Base {
 		return [ 'royal', 'page-list', 'list'];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function add_control_title_pointer_color_hr() {}
 
 	public function add_control_title_pointer() {}

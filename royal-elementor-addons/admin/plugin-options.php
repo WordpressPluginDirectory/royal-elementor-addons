@@ -732,7 +732,7 @@ function wpr_addons_settings_page() {
                 <h4>
                     <span><?php esc_html_e( 'Google Map API Key', 'wpr-addons' ); ?></span>
                     <br>
-                    <a href="https://www.youtube.com/watch?v=O5cUoVpVUjU" target="_blank"><?php esc_html_e( 'How to get Google Map API Key?', 'wpr-addons' ); ?></a>
+                    <a href="https://www.youtube.com/watch?v=hsNlz7-abd0" target="_blank"><?php esc_html_e( 'How to get Google Map API Key?', 'wpr-addons' ); ?></a>
                 </h4>
 
                 <input type="text" name="wpr_google_map_api_key" id="wpr_google_map_api_key" value="<?php echo esc_attr(get_option('wpr_google_map_api_key')); ?>">

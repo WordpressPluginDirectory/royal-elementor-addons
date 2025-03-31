@@ -106,6 +106,7 @@ jQuery(document).ready(function( $ ) {
 			// });
 
 			WprTemplatesKit.initializeLazyLoading();
+
 		},
 
 		installRequiredTheme: function( kitID ) {
@@ -288,8 +289,15 @@ jQuery(document).ready(function( $ ) {
 												console.log('Import Finished!');
 												WprTemplatesKit.importProgressBar('finish');
 											}, 1000 );
+										},
+										error: function( xhr, textStatus, errorThrown ) {
+											console.error('AJAX-error:', textStatus, errorThrown);
 										}
 									});
+								},
+								error: function( xhr, textStatus, errorThrown ) {
+									console.error('AJAX-error:', textStatus, errorThrown);
+							
 								}
 							});
 						},
@@ -541,7 +549,7 @@ jQuery(document).ready(function( $ ) {
 				$('.main-grid .grid-item'+ tagAttr).show();
 			}
 		},
-
+		
 		// TODO: News Magazine X Theme Banner (remove later)
 		newsMagazineXThemeBanner: function() {
 			let $newsItem = $('.wpr-templates-kit-grid .grid-item[data-kit-id="news-magazine-x-v1"]'),
@@ -648,6 +656,7 @@ jQuery(document).ready(function( $ ) {
 				});
 			});
 		}
+
 	}
 
 	WprTemplatesKit.init();

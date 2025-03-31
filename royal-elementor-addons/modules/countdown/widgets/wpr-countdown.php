@@ -1089,7 +1089,8 @@ class Wpr_Countdown extends Widget_Base {
 						break;
 
 					case 'message':
-						$actions['message'] = $this->sanitize_no_js(wp_kses($settings['display_message_text'], $allowed_html));
+						// $actions['message'] = $this->sanitize_no_js(wp_kses($settings['display_message_text'], $allowed_html));
+						$actions['message'] = wp_kses_post($settings['display_message_text'], $allowed_html);
 						break;
 
 					case 'redirect':

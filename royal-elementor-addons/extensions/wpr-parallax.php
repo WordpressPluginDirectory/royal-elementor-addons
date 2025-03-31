@@ -40,7 +40,7 @@ class Wpr_Parallax_Scroll {
             'wpr_parallax',
             [
                 'type' => Controls_Manager::RAW_HTML,
-                'raw' => '<div class="elementor-update-preview-button editor-wpr-preview-update"><span>Update changes to Preview</span><button class="elementor-button elementor-button-success" onclick="elementor.reloadPreview();">Apply</button>',
+                'raw' => '<div class="elementor-update-preview-button editor-wpr-preview-update"><span>Update changes to Preview</span><button class="elementor-button elementor-button-success" onclick="elementor.reloadPreview();">Apply</button></div>',
                 'separator' => 'after'
             ]
         );

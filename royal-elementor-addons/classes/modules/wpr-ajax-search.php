@@ -32,6 +32,11 @@ if ( ! defined( 'ABSPATH' ) ) {
         }
 
 		$all_post_types = [];
+
+        if ( sanitize_text_field($_POST['wpr_show_attachments']) == 'yes' ) {
+            $all_post_types = ['attachment'];
+        }
+
         foreach(  Utilities::get_custom_types_of( 'post', false ) as $key=>$value ) {
             array_push($all_post_types, $key);
         }
@@ -120,7 +125,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         ['key' => '_thumbnail_id']
                     ] : '',
                     'tax_query' => $tax_query,
-                    'post_status' => 'publish',
+                    'post_status' => in_array('attachment', $all_post_types) ? ['publish', 'inherit'] : 'publish',
                     'post_password' => ''
                 ]
             );
@@ -135,7 +140,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         ['key' => '_thumbnail_id']
                     ] : '',
                     'tax_query' => $tax_query,
-                    'post_status' => 'publish',
+                    'post_status' => in_array('attachment', $all_post_types) ? ['publish', 'inherit'] : 'publish',
                 ]
             );
         }

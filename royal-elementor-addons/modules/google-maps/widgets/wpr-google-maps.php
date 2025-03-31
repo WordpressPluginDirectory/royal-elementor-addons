@@ -36,6 +36,10 @@ class Wpr_Google_Maps extends Widget_Base {
 		return [ 'royal', 'google maps', 'location', 'gmap', 'cluster' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-google-maps', 'wpr-google-maps-clusters' ];
 	}
@@ -576,6 +580,24 @@ class Wpr_Google_Maps extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-google-map .gm-style-iw-c' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'map_radius',
+			[
+				'label' => esc_html__( 'Map Border Radius', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px' ],
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-google-map' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);

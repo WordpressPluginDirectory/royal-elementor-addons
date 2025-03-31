@@ -41,6 +41,10 @@ class Wpr_Flip_Carousel extends Widget_Base {
 		return [ 'royal', 'flip carousel', 'flip', 'carousel', 'flip slider' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-flipster' ];
 	}

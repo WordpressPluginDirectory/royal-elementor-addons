@@ -41,6 +41,10 @@ class Wpr_Search extends Widget_Base {
 		return [ 'royal', 'search', 'search widget', 'ajax search' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_style_depends() {
 		return [ 'wpr-animations-css', 'wpr-link-animations-css', 'wpr-button-animations-css', 'wpr-loading-animations-css', 'wpr-lightgallery-css' ];
 	}
@@ -1153,6 +1157,21 @@ class Wpr_Search extends Widget_Base {
 
 		$this->add_control_show_password_protected();
 
+		if ( current_user_can( 'administrator' ) ) {
+			$this->add_control(
+				'show_attachments',
+				[
+					'label' => esc_html__( 'Show Attachments', 'wpr-addons' ),
+					'description' => esc_html__( 'Include Media Files in Search Results', 'wpr-addons' ),
+					'type' => Controls_Manager::SWITCHER,
+					'condition' => [
+						'ajax_search' => 'yes'
+					],
+					'render_type' => 'template',
+				]
+			);
+		}
+
 		$this->add_control_open_in_new_page();
 
 		$this->add_control_show_ajax_thumbnails();
@@ -2100,6 +2119,7 @@ class Wpr_Search extends Widget_Base {
 				'exclude-without-thumb' => isset($settings['exclude_posts_without_thumbnail']) ? $settings['exclude_posts_without_thumbnail'] : '',
 				'link-target' => isset($settings['ajax_search_link_target']) && ( 'yes' === $settings['ajax_search_link_target'] ) ? '_blank'  : '_self',
 				'password-protected' => isset($settings['ajax_show_ps_pt']) ? $settings['ajax_show_ps_pt'] : 'no',
+				'attachments' => isset($settings['show_attachments']) ? $settings['show_attachments'] : 'no',
 				// 'ajax-search-img-size' => isset($settings['ajax_search_img_size']) ? $settings['ajax_search_img_size'] : ''
 			]
 		);

@@ -33,6 +33,10 @@ class Wpr_Page_Cart extends Widget_Base {
 		return [ 'woocommerce', 'royal', 'cart', 'product', 'page', 'cart page', 'page cart' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [];
 	}
@@ -1501,9 +1505,13 @@ class Wpr_Page_Cart extends Widget_Base {
 				'default' => '#636363',
 				'selectors' => [
 					'{{WRAPPER}} .actions .button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .actions .button:disabled' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .coupon .button' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .return-to-shop .button' => 'color: {{VALUE}}'
+					'{{WRAPPER}} .coupon .button:disabled' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'color: {{VALUE}}'
 				],
 			]
 		);
@@ -1518,7 +1526,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button' => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} .coupon .button' => 'background-color: {{VALUE}}',
-					'{{WRAPPER}} .return-to-shop .button' => 'background-color: {{VALUE}}'
+					'{{WRAPPER}} .return-to-shop .button' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .actions .button:disabled' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .coupon .button:disabled' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'background-color: {{VALUE}}'
 				]
 			]
 		);
@@ -1533,7 +1545,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button' => 'border-color: {{VALUE}}',
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'border-color: {{VALUE}}',
 					'{{WRAPPER}} .coupon .button' => 'border-color: {{VALUE}}',
-					'{{WRAPPER}} .return-to-shop .button' => 'border-color: {{VALUE}}'
+					'{{WRAPPER}} .return-to-shop .button' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .actions .button:disabled' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .coupon .button:disabled' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'border-color: {{VALUE}}'
 				],
 			]
 		);
@@ -1542,8 +1558,7 @@ class Wpr_Page_Cart extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'buttons_box_shadow',
-				'selector' => '{{WRAPPER}} .actions .button,
-				{{WRAPPER}} .coupon .coupon-col-end button.button, {{WRAPPER}} .shipping-calculator-form .button, {{WRAPPER}} .return-to-shop .button',
+				'selector' => '{{WRAPPER}} .actions .button, {{WRAPPER}} .coupon .coupon-col-end button.button, {{WRAPPER}} .shipping-calculator-form .button, {{WRAPPER}} .return-to-shop .button, {{WRAPPER}} .actions .button:disabled, {{WRAPPER}} .coupon .coupon-col-end button.button:disabled, {{WRAPPER}} .shipping-calculator-form .button:disabled, {{WRAPPER}} .return-to-shop .button:disabled',
 			]
 		);
 
@@ -1551,7 +1566,7 @@ class Wpr_Page_Cart extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'buttons_typography',
-				'selector' => '{{WRAPPER}} .actions .button, {{WRAPPER}} .coupon .button, {{WRAPPER}} .shipping-calculator-form .button, {{WRAPPER}} .return-to-shop .button',
+				'selector' => '{{WRAPPER}} .actions .button, {{WRAPPER}} .coupon .button, {{WRAPPER}} .shipping-calculator-form .button, {{WRAPPER}} .return-to-shop .button, {{WRAPPER}} .actions .button:disabled, {{WRAPPER}} .coupon .button:disabled, {{WRAPPER}} .shipping-calculator-form .button:disabled, {{WRAPPER}} .return-to-shop .button:disabled',
 				'fields_options' => [
 					'typography' => [
 						'default' => 'custom',
@@ -1579,7 +1594,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .coupon .button' => 'transition-duration: {{VALUE}}s',
-					'{{WRAPPER}} .return-to-shop .button' => 'transition-duration: {{VALUE}}s'
+					'{{WRAPPER}} .return-to-shop .button' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .actions .button:disabled' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .coupon .button:disabled' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'transition-duration: {{VALUE}}s'
 				],
 			]
 		);
@@ -1603,7 +1622,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button:hover' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .shipping-calculator-form .button:hover' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .coupon .button:hover' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .return-to-shop .button:hover' => 'color: {{VALUE}}'
+					'{{WRAPPER}} .return-to-shop .button:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .actions .button:disabled' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .coupon .button:disabled' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'color: {{VALUE}}'
 				],
 			]
 		);
@@ -1618,7 +1641,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button:hover' => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} .shipping-calculator-form .button:hover' => 'background-color: {{VALUE}}',
 					'{{WRAPPER}} .coupon .button:hover' => 'background-color: {{VALUE}}',
-					'{{WRAPPER}} .return-to-shop .button:hover' => 'background-color: {{VALUE}}'
+					'{{WRAPPER}} .return-to-shop .button:hover' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .actions .button:disabled' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .coupon .button:disabled' => 'background-color: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'background-color: {{VALUE}}'
 				]
 			]
 		);
@@ -1633,7 +1660,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button:hover' => 'border-color: {{VALUE}}',
 					'{{WRAPPER}} .shipping-calculator-form .button:hover' => 'border-color: {{VALUE}}',
 					'{{WRAPPER}} .coupon .button:hover' => 'border-color: {{VALUE}}',
-					'{{WRAPPER}} .return-to-shop .button:hover' => 'border-color: {{VALUE}}'
+					'{{WRAPPER}} .return-to-shop .button:hover' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .actions .button:disabled' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .coupon .button:disabled' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'border-color: {{VALUE}}'
 				]
 			]
 		);
@@ -1642,7 +1673,7 @@ class Wpr_Page_Cart extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'buttons_box_shadow_hr',
-				'selector' => '{{WRAPPER}} .actions .button:hover, {{WRAPPER}} .coupon .button:hover, {{WRAPPER}} .shipping-calculator-form .button:hover, {{WRAPPER}} .return-to-shop .button:hover',
+				'selector' => '{{WRAPPER}} .actions .button:hover, {{WRAPPER}} .coupon .button:hover, {{WRAPPER}} .shipping-calculator-form .button:hover, {{WRAPPER}} .return-to-shop .button:hover, {{WRAPPER}} .actions .button:disabled, {{WRAPPER}} .shipping-calculator-form .button:disabled, {{WRAPPER}} .coupon .button:disabled, {{WRAPPER}} .return-to-shop .button:disabled',
 			]
 		);
 
@@ -1668,7 +1699,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button' => 'border-style: {{VALUE}};',
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'border-style: {{VALUE}};',
 					'{{WRAPPER}} .coupon .button' => 'border-style: {{VALUE}}',
-					'{{WRAPPER}} .return-to-shop .button' => 'border-style: {{VALUE}}'
+					'{{WRAPPER}} .return-to-shop .button' => 'border-style: {{VALUE}}',
+					'{{WRAPPER}} .actions .button:disabled' => 'border-style: {{VALUE}}',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'border-style: {{VALUE}}',
+					'{{WRAPPER}} .coupon .button:disabled' => 'border-style: {{VALUE}}',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'border-style: {{VALUE}}'
 				],
 				'separator' => 'before'
 			]
@@ -1690,7 +1725,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .coupon .button' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .return-to-shop .button' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
+					'{{WRAPPER}} .return-to-shop .button' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .actions .button:disabled' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .coupon .button:disabled' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
 				],
 				'condition' => [
 					'buttons_border_type!' => 'none',
@@ -1715,7 +1754,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .coupon .button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .wc-proceed-to-checkout .checkout-button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .return-to-shop .button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
+					'{{WRAPPER}} .return-to-shop .button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .actions .button:disabled' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .coupon .button:disabled' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
 				]
 			]
 		);
@@ -1738,6 +1781,10 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .wc-proceed-to-checkout .checkout-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .return-to-shop .button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .actions .button:disabled' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .coupon .button:disabled' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
 				],
 				'separator' => 'before'
 			]
@@ -1759,7 +1806,11 @@ class Wpr_Page_Cart extends Widget_Base {
 					'{{WRAPPER}} .actions .button' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .shipping-calculator-form .button' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .wc-proceed-to-checkout .checkout-button' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .return-to-shop .button' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
+					'{{WRAPPER}} .return-to-shop .button' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .actions .button:disabled' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .shipping-calculator-form .button:disabled' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .coupon .button:disabled' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .return-to-shop .button:disabled' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
 				]
 			]
 		);

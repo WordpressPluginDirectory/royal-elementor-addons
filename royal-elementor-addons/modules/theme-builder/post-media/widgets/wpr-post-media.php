@@ -37,6 +37,10 @@ class Wpr_Post_Media extends Widget_Base {
 		return [ 'image', 'media', 'post', 'thumbnail', 'video', 'gallery' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'jquery-slick', 'wpr-lightgallery' ];
 	}

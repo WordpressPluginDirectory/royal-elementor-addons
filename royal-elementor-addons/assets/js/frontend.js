@@ -1950,25 +1950,42 @@
 					iGrid.find( '.wpr-grid-media-wrap' ).css('cursor', 'pointer');
 
 					iGrid.find( '.wpr-grid-media-wrap' ).on( 'click', function( event ) {
+
 						var targetClass = event.target.className;
 
 						if ( -1 !== targetClass.indexOf( 'inner-block' ) || -1 !== targetClass.indexOf( 'wpr-cv-inner' ) || 
 							 -1 !== targetClass.indexOf( 'wpr-grid-media-hover' ) ) {
-							event.preventDefault();
-							event.stopPropagation();
+								event.preventDefault();
+								event.stopPropagation();
 
 							var itemUrl = $(this).find( '.wpr-grid-media-hover-bg' ).attr( 'data-url' ),
 								itemUrl = itemUrl.replace('#new_tab', '');
 
-							if ( '_blank' === iGrid.find( '.wpr-grid-item-title a' ).attr('target') ) {
+                            if (itemUrl) {
+                                try {
+                                    // Create a URL object to validate the URL
+                                    var url = new URL(itemUrl);
 
-								console.log(itemUrl);
-								if (itemUrl) {
-									window.open(itemUrl, '_blank');
-								}
-							} else {
-								window.location.href = itemUrl;
-							}
+                                    // Define a list of allowed protocols
+                                    var allowedProtocols = ['http:', 'https:'];
+
+                                    // Check if the URL's protocol is allowed
+                                    if (allowedProtocols.includes(url.protocol)) {
+                                        // Safe to use the URL
+                                        var safeUrl = url.href;
+
+                                        if ('_blank' === iGrid.find('.wpr-grid-item-title a').attr('target')) {
+                                            window.open(safeUrl, '_blank').focus();
+                                        } else {
+                                            window.location.href = safeUrl;
+                                        }
+                                    } else {
+                                        console.error('Invalid URL scheme:', url.protocol);
+                                    }
+                                } catch (e) {
+                                    console.error('Invalid URL:', itemUrl);
+                                }
+                            }
 						}
 					});
 				}				
@@ -2532,8 +2549,6 @@
 									wpr_taxonomy: thisTaxonomy,
 									grid_settings: settings.grid_settings,
 								};
-
-							console.log(thisFilter, thisTaxonomy);
 
 							$.ajax({
 								type: 'POST',
@@ -3111,7 +3126,11 @@
 
 										var newItems = $(response);
 										iGrid.find('.wpr-grid-loader-wrap').remove();
+										iGrid.addClass('wpr-fix-grid-height');
 										iGrid.append(newItems).isotopewpr('appended', newItems).isotopewpr('layout');
+										setTimeout(function() {
+											iGrid.removeClass('wpr-fix-grid-height');
+										}, 500);
 
 										if ( settings.pagination_type == 'load-more' && pagination ) { // needs check if more posts in tax
 											pagination.find( '.wpr-pagination-finish' ).fadeOut( 100 );
@@ -3133,7 +3152,11 @@
 										}
 
 										isotopeLayout( settings );
-										// isotopeFilters( settings, 'click' ); 
+										lightboxPopup( settings );
+			
+										// Fix Lightbox
+										iGrid.data( 'lightGallery' ).destroy( true );
+										iGrid.lightGallery( settings.lightbox );
 
                                         setTimeout(function() {
                                             isotopeLayout( settings );
@@ -3141,6 +3164,7 @@
 											window.dispatchEvent(new Event('resize'));
 											window.dispatchEvent(new Event('scroll'));
                                         }, 500);
+										
 										mediaHoverLink();
 										// iGrid.removeClass('wpr-zero-opacity');
 										initialItems = 0;
@@ -3923,7 +3947,15 @@
 					}
 					
 					if ( dataActions.hasOwnProperty( 'redirect' ) ) {
-						window.location.href = dataActions['redirect'];
+						var url = new URL(dataActions['redirect']);
+    
+						// Define a list of allowed protocols
+						var allowedProtocols = ['http:', 'https:'];
+
+						// Check if the URL's protocol is allowed
+						if (allowedProtocols.includes(url.protocol)) {
+							window.location.href = url.href;
+						}
 					}
 
 					if ( dataActions.hasOwnProperty( 'load-template' ) ) {
@@ -4292,8 +4324,9 @@
 
 		widgetAdvancedSlider: function( $scope ) {
 			var $advancedSlider = $scope.find( '.wpr-advanced-slider' ),
-			sliderData = $advancedSlider.data('slick'),
-			videoBtnSize = $advancedSlider.data('video-btn-size');
+				sliderData = $advancedSlider.data('slick'),
+				videoBtnSize = $advancedSlider.data('video-btn-size'),
+				videoPlays = 'false';
 			
 			// customPaging: function(slider, i) { 
 			// 	return '<span class="wpr-slider-dot" style="background-image:url('+ $(slider.$slides[i]).find('.wpr-slider-item-bg').css('background-image').replace('url(','').replace(')','').replace(/\"/gi, "") +')"></span>';
@@ -4531,7 +4564,7 @@
 						}
 
 						// GOGA - remove condition if not necessary
-						if ( $(this).find('.wpr-slider-content') ) {
+						if ( $(this).find('.wpr-slider-content') && $advancedSlider.data('hide-video-content') === 'yes' ) {
 							$(this).find('.wpr-slider-content').fadeOut(300);
 						}
 					}
@@ -4556,16 +4589,17 @@
 			slideAnimationOn();
 
 			$advancedSlider.on( 'click', '.wpr-slider-video-btn', function() {
-
 				var currentSlide = $(this).closest('.slick-slide'),
-					videoSrc = currentSlide.find('.wpr-slider-item').attr('data-video-src');
+					videoSrc = currentSlide.find('.wpr-slider-item').attr('data-video-src'),
+					videoButton = $(this),
+					allowFullScreen = '';
+					
+					if ( videoPlays == 'true' ) {
+						videoPlays = 'false';
+					} else {
+						videoPlays = 'true';
+					}
 
-					console.log(videoSrc);
-			
-				console.log(currentSlide, videoSrc);
-			
-				var allowFullScreen = '';
-			
 				if ( videoSrc.includes('youtube') ) {
 					videoSrc += "&autoplay=1"; // Tell YouTube to autoplay
 					allowFullScreen = 'allowfullscreen="allowfullscreen"';
@@ -4582,9 +4616,25 @@
 						$advancedSlider.find('video').attr('width', $scope.find('.wpr-slider-item').width());
 						$advancedSlider.find('video').attr('height', $scope.find('.wpr-slider-item').height());
 
-						currentSlide.find('.wpr-slider-content').fadeOut(300);
+						if ( $advancedSlider.data('hide-video-content') === 'yes' ) {
+							currentSlide.find('.wpr-slider-content').fadeOut(300);
+						} else {
+							if ( videoPlays == 'true' ) {
+								videoButton.find('i').removeClass('fa-play').addClass('fa-pause');
+							} else {
+								videoButton.find('i').removeClass('fa-pause').addClass('fa-play');
+							}
+						}
 
 						currentSlide.find('video')[0].play();
+					} else {
+						if ( videoPlays == 'true' ) {
+							currentSlide.find('video')[0].play();
+							videoButton.find('i').removeClass('fa-play').addClass('fa-pause');
+						} else {
+							currentSlide.find('video')[0].pause();
+							videoButton.find('i').removeClass('fa-pause').addClass('fa-play');
+						}
 					}
 					return;
 				}
@@ -4594,7 +4644,10 @@
 					currentSlide.find('.wpr-cv-container').prepend('<div class="wpr-slider-video"><iframe src="'+ videoSrc +'" width="100%" height="100%"  frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"'+ allowFullScreen +'></iframe></div>');
 
 					sliderVideoSize();
-					currentSlide.find('.wpr-slider-content').fadeOut(300);
+
+					if ( $advancedSlider.data('hide-video-content') === 'yes' ) {
+						currentSlide.find('.wpr-slider-content').fadeOut(300);
+					}
 				}
 			
 			});
@@ -4603,6 +4656,10 @@
 				beforeChange: function() {
 					$advancedSlider.find('.wpr-slider-item').not('.slick-active').find('.wpr-slider-video').remove();
 					$advancedSlider.find('.wpr-animation-enter').find('.wpr-slider-content').fadeOut(300);
+					if ( $advancedSlider.data('hide-video-content') !== 'yes' ) {
+						$advancedSlider.find('.wpr-slider-video-btn').find('i').removeClass('fa-pause').addClass('fa-play');
+						videoPlays = 'false';
+					}
 					slideAnimationOff();
 				},
 				afterChange: function( event, slick, currentSlide ) {
@@ -4874,6 +4931,7 @@
 							wpr_exclude_without_thumb: $scope.find('.wpr-search-form-input').attr('exclude-without-thumb'),
 							wpr_ajax_search_link_target: $scope.find('.wpr-search-form-input').attr('link-target'),
 							wpr_show_ps_pt: $scope.find('.wpr-search-form-input').attr('password-protected'),
+							wpr_show_attachments: $scope.find('.wpr-search-form-input').attr('attachments'),
 							// wpr_ajax_search_img_size: $scope.find('.wpr-search-form-input').attr('ajax-search-img-size')
 						},
 						success: function(data) {
@@ -7709,21 +7767,42 @@
                         instaFeed.find( '.wpr-insta-feed-media-wrap' ).css('cursor', 'pointer');
 
                         instaFeed.find( '.wpr-insta-feed-media-wrap' ).on( 'click', function( event ) {
-                        var targetClass = event.target.className;
 
-                        if ( -1 !== targetClass.indexOf( 'inner-block' ) || -1 !== targetClass.indexOf( 'wpr-cv-inner' ) || 
-                                -1 !== targetClass.indexOf( 'wpr-insta-feed-media-hover' ) ) {
-                            event.preventDefault();
+                            var targetClass = event.target.className;
 
-                            var itemUrl = $(this).find( '.wpr-insta-feed-media-hover-bg' ).attr( 'data-url' ),
-                                itemUrl = itemUrl.replace('#new_tab', '');
+                            if ( -1 !== targetClass.indexOf( 'inner-block' ) || -1 !== targetClass.indexOf( 'wpr-cv-inner' ) || 
+                                    -1 !== targetClass.indexOf( 'wpr-insta-feed-media-hover' ) ) {
+									event.preventDefault();
 
-                            if ( '_blank' === instaFeed.find( '.wpr-insta-feed-media-hover-bg' ).data('target') ) {
-                                window.open(itemUrl, '_blank').focus();
-                            } else {
-                                window.location.href = itemUrl;
+                                var itemUrl = $(this).find( '.wpr-insta-feed-media-hover-bg' ).attr( 'data-url' ),
+                                    itemUrl = itemUrl.replace('#new_tab', '');
+
+                                if (itemUrl) {
+                                    try {
+                                        // Create a URL object to validate the URL
+                                        var url = new URL(itemUrl);
+    
+                                        // Define a list of allowed protocols
+                                        var allowedProtocols = ['http:', 'https:'];
+    
+                                        // Check if the URL's protocol is allowed
+                                        if (allowedProtocols.includes(url.protocol)) {
+                                            // Safe to use the URL
+                                            var safeUrl = url.href;
+    
+                                            if ('_blank' === iGrid.find('.wpr-grid-item-title a').attr('target')) {
+                                                window.open(safeUrl, '_blank').focus();
+                                            } else {
+                                                window.location.href = safeUrl;
+                                            }
+                                        } else {
+                                            console.error('Invalid URL scheme:', url.protocol);
+                                        }
+                                    } catch (e) {
+                                        console.error('Invalid URL:', itemUrl);
+                                    }
+                                }
                             }
-                        }
                     });
                 }				
             }

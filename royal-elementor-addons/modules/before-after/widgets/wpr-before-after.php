@@ -37,6 +37,10 @@ class Wpr_Before_After extends Widget_Base {
 		return [ 'royal', 'image compare', 'image comparison', 'before after image' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'jquery-event-move' ];
 	}

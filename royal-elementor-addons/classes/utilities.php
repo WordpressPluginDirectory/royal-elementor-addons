@@ -939,11 +939,14 @@ class Utilities {
 		    $args = [ 'headers' => [ 'Authorization' => 'Basic ' . base64_encode( 'user:'. $api_key ) ] ];
 
 		    $response = wp_remote_get( $url, $args );
-		    $body = json_decode($response['body']);
-			 
-			if ( ! empty( $body->lists ) ) {
-				foreach ( $body->lists as $list ) {
-					$mailchimp_list[$list->id] = $list->name .' ('. $list->stats->member_count .')';
+
+			if ( !is_wp_error($response) ) {
+				$body = json_decode($response['body']);
+				
+				if ( ! empty( $body->lists ) ) {
+					foreach ( $body->lists as $list ) {
+						$mailchimp_list[$list->id] = $list->name .' ('. $list->stats->member_count .')';
+					}
 				}
 			}
 

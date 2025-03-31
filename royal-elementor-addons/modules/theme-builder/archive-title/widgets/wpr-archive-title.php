@@ -42,6 +42,10 @@ class Wpr_Archive_Title extends Widget_Base {
 		return [ 'archive', 'title', 'description', 'category', 'tag' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function add_control_archive_description() {}
 
 	protected function register_controls() {

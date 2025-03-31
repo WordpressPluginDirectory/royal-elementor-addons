@@ -34,6 +34,9 @@ class Wpr_Product_Title extends Widget_Base {
 		return [ 'woocommerce', 'product-title', 'product', 'title' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 
 	protected function register_controls() {
 

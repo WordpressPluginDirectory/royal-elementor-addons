@@ -39,6 +39,10 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 		return [ 'royal', 'blog', 'advanced accordion' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ '' ];
 	}
@@ -514,6 +518,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 				'default' => '#605BE4',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-advanced-accordion .wpr-acc-button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-advanced-accordion .wpr-acc-button .wpr-acc-title-text' => 'color: {{VALUE}}',
 				]
 			]
 		);
@@ -604,6 +609,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-advanced-accordion .wpr-acc-button:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-advanced-accordion .wpr-acc-button:hover .wpr-acc-title-text' => 'color: {{VALUE}}',
 				]
 			]
 		);
@@ -654,6 +660,7 @@ class Wpr_Advanced_Accordion extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-advanced-accordion .wpr-acc-button.wpr-acc-active' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-advanced-accordion .wpr-acc-button.wpr-acc-active .wpr-acc-title-text' => 'color: {{VALUE}}',
 				]
 			]
 		);

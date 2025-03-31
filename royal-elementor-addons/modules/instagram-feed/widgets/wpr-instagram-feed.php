@@ -39,6 +39,10 @@ class Wpr_Instagram_Feed extends Widget_Base {
 		return [ 'royal', 'instagram feed', 'social', 'grid' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'swiper', 'wpr-isotope', 'wpr-lightgallery' ];
 	}
@@ -4999,7 +5003,8 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 		$target = 'yes' == $this->get_settings()['open_in_new_tab'] ? '_blank' : '_self';
 
-		echo '<div class="wpr-insta-feed-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. $result->permalink .'" data-target="'. $target .'">';
+
+		echo '<div class="wpr-insta-feed-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_attr( $result->permalink ) .'" data-target="'. $target .'">';
 
 		echo '</div>';
 	}

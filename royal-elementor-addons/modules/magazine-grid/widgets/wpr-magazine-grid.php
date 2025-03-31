@@ -41,6 +41,10 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		return [ 'royal', 'blog', 'magazin grid', 'magazin slider', 'isotope', 'post tiles', 'posts tiles' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-isotope', 'wpr-slick' ];
 	}

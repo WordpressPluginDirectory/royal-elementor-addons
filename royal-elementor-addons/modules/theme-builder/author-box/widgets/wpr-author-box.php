@@ -36,6 +36,10 @@ class Wpr_Author_Box extends Widget_Base {
 		return [ 'author', 'box', 'post', ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function add_controls_group_author_name_links_to() {
 		$this->add_control(
 			'author_name_links_to',

@@ -42,6 +42,10 @@ class Wpr_Image_Hotspots extends Widget_Base {
 		return [ 'royal', 'image hotspots' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
     public function get_custom_help_url() {
     	if ( empty(get_option('wpr_wl_plugin_links')) )
         // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-image-hotspot-help-btn';

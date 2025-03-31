@@ -36,6 +36,10 @@ class Wpr_Taxonomy_List extends Widget_Base {
 		return [ 'royal', 'taxonomy-list', 'taxonomy', 'category', 'categories', 'tag', 'list'];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function add_section_style_toggle_icon() {}
 
 	public function get_post_taxonomies() {

@@ -35,6 +35,10 @@ class Wpr_Product_Mini_Cart extends Widget_Base {
 		return [ 'woocommerce', 'product-ini-cart', 'product', 'mini', 'cart' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return ['wpr-perfect-scroll-js'];
 	}

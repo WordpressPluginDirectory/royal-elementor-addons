@@ -35,6 +35,10 @@ class Wpr_Lottie_Animations extends Widget_Base {
 	public function get_keywords() {
 		return [ 'royal', 'lottie', 'animation', 'animations', 'svg' ];
 	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 	
 	public function get_script_depends() {
 		return [ 'wpr-lottie-animations' ];

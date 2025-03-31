@@ -1043,15 +1043,29 @@ function wpr_track_import_failed_kit( $kit ) {
 function wpr_install_news_magazine_x_theme() {
     $nonce = $_POST['nonce'];
 
-    if ( !wp_verify_nonce( $nonce, 'wpr-templates-kit-js')  || !current_user_can( 'manage_options' ) ) {
+    if ( !wp_verify_nonce( $nonce, 'wpr-templates-kit-js' )  || !current_user_can( 'manage_options' ) ) {
       exit; // Get out of here, the nonce is rotten!
     }
     
-    if (!current_user_can('switch_themes')) {
+    if ( !current_user_can('switch_themes') ) {
         wp_send_json_error('Permission denied');
     }
 
     $theme = sanitize_text_field($_POST['theme']);
     switch_theme($theme);
+
+    // Deactivate Elementor and Royal Elementor Addons
+    if ( is_plugin_active( 'elementor/elementor.php' ) ) {
+        deactivate_plugins( 'elementor/elementor.php' );
+    }
+
+    if ( is_plugin_active( 'royal-elementor-addons/wpr-addons.php' ) ) {
+        deactivate_plugins( 'royal-elementor-addons/wpr-addons.php' );
+    }
+
+    if ( is_plugin_active( 'royal-elementor-addons-pro/wpr-addons-pro.php' ) ) {
+        deactivate_plugins( 'royal-elementor-addons-pro/wpr-addons-pro.php' );
+    }
+
     wp_send_json_success();
 }

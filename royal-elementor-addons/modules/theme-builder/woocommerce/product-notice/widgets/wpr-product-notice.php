@@ -34,6 +34,10 @@ class Wpr_Product_Notice extends Widget_Base {
 		return [ 'woocommerce', 'product notice', 'product', 'notice', 'woocommerce notice', 'message', 'woocommerce message' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return ['wc-add-to-cart', 'wc-add-to-cart-variation', 'wc-single-product'];
 	}

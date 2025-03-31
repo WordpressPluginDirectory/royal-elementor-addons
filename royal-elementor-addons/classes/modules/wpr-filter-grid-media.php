@@ -139,6 +139,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'posts_per_page' => $settings['query_posts_per_page'],
 				'paged' => $paged,
 			];
+
+			if ( isset($_POST['wpr_offset']) ) {
+				$args['offset'] = $_POST['wpr_offset'];
+			}
+
+			$tax_query = $this->get_tax_query_args();
+
+			if ( ! empty( $tax_query ) ) {
+				$args['tax_query'] = $tax_query;
+			}
 		}
 
 		if ( isset($_POST['wpr_offset']) ) {
@@ -157,16 +167,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$settings = $_POST['grid_settings'];
 		$tax_query = [];
 
-		
-		$tax_query = [];
+		// Add filter for selected taxonomy and term if they exist
+		if (!empty($_POST['wpr_taxonomy']) && !empty($_POST['wpr_filter']) && $_POST['wpr_filter'] !== 'all' && $_POST['wpr_taxonomy'] !== '*') {
+			$tax_query[] = [
+				'taxonomy' => sanitize_text_field($_POST['wpr_taxonomy']),
+				'field' => 'slug', // Use slug instead of ID for attachments
+				'terms' => sanitize_text_field($_POST['wpr_filter']),
+			];
 
-		foreach ( get_object_taxonomies( 'attachment' ) as $tax ) {
-			if ( ! empty($settings[ 'query_taxonomy_'. $tax ]) ) {
-				array_push( $tax_query, [
+			return $tax_query; // Return early with just the selected filter
+		}
+
+		// Otherwise, use the default taxonomies from settings
+		$media_taxonomies = get_taxonomies(['object_type' => ['attachment']], 'names'); // Get custom attachment taxonomies
+
+		foreach ($media_taxonomies as $tax) {
+			if (!empty($settings['query_taxonomy_' . $tax])) {
+				$tax_query[] = [
 					'taxonomy' => $tax,
-					'field' => 'id',
-					'terms' => $settings[ 'query_taxonomy_'. $tax ]
-				] );
+					'field' => 'slug', // Ensure it's using slug
+					'terms' => $settings['query_taxonomy_' . $tax],
+				];
 			}
 		}
 
@@ -294,12 +315,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-			  if ( 'word_count' === $settings['element_trim_text_by']) {
 				echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'] )) .'</p>';
-			  } else {
-				// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
-				echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';
-			  }
 			echo '</div>';
 		echo '</div>';
 	}

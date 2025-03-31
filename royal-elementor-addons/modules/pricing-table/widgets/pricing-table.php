@@ -40,6 +40,10 @@ class Pricing_Table extends Widget_Base {
 		return [ 'royal', 'price table', 'pricing table', 'features table' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_style_depends() {
 		return [ 'wpr-button-animations-css' ];
 	}

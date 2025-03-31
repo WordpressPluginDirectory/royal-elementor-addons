@@ -41,6 +41,10 @@ class Wpr_Woo_Grid extends Widget_Base {
 		return [ 'royal', 'shop grid', 'product grid', 'woocommerce', 'product slider', 'product carousel', 'isotope', 'massonry grid', 'filterable grid', 'loop grid' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	public function get_script_depends() {
 		return [ 'wpr-isotope', 'wpr-slick', 'wpr-lightgallery' ];
 	}
@@ -2928,6 +2932,19 @@ class Wpr_Woo_Grid extends Widget_Base {
 				],
 			]
 		);
+		
+		$this->add_control(
+			'filters_hide_uncategorized',
+			[
+				'label' => esc_html__( 'Hide Uncategorized', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'return_value' => 'yes',
+				'condition' => [
+					'filters_linkable!' => 'yes',
+				],
+			]
+		);
 
 		$this->add_control_filters_deeplinking();
 
@@ -3549,7 +3566,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'grid_item_radius',
 			[
 				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
@@ -3644,7 +3661,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'grid_media_radius',
 			[
 				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
@@ -3686,7 +3703,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 
 		$this->add_control_overlay_border_width();
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'overlay_radius',
 			[
 				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
@@ -9269,7 +9286,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 		$popup_notification_animation = isset($this->get_settings_for_display()['popup_notification_animation']) ? $this->get_settings_for_display()['popup_notification_animation'] : '';
 		$popup_notification_fade_out_in = isset($this->get_settings_for_display()['popup_notification_fade_out_in']) ? $this->get_settings_for_display()['popup_notification_fade_out_in'] : '';
 		$popup_notification_animation_duration = isset($this->get_settings_for_display()['popup_notification_animation_duration']) ? $this->get_settings_for_display()['popup_notification_animation_duration'] : '';
-
+		
 		$attributes = [
 			'rel="nofollow"',
 			'class="'. esc_attr($button_class) .' wpr-button-effect '. esc_attr($add_to_cart_animation) .' '. (!$product->is_in_stock() && 'simple' === $product->get_type() ? 'wpr-atc-not-clickable' : '').'"',
@@ -9277,9 +9294,9 @@ class Wpr_Woo_Grid extends Widget_Base {
 			'data-product_id="'. esc_attr($product->get_id()) .'"',
 			'data-product_sku="'. esc_attr($product->get_sku()) .'"',
 			'data-atc-popup="'. esc_attr( $settings['element_show_added_tc_popup'] ) .'"',
-			'data-atc-animation="'. $popup_notification_animation  .'"',
-			'data-atc-fade-out-in="'. $popup_notification_fade_out_in  .'"',
-			'data-atc-animation-time="'. $popup_notification_animation_duration  .'"'
+			'data-atc-animation="'. esc_attr($popup_notification_animation)  .'"',
+			'data-atc-fade-out-in="'. esc_attr($popup_notification_fade_out_in)  .'"',
+			'data-atc-animation-time="'. esc_attr($popup_notification_animation_duration)  .'"'
 		];
 
 		$button_HTML = '';
@@ -9402,10 +9419,10 @@ class Wpr_Woo_Grid extends Widget_Base {
 		$wishlist_attributes = [
 			'data-wishlist-url' => get_option('wpr_wishlist_page') ? get_option('wpr_wishlist_page') : '',
 			'data-atw-popup="'. $settings['element_show_added_to_wishlist_popup']  .'"',
-			'data-atw-animation="'. $popup_notification_animation  .'"',
-			'data-atw-fade-out-in="'. $popup_notification_fade_out_in  .'"',
-			'data-atw-animation-time="'. $popup_notification_animation_duration  .'"',
-			'data-open-in-new-tab="'. $settings['element_open_links_in_new_tab'] .'"'
+			'data-atw-animation="'. esc_attr($popup_notification_animation)  .'"',
+			'data-atw-fade-out-in="'. esc_attr($popup_notification_fade_out_in)  .'"',
+			'data-atw-animation-time="'. esc_attr($popup_notification_animation_duration)  .'"',
+			'data-open-in-new-tab="'. esc_attr($settings['element_open_links_in_new_tab']) .'"'
 		];
 
 		$button_HTML = '';
@@ -9489,10 +9506,10 @@ class Wpr_Woo_Grid extends Widget_Base {
 		$compare_attributes = [
 			'data-compare-url' => get_option('wpr_compare_page') ? get_option('wpr_compare_page') : '',
 			'data-atcompare-popup="'. $settings['element_show_added_to_compare_popup']  .'"',
-			'data-atcompare-animation="'. $popup_notification_animation  .'"',
-			'data-atcompare-fade-out-in="'. $popup_notification_fade_out_in  .'"',
-			'data-atcompare-animation-time="'. $popup_notification_animation_duration  .'"',
-			'data-open-in-new-tab="'. $settings['element_open_links_in_new_tab'] .'"'
+			'data-atcompare-animation="'. esc_attr($popup_notification_animation)  .'"',
+			'data-atcompare-fade-out-in="'. esc_attr($popup_notification_fade_out_in)  .'"',
+			'data-atcompare-animation-time="'. esc_attr($popup_notification_animation_duration)  .'"',
+			'data-open-in-new-tab="'. esc_attr($settings['element_open_links_in_new_tab']) .'"'
 		];
 
 		$button_HTML = '';
@@ -9945,10 +9962,22 @@ class Wpr_Woo_Grid extends Widget_Base {
 
 		// All Filters
 		} else {
+			$exclude_ids = [];
+
+			if ( 'yes' === $settings['filters_hide_uncategorized'] ) {
+				$uncategorized = get_term_by('slug', 'uncategorized', $taxonomy);
+
+				if ($uncategorized && !is_wp_error($uncategorized)) {
+					$exclude_ids[] = $uncategorized->term_id;
+				}
+			}
+
 			$all_filters = get_terms([
-				'taxonomy' => $taxonomy,
-				'hide_empty' => false, // Include empty taxonomies
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => false,
+				'exclude'    => $exclude_ids,
 			]);
+			
 			$parent_filters = [];
 
 			foreach ( $all_filters as $key => $filter ) {

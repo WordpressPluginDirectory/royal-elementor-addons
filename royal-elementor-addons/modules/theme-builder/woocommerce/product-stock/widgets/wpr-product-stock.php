@@ -32,6 +32,10 @@ class Wpr_Product_Stock extends Widget_Base {
 		return [ 'woocommerce', 'royal', 'product-stock', 'product', 'stock' ];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	protected function register_controls() {
 
 		$this->start_controls_section(
@@ -247,6 +251,26 @@ class Wpr_Product_Stock extends Widget_Base {
 				]
 			]
 		);
+		
+		$this->add_control(
+			'product_stock_vertical_align',
+			[
+				'label' => esc_html__( 'Vertical Alignment', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'top' => esc_html__( 'Top', 'wpr-addons' ),
+					'middle' => esc_html__( 'Middle', 'wpr-addons' ),
+					'bottom' => esc_html__( 'Bottom', 'wpr-addons' ),
+					'text-top' => esc_html__( 'Text Top', 'wpr-addons' ),
+					'text-bottom' => esc_html__( 'Text Bottom', 'wpr-addons' ),
+				],
+				'default' => 'text-bottom',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-product-stock-icon' => 'vertical-align: {{VALUE}};',
+					'{{WRAPPER}} .wpr-product-stock-icon svg' => 'vertical-align: {{VALUE}};',
+				],
+			]
+		);
 
 		$this->add_responsive_control(
 			'product_icon_gutter',
@@ -369,10 +393,22 @@ class Wpr_Product_Stock extends Widget_Base {
             echo '<p class="' . esc_attr($availability['class']) . '">';
 
             if(!empty($icon)) {
-                \Elementor\Icons_Manager::render_icon($icon, ['aria-hidden' => 'true']);
+				if ( \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_font_icon_svg' ) ) {
+					ob_start();
+					\Elementor\Icons_Manager::render_icon($icon, ['aria-hidden' => 'true']);
+					$icon_html = ob_get_clean();
+
+					echo '<span class="wpr-product-stock-icon">';
+						echo $icon_html;
+					echo '</span>';
+				} else {
+					\Elementor\Icons_Manager::render_icon($icon, ['aria-hidden' => 'true']);
+				}
             }
-            
+
             echo apply_filters( 'woocommerce_stock_html', $stock_html, wp_kses_post($availability['availability']), $product );
+
+			echo '</p>';
         echo '</div>';
     }
 }

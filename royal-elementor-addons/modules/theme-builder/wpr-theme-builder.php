@@ -239,7 +239,7 @@ class Wpr_Theme_Builder extends Elementor\Core\Base\Document {
 			'submit_preview_changes',
             [
                 'type' => Controls_Manager::RAW_HTML,
-                'raw' => '<div class="elementor-update-preview-button editor-wpr-preview-update"><span>Click the Publish Button, then Click the Apply Button</span><button class="elementor-button elementor-button-success" onclick="elementor.reloadPreview();">Apply</button>',
+                'raw' => '<div class="elementor-update-preview-button editor-wpr-preview-update"><span>Click the Publish Button, then Click the Apply Button</span><button class="elementor-button elementor-button-success" onclick="elementor.reloadPreview();">Apply</button></div>',
                 'separator' => 'after'
             ]
 		);
