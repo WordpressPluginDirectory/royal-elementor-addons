@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1014
+Stable tag: 1.7.1016
 Requires at least: 5.0
 Tested up to: 6.7.2
 Requires PHP: 5.6
@@ -453,10 +453,13 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
-= Royal Elementor Addons v1.7.1015 - 2025-3-31 =
+= Royal Elementor Addons v1.7.1016 - 2025-4-02 =
+* ADDED: Travel Agency v3 - Elementor Template Kit - [**Travel Agency V3**](https://demosites.royal-elementor-addons.com/travel-agency-v3/?ref=rea-wpo-pp-details-tab).
+
+= Royal Elementor Addons v1.7.1014 - 2025-3-31 =
 * FIXED: Minor Bugs
 
-= Royal Elementor Addons v1.7.1014 - 2025-3-28 =
+= Royal Elementor Addons v1.7.1013 - 2025-3-28 =
 * FIXED: Minor Bugs
 
 = Royal Elementor Addons v1.7.1012 - 2025-3-14 =

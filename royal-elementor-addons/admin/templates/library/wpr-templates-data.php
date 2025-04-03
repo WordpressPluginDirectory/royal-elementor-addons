@@ -803,7 +803,7 @@ class WPR_Templates_Data {
 			],
 			'travel-agency' => [
 				'v1' => [
-					'name' => 'Travel agency',
+					'name' => 'Travel agency V1',
 					'pages' => 'home,tours,gallery,services,reviews,about,contact,',
 					'plugins' => '{"contact-form-7":'. $is_cf7_active .'}',
 					'tags' => 'nature influencer travel content slider tourism influencers creator travel forest slider generic multipurpose national-park nature-park sanctuary wilderness hitchhiking mountain river lakes outdoors travel agency company office travel services',
@@ -813,6 +813,18 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => '',
 					'priority' => 61,
+				],
+				'v3' => [
+					'name' => 'Travel agency V3',
+					'pages' => 'home,about,packages,packages-details,destination,destination-details,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'nature influencer travel content slider tourism influencers creator travel forest slider generic multipurpose national-park nature-park sanctuary wilderness hitchhiking mountain river lakes outdoors travel agency company office travel services tourism',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 62,
 				],
 			],
 			'home-care' => [
