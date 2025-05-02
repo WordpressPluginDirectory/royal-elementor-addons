@@ -35,7 +35,7 @@ class WPR_Date extends Widget_Base {
 		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
 	}
 
-    protected function _register_controls() {
+    protected function register_controls() {
         $this->start_controls_section(
             'section_content',
             [

@@ -49,7 +49,7 @@ class WPR_WooCommerce_Config {
 		
 		add_action( 'init', [$this, 'add_wishlist_endpoint'] );
 		
-		if ( 'on' == get_option('wpr_add_wishlist_to_my_account', 'on') ) {
+		if ( 'on' == get_option('wpr_add_wishlist_to_my_account', 'on') && defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
 			add_filter( 'woocommerce_account_menu_items', [$this, 'add_wishlist_to_my_account'] );
 		}
 

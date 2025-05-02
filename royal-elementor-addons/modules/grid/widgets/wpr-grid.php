@@ -8498,9 +8498,18 @@ class Wpr_Grid extends Widget_Base {
 				if ( $_GET['wpr_select_category'] != '0' ) {
 					// Get category from URL
 					$category = sanitize_text_field($_GET['wpr_select_category']);
+					$taxonomy_name = 'category';
+
+					$term = get_term($category);
+
+					// Check if the term is valid
+					if (!is_wp_error($term)) {
+						// Get the taxonomy name
+						$taxonomy_name = $term->taxonomy;
+					}
 				
 					array_push( $tax_query, [
-						'taxonomy' => 'category',
+						'taxonomy' => $taxonomy_name,
 						'field' => 'id',
 						'terms' => $category
 					] );

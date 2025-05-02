@@ -1187,10 +1187,8 @@
 								// if ( scrollPos >= sectionPos && scrollPos < sectionPos + sectionHeight ) {
 									// Get the id of the section
 									var sectionId = $(this).attr("id");
-							
 									// Remove the active class from all links
 									$navLinks.removeClass("wpr-onepage-active-item");
-							
 									// Add the active class to the corresponding link
 									$navLinks.filter(function(){
 										return $(this).find('a[href*=' + sectionId + ']').length;
@@ -3942,7 +3940,9 @@
 					
 					if ( dataActions.hasOwnProperty( 'message' ) ) {
 						if ( ! $scope.children( '.elementor-widget-container' ).children( '.wpr-countdown-message' ).length && ! $scope.children( '.wpr-countdown-message' ).length ) {
-							countDownWrap.after( '<div class="wpr-countdown-message">'+ dataActions['message'] +'</div>' );
+							// Sanitize message to prevent XSS
+							var sanitizedMessage = sanitizeHTMLContent(dataActions['message']);
+							countDownWrap.after( '<div class="wpr-countdown-message">'+ sanitizedMessage +'</div>' );
 						}
 					}
 					
@@ -3965,6 +3965,42 @@
 
 				}
 				
+			}
+
+			// Add this helper function to sanitize HTML content
+			function sanitizeHTMLContent(html) {
+				// Create a temporary DOM element
+				var tempDiv = document.createElement('div');
+				tempDiv.innerHTML = html;
+				
+				// Remove all script tags
+				var scripts = tempDiv.getElementsByTagName('script');
+				while(scripts.length > 0) {
+					scripts[0].parentNode.removeChild(scripts[0]);
+				}
+				
+				// Find all elements to remove potential malicious attributes
+				var allElements = tempDiv.getElementsByTagName('*');
+				for (var i = 0; i < allElements.length; i++) {
+					// Remove event handler attributes
+					var attrs = allElements[i].attributes;
+					for (var j = attrs.length - 1; j >= 0; j--) {
+						var attrName = attrs[j].name;
+						// Remove all on* event handlers
+						if (attrName.substring(0, 2) === 'on') {
+							allElements[i].removeAttribute(attrName);
+						}
+						// Remove javascript: URLs
+						if (attrName === 'href' || attrName === 'src') {
+							var value = attrs[j].value;
+							if (value.toLowerCase().indexOf('javascript:') === 0) {
+								allElements[i].removeAttribute(attrName);
+							}
+						}
+					}
+				}
+				
+				return tempDiv.innerHTML;
 			}
 
 		}, // End widgetCountDown
@@ -9113,7 +9149,7 @@
 							grecaptcha.execute(WprConfig.site_key, {action: 'submit'}).then(function(token) {
 								// Set the token value to the hidden input field
 								$scope.find('#g-recaptcha-response').val(token);
-			
+	
 								// Perform the AJAX call after the token is set
 								$.ajax({
 									type: 'POST',

@@ -1500,6 +1500,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 				'default' => '#555555',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-ticker-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .wpr-ticker-title-inner' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .wpr-ticker-title:after' => 'color: {{VALUE}};',
 				],
 			]
@@ -1521,6 +1522,7 @@ class Wpr_Content_Ticker extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .wpr-ticker-title:hover a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .wpr-ticker-title-inner:hover' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .wpr-ticker-title:after' => 'color: {{VALUE}};',
 				],
 			]
@@ -1559,6 +1561,24 @@ class Wpr_Content_Ticker extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-ticker-image' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
+			]
+		);
+
+		$this->add_control(
+			'content_image_border_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-ticker-image img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				]
 			]
 		);
 
