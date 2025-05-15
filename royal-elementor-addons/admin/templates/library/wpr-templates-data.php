@@ -689,7 +689,7 @@ class WPR_Templates_Data {
 			],
 			'magazine-blog' => [
 				'v1' => [
-					'name' => 'Magazine Blog v1',
+					'name' => 'News Magazine Blog v1',
 					'pages' => 'home,home-v1,home-v2,category,about,contact,',
 					'plugins' => '{"contact-form-7":'. $is_cf7_active .'}',
 					'tags' => 'blogger blog posts content news newspaper journal magazine business blog publishing theme builder sports grid slider magazine',
@@ -698,10 +698,10 @@ class WPR_Templates_Data {
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'trending',
-					'priority' => 60,
+					'priority' => 7,
 				],
 				'v2' => [
-					'name' => 'Magazine Blog v2',
+					'name' => 'News Magazine Blog v2',
 					'pages' => 'home,home-v1,home-v2,category,about,contact,',
 					'plugins' => '{"contact-form-7":'. $is_cf7_active .'}',
 					'tags' => 'blogger blog posts content news newspaper journal magazine business blog publishing theme builder sports grid slider magazine',
@@ -713,7 +713,7 @@ class WPR_Templates_Data {
 					'priority' => 50,
 				],
 				'v3' => [
-					'name' => 'Magazine Blog v3',
+					'name' => 'News Magazine Blog v3',
 					'pages' => 'home,category,about,contact,',
 					'plugins' => '{"contact-form-7":'. $is_cf7_active .'}',
 					'tags' => 'blogger blog posts content news newspaper journal magazine business blog publishing theme builder sports grid slider magazine',
@@ -725,7 +725,7 @@ class WPR_Templates_Data {
 					'priority' => 30,
 				],
 				'v4' => [
-					'name' => 'Magazine Blog v4',
+					'name' => 'News Magazine Blog v4',
 					'pages' => 'home,home-v1,home-v2,home-v3,category,shop,cart,mega-menu-1,mega-menu-2,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
 					'tags' => 'blogger blog posts content news newspaper journal magazine business blog publishing theme builder sports grid slider magazine',
@@ -737,7 +737,7 @@ class WPR_Templates_Data {
 					'priority' => 6,
 				],
 				'v6' => [
-					'name' => 'Magazine Blog v6',
+					'name' => 'News Magazine Blog v6',
 					'pages' => 'home,category,single-blog,contact,',
 					'plugins' => '{}',
 					'tags' => 'blogger blog posts content news newspaper journal magazine business blog publishing theme builder sports grid slider magazine',
@@ -749,7 +749,7 @@ class WPR_Templates_Data {
 					'priority' => 6,
 				],
 				'v7' => [
-					'name' => 'Magazine Blog v7',
+					'name' => 'News Magazine Blog v7',
 					'pages' => 'home,home-v2,home-v3,home-v4,home-v5,category,single-blog,contact,',
 					'plugins' => '{}',
 					'tags' => 'blogger blog posts content news newspaper journal magazine business blog publishing theme builder sports grid slider magazine',
@@ -760,6 +760,31 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 6,
 				],
+				'v8' => [
+					'name' => 'News Magazine Blog v8',
+					'pages' => 'home,category,author,about,contact,',
+					'plugins' => '{}',
+					'tags' => 'blog blogger posts content news newspaper journal magazine business blog publishing theme builder technology culture grid personal',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 5,
+				],
+				'v9' => [
+					'name' => 'News Magazine Blog v9',
+					'pages' => 'home,category,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'blog posts content news newspaper journal magazine business blog publishing theme builder politics business grid magazine',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 5,
+				],
+
 			],
 			'yoga' => [
 				'v1' => [
@@ -2196,6 +2221,18 @@ class WPR_Templates_Data {
 				'name' => 'Magazine Blog v7',
 				'pages' => ['home','home-v2','home-v3','home-v4','home-v5','contact'],
 				'preview' => ['home','home-v2','home-v3','home-v4','home-v5','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'magazine-blog-v8' => [
+				'name' => 'Magazine Blog v8',
+				'pages' => ['home','category','author','about','contact'],
+				'preview' => ['home','category','author','about','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'magazine-blog-v9' => [
+				'name' => 'Magazine Blog v9',
+				'pages' => ['home','category','single-blog','contact'],
+				'preview' => ['home','category','single-blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'developer-portfolio-v1' => [
