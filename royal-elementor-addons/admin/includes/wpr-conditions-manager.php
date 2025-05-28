@@ -48,8 +48,10 @@ class WPR_Conditions_Manager {
         	}
         }
 
-        if ( !current_user_can('administrator') && ('maintenance' == get_option('elementor_maintenance_mode_mode') || 'coming_soon' == get_option('elementor_maintenance_mode_mode')) ) {
-            $template = NULL;
+        if ( 'on' === get_option('wpr_hide_head_foot_on_maintenenace', 'on') ) {
+            if ( !current_user_can('administrator') && ('maintenance' == get_option('elementor_maintenance_mode_mode') || 'coming_soon' == get_option('elementor_maintenance_mode_mode')) ) {
+                $template = NULL;
+            }
         }
 
 	    return $template;

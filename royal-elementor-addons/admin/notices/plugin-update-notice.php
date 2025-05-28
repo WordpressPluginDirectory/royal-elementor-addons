@@ -12,7 +12,7 @@ class WprPluginNotice {
 
         if ( current_user_can('administrator') ) {
 
-            if ( !get_option('wpr_plugin_update_dismiss_notice_' . get_plugin_data(WPR_ADDONS__FILE__)['Version']) ) {
+            if ( !get_option('wpr_plugin_update_dismiss_notice' ) ) {
                 add_action( 'admin_init', [$this, 'render_notice'] );
             }
         }
@@ -35,7 +35,7 @@ class WprPluginNotice {
 		  exit; // Get out of here, the nonce is rotten!
 		}
 
-        add_option( 'wpr_plugin_update_dismiss_notice_' . get_plugin_data(WPR_ADDONS__FILE__)['Version'], true );
+        add_option( 'wpr_plugin_update_dismiss_notice', true );
     }
 
     public function render_plugin_update_notice() {

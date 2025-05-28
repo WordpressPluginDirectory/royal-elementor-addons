@@ -73,14 +73,47 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
     
     public function update_submissions_post_meta($post_id) {
-        if (isset($_POST['wpr_submission_changes']) && !empty($_POST['wpr_submission_changes'])) {
+        // Only allow users with edit permissions
+        if ( ! current_user_can('edit_post', $post_id) ) {
+            return;
+        }
+    
+        if ( isset($_POST['wpr_submission_changes']) && ! empty($_POST['wpr_submission_changes']) ) {
             $changes = json_decode(stripslashes($_POST['wpr_submission_changes']), true);
-
-            foreach ($changes as $key => $value) { // Iterate through all changes
-                update_post_meta($post_id, $key, $value);
+    
+            if ( ! is_array($changes) ) {
+                return;
+            }
+    
+            // List of disallowed meta keys
+            $disallowed_keys = [
+                '_elementor_data',
+                '_elementor_controls_usage',
+                '_wp_attached_file',
+                // Add more if needed
+            ];
+    
+            foreach ( $changes as $key => $value ) {
+                // Skip blacklisted keys
+                if ( in_array($key, $disallowed_keys, true) ) {
+                    continue;
+                }
+    
+                // Sanitize key and value
+                $safe_key = sanitize_key($key);
+    
+                if ( is_string($value) ) {
+                    $safe_value = sanitize_text_field($value);
+                } elseif ( is_array($value) ) {
+                    $safe_value = array_map('sanitize_text_field', $value);
+                } else {
+                    $safe_value = sanitize_text_field((string) $value);
+                }
+    
+                update_post_meta($post_id, $safe_key, $safe_value);
             }
         }
-    }
+    }    
  }
 
  new WPR_Form_Builder_Submissions();

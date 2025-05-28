@@ -56,6 +56,7 @@ function is_plugin_installed($file) {
 function wpr_register_addons_settings() {
     // Optimizers
     register_setting ('wpr-settings', 'wpr_hide_banners');
+    register_setting ('wpr-settings', 'wpr_hide_head_foot_on_maintenenace');
 
     // WooCommerce
     register_setting( 'wpr-settings', 'wpr_override_woo_templates' );
@@ -455,6 +456,15 @@ function wpr_addons_settings_page() {
                 </div>
                 <input type="checkbox" name="wpr_hide_banners" id="wpr_hide_banners" <?php echo checked( get_option('wpr_hide_banners'), 'on', false ); ?>>
                 <label for="wpr_hide_banners"></label>
+            </div> 
+
+            <div class="wpr-woo-template-info">
+                <div class="wpr-woo-template-title">
+                    <h4>Hide Header & Footer</h4>
+                    <span>Disable Header & Footer on Elementor Maintenance/Coming Soon Mode</span>
+                </div>
+                <input type="checkbox" name="wpr_hide_head_foot_on_maintenenace" id="wpr_hide_head_foot_on_maintenenace" <?php echo checked( get_option('wpr_hide_head_foot_on_maintenenace', 'on'), 'on', true ); ?>>
+                <label for="wpr_hide_head_foot_on_maintenenace"></label>
             </div> 
         </div>
 

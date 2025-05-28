@@ -96,7 +96,7 @@ class WprRatingNotice {
                             <h3>Thank you for using Royal Elementor Addons to build this website!</h3>
                             <p style="">Could you please do us a BIG favor and give it a 5-star rating on WordPress? Just to help us spread the word and boost our motivation.</p>
                             <p>
-                                <a href="https://wordpress.org/support/plugin/royal-elementor-addons/reviews/?filter=5#new-post" target="_blank" class="wpr-you-deserve-it button button-primary">OK, you deserve it!</a>
+                                <a href="https://wordpress.org/support/plugin/royal-elementor-addons/reviews/" target="_blank" class="wpr-you-deserve-it button button-primary">OK, you deserve it!</a>
                                 <a class="wpr-maybe-later"><span class="dashicons dashicons-clock"></span> Maybe Later</a>
                                 <a class="wpr-already-rated"><span class="dashicons dashicons-yes"></span> I Already did</a>
                             </p>

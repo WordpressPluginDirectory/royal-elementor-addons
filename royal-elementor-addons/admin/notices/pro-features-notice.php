@@ -14,12 +14,12 @@ class WprProFeaturesNotice {
 
             if ( current_user_can('administrator') ) {
 
-                if ( !get_option('wpr_pro_features_dismiss_notice_' . get_plugin_data(WPR_ADDONS__FILE__)['Version']) ) {
+                if ( !get_option('wpr_pro_features_dismiss_notice' ) ) {
                     add_action( 'admin_init', [$this, 'render_notice'] );
                 }
             }
 
-            if ( is_admin() && !get_option('wpr_pro_features_dismiss_notice_' . get_plugin_data(WPR_ADDONS__FILE__)['Version']) ) {
+            if ( is_admin() && !get_option('wpr_pro_features_dismiss_notice' ) ) {
                 add_action( 'admin_head', [$this, 'enqueue_scripts' ] );
             }
 
@@ -38,7 +38,7 @@ class WprProFeaturesNotice {
 		  exit; // Get out of here, the nonce is rotten!
 		}
 
-        add_option( 'wpr_pro_features_dismiss_notice_' . get_plugin_data(WPR_ADDONS__FILE__)['Version'], true );
+        add_option( 'wpr_pro_features_dismiss_notice', true );
         return 'responsetext';
     }
 

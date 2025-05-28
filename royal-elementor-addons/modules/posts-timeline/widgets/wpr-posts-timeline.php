@@ -350,6 +350,42 @@ class Wpr_Posts_Timeline extends Widget_Base {
 				]
 			]
 		);
+
+		$this->add_control(
+			'extra_label_source',
+			[
+				'label' => esc_html__( 'Extra Label Source', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'publish_date',
+				'options' => [
+					'publish_date' => esc_html__( 'Publish Date', 'wpr-addons' ),
+					'meta_field' => esc_html__( 'Meta Field', 'wpr-addons' ),
+				],
+				'condition' => [
+					'timeline_content' => 'dynamic',
+					'show_extra_label' => 'yes',
+				]
+			]
+		);
+		
+        $this->add_control(
+			'meta_field_key',
+			[
+				'label' => esc_html__( 'Select Custom Field', 'wpr-addons' ),
+				// 'type' => Controls_Manager::SELECT2,
+				'type' => 'wpr-ajax-select2',
+				'label_block' => true,
+				'default' => 'default',
+				'description' => '<strong>Note:</strong> This option only accepts String(Text) or Numeric Custom Field Values.',
+				// 'options' => $meta,
+				'options' => 'ajaxselect2/get_custom_meta_keys',
+				'condition' => [
+					'timeline_content' => 'dynamic',
+					'show_extra_label' => 'yes',
+					'extra_label_source' => 'meta_field',
+				]
+			]
+		);
 		
 		$this->add_control_slides_to_show();
 
@@ -1759,6 +1795,42 @@ class Wpr_Posts_Timeline extends Widget_Base {
 				'separator' => 'before',
 				'condition' => [
 					'timeline_content' => 'dynamic'
+				]
+			]
+		);
+
+		$this->add_control(
+			'date_source',
+			[
+				'label' => esc_html__( 'Date Source', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'publish_date',
+				'options' => [
+					'publish_date' => esc_html__( 'Publish Date', 'wpr-addons' ),
+					'meta_field' => esc_html__( 'Meta Field', 'wpr-addons' ),
+				],
+				'condition' => [
+					'timeline_content' => 'dynamic',
+					'show_date' => 'yes',
+				]
+			]
+		);
+		
+        $this->add_control(
+			'date_field_key',
+			[
+				'label' => esc_html__( 'Select Custom Field', 'wpr-addons' ),
+				// 'type' => Controls_Manager::SELECT2,
+				'type' => 'wpr-ajax-select2',
+				'label_block' => true,
+				'default' => 'default',
+				'description' => '<strong>Note:</strong> This option only accepts String(Text) or Numeric Custom Field Values.',
+				// 'options' => $meta,
+				'options' => 'ajaxselect2/get_custom_meta_keys',
+				'condition' => [
+					'timeline_content' => 'dynamic',
+					'show_date' => 'yes',
+					'date_source' => 'meta_field',
 				]
 			]
 		);
@@ -5451,9 +5523,11 @@ class Wpr_Posts_Timeline extends Widget_Base {
 					echo '<article class="wpr-timeline-entry '. esc_attr($this->content_alignment) .'" data-counter="'. esc_attr($countItem) .'">';
                         
                         if ( 'yes' === $settings['show_extra_label'] ) {
-                            echo '<time class="wpr-extra-label" data-aos="'. esc_attr($this->animation) .'" data-aos-left="'. esc_attr($this->animation_loadmore_left) .'" data-aos-right="'. esc_attr($this->animation_loadmore_right) .'" data-animation-offset="'. esc_attr($settings['animation_offset']) .'" data-animation-duration="'. esc_attr($settings['aos_animation_duration']) .'">
-                                <span class="wpr-label">'. esc_html__(get_the_date($settings['date_format'])) .'</span>
-                            </time>';
+                            echo '<time class="wpr-extra-label" data-aos="'. esc_attr($this->animation) .'" data-aos-left="'. esc_attr($this->animation_loadmore_left) .'" data-aos-right="'. esc_attr($this->animation_loadmore_right) .'" data-animation-offset="'. esc_attr($settings['animation_offset']) .'" data-animation-duration="'. esc_attr($settings['aos_animation_duration']) .'">';
+                                echo '<span class="wpr-label">';
+								$this->date_and_extra_label($settings, 'extra_label_source', 'meta_field_key');
+								echo '</span>';
+                            echo'</time>';
                         }
 
 						echo '<div class="wpr-timeline-entry-inner">';
@@ -5470,9 +5544,13 @@ class Wpr_Posts_Timeline extends Widget_Base {
 
 									echo  'yes' === $settings['show_title'] && 'yes' === $settings['title_overlay'] ? '<p class="wpr-title-wrap"><a class="wpr-title" href="'. esc_url(get_the_permalink()) .'">'. esc_html__(get_the_title()) .'</a></p>' : '';
 
-									echo 'yes' === $settings['show_date'] && 'yes' === $settings['date_overlay'] ? '<div class="wpr-inner-date-label">
-										'. esc_html__(get_the_date($settings['date_format'])) .'
-									</div>' : '';
+									if ( 'yes' === $settings['show_date'] && 'yes' === $settings['date_overlay'] ) {
+
+										echo '<div class="wpr-inner-date-label">';
+										$this->date_and_extra_label($settings, 'date_source', 'date_field_key');
+										echo '</div>';
+		
+									}
 									
 									echo !empty(get_the_content()) && 'yes' === $settings['show_description'] && 'yes' === $settings['description_overlay'] ? '<div class="wpr-description">'. esc_html__(wp_trim_words(get_the_content(), $settings['excerpt_count'])) .'</div>' : '';
 									
@@ -5486,9 +5564,14 @@ class Wpr_Posts_Timeline extends Widget_Base {
 
 									echo  'yes' === $settings['show_title'] && 'yes' !== $settings['title_overlay'] ? '<p class="wpr-title-wrap"><a class="wpr-title"  href="'. esc_url(get_the_permalink()) .'">'. esc_html__(get_the_title()) .'</a></p>' : '';
 
-									echo 'yes' === $settings['show_date'] && 'yes' !== $settings['date_overlay'] ? '<div class="wpr-inner-date-label">
-										'. esc_html__(get_the_date($settings['date_format'])) .'
-									</div>' : '';
+
+									if ( 'yes' === $settings['show_date'] && 'yes' !== $settings['date_overlay'] ) {
+
+										echo '<div class="wpr-inner-date-label">';
+										$this->date_and_extra_label($settings, 'date_source', 'date_field_key');
+										echo '</div>';
+		
+									}
 
 									echo !empty(get_the_content()) && 'yes' === $settings['show_description']  && 'yes' !== $settings['description_overlay'] ? '<div class="wpr-description">'. esc_html__(wp_trim_words(get_the_content(), $settings['excerpt_count'])) .'</div>' : '';
 
@@ -5640,10 +5723,14 @@ class Wpr_Posts_Timeline extends Widget_Base {
 						echo ($settings['show_overlay'] === 'yes' && !empty(get_the_post_thumbnail_url())) ? '<div class="wpr-timeline-story-overlay '. esc_attr($this->animation_class) .'">' : '';
 	
 							echo 'yes' === $settings['show_title'] && 'yes' === $settings['title_overlay'] ? '<p class="wpr-title-wrap" ><a class="wpr-title" href="'. esc_url(get_the_permalink()) .'">'. esc_html__(get_the_title()) .'</a></p>' : '';
-	
-							echo 'yes' === $settings['show_date'] && 'yes' === $settings['date_overlay'] ? '<div class="wpr-inner-date-label">
-							'. esc_html__(get_the_date($settings['date_format'])) .'
-							</div>' : '';
+
+							if ( 'yes' === $settings['show_date'] && 'yes' === $settings['date_overlay'] ) {
+
+								echo '<div class="wpr-inner-date-label">';
+								$this->date_and_extra_label($settings, 'date_source', 'date_field_key');
+								echo '</div>';
+
+							}
 	
 							echo !empty(get_the_content()) && 'yes' === $settings['show_description'] && 'yes' === $settings['description_overlay'] ? '<div class="wpr-description">'. esc_html__(wp_trim_words(get_the_content(), $settings['excerpt_count'])) .'</div>' : '';
 							
@@ -5654,10 +5741,16 @@ class Wpr_Posts_Timeline extends Widget_Base {
 						
 						echo 'yes' !== $settings['title_overlay'] && 'yes' === $settings['show_title'] || 'yes' !== $settings['description_overlay'] && 'yes' === $settings['show_description'] || 'yes' === $settings['show_date'] && 'yes' !== $settings['date_overlay'] || 'yes' === $this->show_readmore && 'yes' !== $settings['readmore_overlay']  ? '<div class="wpr-timeline-content-wrapper">' : '';
 							echo 'yes' === $settings['show_title'] && 'yes' !== $settings['title_overlay'] ? '<p class="wpr-title-wrap"><a class="wpr-title" href="'. esc_url(get_the_permalink()) .'">'. esc_html__(get_the_title()) .'</a></p>' : '';
-		
-							echo 'yes' === $settings['show_date'] && 'yes' !== $settings['date_overlay'] ? '<div class="wpr-inner-date-label">
-							'. esc_html__(get_the_date($settings['date_format'])) .'
-							</div>' : '';
+
+							if ( 'yes' === $settings['show_date'] && 'yes' !== $settings['date_overlay'] ) {
+
+								echo '<div class="wpr-inner-date-label">';
+								
+								$this->date_and_extra_label($settings, 'date_source', 'date_field_key');
+
+								echo '</div>';
+
+							}
 		
 							echo !empty(get_the_content()) && 'yes' === $settings['show_description'] && 'yes' !== $settings['description_overlay'] ? '<div class="wpr-description">'. esc_html__(wp_trim_words(get_the_content(), $settings['excerpt_count'])) .'</div>' : '';
 		
@@ -5672,11 +5765,11 @@ class Wpr_Posts_Timeline extends Widget_Base {
 						echo '</div>';
 	
 						if ( 'yes' === $settings['show_extra_label'] ) {	
-							echo '<div class="wpr-extra-label">
-								<span class="wpr-label">
-								'. esc_html__(get_the_date($settings['date_format'])) .'
-								</span>
-							</div>';
+							echo '<div class="wpr-extra-label">';
+								echo '<span class="wpr-label">';
+								$this->date_and_extra_label($settings, 'extra_label_source', 'meta_field_key');
+								echo '</span>';
+							echo '</div>';
 						}
 
 						echo '<div class="wpr-main-line-icon wpr-icon">';
@@ -5712,6 +5805,27 @@ class Wpr_Posts_Timeline extends Widget_Base {
 		$post_types['pro-rl'] = esc_html__( 'Related Query (Pro)', 'wpr-addons' );
 		
 		return $post_types;
+	}
+
+	public function date_and_extra_label($settings, $source, $field_key) {
+		if ( isset($settings[$source]) && 'meta_field' === $settings[$source] ) {
+			$meta_type = get_post_meta( get_the_ID(), $settings[$field_key] . '_type', true );
+
+			if ( empty($meta_type) ) {
+				$meta_value = get_post_meta( get_the_ID(), $settings[$field_key], true );
+				if ( strtotime($meta_value) !== false ) {
+					$meta_type = 'date';
+				}
+			}
+
+			if ( 'meta_field' === $settings[$source] && 'date' === $meta_type ) {
+				echo esc_html__( date( $settings['date_format'], strtotime( $meta_value ) ) );
+			} else {
+				echo esc_html__( $meta_value );
+			}
+		} else {
+			echo esc_html__( get_the_date( $settings['date_format'] ) );
+		}
 	}
 
 	protected function render() {

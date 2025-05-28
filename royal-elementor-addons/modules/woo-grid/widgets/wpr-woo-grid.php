@@ -8490,8 +8490,11 @@ class Wpr_Woo_Grid extends Widget_Base {
 			$settings[ 'query_offset' ] = 0;
 		}
 		
-		$query_posts_per_page = $settings['query_posts_per_page'];
-		if ( empty($query_posts_per_page) ) {
+		if ( 'current' !== $settings['query_selection'] ) {
+			$query_posts_per_page = $settings['query_posts_per_page'];
+		}
+
+		if (!isset($query_posts_per_page) || empty($query_posts_per_page) ) {
 			$query_posts_per_page = -1;
 		}
 		
@@ -8564,7 +8567,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 					'meta_query' => $meta_query
 				);
 			} else {
-				$args['post_type'] = ['none'];
+				$args['post_type'] = 'none';
 			}
 		}
 
@@ -10337,6 +10340,8 @@ class Wpr_Woo_Grid extends Widget_Base {
 
 		if ( 'current' !== $settings[ 'query_selection' ] ) {
 			$layout_settings['query_posts_per_page'] = $settings['query_posts_per_page'];
+		} else {
+			$layout_settings['query_selection'] = $settings['query_selection'];
 		}
 
 		if ( 'list' === $settings['layout_select'] ) {

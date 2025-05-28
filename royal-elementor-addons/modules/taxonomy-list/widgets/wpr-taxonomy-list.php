@@ -697,7 +697,7 @@ class Wpr_Taxonomy_List extends Widget_Base {
 	
 				foreach ($grand_children as $term) :
 					$hidden_class = $settings['show_sub_categories_on_click'] == 'yes' ? ' wpr-sub-hidden' : '';
-					if ( $term->term_id == get_queried_object()->term_taxonomy_id && 'yes' == $settings['highlight_active'] ) {
+					if ( !empty(get_queried_object()) && ($term->term_id == get_queried_object()->term_taxonomy_id) && 'yes' == $settings['highlight_active'] ) {
 						$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy wpr-taxonomy-active' . $hidden_class . '"' : '';
 					} else {
 						$sub_class = $term->parent > 0 ? ' class="wpr-inner-sub-taxonomy' . $hidden_class . '"' : '';

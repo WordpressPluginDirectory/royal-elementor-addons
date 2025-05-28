@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1020
+Stable tag: 1.7.1022
 Requires at least: 5.0
 Tested up to: 6.8.1
 Requires PHP: 5.6
@@ -453,6 +453,13 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1022 - 2025-5-28 =
+* FIXED: Minor Bugs
+
+= Royal Elementor Addons v1.7.1021 - 2025-5-27 =
+* FIXED: Minor Bugs
+* FIXED: Freemius Security Related Issues
+
 = Royal Elementor Addons v1.7.1020 - 2025-5-21 =
 * ADDED: Auto Parts Store V2 Elementor Templates Kit - [**Auto Parts Store V2**](https://demosites.royal-elementor-addons.com/woo-auto-parts-v2/?ref=rea-wpo-pp-details-tab).
 

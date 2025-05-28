@@ -248,7 +248,10 @@ class Plugin {
 	public function mega_menu_ajax_loading() {
 		$elementor = \Elementor\Plugin::instance();
 		$mega_id = get_post_meta( $_GET['item_id'], 'wpr-mega-menu-item', true);
-		$content = $elementor->frontend->get_builder_content_for_display($mega_id);
+		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true) || get_post_meta($mega_id, '_elementor_template_type', true);
+		$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
+		
+		$content = $elementor->frontend->get_builder_content_for_display($mega_id, $has_css);
 
 		wp_send_json( $content );
 	}
@@ -580,6 +583,11 @@ class Plugin {
 				'select_empty' => esc_html__('Nothing selected', 'wpr-addons'),
 				'file_empty' => esc_html__('Please upload a file', 'wpr-addons'),
 				'recaptcha_error' => esc_html__('Recaptcha Error', 'wpr-addons'),
+				'woo_shop_ppp' => get_option('wpr_woo_shop_ppp'),
+				'woo_shop_cat_ppp' => get_option('wpr_woo_shop_cat_ppp'),
+				'woo_shop_tag_ppp' => get_option('wpr_woo_shop_tag_ppp'),
+				'is_product_category' => function_exists('is_product_category') ? is_product_category() : false,
+				'is_product_tag' => function_exists('is_product_tag') ? is_product_tag() : false,
 				// 'token' => $custom_token
 			]
 		);
