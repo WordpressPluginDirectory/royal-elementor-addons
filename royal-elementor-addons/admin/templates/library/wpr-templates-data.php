@@ -332,6 +332,18 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 1,
 				],
+				'v3' => [
+					'name' => 'Landing Page - Business V3',
+					'pages' => 'home,about,services,features,pricing,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free digital product single-page landing page one page onepage landingpage agency digital app business corporate creative lead capture marketing startup',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 1,
+				],
 			],
 			'landing-page-digital-product' => [
 				'v1' => [
@@ -801,7 +813,7 @@ class WPR_Templates_Data {
 			],
 			'yoga' => [
 				'v1' => [
-					'name' => 'yoga',
+					'name' => 'yoga V1',
 					'pages' => 'home,about,classes,testimonials,contact,',
 					'plugins' => '{"contact-form-7":'. $is_cf7_active .'}',
 					'tags' => 'free personal trainer gym fitness sport yoga stydio yoga trainer exercises workout cardio strength training weightlifting crossfit hiit bodyweight exercises muscle building bodybuilding powerlifting',
@@ -811,6 +823,18 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 100,
+				],
+				'v2' => [
+					'name' => 'Yoga V2',
+					'pages' => 'home,about,classes,team,pricing,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free personal trainer gym fitness meditation health physical sport yoga stydio yoga trainer exercises workout cardio strength training weightlifting crossfit hiit bodyweight exercises muscle building',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 1,
 				],
 			],
 			'nature' => [
@@ -1393,6 +1417,20 @@ class WPR_Templates_Data {
 					'priority' => 161,
 				],
 			],
+			'nutritionist' => [
+				'v1' => [
+					'name' => 'Nutritionist V1',
+					'pages' => 'home,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free nutritionist nutrition health personal coaching lifestyle wellness diet protein muscle strength food weight loss supplements calories',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 2,
+				],
+			],
 			'lawyer' => [
 				'v1' => [
 					'name' => 'Lawyer',
@@ -1419,6 +1457,18 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => '',
 					'priority' => 180,
+				],
+				'v2' => [
+					'name' => 'Medical V2',
+					'pages' => 'home,about,services,our-doctors,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'medical clinic dental health healthcare doctor therapist therapy patient care diagnostics treatment testing wellness treatment cure',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'New',
+					'priority' => 179,
 				],
 			],
 			'digitalagency' => [
@@ -1996,6 +2046,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','shop','about','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'woo-auto-parts-v2' => [
+				'name' => 'Auto Parts Store',
+				'pages' => ['home','shop','shop-v2','shop-list-view','about','cart','compare','wishlist','about','blog','contact'],
+				'preview' => ['home','shop','shop-v2','shop-list-view','about','cart','compare','wishlist','about','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'home-care-v1' => [
 				'name' => 'Home Care',
 				'pages' => ['home','about','appointment','services','blog','contact'],
@@ -2048,6 +2104,12 @@ class WPR_Templates_Data {
 				'name' => 'Medical',
 				'pages' => ['home','about','services','doctors','contact'],
 				'preview' => ['home','about','services','doctors','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+				'medical-v2' => [
+				'name' => 'Medical V2',
+				'pages' => ['home','about','services','our-doctors','faq','blog','contact'],
+				'preview' => ['home','about','services','our-doctors','faq','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'job-listing-v1' => [
@@ -2132,6 +2194,18 @@ class WPR_Templates_Data {
 				'name' => 'Yoga',
 				'pages' => ['home','about','classes','testimonials','contact'],
 				'preview' => ['home','about','classes','testimonials','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'yoga-v2' => [
+				'name' => 'Yoga V2',
+				'pages' => ['home','about','classes','team','pricing','faq','blog','contact'],
+				'preview' => ['home','about','classes','team','pricing','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'nutritionist-v1' => [
+				'name' => 'Nutritionist V1',
+				'pages' => ['home','blog','contact'],
+				'preview' => ['home','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'ecommerce-v1' => [

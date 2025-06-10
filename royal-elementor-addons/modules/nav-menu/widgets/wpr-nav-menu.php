@@ -761,6 +761,16 @@ class Wpr_Nav_Menu extends Widget_Base {
 					 {{WRAPPER}}.wpr-pointer-double-line .wpr-menu-item:before,
 					 {{WRAPPER}}.wpr-pointer-double-line .wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}}.wpr-pointer-border-fx .wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-underline>nav .wpr-menu-item:after,
+					 {{WRAPPER}}.wpr-pointer-overline>nav .wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>nav .wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>nav .wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-border-fx>nav .wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-underline.elementor-widget-container>nav .wpr-menu-item:after,
+					 {{WRAPPER}}.wpr-pointer-overline.elementor-widget-container>nav .wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line.elementor-widget-container>nav .wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line.elementor-widget-container>nav .wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-border-fx.elementor-widget-container>nav .wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
 				],
 				'separator' => 'before',
 			]
@@ -1128,6 +1138,40 @@ class Wpr_Nav_Menu extends Widget_Base {
 					'box_shadow_position',
 				],
 				'selector' => '{{WRAPPER}} .wpr-sub-menu',
+			]
+		);
+
+		$this->add_control(
+			'sub_menu_items_heading',
+			[
+				'label' => esc_html__( 'Sub Menu Items', 'wpr-addons' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'sub_menu_items_border',
+				'fields_options' => [
+					'border' => [
+						'default' => '',
+					],
+					'width' => [
+						'default' => [
+							'top' => '0',
+							'right' => '0',
+							'bottom' => '0',
+							'left' => '0',
+							'isLinked' => true,
+						],
+					],
+					'color' => [
+						'default' => '#E8E8E8',
+					],
+				],
+				'selector' => '{{WRAPPER}} .wpr-sub-menu .menu-item',
 			]
 		);
 

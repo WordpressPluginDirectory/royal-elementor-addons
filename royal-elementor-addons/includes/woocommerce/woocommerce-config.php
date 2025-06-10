@@ -54,7 +54,7 @@ class WPR_WooCommerce_Config {
 		}
 
 		add_action( 'woocommerce_after_register_post_type', [$this, 'remove_deleted_products_from_compare_and_wishlist'] );
-		// GOGA - max & min issue
+		//TODO: GOGA - max & min issue
 		// add_filter( 'woocommerce_quantity_input_args', [$this, 'wpr_custom_quantity_step'], 10, 2 );
 	}
 
@@ -63,9 +63,10 @@ class WPR_WooCommerce_Config {
 	}
 
 	function wpr_custom_quantity_step( $args, $product ) {
-    if ( $args['input_value'] < 8 ) {
-      $args['input_value'] = 8;  // Start from this value
-    }
+		if ( $args['input_value'] < 8 ) {
+			$args['input_value'] = 8;  // Start from this value
+		}
+
 		// $args['max_value'] = 80;  // Maximum value
 		$args['min_value'] = 8;  // Minimum value
 		$args['step'] = 8;  // Increment/decrement by this value

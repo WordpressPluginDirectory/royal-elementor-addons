@@ -77,11 +77,11 @@ class WprPluginSaleNotice {
                             <ul>
                                 <li>
                                     <img src="'. esc_url(WPR_ADDONS_ASSETS_URL) .'img/check-mark.png">
-                                    120+ Designer Made Templates Kit
+                                    140+ Designer Made Templates Kit
                                 </li>
                                 <li>
                                     <img src="'. esc_url(WPR_ADDONS_ASSETS_URL) .'img/check-mark.png">
-                                    90+ Advanced Elementor Widgets
+                                    100+ Advanced Elementor Widgets
                                 </li>
                                 <li>
                                     <img src="'. esc_url(WPR_ADDONS_ASSETS_URL) .'img/check-mark.png">

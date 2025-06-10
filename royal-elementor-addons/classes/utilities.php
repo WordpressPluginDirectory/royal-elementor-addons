@@ -375,6 +375,29 @@ class Utilities {
 				$template = $id;
 			} elseif ( in_array( $page, $conditions)  && !in_array( $page .'/'. $post_id, $conditions) ) {
 				$template = $id;
+			} elseif ( array_filter($conditions, function($condition) use ($page) { return strpos($condition, $page) !== false; }) ) {
+				// Handles Taxonomy Conditions for Single Post/Product (check CPT)
+				$has_additional_slash = array_filter($conditions, function($condition) use ($page) {
+					$page_position = strpos($condition, $page . '/');
+					return $page_position !== false && strpos($condition, '/', $page_position + strlen($page) + 1) !== false;
+				});
+
+				if ($has_additional_slash) {
+					// Extract the taxonomy name and term ID from the condition
+					foreach ($conditions as $condition) {
+						$parts = explode('/', $condition);
+						if (count($parts) >= 3) {
+							$taxonomy_name = $parts[2];
+							$term_id = $parts[3];
+
+							// Check if the $post_id has the term of the specified taxonomy
+							if (has_term($term_id, $taxonomy_name, $post_id)) {
+								$template = $id;
+								break;
+							}
+						}
+					}
+				}
 			}
 
 			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {

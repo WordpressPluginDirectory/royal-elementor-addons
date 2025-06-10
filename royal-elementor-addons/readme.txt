@@ -1,7 +1,7 @@
 === Royal Elementor Addons and Templates ===
 Contributors: WP Royal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1022
+Stable tag: 1.7.1025
 Requires at least: 5.0
 Tested up to: 6.8.1
 Requires PHP: 5.6
@@ -14,7 +14,7 @@ Elementor Post Grid, Portfolio, Woocommerce Grid builder Widgets. Slider, Carous
 
 **Royal Elementor addons** is the most versatile, intuitive, and easy to use [Popular Page Builder](https://wordpress.org/plugins/elementor/) extension. Our goal is to provide you with the tools to make things happen, efficiently, and fast compare to other elementor addons. Choosing us is not only a mindset, but it is also a requirement if you intend to gain an edge over your competitors when creating your website. The best part is that you can design anything **without having to touch a single line of code**.
 
-Comes with **90+ Elementor addons, 100+ Elementor Templates KIT (Growing Each Week), Theme Builder, WooCommerce Builder, Elementor Mega Menu Builder, Popup Builder, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
+Comes with **100+ Elementor addons, 140+ Elementor Templates KIT (Growing Each Week), Theme Builder, WooCommerce Builder, Elementor Mega Menu Builder, Popup Builder, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
 
 *Free and Pro functionalities are mixed in the Widget Demos below.*
 
@@ -453,6 +453,20 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1025 - 2025-6-10 =
+* FIXED: Minor Bugs
+* ADDED: Taxonomy Condition for Single Templates of Theme Builder (by placing taxonomy-name/term-id in place of 'all')
+* ADDED: Language option for google maps in dashboard settings
+
+= Royal Elementor Addons v1.7.1024 - 2025-6-5 =
+* ADDED: Business Landing Page V3 - Elementor Templates Kit - [**Landing Page Business V3**](https://demosites.royal-elementor-addons.com/landing-page-business-v3/?ref=rea-wpo-pp-details-tab).
+* ADDED: Medical V2 - Elementor Templates Kit - [**Medical V2**](https://demosites.royal-elementor-addons.com/medical-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Yoga V2 - Elementor Templates Kit - [**Yoga V2**](https://demosites.royal-elementor-addons.com/yoga-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Nutritionist V1 - Elementor Templates Kit - [**Nutritionist V1**](https://demosites.royal-elementor-addons.com/nutritionist-v1/?ref=rea-wpo-pp-details-tab).
+
+= Royal Elementor Addons v1.7.1023 - 2025-6-2 =
+* FIXED: Minor Bugs
+
 = Royal Elementor Addons v1.7.1022 - 2025-5-28 =
 * FIXED: Minor Bugs
 

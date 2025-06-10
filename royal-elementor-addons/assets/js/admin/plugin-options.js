@@ -357,6 +357,9 @@ jQuery(document).ready(function( $ ) {
 							$(this).find('.'+ path[s-1] +'s-condition-select').val(path[s]).trigger('change');
 						} else if ( s === 2 ) {
 							$(this).find(inputIDs).val(path[s]).trigger('keyup').show();
+							if ( typeof path[s + 1] !== 'undefined' ) {
+								$(this).find(inputIDs).val(path[s] + '/' + path[s + 1]).trigger('keyup').show();
+							}
 						}
 					}
 				});

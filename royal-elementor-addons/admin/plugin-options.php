@@ -75,6 +75,7 @@ function wpr_register_addons_settings() {
 
     // Integrations
     register_setting( 'wpr-settings', 'wpr_google_map_api_key' );
+    register_setting( 'wpr-settings', 'wpr_google_map_language' );
     register_setting( 'wpr-settings', 'wpr_mailchimp_api_key' );
     register_setting( 'wpr-settings', 'wpr_recaptcha_v3_site_key' );
     register_setting( 'wpr-settings', 'wpr_recaptcha_v3_secret_key' );
@@ -746,6 +747,23 @@ function wpr_addons_settings_page() {
                 </h4>
 
                 <input type="text" name="wpr_google_map_api_key" id="wpr_google_map_api_key" value="<?php echo esc_attr(get_option('wpr_google_map_api_key')); ?>">
+
+                <h4>
+                    <span><?php esc_html_e( 'Google Map Language', 'wpr-addons' ); ?></span>
+                </h4>
+
+                <select name="wpr_google_map_language" id="wpr_google_map_language">
+                    <option value=""><?php esc_html_e('Default', 'wpr-addons'); ?></option>
+                    <option value="en" <?php selected(get_option('wpr_google_map_language'), 'en'); ?>><?php esc_html_e('English', 'wpr-addons'); ?></option>
+                    <option value="es" <?php selected(get_option('wpr_google_map_language'), 'es'); ?>><?php esc_html_e('Spanish', 'wpr-addons'); ?></option>
+                    <option value="fr" <?php selected(get_option('wpr_google_map_language'), 'fr'); ?>><?php esc_html_e('French', 'wpr-addons'); ?></option>
+                    <option value="de" <?php selected(get_option('wpr_google_map_language'), 'de'); ?>><?php esc_html_e('German', 'wpr-addons'); ?></option>
+                    <option value="zh" <?php selected(get_option('wpr_google_map_language'), 'zh'); ?>><?php esc_html_e('Chinese', 'wpr-addons'); ?></option>
+                    <option value="ja" <?php selected(get_option('wpr_google_map_language'), 'ja'); ?>><?php esc_html_e('Japanese', 'wpr-addons'); ?></option>
+                    <option value="ko" <?php selected(get_option('wpr_google_map_language'), 'ko'); ?>><?php esc_html_e('Korean', 'wpr-addons'); ?></option>
+                    <option value="hi" <?php selected(get_option('wpr_google_map_language'), 'hi'); ?>><?php esc_html_e('Hindi', 'wpr-addons'); ?></option>
+                    <option value="ar" <?php selected(get_option('wpr_google_map_language'), 'ar'); ?>><?php esc_html_e('Arabic', 'wpr-addons'); ?></option>
+                </select>
             </div>
 
             <div class="wpr-setting">

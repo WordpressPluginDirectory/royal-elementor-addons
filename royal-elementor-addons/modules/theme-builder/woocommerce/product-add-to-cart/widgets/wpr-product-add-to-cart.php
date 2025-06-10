@@ -2034,7 +2034,53 @@ class Wpr_Product_AddToCart extends Widget_Base {
 
 	}
 
-	protected function render() {
+	function before_add_to_cart_quantity() {
+		$settings = $this->get_settings_for_display();
+		$product = wc_get_product();
+		$btn_arg = [
+			'position' => $settings['quantity_btn_position']
+		];
+
+		if ($product->is_type('simple')) {
+			echo '<div class="wpr-simple-qty-wrap">';
+		}
+		echo '<div class="wpr-quantity-wrapper">';
+
+		if($btn_arg['position'] === 'before') {
+			echo '<div class="wpr-add-to-cart-icons-wrap"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></i></div>';
+		}
+
+		if($btn_arg['position'] === 'both') { 
+			echo '<i class="fas fa-minus"></i>';
+		}
+	}
+
+	function after_add_to_cart_quantity() {
+		$settings = $this->get_settings_for_display();
+		$btn_arg = [
+			'position' => $settings['quantity_btn_position']
+		];
+
+		if($btn_arg['position'] === 'after') {
+			echo '<div class="wpr-add-to-cart-icons-wrap"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></i></div>';
+		}
+
+		if($btn_arg['position'] === 'both') { 
+			echo '<i class="fas fa-plus"></i>';
+		}
+
+		echo '</div>';
+	}
+
+	function after_add_to_cart_button() {
+		$product = wc_get_product();
+
+		if ($product->is_type('simple')) {
+			echo '</div>';
+		}
+	}
+
+	function render() {
 		// Get Settings
 		$settings = $this->get_settings_for_display();
 		
@@ -2055,49 +2101,9 @@ class Wpr_Product_AddToCart extends Widget_Base {
 			return;
 		}
 
-		$btn_arg = [
-			'position' => $settings['quantity_btn_position']
-		];
-
-		add_action('woocommerce_before_add_to_cart_quantity', function () use ($btn_arg, $product) {
-			if ($product->is_type('simple')) {
-				echo '<div class="wpr-simple-qty-wrap">';
-			}
-			echo '<div class="wpr-quantity-wrapper">';
-
-			if($btn_arg['position'] === 'before') {
-				echo '<div class="wpr-add-to-cart-icons-wrap"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></i></div>';
-			}
-
-			if($btn_arg['position'] === 'both') { 
-				
-				echo '<i class="fas fa-minus"></i>';
-			}
-
-		});
-
-		add_action('woocommerce_after_add_to_cart_quantity', function () use ($btn_arg) {
-
-			if($btn_arg['position'] === 'after') {
-				echo '<div class="wpr-add-to-cart-icons-wrap"><i class="fas fa-plus"></i><i class="fas fa-minus"></i></i></div>';
-			}
-
-			if($btn_arg['position'] === 'both') { 
-				
-				echo '<i class="fas fa-plus"></i>';
-			}
-
-			echo '</div>';
-
-		});
-
-		add_action('woocommerce_after_add_to_cart_button', function () use ($product) {
-			
-			if ($product->is_type('simple')) {
-				echo '</div>';
-			}
-
-		});
+		add_action('woocommerce_before_add_to_cart_quantity', [$this, 'before_add_to_cart_quantity']);
+		add_action('woocommerce_after_add_to_cart_quantity', [$this, 'after_add_to_cart_quantity']);
+		add_action('woocommerce_after_add_to_cart_button', [$this, 'after_add_to_cart_button']);
 
 		if ( 'yes' !== $settings['ajax_add_to_cart'] ) {
 			do_action( 'woocommerce_before_single_product' ); // locate it in condition if ajax activated
@@ -2116,6 +2122,13 @@ class Wpr_Product_AddToCart extends Widget_Base {
 			woocommerce_template_single_add_to_cart();
 
 		echo '</div>';
+
+		remove_action('woocommerce_before_add_to_cart_quantity', [$this, 'before_add_to_cart_quantity']);
+		remove_action('woocommerce_after_add_to_cart_quantity', [$this, 'after_add_to_cart_quantity']);
+		remove_action('woocommerce_after_add_to_cart_button', [$this, 'after_add_to_cart_button']);
+
+		remove_filter( 'wc_add_to_cart_message', 'custom_wc_add_to_cart_message', 10, 2 );
+		remove_filter('add_to_cart_fragments', [$this, 'woocommerce_header_add_to_cart_fragment']);
 	}
 	
 }

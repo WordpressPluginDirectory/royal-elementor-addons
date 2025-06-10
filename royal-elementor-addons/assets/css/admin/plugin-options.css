@@ -429,7 +429,8 @@
   margin: 0;
 }
 
-.wpr-compare-wishlist select {
+.wpr-compare-wishlist select,
+#wpr_google_map_language {
   display: block !important;
   min-width: 100% !important;  
   border: 1px solid #e8e8e8;

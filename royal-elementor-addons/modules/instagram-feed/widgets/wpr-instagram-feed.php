@@ -4889,6 +4889,12 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 			$response = wp_remote_get($url);
 
+			// TODO: GOGA refine logic later
+			// if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+			// 	// If there's an error or the response code is not 200, return the cached data if available
+			// 	$instagram_data = get_transient($key) ?: [];
+			// }
+
 			$body = json_decode($response['body']);
 
 			if(!isset($body)) {
