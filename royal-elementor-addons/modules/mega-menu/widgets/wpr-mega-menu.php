@@ -873,11 +873,16 @@ class Wpr_Mega_Menu extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}}.wpr-pointer-underline .wpr-menu-item:after,
-					 {{WRAPPER}}.wpr-pointer-overline .wpr-menu-item:before,
-					 {{WRAPPER}}.wpr-pointer-double-line .wpr-menu-item:before,
-					 {{WRAPPER}}.wpr-pointer-double-line .wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}}.wpr-pointer-border-fx .wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-underline>.wpr-nav-menu-container >ul>li>.wpr-menu-item:after,
+					 {{WRAPPER}}.wpr-pointer-overline>.wpr-nav-menu-container >ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>.wpr-nav-menu-container >ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>.wpr-nav-menu-container >ul>li>.wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-border-fx>.wpr-nav-menu-container >ul>li>.wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-underline>.elementor-widget-container>.wpr-nav-menu-container >ul>li>.wpr-menu-item:after,
+					 {{WRAPPER}}.wpr-pointer-overline>.elementor-widget-container>.wpr-nav-menu-container >ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>.elementor-widget-container>.wpr-nav-menu-container >ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>.elementor-widget-container>.wpr-nav-menu-container >ul>li>.wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-border-fx>.elementor-widget-container>.wpr-nav-menu-container >ul>li>.wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
 				],
 				'condition' => [
 					'menu_items_pointer!' => 'background',
@@ -2299,7 +2304,7 @@ class Wpr_Mega_Menu extends Widget_Base {
 			'menu_id' => 'menu-'. $this->get_nav_menu_index() .'-'. $this->get_id(),
 			'container' => '',
 			'fallback_cb' => '__return_empty_string',
-			'walker' => new \Wpr_Main_Menu_Walker(),
+			'walker' => new \Wpr_Main_Menu_Walker($settings['menu_item_highlight']),
 		];
 
 		// Add Custom Filters
@@ -2315,7 +2320,7 @@ class Wpr_Mega_Menu extends Widget_Base {
 			'menu_id' => 'mobile-menu-'. $this->get_nav_menu_index() .'-'. $this->get_id(),
 			'container' => '',
 			'fallback_cb' => '__return_empty_string',
-			'walker' => new \Wpr_Mobile_Menu_Walker(),
+			'walker' => new \Wpr_Mobile_Menu_Walker($settings['mobile_menu_highlight']),
 		];
 
 		// Retrieve Image Alt Text

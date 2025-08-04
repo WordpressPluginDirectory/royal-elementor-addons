@@ -1,6 +1,10 @@
 <?php
 
 class Wpr_Mobile_Menu_Walker extends \Walker_Nav_Menu {
+	public function __construct( $mobile_menu_highlight ) {
+		$this->mobile_menu_highlight = $mobile_menu_highlight;
+	}
+
 	public function start_lvl( &$output, $depth = 0, $args = array() ) {
 		if ( 'mega-content' === $this->get_menu_item_type() ) {
 			return;
@@ -98,7 +102,7 @@ class Wpr_Mobile_Menu_Walker extends \Walker_Nav_Menu {
 		
 		$item_a_class = 'wpr-mobile-menu-item';
 		
-		if ( in_array( 'current-menu-item', $item->classes ) ) {
+		if ( in_array( 'current-menu-item', $item->classes ) && ('yes' === $this->mobile_menu_highlight) ) {
 			$item_a_class .= ' wpr-active-menu-item';
 		}
 
@@ -107,7 +111,7 @@ class Wpr_Mobile_Menu_Walker extends \Walker_Nav_Menu {
 			$item_output = $args->before;
 				// Parent Item
 				if ( in_array( 'menu-item-has-children', $item->classes ) ) {
-					if ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) {
+					if ( ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) && ('yes' === $this->mobile_menu_highlight) ) {
 						$item_a_class .= ' wpr-active-menu-item';
 					}
 				}
@@ -116,7 +120,7 @@ class Wpr_Mobile_Menu_Walker extends \Walker_Nav_Menu {
 				if ( $depth > 0 ) {
 					$item_a_class = 'wpr-mobile-sub-menu-item';
 
-					if ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) {
+					if ( ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) && ('yes' === $this->mobile_menu_highlight) ) {
 						$item_a_class .= ' wpr-active-menu-item';
 					}
 				}

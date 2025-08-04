@@ -363,15 +363,15 @@ class Plugin {
 			Plugin::instance()->get_version()
 		);
 
-    // Load FontAwesome - TODO: Check if necessary (maybe elementor is already loading this)
-    wp_enqueue_style(
+    	// Load FontAwesome - TODO: Check if necessary (maybe elementor is already loading this)
+    	wp_enqueue_style(
 			'font-awesome-5-all',
 			ELEMENTOR_ASSETS_URL . 'lib/font-awesome/css/all'. $this->script_suffix() .'.css',
 			false,
 			Plugin::instance()->get_version()
 		);
 
-    if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+    	if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
 			wp_enqueue_style(
 				'wpr-addons-library-frontend-css',
 				WPR_ADDONS_URL . 'assets/css/admin/library-frontend'. $this->script_suffix() .'.css',
@@ -540,12 +540,21 @@ class Plugin {
 
 	public function enqueue_scripts() {
 
+		// Register DOMPurify
+		wp_enqueue_script(
+			'dompurify',
+			'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js',
+			['jquery', 'elementor-frontend'],
+			'3.0.6',
+		);
+
 		wp_enqueue_script(
 			'wpr-addons-js',
 			WPR_ADDONS_URL . 'assets/js/frontend'. $this->script_suffix() .'.js',
 			[
 				'jquery',
-				'elementor-frontend'
+				'elementor-frontend',
+				'dompurify'
 			],
 			Plugin::instance()->get_version(),
 			true

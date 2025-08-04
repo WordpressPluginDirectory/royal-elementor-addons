@@ -751,7 +751,7 @@ class Wpr_Nav_Menu extends Widget_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 1,
+						'min' => 0,
 						'max' => 10,
 					],
 				],
@@ -761,18 +761,40 @@ class Wpr_Nav_Menu extends Widget_Base {
 					 {{WRAPPER}}.wpr-pointer-double-line .wpr-menu-item:before,
 					 {{WRAPPER}}.wpr-pointer-double-line .wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}}.wpr-pointer-border-fx .wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}}.wpr-pointer-underline>nav .wpr-menu-item:after,
-					 {{WRAPPER}}.wpr-pointer-overline>nav .wpr-menu-item:before,
-					 {{WRAPPER}}.wpr-pointer-double-line>nav .wpr-menu-item:before,
-					 {{WRAPPER}}.wpr-pointer-double-line>nav .wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}}.wpr-pointer-border-fx>nav .wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}}.wpr-pointer-underline.elementor-widget-container>nav .wpr-menu-item:after,
-					 {{WRAPPER}}.wpr-pointer-overline.elementor-widget-container>nav .wpr-menu-item:before,
-					 {{WRAPPER}}.wpr-pointer-double-line.elementor-widget-container>nav .wpr-menu-item:before,
-					 {{WRAPPER}}.wpr-pointer-double-line.elementor-widget-container>nav .wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}}.wpr-pointer-border-fx.elementor-widget-container>nav .wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-underline>nav>ul>li>.wpr-menu-item:after,
+					 {{WRAPPER}}.wpr-pointer-overline>nav>ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>nav>ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>nav>ul>li>.wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-border-fx>nav>ul>li>.wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-underline>.elementor-widget-container>nav>ul>li>.wpr-menu-item:after,
+					 {{WRAPPER}}.wpr-pointer-overline>.elementor-widget-container>nav>ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>.elementor-widget-container>nav>ul>li>.wpr-menu-item:before,
+					 {{WRAPPER}}.wpr-pointer-double-line>.elementor-widget-container>nav>ul>li>.wpr-menu-item:after' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.wpr-pointer-border-fx>.elementor-widget-container>nav>ul>li>.wpr-menu-item:before' => 'border-width: {{SIZE}}{{UNIT}};',
 				],
 				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'pointer_distance',
+			[
+				'label' => esc_html__( 'Pointer Distance', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'devices' => [ self::RESPONSIVE_DESKTOP, self::RESPONSIVE_TABLET ],
+				'default' => [
+					'size' => 13,
+				],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 25,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}}:not(.wpr-pointer-border-fx) .wpr-menu-item.wpr-pointer-item:before' => 'transform: translateY(-{{SIZE}}{{UNIT}});',
+					'{{WRAPPER}}:not(.wpr-pointer-border-fx) .wpr-menu-item.wpr-pointer-item:after' => 'transform: translateY({{SIZE}}{{UNIT}});',
+				]
 			]
 		);
 
@@ -1127,6 +1149,20 @@ class Wpr_Nav_Menu extends Widget_Base {
 					],
 				],
 				'selector' => '{{WRAPPER}} .wpr-sub-menu',
+			]
+		);
+
+		$this->add_control(
+			'sub_menu_border_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-sub-menu' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-sub-menu li:first-child a' => 'border-top-left-radius: {{TOP}}{{UNIT}}; border-top-right-radius: {{RIGHT}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-sub-menu li:last-child a' => 'border-bottom-left-radius: {{BOTTOM}}{{UNIT}}; border-bottom-right-radius: {{LEFT}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -1701,9 +1737,9 @@ class Wpr_Nav_Menu extends Widget_Base {
 				}
 
 				// Add Sub Menu Icon
-				$output  ='<a href="'. esc_url($item->url) .'" class="'. esc_attr($item_class) .'">'. esc_html($item->title);
+				// $output  ='<a aria-haspopup="true" aria-expanded="false" href="'. esc_url($item->url) .'" class="'. esc_attr($item_class) .'">'. esc_html($item->title);
 				// GOGA: render language switcher correctly
-				$output = '<a href="' . esc_url($item->url) . '" class="' . esc_attr($item_class) . '">'
+				$output = '<a aria-haspopup="true" aria-expanded="false" href="' . esc_url($item->url) . '" class="' . esc_attr($item_class) . '">'
 							. wp_kses($item->title, array(
 								'span' => array('class' => array()), // Allow <span> tags with class attribute
 								'a' => array( // Allow <a> tags with specified attributes

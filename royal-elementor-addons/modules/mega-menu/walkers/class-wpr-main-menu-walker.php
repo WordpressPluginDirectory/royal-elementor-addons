@@ -1,6 +1,10 @@
 <?php
 
 class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
+	public function __construct( $menu_item_highlight ) {
+		$this->menu_item_highlight = $menu_item_highlight;
+	}
+
 	public function start_lvl( &$output, $depth = 0, $args = array() ) {
 		if ( 'mega-content' === $this->get_menu_item_type() ) {
 			return;
@@ -89,7 +93,7 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
 
         $item_a_class = 'wpr-menu-item wpr-pointer-item';
 
-		if ( in_array( 'current-menu-item', $item->classes ) ) {
+		if ( in_array( 'current-menu-item', $item->classes ) && ('yes' === $this->menu_item_highlight) ) {
 			$item_a_class .= ' wpr-active-menu-item';
 		}
 		
@@ -99,7 +103,7 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
 				$submenu_icon = '';
 				// Parent Item
 				if ( in_array( 'menu-item-has-children', $item->classes ) || $this->has_mega_menu( $item->ID ) ) {
-					if ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) {
+					if ( ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) && ('yes' === $this->menu_item_highlight) ) {
 						$item_a_class .= ' wpr-active-menu-item';
 					}
 
@@ -115,7 +119,7 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
 				if ( $depth > 0 ) {
 					$item_a_class = 'wpr-sub-menu-item';
 
-					if ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) {
+					if ( ( in_array( 'current-menu-item', $item->classes ) || in_array( 'current-menu-ancestor', $item->classes ) ) && ('yes' === $this->menu_item_highlight) ) {
 						$item_a_class .= ' wpr-active-menu-item';
 					}
 				}

@@ -138,7 +138,7 @@
             }
 
 			if ( $scope.hasClass('wpr-jarallax') || $scope.hasClass('wpr-jarallax-yes') ) {
-				parallaxBackground();
+				observeParallax($scope);
 			}
 
 			if ( $scope.hasClass('wpr-parallax-yes') ) {
@@ -146,7 +146,9 @@
 			}
 
 			if ( $scope.hasClass('wpr-sticky-section-yes') ) {
-				stickySection();
+				$(document).ready(function() {
+					stickySection();
+				});
 			}
 
 			function stickySection() {
@@ -172,7 +174,8 @@
 					distanceFromTop = $scope.offset().top,
 					windowHeight = $(window).height(),
 					elementHeight = $scope.outerHeight(true),
-					distanceFromBottom = $(document).height() - (distanceFromTop + elementHeight);
+					distanceFromBottom = $(document).height() - (distanceFromTop + elementHeight),
+					offsetTop;
 
 
 					if ( $scope.data('settings') && $scope.data('settings').sticky_animation ) {
@@ -182,12 +185,6 @@
 					}
 
 					var stickyAnimDuration = $scope.attr('data-wpr-animation-duration') ? $scope.attr('data-wpr-animation-duration') + 's' : 500 + 's';
-
-					// if ( WprElements.editorCheck() ) { // needs different approach
-					// 	if ( $scope.next('section').length > 0 && ($scope.next('section').offset().top < ($scope.offset().top + $scope.height())) ) {
-					// 		$scope.next('section').css('margin-top', $scope.offset().top + $scope.height() + 'px');
-					// 	}
-					// }
 
 				if ( $scope.closest('div[data-elementor-type="wp-post"]').length > 0 ) {
 					stickyHeaderFooter = $scope.closest('div[data-elementor-type="wp-post"]');
@@ -207,10 +204,10 @@
 			    }
 
                 if ( 'top' === positionLocation && 'auto' === $scope.css('top') ) {
-                    var offsetTop = 0;
-                    $scope.css('top', 0);
+                    var offsetTop = $scope.data('wpr-position-offset');
+                    $scope.css('top', offsetTop);
                 } else {
-                    var offsetTop = +$scope.css('top').slice(0, -2);
+                    var offsetTop = $scope.data('wpr-position-offset');
                 }
 
 			    if ( 0 == availableDevices.length ) {
@@ -242,7 +239,7 @@
 
 				// Create a MutationObserver instance
 				if ( !WprElements.editorCheck() ) {
-					if ( 'yes' !== $scope.data('wpr-replace-header') ) {
+					if ( 'yes' !== $scope.data('wpr-replace-header') && 'yes' !== $scope.data('wpr-sticky-hide') ) {
 						// Function to be called when mutations are observed
 						const handleMutations = debounce(function(mutationsList) {
 							for (let mutation of mutationsList) {
@@ -397,7 +394,11 @@
 										$scope.addClass('wpr-' + stickyAnimation + '-out');
 									}
 								}
-							}	
+							}
+
+							if ( 0 === $(window).scrollTop() && 'sticky' === positionType ) {
+								$scope.css('position', 'relative');
+							}
 						}
 
 						// Clear any previous timeout
@@ -421,13 +422,6 @@
                             $scope.next().get(0).style.setProperty('--wpr-animation-duration', stickyAnimDuration);
                         }
 					}
-					
-					function debounceScroll(method, delay) {
-						clearTimeout(method._tId);
-						method._tId= setTimeout(function(){
-							method();
-						}, delay);
-					}
 
 					let scrollEndTimeout;
 			    }
@@ -447,14 +441,13 @@
 					$scope.css({'position': stickType });
 
                     if ( $('.wpr-close-cart span').length && !WprElements.editorCheck() ) {
-                        $('.wpr-close-cart span').trigger('click');
+                        WprElements.closeSideBarOnReplace($scope, 200);
                     }
 			    }
 
-			    function changeAdminBarOffset() {	
+			    function changeAdminBarOffset() {
 			        if ( $('#wpadminbar').length ) {
 			            adminBarHeight = $('#wpadminbar').css('height').slice(0, $('#wpadminbar').css('height').length - 2);
-			            // if ( 'top'  ===  positionLocation && ( 'fixed' == $scope.css('position')  || 'sticky' == $scope.css('position') ) ) {
 
 			            if ( 'top'  ===  positionLocation && ( 'fixed' == $scope.css('position') ) ) {
 			                $scope.css('top', +adminBarHeight + offsetTop + 'px');
@@ -466,7 +459,7 @@
 
 			function particlesEffect() {
 				var elementType = $scope.data('element_type'),
-					sectionID = $scope.data('id'),
+					sectionID = encodeURIComponent($scope.data('id')),
 					particlesJSON = ! WprElements.editorCheck() ? $scope.attr('data-wpr-particles') : $scope.find('.wpr-particle-wrapper').attr('data-wpr-particles-editor');
 
 				if ( ('section' === elementType || 'container' === elementType) && undefined !== particlesJSON ) {
@@ -536,6 +529,23 @@
 						speed: $scope.find('> .wpr-jarallax').attr('speed-data-editor')
 					});									
 				}
+			}
+
+			function observeParallax($scope) {
+				const observer = new IntersectionObserver((entries, obs) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							// Call your original function once
+							parallaxBackground.call(this, $scope);
+							obs.unobserve(entry.target); // Only trigger once
+						}
+					});
+				}, {
+					rootMargin: '0px',
+					threshold: 0.1
+				});
+			
+				observer.observe($scope[0]);
 			}
 
 			function parallaxMultiLayer() {
@@ -766,12 +776,14 @@
 			// Sub Menu Animation
 			function subMenuAnimation( selector, show ) {
 				if ( show === true ) {
+					selector.prev().attr('aria-expanded', 'true');
 					if ( $scope.hasClass('wpr-sub-menu-fx-slide') ) {
 						selector.stop().slideDown();
 					} else {
 						selector.stop().fadeIn();
 					}
 				} else {
+					selector.prev().attr('aria-expanded', 'false');
 					if ( $scope.hasClass('wpr-sub-menu-fx-slide') ) {
 						selector.stop().slideUp();
 					} else {
@@ -2138,7 +2150,7 @@
 
 					$.ajax({
 						type: 'POST',
-						url: current.attr( 'data-ajax' ),
+						url: $('<div>').text(current.attr('data-ajax')).html(),
 						data: {
 							action : 'wpr_likes_init',
 							post_id : current.attr( 'data-post-id' ),
@@ -2149,13 +2161,13 @@
 						},	
 						success: function( response ) {
 							// Get Icon
-							var iconClass = current.attr( 'data-icon' );
+							var iconClass = $('<div>').text( current.attr('data-icon') ).html();
 
 							// Get Count
 							var countHTML = response.count;
 
 							if ( '' === countHTML.replace(/<\/?[^>]+(>|$)/g, "") ) {
-								countHTML = '<span class="wpr-post-like-count">'+ current.attr( 'data-text' ) +'</span>';
+								countHTML = '<span class="wpr-post-like-count">' + $('<div>').text( current.attr('data-text') ).html() + '</span>';
 
 								if ( ! current.hasClass( 'wpr-likes-zero' ) ) {
 									current.addClass( 'wpr-likes-zero' );
@@ -3535,7 +3547,7 @@
 
 					$.ajax({
 						type: 'POST',
-						url: current.attr( 'data-ajax' ),
+						url: $('<div>').text(current.attr('data-ajax')).html(),
 						data: {
 							action : 'wpr_likes_init',
 							post_id : current.attr( 'data-post-id' ),
@@ -3546,13 +3558,13 @@
 						},	
 						success: function( response ) {
 							// Get Icon
-							var iconClass = current.attr( 'data-icon' );
+							var iconClass = $('<div>').text( current.attr('data-icon') ).html();
 
 							// Get Count
 							var countHTML = response.count;
 
 							if ( '' === countHTML.replace(/<\/?[^>]+(>|$)/g, "") ) {
-								countHTML = '<span class="wpr-post-like-count">'+ current.attr( 'data-text' ) +'</span>';
+								countHTML = '<span class="wpr-post-like-count">' + $('<div>').text( current.attr('data-text') ).html() + '</span>';
 
 								if ( ! current.hasClass( 'wpr-likes-zero' ) ) {
 									current.addClass( 'wpr-likes-zero' );
@@ -3963,7 +3975,7 @@
 					if ( dataActions.hasOwnProperty( 'message' ) ) {
 						if ( ! $scope.children( '.elementor-widget-container' ).children( '.wpr-countdown-message' ).length && ! $scope.children( '.wpr-countdown-message' ).length ) {
 							// Sanitize message to prevent XSS
-							var sanitizedMessage = sanitizeHTMLContent(dataActions['message']);
+							var sanitizedMessage = WprElements.sanitizeHTMLContent(dataActions['message']);
 							countDownWrap.after( '<div class="wpr-countdown-message">'+ sanitizedMessage +'</div>' );
 						}
 					}
@@ -3987,42 +3999,6 @@
 
 				}
 				
-			}
-
-			// Add this helper function to sanitize HTML content
-			function sanitizeHTMLContent(html) {
-				// Create a temporary DOM element
-				var tempDiv = document.createElement('div');
-				tempDiv.innerHTML = html;
-				
-				// Remove all script tags
-				var scripts = tempDiv.getElementsByTagName('script');
-				while(scripts.length > 0) {
-					scripts[0].parentNode.removeChild(scripts[0]);
-				}
-				
-				// Find all elements to remove potential malicious attributes
-				var allElements = tempDiv.getElementsByTagName('*');
-				for (var i = 0; i < allElements.length; i++) {
-					// Remove event handler attributes
-					var attrs = allElements[i].attributes;
-					for (var j = attrs.length - 1; j >= 0; j--) {
-						var attrName = attrs[j].name;
-						// Remove all on* event handlers
-						if (attrName.substring(0, 2) === 'on') {
-							allElements[i].removeAttribute(attrName);
-						}
-						// Remove javascript: URLs
-						if (attrName === 'href' || attrName === 'src') {
-							var value = attrs[j].value;
-							if (value.toLowerCase().indexOf('javascript:') === 0) {
-								allElements[i].removeAttribute(attrName);
-							}
-						}
-					}
-				}
-				
-				return tempDiv.innerHTML;
 			}
 
 		}, // End widgetCountDown
@@ -4604,8 +4580,8 @@
 			function autoplayVideo() {
 				$advancedSlider.find('.slick-current').each(function() {
 
-					var videoSrc = $(this).find('.wpr-slider-item').attr('data-video-src'),
-					videoAutoplay = $(this).find('.wpr-slider-item').attr('data-video-autoplay');
+					var videoSrc = WprElements.sanitizeURL($(this).find('.wpr-slider-item').attr('data-video-src')) || '',
+						videoAutoplay = $(this).find('.wpr-slider-item').attr('data-video-autoplay');
 					
 					if ( $(this).find( '.wpr-slider-video' ).length !== 1 && videoAutoplay === 'yes' ) {
 						if ( videoSrc.includes('vimeo') || videoSrc.includes('youtube') ) {
@@ -4617,9 +4593,9 @@
 							}
 							sliderVideoSize();
 						} else {
-							var videoMute = $(this).find('.wpr-slider-item').attr('data-video-mute');
-							var videoControls = $(this).find('.wpr-slider-item').attr('data-video-controls');
-							var videoLoop = $(this).find('.wpr-slider-item').attr('data-video-loop');
+							var videoMute = WprElements.sanitizeDataAttr($(this).find('.wpr-slider-item').attr('data-video-mute'));
+							var videoControls = WprElements.sanitizeDataAttr($(this).find('.wpr-slider-item').attr('data-video-controls'));
+							var videoLoop = WprElements.sanitizeDataAttr($(this).find('.wpr-slider-item').attr('data-video-loop'));
 
 							$(this).find('.wpr-cv-inner').prepend('<div class="wpr-slider-video wpr-custom-video"><video autoplay '+ videoLoop + ' ' + videoMute + ' ' + videoControls + ' ' +  'src="'+ videoSrc +'" width="100%" height="100%"></video></div>');
 							
@@ -4654,7 +4630,7 @@
 
 			$advancedSlider.on( 'click', '.wpr-slider-video-btn', function() {
 				var currentSlide = $(this).closest('.slick-slide'),
-					videoSrc = currentSlide.find('.wpr-slider-item').attr('data-video-src'),
+					videoSrc = WprElements.sanitizeURL(currentSlide.find('.wpr-slider-item').attr('data-video-src')) || '',
 					videoButton = $(this),
 					allowFullScreen = '';
 					
@@ -4670,9 +4646,9 @@
 				} else if ( videoSrc.includes('vimeo') ) {
 					allowFullScreen = 'allowfullscreen';
 				} else {
-					var videoMute = currentSlide.find('.wpr-slider-item').attr('data-video-mute');
-					var videoControls = currentSlide.find('.wpr-slider-item').attr('data-video-controls');
-					var videoLoop = currentSlide.find('.wpr-slider-item').attr('data-video-loop');
+					var videoMute = WprElements.sanitizeDataAttr(currentSlide.find('.wpr-slider-item').attr('data-video-mute'));
+					var videoControls = WprElements.sanitizeDataAttr(currentSlide.find('.wpr-slider-item').attr('data-video-controls'));
+					var videoLoop = WprElements.sanitizeDataAttr(currentSlide.find('.wpr-slider-item').attr('data-video-loop'));
 					
 					if ( currentSlide.find( '.wpr-slider-video' ).length !== 1 ) {
 						currentSlide.find('.wpr-cv-container').prepend('<div class="wpr-slider-video wpr-custom-video"><video '+ videoLoop + ' ' + videoMute + ' ' + videoControls + ' ' + 'src="'+ videoSrc +'" width="100%" height="100%"></video></div>');
@@ -9192,7 +9168,7 @@
 											setTimeout(function() {
 												$scope.find('.wpr-button').find('.wpr-double-bounce').addClass('wpr-loader-hidden');
 												$scope.find('.wpr-button>span').removeClass('wpr-loader-hidden');
-												$scope.find('form').append('<p class="wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
+												$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
 											}, 500);
 											callback(false); // Call the callback with failure
 										} else {
@@ -9205,7 +9181,7 @@
 										setTimeout(function() {
 											$scope.find('.wpr-button').find('.wpr-double-bounce').addClass('wpr-loader-hidden');
 											$scope.find('.wpr-button>span').removeClass('wpr-loader-hidden');
-											$scope.find('form').append('<p class="wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
+											$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
 										}, 500);
 										callback(false); // Call the callback with failure
 									}
@@ -9280,10 +9256,10 @@
 								return Promise.all(updateMetaPromises).then(() => {
 									if (responsesArray.includes('error')) {
 										var sanitizedErrorMessage = $('<div>').text($scope.data('settings').error_message).html();
-										$scope.find('form').append('<p class="wpr-submit-error">' + sanitizedErrorMessage + '</p>');
+										$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">' + sanitizedErrorMessage + '</p>');
 									} else {
 										$scope.find('form').append(
-											$('<p class="wpr-submit-success"></p>').text($scope.data('settings').success_message)
+											$('<p class="wpr-submit-notice wpr-submit-success"></p>').text($scope.data('settings').success_message)
 										);										
 										// $scope.find('form').append('<p class="wpr-submit-success">'+ $scope.data('settings').success_message +'</p>');
 										$scope.find('button').attr('disabled', true);
@@ -9628,11 +9604,11 @@
 							if (response.data ) {
 								if ( 'filesize' === response.data.cause ) {
 									let maxFileNotice = thisInput.data('maxfs-notice') ? thisInput.data('maxfs-notice') : response.data.message;
-									thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-error">' + maxFileNotice + '</p>');
+									thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-notice wpr-submit-error">' + maxFileNotice + '</p>');
 								}
 
 								if ( 'filetype' == response.data.cause ) {
-									thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-error">' + response.data.message + '</p>');
+									thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-notice wpr-submit-error">' + response.data.message + '</p>');
 								}
 							}
 
@@ -9642,11 +9618,11 @@
 						error: function(error) {
 							if ( 'filesize' === error.cause ) {
 								let maxFileNotice = thisInput.data('maxfs-notice') ? thisInput.data('maxfs-notice') : error.message;
-								thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-error">' + maxFileNotice + '</p>');
+								thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-notice wpr-submit-error">' + maxFileNotice + '</p>');
 							}
 
 							if ( 'filetype' == error.cause ) {
-								thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-error">' + error.message + '</p>');
+								thisInput.closest('.wpr-field-group').append('<p class="wpr-submit-notice wpr-submit-error">' + error.message + '</p>');
 							}
 						  console.log(error);
 						  reject(error);
@@ -9754,11 +9730,11 @@
 					$stepTab.eq(currentTab).find('.wpr-form-error, .wpr-form-error-wrap').each(function() {
 						if ( !($(this).closest('.wpr-field-group').find('.wpr-submit-error').length > 0) ) {
 							if ( $(this).attr('type') == 'file' ) {
-								$(this).closest('.wpr-field-group').append('<p class="wpr-submit-error">'+ WprConfig.file_empty +'</p>');
+								$(this).closest('.wpr-field-group').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.file_empty +'</p>');
 							} else if ( $(this).is('select') || $(this).attr('type') === 'radio' || $(this).attr('type') === 'checkbox' ) {
-								$(this).closest('.wpr-field-group').append('<p class="wpr-submit-error">'+ WprConfig.select_empty +'</p>');
+								$(this).closest('.wpr-field-group').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.select_empty +'</p>');
 							} else {
-								$(this).closest('.wpr-field-group').append('<p class="wpr-submit-error">'+ WprConfig.input_empty +'</p>');
+								$(this).closest('.wpr-field-group').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.input_empty +'</p>');
 							}
 						}
 					});
@@ -10150,7 +10126,7 @@
 			$scope.off('click', 'i:' + plusIconChild).on('click', 'i:' + plusIconChild, function() {
 				var $qtyInput = jQuery(this).prev('.quantity').find('input.qty');
                 if ($qtyInput.length === 0) {
-                    $qtyInput = jQuery(this).closest('.wpr-product-add-to-cart').find('.quantity').find('input.qty');
+                    $qtyInput = jQuery(this).closest('.wpr-quantity-wrapper').find('.quantity').find('input.qty');
                 }
                 
 				var currentVal = parseInt($qtyInput.val(), 10);
@@ -10167,7 +10143,7 @@
 			$scope.off('click', 'i:' + minusIconChild).on('click', 'i:' + minusIconChild, function() {
 				var $qtyInput = jQuery(this).next('.quantity').find('input.qty');
                 if ($qtyInput.length === 0) {
-                    $qtyInput = jQuery(this).closest('.wpr-product-add-to-cart').find('.quantity').find('input.qty');
+                    $qtyInput = jQuery(this).closest('.wpr-quantity-wrapper').find('.quantity').find('input.qty');
                 }
                 
 				var currentVal = parseInt($qtyInput.val(), 10);
@@ -11201,6 +11177,108 @@
 
 		changeActionTargetProductId: function(productId) {
 			actionTargetProductId = productId;
+		},
+
+		// Add this helper function to sanitize HTML content
+		sanitizeHTMLContent: function(html) {
+			// Create a temporary DOM element
+			var tempDiv = document.createElement('div');
+			tempDiv.innerHTML = html;
+			
+			// Remove all script tags
+			var scripts = tempDiv.getElementsByTagName('script');
+			while(scripts.length > 0) {
+				scripts[0].parentNode.removeChild(scripts[0]);
+			}
+
+			// Remove all iframe tags
+			var iframes = tempDiv.getElementsByTagName('iframe');
+			while(iframes.length > 0) {
+				iframes[0].parentNode.removeChild(iframes[0]);
+			}
+			
+			// Find all elements to remove potential malicious attributes
+			var allElements = tempDiv.getElementsByTagName('*');
+			for (var i = 0; i < allElements.length; i++) {
+				// Remove event handler attributes
+				var attrs = allElements[i].attributes;
+				for (var j = attrs.length - 1; j >= 0; j--) {
+					var attrName = attrs[j].name;
+					// Remove all on* event handlers
+					if (attrName.substring(0, 2) === 'on') {
+						allElements[i].removeAttribute(attrName);
+					}
+					// Remove javascript: URLs
+					if (attrName === 'href' || attrName === 'src') {
+						var value = attrs[j].value;
+						if (value.toLowerCase().indexOf('javascript:') === 0) {
+							allElements[i].removeAttribute(attrName);
+						}
+					}
+				}
+			}
+			
+			return tempDiv.innerHTML;
+		},
+
+		sanitizeURL: function(dirtyURL) {
+			// Add DOMPurify hook to block dangerous protocols
+			DOMPurify.addHook('uponSanitizeAttribute', function(node, data) {
+				const val = data.attrValue.trim().toLowerCase();
+				if (data.attrName === 'src' &&
+					(val.startsWith('javascript:') || val.startsWith('data:') || val.startsWith('vbscript:'))
+				) {
+					data.attrValue = '';
+				}
+			});
+		
+			// Step 1: Sanitize with DOMPurify
+			const cleanURL = DOMPurify.sanitize(dirtyURL);
+		
+			// Step 2: Allow video formats from trusted domains (add your own if needed)
+			const allowedVideoPattern = /^(https?:)?\/\/[^\s]+?\.(mp4|webm|ogg)(\?.*)?$/i;
+		
+			// Step 3: Also allow YouTube/Vimeo/embed services
+			const allowedPlatforms = /^(https?:)?\/\/(www\.)?(youtube\.com|youtu\.be|vimeo\.com|yourdomain\.com)\//i;
+		
+			const isValid = allowedVideoPattern.test(cleanURL) || allowedPlatforms.test(cleanURL);
+		
+			return isValid && cleanURL !== '' ? cleanURL : null;
+		},
+		
+		sanitizeDataAttr: function(value) {
+			const raw = String(value || '').trim();
+		
+			// If value contains anything suspicious, block it
+			const blacklisted = [
+				'onerror', 'onclick', 'onload', 'script', '<', '>', '=', 'javascript:', 'data:', 'vbscript:', '&', '%3C', '%3E'
+			];
+		
+			for (const keyword of blacklisted) {
+				if (raw.toLowerCase().includes(keyword)) {
+					return null;
+				}
+			}
+		
+			// Fallback DOMPurify to clean even benign input
+			return DOMPurify.sanitize(raw, {
+				SAFE_FOR_TEMPLATES: true,
+				ALLOWED_TAGS: [],
+				ALLOWED_ATTR: [],
+			});
+		},
+
+		closeSideBarOnReplace: function($scope = null, animationSpeed = 200) {
+			// $scope.find('.widget_shopping_cart_content').addClass('wpr-mini-cart-slide-out');
+			$scope.find('.wpr-shopping-cart-inner-wrap').addClass('wpr-mini-cart-slide-out');
+			$scope.find('.wpr-mini-cart-slide-out').css('animation-speed', animationSpeed);
+			$scope.find('.wpr-shopping-cart-wrap').fadeOut(animationSpeed);
+			$('body').removeClass('wpr-mini-cart-sidebar-body');
+			setTimeout(function() {
+				// $scope.find('.widget_shopping_cart_content').removeClass('wpr-mini-cart-slide-out');
+				$scope.find('.wpr-shopping-cart-inner-wrap').removeClass('wpr-mini-cart-slide-out');
+				$scope.find('.wpr-mini-cart').css({"display": "none"});
+			}, animationSpeed + 100);
 		}
 	
 	} // End WprElements

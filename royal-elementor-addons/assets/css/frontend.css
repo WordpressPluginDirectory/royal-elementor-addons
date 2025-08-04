@@ -238,7 +238,7 @@ template {
 }
 
 /* TODO: Remove this when php part is done */
-.ast-separate-container .ast-article-post,
+/* .ast-separate-container .ast-article-post,
 .ast-separate-container .ast-article-single {
     padding: 0;
     border: none;
@@ -248,7 +248,7 @@ template {
 .ast-separate-container .comment-respond {
     padding: 0;
     background-color: transparent;
-}
+} */
 
 
 /*--------------------------------------------------------------
@@ -1072,14 +1072,14 @@ div[class*="wpr-sub-icon-"] .wpr-mobile-nav-menu .menu-item-has-children>a:after
     transition-duration: 0s !important;
 }
 
-.wpr-pointer-overline.wpr-pointer-fx-slide .wpr-pointer-item.wpr-active-menu-item:before,
-.wpr-pointer-underline.wpr-pointer-fx-slide .wpr-pointer-item.wpr-active-menu-item:after,
-.wpr-pointer-double-line.wpr-pointer-fx-slide .wpr-pointer-item.wpr-active-menu-item:before,
-.wpr-pointer-double-line.wpr-pointer-fx-slide .wpr-pointer-item.wpr-active-menu-item:after,
-.wpr-pointer-overline.wpr-pointer-fx-grow .wpr-pointer-item.wpr-active-menu-item:before,
-.wpr-pointer-underline.wpr-pointer-fx-grow .wpr-pointer-item.wpr-active-menu-item:after,
-.wpr-pointer-double-line.wpr-pointer-fx-grow .wpr-pointer-item.wpr-active-menu-item:before,
-.wpr-pointer-double-line.wpr-pointer-fx-grow .wpr-pointer-item.wpr-active-menu-item:after {
+.wpr-pointer-overline.wpr-pointer-fx-slide > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-underline.wpr-pointer-fx-slide  > .elementor-widget-container > .wpr-nav-menu-container > ul> li > wpr-pointer-item.wpr-active-menu-item:after,
+.wpr-pointer-double-line.wpr-pointer-fx-slide > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-double-line.wpr-pointer-fx-slide > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
+.wpr-pointer-overline.wpr-pointer-fx-grow > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-underline.wpr-pointer-fx-grow > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
+.wpr-pointer-double-line.wpr-pointer-fx-grow > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-double-line.wpr-pointer-fx-grow > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after {
     width: 100%;
 }
 

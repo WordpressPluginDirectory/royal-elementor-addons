@@ -321,6 +321,7 @@ jQuery(document).ready(function( $ ) {
                 } else {
                     $('#wpr_mm_enable').prop( 'checked', false );
                 }
+
                 $('#wpr_mm_position').val(settings['wpr_mm_position']).trigger('change');
                 $('#wpr_mm_width').val(settings['wpr_mm_width']).trigger('change');
                 $('#wpr_mm_custom_width').val(settings['wpr_mm_custom_width']);

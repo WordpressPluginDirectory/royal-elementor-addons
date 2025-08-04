@@ -717,6 +717,7 @@ class Wpr_Before_After extends Widget_Base {
 	protected function render() {
 		// Get Settings
 		$settings = $this->get_settings();
+		$settings_new = $this->get_settings_for_display();
 
 		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 			$settings['direction'] = 'horizontal';
@@ -734,19 +735,19 @@ class Wpr_Before_After extends Widget_Base {
 		$icon_dir_second = 'horizontal' === $settings['direction'] ? 'right' : 'down';
 
 		// Image Source
-		$image_1_src = Group_Control_Image_Size::get_attachment_image_src( $settings['image_upload_1']['id'], 'image_size', $settings );
-		$image_2_src = Group_Control_Image_Size::get_attachment_image_src( $settings['image_upload_2']['id'], 'image_size', $settings );
+		$image_1_src = !empty($settings_new['image_upload_1']['id']) ? Group_Control_Image_Size::get_attachment_image_src( $settings_new['image_upload_1']['id'], 'image_size', $settings_new ) : $settings_new['image_upload_1']['url'];
+		$image_2_src = !empty($settings_new['image_upload_2']['id']) ? Group_Control_Image_Size::get_attachment_image_src( $settings_new['image_upload_2']['id'], 'image_size', $settings_new ) : $settings_new['image_upload_2']['url'];
 
 		// Divider
 		echo '<div class="wpr-ba-image-container'. esc_attr($class) .'" data-position="'. esc_attr($settings['divider_position']) .'" data-trigger="'. esc_attr($settings['trigger']) .'">';
 			
 			// Defaults
-			if ( '' !== $settings['image_upload_1']['url'] ) {
-				$image_1_src = $settings['image_upload_1']['url'];
-			}
-			if ( '' !== $settings['image_upload_2']['url'] ) {
-				$image_2_src = $settings['image_upload_2']['url'];
-			}
+			// if ( '' !== $settings['image_upload_1']['url'] ) {
+			// 	$image_1_src = $settings['image_upload_1']['url'];
+			// }
+			// if ( '' !== $settings['image_upload_2']['url'] ) {
+			// 	$image_2_src = $settings['image_upload_2']['url'];
+			// }
 
 			// Image 1
 			echo '<div class="wpr-ba-image-1">';

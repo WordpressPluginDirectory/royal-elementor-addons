@@ -457,7 +457,7 @@ function wpr_addons_settings_page() {
                 </div>
                 <input type="checkbox" name="wpr_hide_banners" id="wpr_hide_banners" <?php echo checked( get_option('wpr_hide_banners'), 'on', false ); ?>>
                 <label for="wpr_hide_banners"></label>
-            </div> 
+            </div>
 
             <div class="wpr-woo-template-info">
                 <div class="wpr-woo-template-title">
@@ -466,7 +466,7 @@ function wpr_addons_settings_page() {
                 </div>
                 <input type="checkbox" name="wpr_hide_head_foot_on_maintenenace" id="wpr_hide_head_foot_on_maintenenace" <?php echo checked( get_option('wpr_hide_head_foot_on_maintenenace', 'on'), 'on', true ); ?>>
                 <label for="wpr_hide_head_foot_on_maintenenace"></label>
-            </div> 
+            </div>
         </div>
 
         <div class="wpr-settings-group wpr-settings-group-optimizers">
