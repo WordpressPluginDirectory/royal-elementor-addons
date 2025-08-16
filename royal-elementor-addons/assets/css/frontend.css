@@ -1072,8 +1072,16 @@ div[class*="wpr-sub-icon-"] .wpr-mobile-nav-menu .menu-item-has-children>a:after
     transition-duration: 0s !important;
 }
 
+.wpr-pointer-overline.wpr-pointer-fx-slide > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-underline.wpr-pointer-fx-slide > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
+.wpr-pointer-double-line.wpr-pointer-fx-slide > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-double-line.wpr-pointer-fx-slide > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
+.wpr-pointer-overline.wpr-pointer-fx-grow > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-underline.wpr-pointer-fx-grow > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
+.wpr-pointer-double-line.wpr-pointer-fx-grow > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
+.wpr-pointer-double-line.wpr-pointer-fx-grow > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
 .wpr-pointer-overline.wpr-pointer-fx-slide > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
-.wpr-pointer-underline.wpr-pointer-fx-slide  > .elementor-widget-container > .wpr-nav-menu-container > ul> li > wpr-pointer-item.wpr-active-menu-item:after,
+.wpr-pointer-underline.wpr-pointer-fx-slide  > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
 .wpr-pointer-double-line.wpr-pointer-fx-slide > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
 .wpr-pointer-double-line.wpr-pointer-fx-slide > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:after,
 .wpr-pointer-overline.wpr-pointer-fx-grow > .elementor-widget-container > .wpr-nav-menu-container > ul> li > .wpr-pointer-item.wpr-active-menu-item:before,
