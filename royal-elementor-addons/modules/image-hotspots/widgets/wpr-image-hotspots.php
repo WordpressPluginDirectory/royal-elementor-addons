@@ -302,6 +302,25 @@ class Wpr_Image_Hotspots extends Widget_Base {
 			]
 		);
 
+		$repeater->add_responsive_control(
+			'tooltip_margin',
+			[
+				'label' => esc_html__( 'Margin', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', ],
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}} .wpr-hotspot-tooltip' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
 		$repeater->end_controls_tab();
 
 		$repeater->end_controls_tabs();

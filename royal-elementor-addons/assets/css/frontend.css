@@ -9818,6 +9818,7 @@ select.wpr-category-select {
     border-top-style: solid;
 }
 
+.wpr-hotspot-tooltip *,
 .wpr-hotspot-tooltip p {
     margin: 0;
 }

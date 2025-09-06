@@ -512,7 +512,9 @@ class Utilities {
 	*/
 	public static function render_elementor_template( $slug ) {
 		$template_id = Utilities::get_template_id( $slug );
-		$get_elementor_content = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id, false );
+		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true) || get_post_meta($template_id, '_elementor_template_type', true);
+		$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
+		$get_elementor_content = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id, $has_css);
 
 		if ( '' === $get_elementor_content ) {
 			return;

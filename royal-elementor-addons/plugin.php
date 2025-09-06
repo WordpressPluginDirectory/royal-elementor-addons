@@ -543,7 +543,7 @@ class Plugin {
 		// Register DOMPurify
 		wp_enqueue_script(
 			'dompurify',
-			'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js',
+			WPR_ADDONS_URL . 'assets/js/lib/dompurify/dompurify.min.js',
 			['jquery', 'elementor-frontend'],
 			'3.0.6',
 		);

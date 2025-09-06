@@ -3387,11 +3387,11 @@ class Wpr_Advanced_Slider extends Widget_Base {
 		$slider_options = [
 			'rtl' => $slider_is_rtl,
 			'infinite' => ( $settings['slider_loop'] === 'yes' ),
-			'speed' => absint( $settings['slider_effect_duration'] * 1000 ),
+			'speed' => absint( ( floatval( $settings['slider_effect_duration'] ?: 1 ) ) * 1000 ),
 			'arrows'=> true,
 			'dots' 	=> true,
 			'autoplay' => ( $settings['slider_autoplay'] === 'yes' ),
-			'autoplaySpeed'=> absint( $settings['slider_autoplay_duration'] * 1000 ),
+			'autoplaySpeed' => absint( ( floatval( $settings['slider_autoplay_duration'] ?: 1 ) ) * 1000 ),
 			'pauseOnHover' => esc_attr($settings['slider_pause_on_hover']),
 			'prevArrow' => '#wpr-slider-prev-'. $this->get_id(),
 			'nextArrow' => '#wpr-slider-next-'. $this->get_id(),

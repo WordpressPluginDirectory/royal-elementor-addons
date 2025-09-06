@@ -76,6 +76,20 @@ class Wpr_Google_Maps extends Widget_Base {
 			);
 		}
 
+		// $this->add_control(
+		// 	'gm_integration',
+		// 	[
+		// 		'label' => esc_html__( 'Map Integration', 'wpr-addons' ),
+		// 		'type' => Controls_Manager::SELECT,
+		// 		'options' => [
+		// 			'api_key' => esc_html__( 'API Key', 'wpr-addons' ),
+		// 			'without_api_key' => esc_html__( 'Without API Key', 'wpr-addons' )
+		// 		],
+		// 		'default' => 'api_key',
+		// 		'render_type' => 'template',
+		// 	]
+		// );
+
 		$this->add_control(
 			'gm_type',
 			[
@@ -153,6 +167,8 @@ class Wpr_Google_Maps extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-google-map' => 'height: {{SIZE}}px;',
 				],
+				'frontend_available' => true,
+				'render_type' => 'template',
 				'separator' => 'before'
 			]
 		);
@@ -171,6 +187,8 @@ class Wpr_Google_Maps extends Widget_Base {
 						'max' => 20,
 					],
 				],
+				'frontend_available' => true,
+				'render_type' => 'template',
 			]
 		);
 
@@ -681,7 +699,7 @@ class Wpr_Google_Maps extends Widget_Base {
 		$attributes  = ' data-settings="'. esc_attr($map_settings) .'"';
 		$attributes .= ' data-locations="'. esc_attr($map_locations) .'"';
 		$attributes .= ' data-controls="'. esc_attr($map_controls) .'"';
-	
+		
 		// Output the sanitized HTML container
 		echo '<div class="wpr-google-map" '. $attributes .'></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	

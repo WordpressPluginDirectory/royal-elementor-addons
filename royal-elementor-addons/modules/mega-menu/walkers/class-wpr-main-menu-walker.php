@@ -96,6 +96,10 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
 		if ( in_array( 'current-menu-item', $item->classes ) && ('yes' === $this->menu_item_highlight) ) {
 			$item_a_class .= ' wpr-active-menu-item';
 		}
+
+		if ( in_array( 'current-menu-item', $item->classes ) && ('yes' === $this->menu_item_highlight) ) {
+			$item_li_class .= ' wpr-active-menu-item';
+		}
 		
 		$output .= $indent .'<li'. $id . $item_li_class . $custom_width_attr . $id_attr .'>';
 
@@ -189,7 +193,11 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
 			if ( $this->has_mega_menu($item->ID) ) {
 				$elementor = \Elementor\Plugin::instance();
 				$mega_id = get_post_meta( $item->ID, 'wpr-mega-menu-item', true);
-				$content = $elementor->frontend->get_builder_content_for_display($mega_id);
+				
+				$type = get_post_meta(get_the_ID(), '_wpr_template_type', true) || get_post_meta($mega_id, '_elementor_template_type', true);
+				$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
+				
+				$content = $elementor->frontend->get_builder_content_for_display($mega_id, $has_css);
 				$output .= '<div class="wpr-sub-mega-menu">'. $content .'</div>';
 			}
 

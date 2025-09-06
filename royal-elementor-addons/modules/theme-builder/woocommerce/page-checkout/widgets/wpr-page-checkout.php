@@ -1703,7 +1703,6 @@ class Wpr_Page_Checkout extends Widget_Base {
 	public function woocommerce_checkout_after_order_review() {
 		echo '</div>';
 		echo '</div>';
-        echo '</div>';
 	}
 
 	public function woocommerce_checkout_order_review() {

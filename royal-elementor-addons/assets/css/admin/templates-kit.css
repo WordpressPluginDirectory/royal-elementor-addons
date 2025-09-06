@@ -706,7 +706,7 @@ span.wpr-woo-builder-label {
 }
 
 .wpr-templates-kit-not-found img {
-  width: 180px;
+  width: 180px !important;
 }
 
 .wpr-templates-kit-not-found h1 {

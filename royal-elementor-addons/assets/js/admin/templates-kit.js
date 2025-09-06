@@ -106,6 +106,7 @@ jQuery(document).ready(function( $ ) {
 			// });
 
 			WprTemplatesKit.initializeLazyLoading();
+			WprTemplatesKit.newsMagazineXThemeBanner();
 
 		},
 
