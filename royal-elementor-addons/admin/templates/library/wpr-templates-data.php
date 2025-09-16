@@ -235,6 +235,18 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 20,
 				],
+				'v2' => [
+					'name' => 'Business Coaching V2',
+					'pages' => 'home,courses,course-details,cart,checkout,services,service-details,events,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'pro business coaching coach assistent industry sucess strategy leadership skills training planning partner expert mastery coaching business training mentor consultation industry learning professional growth leadership skills productivity career strategy online courses lessons school study  tutor consultant life coach lifecoach',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 22,
+				],
 			],
 			'amazon-landing-page' => [
 				'v1' => [
@@ -2545,6 +2557,12 @@ class WPR_Templates_Data {
 				'name' => 'Business Coaching V1',
 				'pages' => ['home','about','courses','cart','services','service-details','blog','contact'],
 				'preview' => ['home','about','courses','cart','services','service-details','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'business-coaching-v2' => [
+				'name' => 'Business Coaching V2',
+				'pages' => ['home','courses','course-details','cart','services','service-details','events','blog','contact'],
+				'preview' => ['home','courses','course-details','cart','services','service-details','events','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'wedding-v1' => [
