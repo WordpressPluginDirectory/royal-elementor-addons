@@ -59,6 +59,8 @@ class Wpr_Magazine_Grid extends Widget_Base {
     		return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
     }
 
+	public $already_displayed_posts = [];
+
 	public function add_option_query_source() {
 		$post_types = [];
 		$post_types['post'] = esc_html__( 'Posts', 'wpr-addons' );
@@ -5034,6 +5036,10 @@ class Wpr_Magazine_Grid extends Widget_Base {
 
 		if ( 'yes' === $settings['slider_enable'] ) {
 			$offset = $offset + $query_posts_per_page * $slide_offset;
+
+			if ( 'rand' === $settings['query_randomize'] ) {
+				$offset = $settings[ 'query_offset' ];
+			}
 		}
 
 		// Dynamic
@@ -5047,6 +5053,18 @@ class Wpr_Magazine_Grid extends Widget_Base {
 			'paged' => $paged,
 			'offset' => $offset
 		];
+
+		if ( 'yes' === $settings['slider_enable'] && 'rand' === $settings['query_randomize'] ) {
+			if ( is_array( $settings[ 'query_exclude_'. $settings[ 'query_source' ] ] ) ) {
+				$query_exclude = array_push($settings[ 'query_exclude_'. $settings[ 'query_source' ] ], $this->already_displayed_posts);
+			} else {
+				$query_exclude = $this->already_displayed_posts;
+			}
+
+			if ( is_array( $query_exclude ) ) {
+				$args['post__not_in'] = $query_exclude;
+			}
+		}
 
 		// Exclude Items without F/Image
 		if ( 'yes' === $settings['query_exclude_no_images'] ) {
@@ -5767,6 +5785,8 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		}
 
 		while ( $posts->have_posts() ) : $posts->the_post();
+
+			$this->already_displayed_posts[] = get_the_ID();
 
 			// Post Class
 			$post_class = implode( ' ', get_post_class( 'wpr-mgzn-grid-item elementor-clearfix', get_the_ID() ) );

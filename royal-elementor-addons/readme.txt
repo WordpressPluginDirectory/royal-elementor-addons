@@ -1,7 +1,7 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1036
+Stable tag: 1.7.1037
 Requires at least: 5.0
 Tested up to: 6.8.3
 Requires PHP: 5.6
@@ -453,6 +453,19 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1037 - 2025-11-7 =
+* Fixed: Mobile menu click on desktop in Mega Menu.
+* Fixed: Minor vulnerability in Form Builder file upload action.
+* Fixed: Minor bugs in Grid and Mega Menu modules.
+* Fixed: Number of columns error in Advanced Slider widget.
+* Fixed: Minor sanitization-related vulnerability in Form Builder.
+* Added: Google Maps widget option to work without API Key.
+* Fixed: Randomize option duplicating posts in Magazine Grid.
+* Fixed: Lightbox popup minor bug in Media Grid.
+* Added: Title HTML tag option in Posts Timeline.
+* Added: Inline/Separate display option for Checkout buttons in Cart Page widget.
+* Fixed: Safari rendering bugs in Add to Cart widget.
+
 = Royal Elementor Addons v1.7.1036 - 2025-10-26 =
 * ADDED: Wooshop V2 - Elementor Template Kit [**Wooshop V2**](https://demosites.royal-elementor-addons.com/wooshop-v2/?ref=rea-wpo-pp-details-tab).
 * ADDED: Real Estate Consultant - Elementor Template Kit [**Real Estate Consultant**](https://demosites.royal-elementor-addons.com/real-estate-consultant-v1/?ref=rea-wpo-pp-details-tab).

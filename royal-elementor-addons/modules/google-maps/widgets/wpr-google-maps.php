@@ -76,19 +76,66 @@ class Wpr_Google_Maps extends Widget_Base {
 			);
 		}
 
-		// $this->add_control(
-		// 	'gm_integration',
-		// 	[
-		// 		'label' => esc_html__( 'Map Integration', 'wpr-addons' ),
-		// 		'type' => Controls_Manager::SELECT,
-		// 		'options' => [
-		// 			'api_key' => esc_html__( 'API Key', 'wpr-addons' ),
-		// 			'without_api_key' => esc_html__( 'Without API Key', 'wpr-addons' )
-		// 		],
-		// 		'default' => 'api_key',
-		// 		'render_type' => 'template',
-		// 	]
-		// );
+		$this->add_control(
+			'gm_integration',
+			[
+				'label' => esc_html__( 'Map Integration', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'api_key' => esc_html__( 'API Key', 'wpr-addons' ),
+					'without_api_key' => esc_html__( 'Without API Key', 'wpr-addons' )
+				],
+				'default' => 'api_key',
+				'render_type' => 'template',
+			]
+		);
+		
+		$this->add_control(
+			'gm_latitude',
+			[
+				'label' => esc_html__( 'Latitude', 'wpr-addons' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => '40.782864',
+				'dynamic' => [
+					'active' => true,
+				],
+				'condition' => [
+					'gm_integration' => 'without_api_key',
+				]
+			]
+		);
+
+		$this->add_control(
+			'gm_longtitude',
+			[
+				'label' => esc_html__( 'Longtitude', 'wpr-addons' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => '-73.965355',
+				'dynamic' => [
+					'active' => true,
+				],
+				'condition' => [
+					'gm_integration' => 'without_api_key',
+				]
+			]
+		);
+
+		$this->add_control(
+			'gm_location_title',
+			[
+				'label' => esc_html__( 'Location Title', 'wpr-addons' ),
+				'description' => esc_html__( 'Enter a location name or address to display the map. For example: "Central Park, New York, USA". (Works if long/lat Fields Empty)', 'wpr-addons' ),
+				'label_block' => true,
+				'type' => Controls_Manager::TEXT,
+				'default' => 'Central Park, New York, USA',
+				'dynamic' => [
+					'active' => true,
+				],
+				'condition' => [
+					'gm_integration' => 'without_api_key',
+				]
+			]
+		);
 
 		$this->add_control(
 			'gm_type',
@@ -102,6 +149,9 @@ class Wpr_Google_Maps extends Widget_Base {
 					'terrain' => esc_html__( 'Terrain', 'wpr-addons' ),
 				],
 				'default' => 'roadmap',
+				'condition' => [
+					'gm_integration' => 'api_key',
+				],
 			]
 		);
 
@@ -130,6 +180,7 @@ class Wpr_Google_Maps extends Widget_Base {
 				],
 				'default' => 'default',
 				'condition' => [
+					'gm_integration' => 'api_key',
 					'gm_type!' => 'satellite',
 				]
 			]
@@ -145,6 +196,7 @@ class Wpr_Google_Maps extends Widget_Base {
 					'active' => true,
 				],
 				'condition' => [
+					'gm_integration' => 'api_key',
 					'gm_color_scheme' => 'custom',
 				]
 			]
@@ -199,7 +251,10 @@ class Wpr_Google_Maps extends Widget_Base {
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 				'return_value' => 'cooperative',
-				'separator' => 'before'
+				'separator' => 'before',
+				'condition' => [
+					'gm_integration' => 'api_key',
+				]
 			]
 		);
 
@@ -210,6 +265,9 @@ class Wpr_Google_Maps extends Widget_Base {
 				'description' => esc_html__( 'Combine markers of close proximity into clusters, and simplify the display of markers on the map.', 'wpr-addons' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
+				'condition' => [
+					'gm_integration' => 'api_key',
+				]
 			]
 		);
 
@@ -222,6 +280,9 @@ class Wpr_Google_Maps extends Widget_Base {
 			[
 				'label' => esc_html__( 'Locations', 'wpr-addons' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
+				'condition' => [
+					'gm_integration' => 'api_key',
+				]
 			]
 		);
 
@@ -425,6 +486,9 @@ class Wpr_Google_Maps extends Widget_Base {
 			[
 				'label' => esc_html__( 'Controls', 'wpr-addons' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
+				'condition' => [
+					'gm_integration' => 'api_key',
+				]
 			]
 		);
 
@@ -477,6 +541,9 @@ class Wpr_Google_Maps extends Widget_Base {
 				'label' => esc_html__( 'Info Window', 'wpr-addons' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'show_label' => false,
+				'condition' => [
+					'gm_integration' => 'api_key',
+				]
 			]
 		);
 
@@ -675,36 +742,61 @@ class Wpr_Google_Maps extends Widget_Base {
 	protected function render() {
 		// Get Settings
 		$settings = $this->get_settings();
-	
-		// Access and sanitize gm_location_title
-		$google_map_locations = $settings['google_map_locations'];
-	
-		// Sanitize: Remove <img>, <script> tags and any attributes like onerror
-		$gm_location_title = $google_map_locations[0]['gm_location_title'];
-		$gm_location_title = preg_replace('/<\s*(img|script)[^>]*>/i', '', $gm_location_title); // Remove <img> and <script>
-		$gm_location_title = preg_replace('/\s*on\w+="[^"]*"/i', '', $gm_location_title);       // Remove inline event handlers
-	
-		// Final encode to escape any remaining HTML entities or unsafe characters
-		$gm_location_title = htmlspecialchars($gm_location_title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-	
-		// Assign sanitized title back to location data
-		$google_map_locations[0]['gm_location_title'] = $gm_location_title;
-	
-		// Encode data for output, ensuring JSON strings are sanitized and properly escaped
-		$map_settings = json_encode($this->get_map_settings($settings), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
-		$map_locations = json_encode($google_map_locations, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
-		$map_controls = json_encode($this->get_map_controls($settings), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
-	
-		// Set sanitized attributes
-		$attributes  = ' data-settings="'. esc_attr($map_settings) .'"';
-		$attributes .= ' data-locations="'. esc_attr($map_locations) .'"';
-		$attributes .= ' data-controls="'. esc_attr($map_controls) .'"';
 		
-		// Output the sanitized HTML container
-		echo '<div class="wpr-google-map" '. $attributes .'></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( '' == get_option('wpr_google_map_api_key') && 'without_api_key' === $settings['gm_integration'] ) {
+			$latitude  = $settings['gm_latitude'] ?? '';
+			$longitude = $settings['gm_longtitude'] ?? '';
+			$gm_location_title = $settings['gm_location_title'] ?? '';
+			$zoom = !empty($settings['gm_zoom_depth']['size']) ? intval($settings['gm_zoom_depth']['size']) : 14;
+	
+			if ($latitude && $longitude) {
+				$map_src = "https://www.google.com/maps?q={$latitude},{$longitude}&z={$zoom}&output=embed";
+			} else {
+				$map_src = "https://www.google.com/maps?q=" . rawurlencode($gm_location_title) . "&z={$zoom}&output=embed";
+			}
+
+			echo '<div class="wpr-google-map" data-integration-type ="'. esc_attr($settings['gm_integration']) .'">';
+			echo '<iframe 
+					src="' . esc_url($map_src) . '" 
+					width="100%"
+					height="'. $settings['gm_height']['size'] .'"
+					style="border:0;" 
+					allowfullscreen="" 
+					loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade">
+				  </iframe>';
+			echo '</div>';
+		} else {
+			// Access and sanitize gm_location_title
+			$google_map_locations = $settings['google_map_locations'];
+		
+			// Sanitize: Remove <img>, <script> tags and any attributes like onerror
+			$gm_location_title = $google_map_locations[0]['gm_location_title'];
+			$gm_location_title = preg_replace('/<\s*(img|script)[^>]*>/i', '', $gm_location_title); // Remove <img> and <script>
+			$gm_location_title = preg_replace('/\s*on\w+="[^"]*"/i', '', $gm_location_title);       // Remove inline event handlers
+		
+			// Final encode to escape any remaining HTML entities or unsafe characters
+			$gm_location_title = htmlspecialchars($gm_location_title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		
+			// Assign sanitized title back to location data
+			$google_map_locations[0]['gm_location_title'] = $gm_location_title;
+		
+			// Encode data for output, ensuring JSON strings are sanitized and properly escaped
+			$map_settings = json_encode($this->get_map_settings($settings), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+			$map_locations = json_encode($google_map_locations, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+			$map_controls = json_encode($this->get_map_controls($settings), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+		
+			// Set sanitized attributes
+			$attributes  = ' data-settings="'. esc_attr($map_settings) .'"';
+			$attributes .= ' data-locations="'. esc_attr($map_locations) .'"';
+			$attributes .= ' data-controls="'. esc_attr($map_controls) .'"';
+
+			// Output the sanitized HTML container
+			echo '<div class="wpr-google-map" '. $attributes .'></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 	
 		// Additional admin notice for missing API key
-		if (current_user_can('manage_options') && '' == get_option('wpr_google_map_api_key')) { 
+		if (current_user_can('manage_options') && 'api_key' === $settings['gm_integration'] && '' == get_option('wpr_google_map_api_key')) { 
 			echo '<p class="wpr-api-key-missing">Please go to plugin <a href='. esc_url(admin_url( 'admin.php?page=wpr-addons&tab=wpr_tab_settings' )) .' target="_blank">Settings</a> and Insert Google Map API Key in order to make Google Maps work</p>'; 
 		}
 	}	

@@ -200,6 +200,22 @@ class Wpr_Page_Cart extends Widget_Base {
 				'default' => esc_html__( 'Proceed to Checkout', 'wpr-addons' ),
 			]
 		);
+		
+		$this->add_control(
+			'checkout_button_display',
+			[
+				'label' => esc_html__( 'Display', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'row',
+				'options' => [
+					'row' => esc_html__( 'Inline', 'wpr-addons' ),
+					'column' => esc_html__( 'Separate', 'wpr-addons' ),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wc-proceed-to-checkout' => 'flex-direction: {{VALUE}}',
+				]
+			]
+		);
 
 		$this->add_responsive_control(
 			'checkout_button_alignment',

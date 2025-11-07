@@ -3196,7 +3196,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 				if ( 'slide_vertical' === $settings['slider_effect'] ) {
 					$slider_amount = 1;
 				} else {
-					$slider_amount = +$settings['slider_amount'];
+					$slider_amount = +intval($settings['slider_amount']);
 				}
 
 				// Slider Overlay

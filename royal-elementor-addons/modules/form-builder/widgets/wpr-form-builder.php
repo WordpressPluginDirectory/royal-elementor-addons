@@ -3625,6 +3625,10 @@ class Wpr_Form_Builder extends Widget_Base {
 	}	
 	
 	protected function form_fields_render_attributes( $i, $instance, $item ) {
+		if ( 'upload' === $item['field_type'] ) {
+			update_option( 'wpr_form_upload_field_in_use_' . $this->get_attribute_id( $item ), true );
+		}
+
 		$this->add_render_attribute(
 			[
 				'field-group' . $i => [
@@ -3928,7 +3932,8 @@ class Wpr_Form_Builder extends Widget_Base {
 					$this->form_fields_render_attributes( $item_index, $instance, $item );
 
 					$print_label = ! in_array( $item['field_type'], [ 'hidden', 'html', 'step' ], true );
-
+					$field_id = sanitize_key( $item['field_id'] );
+					$field_label = sanitize_text_field( $item['field_label'] );
 					
 					if ( 'step' === $item['field_type'] )  {
                         if ( isset($item['previous_button_text']) ) {
@@ -4043,7 +4048,7 @@ class Wpr_Form_Builder extends Widget_Base {
 								echo '<input size="1 "'. $this->get_render_attribute_string( 'input' . $item_index ) .'>';
 								break;
 							case 'step':
-								echo '<input type="hidden" class="wpr-step-input" id=form-field-'. esc_attr( $item['field_id'] ) .' value='. esc_attr( $item['field_label'] ) .'>';
+								echo '<input type="hidden" class="wpr-step-input" id=form-field-'. esc_attr( $field_id ) .' value='. esc_attr( $field_label ) .'>';
 								break;
 							default:
 								$field_type = $item['field_type'];

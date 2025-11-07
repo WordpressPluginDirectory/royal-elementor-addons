@@ -199,7 +199,7 @@ class Wpr_Feature_List extends Widget_Base {
 					'h6' => 'H6',
 					'div' => 'div',
 					'span' => 'span',
-					'P' => 'p'
+					'p' => 'p'
 				],
 				'default' => 'h2'
 			]

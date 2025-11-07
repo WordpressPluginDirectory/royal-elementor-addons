@@ -29,6 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			));
 		}
 
+		if ( !isset($_POST['form_field_id']) || !get_option( 'wpr_form_upload_field_in_use_' . sanitize_text_field( $_POST['form_field_id'] ) ) ) {
+			wp_send_json_error(['message' => 'Permission denied'], 403);
+		}
+
         // Get the max_file_size value from the file_size control.
         $max_file_size = isset($_POST['max_file_size']) ? floatval(sanitize_text_field($_POST['max_file_size'])) : 0; // Replace this with the value from the file_size control.
         if ($max_file_size <= 0) {

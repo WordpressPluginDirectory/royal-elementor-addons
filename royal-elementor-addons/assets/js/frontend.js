@@ -894,6 +894,11 @@
 
 			// Toggle Button
 			$mobileNavMenu.find( '.wpr-mobile-toggle' ).on( 'click', function(e) {
+
+				if ( window.getComputedStyle($mobileNavMenu[0])['pointer-events'] === 'none' ) {
+					return;
+				}
+
 				// Change Toggle Text
 				if ( ! $(this).hasClass('wpr-mobile-toggle-open') ) {
 					$(this).addClass('wpr-mobile-toggle-open');
@@ -1072,6 +1077,10 @@
 
 							var elWidgetGap = elContainer.find('.elementor-element.e-con').css('padding'),
 								elWidgetGap = parseInt(elWidgetGap, 10);
+						}
+						
+						if ( elContainer.length === 0 ) {
+							return;
 						}
 
 						var elContainerWidth = elContainer.outerWidth() - (elWidgetGap * 2),
@@ -3198,6 +3207,7 @@
 											window.dispatchEvent(new Event('scroll'));
                                         }, 500);
 										
+										lazyLoadObserver();
 										mediaHoverLink();
 										// iGrid.removeClass('wpr-zero-opacity');
 										initialItems = 0;
@@ -9584,6 +9594,7 @@
 				  formDataForFile.append('allowed_file_types', allowedFileTypes);
 				  formDataForFile.append('triggering_event', eventType);
 				  formDataForFile.append('wpr_addons_nonce', WprConfig.nonce);
+				  formDataForFile.append('form_field_id', thisId);
 			  
 				  if ('click' == eventType) {
 					if (!fileUrl[thisId]) {

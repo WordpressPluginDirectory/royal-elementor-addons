@@ -783,7 +783,7 @@ class Wpr_Nav_Menu extends Widget_Base {
 				'type' => Controls_Manager::SLIDER,
 				'devices' => [ self::RESPONSIVE_DESKTOP, self::RESPONSIVE_TABLET ],
 				'default' => [
-					'size' => 1,
+					'size' => 0,
 				],
 				'range' => [
 					'px' => [

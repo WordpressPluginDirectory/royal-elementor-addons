@@ -1668,6 +1668,8 @@ function wpr_addons_add_upgrade_menu() {
         $label = 'Upgrade to Expert';
     }
 
+    $label = isset($label) ? $label : __('Upgrade', 'wpr-addons');
+
     add_submenu_page( 'wpr-addons', $label, $label, 'manage_options', 'wpr-upgrade', 'wpr_addons_upgrade_page', 999 );
 }
 add_action( 'admin_menu', 'wpr_addons_add_upgrade_menu', 999999999999 );

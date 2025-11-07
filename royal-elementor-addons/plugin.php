@@ -165,6 +165,9 @@ class Plugin {
 			// Dropdown Category Filter for Wpr Templates
 			require WPR_ADDONS_PATH . 'admin/includes/wpr-templates-category-filter.php';
 
+			// Editor Hooks
+			require WPR_ADDONS_PATH . 'admin/includes/wpr-editor-hooks.php';
+
 			// Hide Theme Notice
 			// TODO: Remove this and fix with Transients
 			add_action( 'admin_enqueue_scripts', [ $this, 'hide_theme_notice' ] );
@@ -1091,7 +1094,7 @@ class Plugin {
 
 		// Promote Premium Widgets
 		if ( current_user_can('administrator') ) {
-			add_filter('elementor/editor/localize_settings', [$this, 'promote_premium_widgets']);
+			add_filter('elementor/editor/localize_settings', [$this, 'promote_premium_widgets'], 999);
 		}
 
 		add_filter( 'pre_get_posts', [$this, 'wpr_custom_posts_per_page'] );

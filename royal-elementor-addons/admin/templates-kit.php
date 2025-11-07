@@ -304,6 +304,7 @@ function wpr_fix_royal_compatibility() {
         'royal-elementor-addons/wpr-addons.php',
         'royal-elementor-addons-pro/wpr-addons-pro.php',
         'wpr-addons-pro/wpr-addons-pro.php',
+        'royal-backup-reset/royal-backup-reset.php',
         'contact-form-7/wp-contact-form-7.php',
         'woocommerce/woocommerce.php',
         'really-simple-ssl/rlrsssl-really-simple-ssl.php',

@@ -1266,7 +1266,7 @@ class Utilities {
 	public static function validate_html_tags_wl( $setting, $default, $tags_whitelist ) {
 		$value = $setting;
 
-		if ( ! in_array($value, $tags_whitelist) ) {
+		if ( ! in_array(strtolower($value), $tags_whitelist) ) {
 			$value = $default;
 		}
 
