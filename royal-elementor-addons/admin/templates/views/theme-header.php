@@ -11,16 +11,18 @@ $template_slug = WPR_Conditions_Manager::header_footer_display_conditions($condi
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
-<head>
-	<meta charset="<?php bloginfo( 'charset' ); ?>">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-	<?php if ( ! current_theme_supports( 'title-tag' ) ) : ?>
-		<title>
-			<?php echo esc_html(wp_get_document_title()); ?>
-		</title>
-	<?php endif; ?>
-	<?php wp_head(); ?>
-</head>
+<?php if ( 'Astra' != wp_get_theme()->get('Name') ) { ?>
+    <head>
+        <meta charset="<?php bloginfo( 'charset' ); ?>">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <?php if ( ! current_theme_supports( 'title-tag' ) ) : ?>
+            <title>
+                <?php echo esc_html(wp_get_document_title()); ?>
+            </title>
+        <?php endif; ?>
+        <?php wp_head(); ?>
+    </head>
+<?php } ?>
 
 <body <?php body_class(); ?>>
 

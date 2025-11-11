@@ -14,6 +14,7 @@ use Elementor\Icons_Manager;
 use Elementor\Repeater;
 use Elementor\Group_Control_Image_Size;
 use WprAddons\Classes\Utilities;
+use WprAddons\Classes\Modules\WPR_Grid_Helpers;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -59,10 +60,13 @@ class Wpr_Grid extends Widget_Base {
 			return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
 	}
 
+	public $post_types;
+	public $current_post_type;
+
 	public function add_option_query_source() {
-		$post_types = [];
-		$post_types['post'] = esc_html__( 'Posts', 'wpr-addons' );
-		$post_types['page'] = esc_html__( 'Pages', 'wpr-addons' );
+		$this->post_types = [];
+		$this->post_types['post'] = esc_html__( 'Posts', 'wpr-addons' );
+		$this->post_types['page'] = esc_html__( 'Pages', 'wpr-addons' );
 
 		$custom_post_types = Utilities::get_custom_types_of( 'post', true );
 		foreach( $custom_post_types as $slug => $title ) {
@@ -71,22 +75,22 @@ class Wpr_Grid extends Widget_Base {
 			}
 
 			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
-				$post_types['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
+				$this->post_types['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
 			} else {
-				$post_types[$slug] = esc_html( $title );
+				$this->post_types[$slug] = esc_html( $title );
 			}
 		}
 
-		$post_types['current'] = esc_html__( 'Current Query', 'wpr-addons' );
-		$post_types['pro-rl'] = esc_html__( 'Related Query (Pro)', 'wpr-addons' );
+		$this->post_types['current'] = esc_html__( 'Current Query', 'wpr-addons' );
+		$this->post_types['pro-rl'] = esc_html__( 'Related Query (Pro)', 'wpr-addons' );
 		
-		return $post_types;
+		return $this->post_types;
 	}
 
 	public function get_available_taxonomies() {
-		$post_taxonomies = [];
-		$post_taxonomies['category'] = esc_html__( 'Categories', 'wpr-addons' );
-		$post_taxonomies['post_tag'] = esc_html__( 'Tags', 'wpr-addons' );
+		$this->post_taxonomies = [];
+		$this->post_taxonomies['category'] = esc_html__( 'Categories', 'wpr-addons' );
+		$this->post_taxonomies['post_tag'] = esc_html__( 'Tags', 'wpr-addons' );
 
 		$custom_post_taxonomies = Utilities::get_custom_types_of( 'tax', true );
 		foreach( $custom_post_taxonomies as $slug => $title ) {
@@ -95,13 +99,13 @@ class Wpr_Grid extends Widget_Base {
 			}
 
 			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
-				$post_taxonomies['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
+				$this->post_taxonomies['pro-'. substr($slug, 0, 2)] = esc_html( $title ) .' (Expert)';
 			} else {
-				$post_taxonomies[$slug] = esc_html( $title );
+				$this->post_taxonomies[$slug] = esc_html( $title );
 			}
 		}
 
-		return $post_taxonomies;
+		return $this->post_taxonomies;
 	}
 
 	public function add_control_secondary_img_on_hover() {
@@ -779,6 +783,8 @@ class Wpr_Grid extends Widget_Base {
 	
 	public function add_control_grid_slider_dots_hr() {}
 
+	public $post_taxonomies;
+
 	protected function register_controls() {
 
 		// Tab: Content ==============
@@ -794,10 +800,10 @@ class Wpr_Grid extends Widget_Base {
 		Utilities::wpr_library_buttons( $this, Controls_Manager::RAW_HTML );
 
 		// Get Available Post Types
-		$post_types = $this->add_option_query_source();
+		$this->post_types = $this->add_option_query_source();
 
 		// Get Available Taxonomies
-		$post_taxonomies = $this->get_available_taxonomies();
+		$this->post_taxonomies = $this->get_available_taxonomies();
 
 		// Get Available Meta Keys
 		$tax_meta_keys = Utilities::get_custom_meta_keys_tax();
@@ -808,7 +814,7 @@ class Wpr_Grid extends Widget_Base {
 				'label' => esc_html__( 'Source', 'wpr-addons' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'post',
-				'options' => $post_types,
+				'options' => $this->post_types,
 			]
 		);
 
@@ -875,7 +881,7 @@ class Wpr_Grid extends Widget_Base {
 				'label' => esc_html__( 'Select Taxonomy', 'wpr-addons' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'category',
-				'options' => $post_taxonomies,
+				'options' => $this->post_taxonomies,
 				'condition' => [
 					'query_source' => 'related',
 				],
@@ -913,7 +919,7 @@ class Wpr_Grid extends Widget_Base {
 		);
 		
 		// Taxonomies
-		foreach ( $post_taxonomies as $slug => $title ) {
+		foreach ( $this->post_taxonomies as $slug => $title ) {
 			global $wp_taxonomies;
 			$post_type = '';
 
@@ -939,7 +945,7 @@ class Wpr_Grid extends Widget_Base {
 		}
 
 		// Exclude
-		foreach ( $post_types as $slug => $title ) {
+		foreach ( $this->post_types as $slug => $title ) {
 			$this->add_control(
 				'query_exclude_'. $slug,
 				[
@@ -959,7 +965,7 @@ class Wpr_Grid extends Widget_Base {
 		}
 
 		// Manual Selection
-		foreach ( $post_types as $slug => $title ) {
+		foreach ( $this->post_types as $slug => $title ) {
 			$this->add_control(
 				'query_manual_'. $slug,
 				[
@@ -1053,6 +1059,18 @@ class Wpr_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
+			'advanced_filters',
+			[
+				'label' => esc_html__( 'Enable Advanced Filters', 'wpr-addons' ),
+				'description' => esc_html__( 'Turn on Only with Advanced Filters widget.', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'no',
+				'return_value' => 'yes',
+				'render_type' => 'template'
+			]
+		);
+
+		$this->add_control(
 			'current_query_notice',
 			[
 				'type' => Controls_Manager::RAW_HTML,
@@ -1080,7 +1098,7 @@ class Wpr_Grid extends Widget_Base {
 			'element_select_filter',
 			[
 				'type' => Controls_Manager::HIDDEN,
-				'default' => $this->get_related_taxonomies(),
+				'default' => WPR_Grid_Helpers::get_related_taxonomies(),
 			]
 		);
 
@@ -1332,52 +1350,6 @@ class Wpr_Grid extends Widget_Base {
 				'render_type' => 'template',
 				'condition' => [
 					'layout_select!' => 'slider',
-				]
-			]
-		);
-
-		$this->add_control(
-			'filters_experiment',
-			[
-				'label' => esc_html__( 'Filters & Load More Experiment', 'wpr-addons' ),
-				'type' => Controls_Manager::SWITCHER,
-				'default' => 'no',
-				'return_value' => 'yes',
-				'render_type' => 'template',
-				'conditions' => [
-					'relation' => 'and',
-					'terms' => [
-						[
-							'name' => 'layout_filters',
-							'operator' => '!=',
-							'value' => '',
-						],
-						[
-							'relation' => 'or',
-							'terms' => [
-								[
-									'relation' => 'and',
-									'terms' => [	
-										[
-											'name' => 'layout_pagination',
-											'operator' => '!=',
-											'value' => '',
-										],
-										[
-											'name' => 'pagination_type',
-											'operator' => 'in',
-											'value' => ['load-more', 'infinite'],
-										],
-									]
-								],
-								[	
-									'name' => 'layout_pagination',
-									'operator' => '==',
-									'value' => '',
-								]
-							],
-						],
-					]
 				]
 			]
 		);
@@ -1641,7 +1613,7 @@ class Wpr_Grid extends Widget_Base {
 				'label' => esc_html__( 'Select Element', 'wpr-addons' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'title',
-				'options' => array_merge( $element_select, $post_taxonomies ),
+				'options' => array_merge( $element_select, $this->post_taxonomies ),
 				'separator' => 'after'
 			]
 		);
@@ -2901,7 +2873,7 @@ class Wpr_Grid extends Widget_Base {
 			[
 				'label' => esc_html__( 'Select Taxonomy', 'wpr-addons' ),
 				'type' => Controls_Manager::SELECT,
-				'options' => $post_taxonomies,
+				'options' => $this->post_taxonomies,
 				'default' => 'category',
 			]
 		);
@@ -2957,6 +2929,52 @@ class Wpr_Grid extends Widget_Base {
 		);
 
 		$this->add_control_filters_deeplinking();
+
+		$this->add_control(
+			'filters_experiment',
+			[
+				'label' => esc_html__( 'Enable AJAX Loading', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => 'no',
+				'return_value' => 'yes',
+				'render_type' => 'template',
+				'conditions' => [
+					'relation' => 'and',
+					'terms' => [
+						[
+							'name' => 'layout_filters',
+							'operator' => '!=',
+							'value' => '',
+						],
+						[
+							'relation' => 'or',
+							'terms' => [
+								[
+									'relation' => 'and',
+									'terms' => [	
+										[
+											'name' => 'layout_pagination',
+											'operator' => '!=',
+											'value' => '',
+										],
+										[
+											'name' => 'pagination_type',
+											'operator' => 'in',
+											'value' => ['load-more', 'infinite'],
+										],
+									]
+								],
+								[	
+									'name' => 'layout_pagination',
+									'operator' => '==',
+									'value' => '',
+								]
+							],
+						],
+					]
+				]
+			]
+		);
 
 		$this->add_control(
 			'filters_all',
@@ -8337,764 +8355,6 @@ class Wpr_Grid extends Widget_Base {
 		
 	}
 
-
-	// Get Taxonomies Related to Post Type
-	public function get_related_taxonomies() {
-		$relations = [];
-		$post_types = Utilities::get_custom_types_of( 'post', false );
-
-		foreach ( $post_types as $slug => $title ) {
-			$relations[$slug] = [];
-
-			foreach ( get_object_taxonomies( $slug ) as $tax ) {
-				array_push( $relations[$slug], $tax );
-			}
-		}
-
-		return json_encode( $relations );
-	}
-
-	// Get Max Pages
-	public function get_max_num_pages( $settings ) {
-		$query = new \WP_Query( $this->get_main_query_args() );
-		$max_num_pages = intval( ceil( $query->max_num_pages ) );
-
-		// Reset
-		wp_reset_postdata();
-
-		// $max_num_pages
-		return $max_num_pages;
-	}
-
-	// Main Query Args
-	public function get_main_query_args() {
-		$settings = $this->get_settings();
-		$author = ! empty( $settings[ 'query_author' ] ) ? implode( ',', $settings[ 'query_author' ] ) : '';
-
-		// if ( is_user_logged_in() ){
-		// 	$logged_in_user = wp_get_current_user();
-		// 	$author = '1' . ',' . $logged_in_user->ID;
-		// }
-
-		// Get Paged
-		if ( get_query_var( 'paged' ) ) {
-			$paged = get_query_var( 'paged' );
-		} elseif ( get_query_var( 'page' ) ) {
-			$paged = get_query_var( 'page' );
-		} else {
-			$paged = 1;
-		}
-
-		// Change Posts Per Page for Slider Layout
-		if ( 'slider' === $settings['layout_select'] && Utilities::is_new_free_user() ) {
-			$settings['query_posts_per_page'] = $settings['query_slides_to_show'] ? $settings['query_slides_to_show'] : -1;
-			$settings['query_posts_per_page'] = $settings['query_posts_per_page'] > 4 ? 4 : $settings['query_posts_per_page'];
-		}
-
-		if ( 'slider' === $settings['layout_select'] ) {
-			$paged = 1;
-		}
-		
-		if ( empty($settings['query_offset']) ) {
-			$settings[ 'query_offset' ] = 0;
-		}
-
-		$offset = ( $paged - 1 ) * intval($settings['query_posts_per_page']) + intval($settings[ 'query_offset' ]);
-
-		if ( empty($settings['query_posts_per_page']) ) {
-			if ( !('slider' === $settings['layout_select'] && Utilities::is_new_free_user()) ) {
-				$settings['query_posts_per_page'] = 999;
-			}
-		}
-
-		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
-			$settings[ 'query_randomize' ] = '';
-			$settings['order_posts'] = 'date';
-		}
-
-		$query_order_by = '' != $settings['query_randomize'] ? $settings['query_randomize'] : $settings['order_posts'];
-		$post__not_in = isset($settings[ 'query_exclude_'. $settings[ 'query_source' ] ]) && !empty($settings[ 'query_exclude_'. $settings[ 'query_source' ] ]) ? $settings[ 'query_exclude_'. $settings[ 'query_source' ] ] : [];
-
-		// Dynamic
-		$args = [
-			'post_type' => $settings[ 'query_source' ],
-			'tax_query' => $this->get_tax_query_args(),
-			'post__not_in' => $post__not_in,
-			'posts_per_page' => $settings['query_posts_per_page'],
-			'orderby' => $query_order_by,
-			'author' => $author,
-			'paged' => $paged,
-			'offset' => $offset
-		];
-
-		if ( $query_order_by == 'meta_value' ) {
-			$args['meta_key'] = $settings['order_posts_by_acf'];
-		}
-
-		// Display Scheduled Posts
-		if ( 'yes' === $settings['display_scheduled_posts'] && (defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) ) {
-			$args['post_status'] = 'future';
-		} else {
-			$args['post_status'] = 'publish';
-		}
-
-		// Exclude Items without F/Image
-		if ( 'yes' === $settings['query_exclude_no_images'] ) {
-			$args['meta_key'] = '_thumbnail_id';
-		}
-
-		// Manual
-		if ( 'manual' === $settings[ 'query_selection' ] ) {
-			$post_ids = [''];
-
-			if ( ! empty($settings[ 'query_manual_'. $settings[ 'query_source' ] ]) ) {
-				$post_ids = $settings[ 'query_manual_'. $settings[ 'query_source' ] ];
-			}
-
-			$args = [
-				'post_type' => $settings[ 'query_source' ],
-				'post__in' => $post_ids,
-				'ignore_sticky_posts' => 1,
-				'posts_per_page' => $settings['query_posts_per_page'],
-				'orderby' => $query_order_by,
-				'paged' => $paged,
-			];
-		}
-
-		// Current
-		if ( 'current' === $settings[ 'query_source' ] ) {
-			global $wp_query;
-
-			$tax_query = [];
-
-			$args = $wp_query->query_vars;
-
-			if ( is_post_type_archive() ) {
-				$posts_per_page = intval(get_option('wpr_cpt_ppp_'. $args['post_type']), 10);
-			} else {
-				$posts_per_page = intval(get_option('posts_per_page'));
-			}
-
-			$args['orderby'] = $query_order_by;
-
-			$args['offset'] = ( $paged - 1 ) * $posts_per_page + intval($settings[ 'query_offset' ]);
-			
-			if ( isset($_GET['category']) ) {
-				
-				if ( $_GET['category'] != '0' ) {
-					// Get category from URL
-					$category = sanitize_text_field($_GET['category']);
-				
-					array_push( $tax_query, [
-						'taxonomy' => 'category',
-						'field' => 'id',
-						'terms' => $category
-					] );
-				}
-			}
-						
-			if ( isset($_GET['wpr_select_category']) ) {
-				
-				if ( $_GET['wpr_select_category'] != '0' ) {
-					// Get category from URL
-					$category = sanitize_text_field($_GET['wpr_select_category']);
-					$taxonomy_name = 'category';
-
-					$term = get_term($category);
-
-					// Check if the term is valid
-					if (!is_wp_error($term)) {
-						// Get the taxonomy name
-						$taxonomy_name = $term->taxonomy;
-					}
-				
-					array_push( $tax_query, [
-						'taxonomy' => $taxonomy_name,
-						'field' => 'id',
-						'terms' => $category
-					] );
-				}
-			}
-
-			if ( !empty($tax_query) ) {
-				$args['tax_query'] = $tax_query;
-			}
-		}
-
-		// Related
-		if ( 'related' === $settings[ 'query_source' ] ) {
-			$args = [
-				'post_type' => get_post_type( get_the_ID() ),
-				'tax_query' => $this->get_tax_query_args(),
-				'post__not_in' => [ get_the_ID() ],
-				'ignore_sticky_posts' => 1,
-				'posts_per_page' => $settings['query_posts_per_page'],
-				'orderby' => $query_order_by,
-				'offset' => $offset,
-			];
-		}
-
-		if ( 'rand' !== $query_order_by ) {
-			$args['order'] = $settings['order_direction'];
-		}
-
-		return $args;
-	}
-
-	// Taxonomy Query Args
-	public function get_tax_query_args() {
-		$settings = $this->get_settings();
-		$tax_query = [];
-
-		if ( 'related' === $settings[ 'query_source' ] ) {
-			$tax_query = [
-				[
-					'taxonomy' => $settings['query_tax_selection'],
-					'field' => 'term_id',
-					'terms' => wp_get_object_terms( get_the_ID(), $settings['query_tax_selection'], array( 'fields' => 'ids' ) ),
-				]
-			];
-		} else {
-			foreach ( get_object_taxonomies($settings[ 'query_source' ]) as $tax ) {
-				if ( ! empty($settings[ 'query_taxonomy_'. $tax ]) ) {
-					array_push( $tax_query, [
-						'taxonomy' => $tax,
-						'field' => 'id',
-						'terms' => $settings[ 'query_taxonomy_'. $tax ]
-					] );
-				}
-			}
-		}
-
-		return $tax_query;
-	}
-
-	// Get Animation Class
-	public function get_animation_class( $data, $object ) {
-		$class = '';
-
-		// Disable Animation on Mobile
-		if ( 'overlay' !== $object ) {
-			if ( 'yes' === $data[$object .'_animation_disable_mobile'] && wp_is_mobile() ) {
-				return $class;
-			}
-		}
-
-		// Animation Class
-		if ( 'none' !== $data[ $object .'_animation'] ) {
-			$class .= ' wpr-'. $object .'-'. $data[ $object .'_animation'];
-			$class .= ' wpr-anim-size-'. $data[ $object .'_animation_size'];
-			$class .= ' wpr-anim-timing-'. $data[ $object .'_animation_timing'];
-
-			if ( 'yes' === $data[ $object .'_animation_tr'] ) {
-				$class .= ' wpr-anim-transparency';
-			}
-		}
-
-		return $class;
-	}
-
-	// Get Image Effect Class
-	public function get_image_effect_class( $settings ) {
-		$class = '';
-
-		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
-			if ( 'pro-zi' ==  $settings['image_effects'] || 'pro-zo' ==  $settings['image_effects'] || 'pro-go' ==  $settings['image_effects'] || 'pro-bo' ==  $settings['image_effects'] ) {
-				$settings['image_effects'] = 'none';
-			}
-		}
-
-		// Animation Class
-		if ( 'none' !== $settings['image_effects'] ) {
-			$class .= ' wpr-'. $settings['image_effects'];
-		}
-		
-		// Slide Effect
-		if ( 'slide' !== $settings['image_effects'] ) {
-			$class .= ' wpr-effect-size-'. $settings['image_effects_size'];
-		} else {
-			$class .= ' wpr-effect-dir-'. $settings['image_effects_direction'];
-		}
-
-		return $class;
-	}
-
-	// Render Password Protected Input
-	public function render_password_protected_input( $settings ) {
-		if ( ! post_password_required() ) {
-			return;
-		}
-
-		add_filter( 'the_password_form', function () {
-			$output  = '<form action="'. esc_url(home_url( 'wp-login.php?action=postpass' )) .'" method="post">';
-			$output .= '<i class="fas fa-lock"></i>';
-			$output .= '<p>'. esc_html(get_the_title()) .'</p>';
-			$output .= '<input type="password" name="post_password" id="post-'. esc_attr(get_the_id()) .'" placeholder="'. esc_html__( 'Type and hit Enter...', 'wpr-addons' ) .'">';
-			$output .= '</form>';
-
-			return $output;
-		} );
-
-		echo '<div class="wpr-grid-item-protected wpr-cv-container">';
-
-			echo '<div class="wpr-cv-outer">';
-				echo '<div class="wpr-cv-inner">';
-					echo get_the_password_form(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo '</div>';
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Thumbnail
-	public function render_post_thumbnail( $settings ) {
-		$id = get_post_thumbnail_id();
-		
-		$src = Group_Control_Image_Size::get_attachment_image_src( $id, 'layout_image_crop', $settings );
-		
-		if ( get_post_meta(get_the_ID(), 'wpr_secondary_image_id') && !empty(get_post_meta(get_the_ID(), 'wpr_secondary_image_id')) ) {
-			$src2 = Group_Control_Image_Size::get_attachment_image_src( get_post_meta(get_the_ID(), 'wpr_secondary_image_id')[0], 'layout_image_crop', $settings );
-		} else {
-			$src2 = '';
-		}
-
-		$alt = '' === wp_get_attachment_caption( $id ) ? get_the_title() : wp_get_attachment_caption( $id );
-
-		if ( has_post_thumbnail() ) {
-			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'" data-img-on-hover="'. esc_attr( $settings['secondary_img_on_hover'] ) .'"  data-src-secondary="'. esc_url( $src2 ) .'">';
-				if ( 'yes' == $settings['grid_lazy_loading'] ) {
-					echo '<img data-no-lazy="1" src="'. WPR_ADDONS_ASSETS_URL . 'img/icon-256x256.png" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-image wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
-					if ( 'yes' == $settings['secondary_img_on_hover'] ) {
-						echo '<img data-no-lazy="1" src="'. esc_url( $src2 ) . '" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-img wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
-					}
-				} else {
-					echo '<img data-no-lazy="1" src="'. esc_url( $src ) . '" alt="'. esc_attr( $alt ) .'" class="wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
-					if ( 'yes' == $settings['secondary_img_on_hover'] ) {
-						echo '<img data-no-lazy="1" src="'. esc_url( $src2 ) . '" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-img wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
-					}
-				}
-			echo '</div>';
-		}
-	}
-
-	// Render Media Overlay
-	public function render_media_overlay( $settings ) {
-		echo '<div class="wpr-grid-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_attr( get_the_permalink( get_the_ID() ) ) .'">';
-
-			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
-				if ( '' !== $settings['overlay_image']['url'] ) {
-					echo '<img data-no-lazy="1" src="'. esc_url( $settings['overlay_image']['url'] ) .'">';
-				}
-			}
-
-		echo '</div>';
-	}
-
-	// Render Post Title
-	public function render_post_title( $settings, $class ) {
-		$title_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $this->get_settings()['title_pointer'];
-		$title_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $this->get_settings()['title_pointer_animation'];
-		$pointer_item_class = (isset($this->get_settings()['title_pointer']) && 'none' !==$this->get_settings()['title_pointer']) ? 'class="wpr-pointer-item"' : '';
-		$open_links_in_new_tab = 'yes' === $this->get_settings()['open_links_in_new_tab'] ? '_blank' : '_self';
-
-		$class .= ' wpr-pointer-'. $title_pointer;
-		$class .= ' wpr-pointer-line-fx wpr-pointer-fx-'. $title_pointer_animation;
-
-		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
-		$element_title_tag = Utilities::validate_html_tags_wl( $settings['element_title_tag'], 'h2', $tags_whitelist );
-
-		echo '<'. esc_attr($element_title_tag) .' class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-				echo '<a target="'. $open_links_in_new_tab .'" '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
-					if ( 'word_count' === $settings['element_trim_text_by'] ) {
-						echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
-					} else {
-						echo substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...';
-					}
-				echo '</a>';
-			echo '</div>';
-		echo '</'. esc_attr($element_title_tag) .'>';
-	}
-
-	// Render Post Content
-	public function render_post_content( $settings, $class ) {
-		$dropcap_class = 'yes' === $settings['element_dropcap'] ? ' wpr-enable-dropcap' : '';
-		$class .= $dropcap_class;
-
-		if ( '' === get_the_content() ) {
-			return;
-		}
-
-		echo '<div class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-				echo wp_kses_post(get_the_content());
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Excerpt
-	public function render_post_excerpt( $settings, $class ) {
-		$dropcap_class = 'yes' === $settings['element_dropcap'] ? ' wpr-enable-dropcap' : '';
-		$class .= $dropcap_class;
-
-		if ( '' === get_the_excerpt() ) {
-			return;
-		}
-
-		$excerpt = get_the_excerpt();
-
-		// Convert HTML entities to their respective characters
-		$decoded_excerpt = html_entity_decode($excerpt, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-
-		// Trim the string to the desired length
-		$trimmed_excerpt = mb_substr($decoded_excerpt, 0, $settings['element_letter_count'], 'UTF-8');
-
-		echo '<div class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-			  if ( 'word_count' === $settings['element_trim_text_by']) {
-				$show_dots = $settings['element_show_dots'] === 'yes' ? '...' : '';
-				echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'], $show_dots )) .'</p>';
-			  } else {
-				// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
-				// echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';	
-				echo '<p>' . esc_html($trimmed_excerpt) . '...' . '</p>';
-			  }
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Date
-	public function render_post_date( $settings, $class ) {
-		echo '<div class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-				echo '<span>';
-				// Text: Before
-				if ( 'before' === $settings['element_extra_text_pos'] ) {
-					echo '<span class="wpr-grid-extra-text-left">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-				}
-				// Icon: Before
-				if ( 'before' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-
-					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-
-				// Date
-				if ( 'yes' === $settings['show_last_update_date'] ) {
-					echo esc_html(get_the_modified_time(get_option( 'date_format' )));
-				} else {
-					echo esc_html(apply_filters( 'the_date', get_the_date( '' ), get_option( 'date_format' ), '', '' ));
-				}
-
-				// Icon: After
-				if ( 'after' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-
-					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-				// Text: After
-				if ( 'after' === $settings['element_extra_text_pos'] ) {
-					echo '<span class="wpr-grid-extra-text-right">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-				}
-				echo '</span>';
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Time
-	public function render_post_time( $settings, $class ) {
-		echo '<div class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-				echo '<span>';
-				// Text: Before
-				if ( 'before' === $settings['element_extra_text_pos'] ) {
-					echo '<span class="wpr-grid-extra-text-left">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-				}
-				// Icon: Before
-				if ( 'before' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-
-					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-
-				// Time
-				echo esc_html(get_the_time(''));
-
-				// Icon: After
-				if ( 'after' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-
-					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-				// Text: After
-				if ( 'after' === $settings['element_extra_text_pos'] ) {
-					echo '<span class="wpr-grid-extra-text-right">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-				}
-				echo '</span>';
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Author
-	public function render_post_author( $settings, $class ) {
-		$author_id =  get_post_field( 'post_author' );
-
-		echo '<div class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-				// Text: Before
-				if ( 'before' === $settings['element_extra_text_pos'] ) {
-					echo '<span class="wpr-grid-extra-text-left">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-				}
-
-				// Author
-				echo '<a href="'. esc_url( get_author_posts_url( $author_id ) ) .'">';
-
-				// Icon: Before
-				if ( 'before' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-
-					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-					if ( 'yes' === $settings['element_show_avatar'] ) {
-						echo get_avatar( $author_id, $settings['element_avatar_size'] );
-					}
-
-					echo '<span>'. esc_html(get_the_author_meta( 'display_name', $author_id )) .'</span>';
-
-				// Icon: After
-				if ( 'after' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-
-					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-				echo '</a>';
-
-				// Text: After
-				if ( 'after' === $settings['element_extra_text_pos'] ) {
-					echo '<span class="wpr-grid-extra-text-right">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-				}
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Comments
-	public function render_post_comments( $settings, $class ) {
-		$count = get_comments_number();
-
-		if ( comments_open() ) {
-			if ( $count == 1 ) {
-				$text = $count .'&nbsp;'. $settings['element_comments_text_2'];
-			} elseif ( $count > 1 ) {
-				$text = $count .'&nbsp;'. $settings['element_comments_text_3'];
-			} else {
-				$text = $settings['element_comments_text_1'];
-			}
-
-			echo '<div class="'. esc_attr($class) .'">';
-				echo '<div class="inner-block">';
-					// Text: Before
-					if ( 'before' === $settings['element_extra_text_pos'] ) {
-						echo '<span class="wpr-grid-extra-text-left">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-					}
-
-					// Comments
-					echo '<a href="'. esc_url( get_comments_link() ) .'">';
-
-					// Icon: Before
-					if ( 'before' === $settings['element_extra_icon_pos'] ) {
-						ob_start();
-						\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-						$extra_icon = ob_get_clean();
-		
-						echo '<span class="wpr-grid-extra-icon-left">';
-							echo $extra_icon;
-						echo '</span>';
-					}
-
-					echo '<span>'. esc_html($text) .'</span>';
-
-					// Icon: After
-					if ( 'after' === $settings['element_extra_icon_pos'] ) {
-						ob_start();
-						\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-						$extra_icon = ob_get_clean();
-			
-						echo '<span class="wpr-grid-extra-icon-right">';
-							echo $extra_icon;
-						echo '</span>';
-					}
-
-					echo '</a>';
-
-					// Text: After
-					if ( 'after' === $settings['element_extra_text_pos'] ) {
-						echo '<span class="wpr-grid-extra-text-right">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-					}
-				echo '</div>';
-			echo '</div>';
-		}
-	}
-
-	// Render Post Read More
-	public function render_post_read_more( $settings, $class ) {
-		$read_more_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $this->get_settings()['read_more_animation'];
-		$open_links_in_new_tab = 'yes' === $this->get_settings()['open_links_in_new_tab'] ? '_blank' : '_self';
-
-		echo '<div class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-				echo '<a target="'. $open_links_in_new_tab .'" href="'. esc_url( get_the_permalink() ) .'" class="wpr-button-effect '. esc_attr($read_more_animation) .'">';
-
-				// Icon: Before
-				if ( 'before' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-
-					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-
-				// Read More Text
-				echo '<span>'. esc_html( $settings['element_read_more_text'] ) .'</span>';
-
-				// Icon: After
-				if ( 'after' === $settings['element_extra_icon_pos'] ) {
-					ob_start();
-					\Elementor\Icons_Manager::render_icon($settings['element_extra_icon'], ['aria-hidden' => 'true']);
-					$extra_icon = ob_get_clean();
-		
-					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
-					echo '</span>';
-				}
-
-				echo '</a>';
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Likes
-	public function render_post_likes( $settings, $class, $post_id ) {}
-
-	// Render Post Sharing
-	public function render_post_sharing_icons( $settings, $class ) {}
-
-	// Render Post Lightbox
-	public function render_post_lightbox( $settings, $class, $post_id ) {
-		echo '<div class="'. esc_attr($class) .'">';
-			echo '<div class="inner-block">';
-				$lightbox_source = get_the_post_thumbnail_url( $post_id );
-
-				// Audio Post Type
-				if ( 'audio' === get_post_format() ) {
-					// Load Meta Value
-					if ( 'meta' === $settings['element_lightbox_pfa_select'] ) {
-						$utilities = new Utilities();
-						$meta_value = get_post_meta( $post_id, $settings['element_lightbox_pfa_meta'], true );
-
-						// URL
-						if ( false === strpos( $meta_value, '<iframe ' ) ) {
-							add_filter( 'oembed_result', [ $utilities, 'filter_oembed_results' ], 50, 3 );
-								$track_url = wp_oembed_get( $meta_value );
-							remove_filter( 'oembed_result', [ $utilities, 'filter_oembed_results' ], 50 );
-
-						// Iframe
-						} else {
-							$track_url = Utilities::filter_oembed_results( $meta_value );
-						}
-
-						$lightbox_source = $track_url;
-					}
-
-				// Video Post Type
-				} elseif ( 'video' === get_post_format() ) {
-					// Load Meta Value
-					if ( 'meta' === $settings['element_lightbox_pfv_select'] ) {
-						$meta_value = get_post_meta( $post_id, $settings['element_lightbox_pfv_meta'], true );
-
-						// URL
-						if ( false === strpos( $meta_value, '<iframe ' ) ) {
-							$video = \Elementor\Embed::get_video_properties( $meta_value );
-
-						// Iframe
-						} else {
-							$video = \Elementor\Embed::get_video_properties( Utilities::filter_oembed_results($meta_value) );
-						}
-
-						// Provider URL
-						if ( 'youtube' === $video['provider'] ) {
-							$video_url = '//www.youtube.com/embed/'. $video['video_id'] .'?feature=oembed&autoplay=1&controls=1';
-						} elseif ( 'vimeo' === $video['provider'] ) {
-							$video_url = 'https://player.vimeo.com/video/'. $video['video_id'] .'?autoplay=1#t=0';
-						}
-
-						// Add Lightbox Attributes
-						if ( isset( $video_url ) ) {
-							$lightbox_source = $video_url;
-						}
-					}
-				}
-
-				// Lightbox Button
-				echo '<span data-src="'. esc_url( $lightbox_source ) .'">';
-				
-					// Text: Before
-					if ( 'before' === $settings['element_extra_text_pos'] ) {
-						echo '<span class="wpr-grid-extra-text-left">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-					}
-
-					// Lightbox Icon
-					echo '<i class="'. esc_attr( $settings['element_extra_icon']['value'] ) .'"></i>';
-
-					// Text: After
-					if ( 'after' === $settings['element_extra_text_pos'] ) {
-						echo '<span class="wpr-grid-extra-text-right">'. esc_html( $settings['element_extra_text'] ) .'</span>';
-					}
-
-				echo '</span>';
-
-				// Media Overlay
-				if ( 'yes' === $settings['element_lightbox_overlay'] ) {
-					echo '<div class="wpr-grid-lightbox-overlay"></div>';
-				}
-			echo '</div>';
-		echo '</div>';
-	}
-
-	// Render Post Custom Field
-	public function render_post_custom_field( $settings, $class, $post_id ) {}
-
-	// Render Post Element Separator
-	public function render_post_element_separator( $settings, $class ) {
-		echo '<div class="'. esc_attr($class .' '. $settings['element_separator_style']) .'">';
-			echo '<div class="inner-block"><span></span></div>';
-		echo '</div>';
-	}
-
 	// Render Post Taxonomies
 	public function render_post_taxonomies( $settings, $class, $post_id ) {
 		$terms = wp_get_post_terms( $post_id, $settings['element_select'] );
@@ -9173,147 +8433,7 @@ class Wpr_Grid extends Widget_Base {
 		echo '</div>';
 	}
 
-	// Get Elements
-	public function get_elements( $type, $settings, $class, $post_id ) {
-		if ( 'pro-lk' == $type || 'pro-shr' == $type || 'pro-cf' == $type ) {
-			$type = 'title';
-		}
-
-		switch ( $type ) {
-			case 'title':
-				$this->render_post_title( $settings, $class );
-				break;
-
-			case 'content':
-				$this->render_post_content( $settings, $class );
-				break;
-
-			case 'excerpt':
-				$this->render_post_excerpt( $settings, $class );
-				break;
-
-			case 'date':
-				$this->render_post_date( $settings, $class );
-				break;
-
-			case 'time':
-				$this->render_post_time( $settings, $class );
-				break;
-
-			case 'author':
-				$this->render_post_author( $settings, $class );
-				break;
-
-			case 'comments':
-				$this->render_post_comments( $settings, $class );
-				break;
-
-			case 'read-more':
-				$this->render_post_read_more( $settings, $class );
-				break;
-
-			case 'likes':
-				$this->render_post_likes( $settings, $class, $post_id );
-				break;
-
-			case 'sharing':
-				$this->render_post_sharing_icons( $settings, $class );
-				break;
-
-			case 'lightbox':
-				$this->render_post_lightbox( $settings, $class, $post_id );
-				break;
-
-			case 'custom-field':
-				$this->render_post_custom_field( $settings, $class, $post_id );
-				break;
-
-			case 'separator':
-				$this->render_post_element_separator( $settings, $class );
-				break;
-			
-			default:
-				$this->render_post_taxonomies( $settings, $class, $post_id );
-				break;
-		}
-
-	}
-
-	// Get Elements by Location
-	public function get_elements_by_location( $location, $settings, $post_id ) {
-		$locations = [];
-
-		foreach ( $settings['grid_elements'] as $data ) {
-			$place = $data['element_location'];
-			$align_vr = $data['element_align_vr'];
-
-			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
-				$align_vr = 'middle';
-			}
-
-			if ( ! isset($locations[$place]) ) {
-				$locations[$place] = [];
-			}
-			
-			if ( 'over' === $place ) {
-				if ( ! isset($locations[$place][$align_vr]) ) {
-					$locations[$place][$align_vr] = [];
-				}
-
-				array_push( $locations[$place][$align_vr], $data );
-			} else {
-				array_push( $locations[$place], $data );
-			}
-		}
-
-		if ( ! empty( $locations[$location] ) ) {
-
-			if ( 'over' === $location ) {
-				foreach ( $locations[$location] as $align => $elements ) {
-
-					if ( 'middle' === $align ) {
-						echo '<div class="wpr-cv-container"><div class="wpr-cv-outer"><div class="wpr-cv-inner">';
-					}
-
-					echo '<div class="wpr-grid-media-hover-'. esc_attr($align) .' elementor-clearfix">';
-						foreach ( $elements as $data ) {
-							
-							// Get Class
-							$class  = 'wpr-grid-item-'. $data['element_select'];
-							$class .= ' elementor-repeater-item-'. $data['_id'];
-							$class .= ' wpr-grid-item-display-'. $data['element_display'];
-							$class .= ' wpr-grid-item-align-'. $data['element_align_hr'];
-							$class .= $this->get_animation_class( $data, 'element' );
-
-							// Element
-							$this->get_elements( $data['element_select'], $data, $class, $post_id );
-						}
-					echo '</div>';
-
-					if ( 'middle' === $align ) {
-						echo '</div></div></div>';
-					}
-				}
-			} else {
-				echo '<div class="wpr-grid-item-'. esc_attr($location) .'-content elementor-clearfix">';
-					foreach ( $locations[$location] as $data ) {
-
-						// Get Class
-						$class  = 'wpr-grid-item-'. $data['element_select'];
-						$class .= ' elementor-repeater-item-'. $data['_id'];
-						$class .= ' wpr-grid-item-display-'. $data['element_display'];
-						$class .= ' wpr-grid-item-align-'. $data['element_align_hr'];
-
-						// Element
-						$this->get_elements( $data['element_select'], $data, $class, $post_id );
-					}
-				echo '</div>';
-			}
-
-		}
-	}
-
-	// Render Grid Filters
+	// Render Advanced Filters
 	public function render_grid_filters( $settings ) {
 		$taxonomy = $settings['filters_select'];
 
@@ -9436,7 +8556,7 @@ class Wpr_Grid extends Widget_Base {
 				if ( 0 === $filter->parent ) {
 					$children = get_term_children( $filter->term_id, $taxonomy );
 					$data_role = ! empty($children) ? ' data-role="parent"' : '';
-					$hidden_class = $this->get_hidden_filter_class($filter->slug, $settings);
+					$hidden_class = WPR_Grid_Helpers::get_hidden_filter_class($filter->slug, $settings);
 
 					echo '<li'. $data_role .' class="'. esc_attr($pointer_class) . esc_attr($hidden_class) .'">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						if ( 'yes' !== $settings['filters_linkable'] ) {
@@ -9486,232 +8606,6 @@ class Wpr_Grid extends Widget_Base {
 		echo '</ul>';
 	}
 
-	public function get_hidden_filter_class($slug, $settings) {
-		$posts = new \WP_Query( $this->get_main_query_args() );
-		$visible_categories = [];
-
-		if ( $posts->have_posts() ) {
-			while ( $posts->have_posts() ) {
-				$posts->the_post();
-				$categories = get_the_category();
-
-				foreach ($categories as $key => $category) {
-					array_push($visible_categories, $category->slug);
-				}
-			}
-
-			$visible_categories = array_unique($visible_categories);
-
-			wp_reset_postdata();
-		}
-
-		return ( ! in_array($slug, $visible_categories) && 'yes' == $settings['filters_hide_empty'] ) ? ' wpr-hidden-element' : '';
-	}
-
-	// Render Grid Pagination
-	public function render_grid_pagination( $settings ) {
-		// Return if Disabled
-		if ( 'yes' !== $settings['layout_pagination'] || 1 === $this->get_max_num_pages( $settings ) || 'slider' === $settings['layout_select'] ) {
-			return;
-		}
-
-		global $paged;
-		$pages = $this->get_max_num_pages( $settings );
-		
-		// $paged = empty( $paged ) ? 1 : $paged;
-		if ( get_query_var('paged') ) {
-			$paged = get_query_var('paged');
-		} elseif ( get_query_var('page') ) {
-			$paged = get_query_var('page');
-		} else {
-			$paged = 1;
-		}
-
-		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
-			$settings['pagination_type'] = 'pro-is' == $settings['pagination_type'] ? 'default' : $settings['pagination_type'];
-		}
-
-		echo '<div class="wpr-grid-pagination elementor-clearfix wpr-grid-pagination-'. esc_attr($settings['pagination_type']) .'">';
-
-		// Default
-		if ( 'default' === $settings['pagination_type'] ) {
-			if ( $paged < $pages ) {
-				echo '<a href="'. esc_url(get_pagenum_link( $paged + 1, true )) .'" class="wpr-prev-post-link">';
-					echo Utilities::get_wpr_icon( $settings['pagination_on_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					echo esc_html($settings['pagination_older_text']);
-				echo '</a>';
-			} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-				echo '<span class="wpr-prev-post-link wpr-disabled-arrow">';
-					echo Utilities::get_wpr_icon( $settings['pagination_on_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					echo esc_html($settings['pagination_older_text']);
-				echo '</span>';
-			}
-
-			if ( $paged > 1 ) {
-				echo '<a href="'. esc_url(get_pagenum_link( $paged - 1, true )) .'" class="wpr-next-post-link">';
-					echo esc_html($settings['pagination_newer_text']);
-					echo Utilities::get_wpr_icon( $settings['pagination_on_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo '</a>';
-			} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-				echo '<span class="wpr-next-post-link wpr-disabled-arrow">';
-					echo esc_html($settings['pagination_newer_text']);
-					echo Utilities::get_wpr_icon( $settings['pagination_on_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo '</span>';
-			}
-
-		// Numbered
-		} elseif ( 'numbered' === $settings['pagination_type'] ) {
-			$range = $settings['pagination_range'];
-			$showitems = ( $range * 2 ) + 1;
-
-			if ( 1 !== $pages ) {
-
-				if ( 'yes' === $settings['pagination_prev_next'] || 'yes' === $settings['pagination_first_last'] ) {
-					echo '<div class="wpr-grid-pagi-left-arrows">';
-
-					if ( 'yes' === $settings['pagination_first_last'] ) {
-						if ( $paged >= 2 ) {
-							echo '<a href="'. esc_url(get_pagenum_link( 1, true )) .'" class="wpr-first-page">';
-								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								echo '<span>'. esc_html($settings['pagination_first_text']) .'</span>';
-							echo '</a>';
-						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-							echo '<span class="wpr-first-page wpr-disabled-arrow">';
-								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								echo '<span>'. esc_html($settings['pagination_first_text']) .'</span>';
-							echo '</span>';
-						}
-					}
-
-					if ( 'yes' === $settings['pagination_prev_next'] ) {
-						if ( $paged > 1 ) {
-							echo '<a href="'. esc_url(get_pagenum_link( $paged - 1, true )) .'" class="wpr-prev-page">';
-								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								echo '<span>'. esc_html($settings['pagination_prev_text']) .'</span>';
-							echo '</a>';
-						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-							echo '<span class="wpr-prev-page wpr-disabled-arrow">';
-								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'left' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								echo '<span>'. esc_html($settings['pagination_prev_text']) .'</span>';
-							echo '</span>';
-						}
-					}
-
-					echo '</div>';
-				}
-
-				for ( $i = 1; $i <= $pages; $i++ ) {
-					if ( 1 !== $pages && ( ! ( $i >= $paged + $range + 1 || $i <= $paged - $range - 1 ) || $pages <= $showitems ) ) {
-						if ( $paged === $i ) {
-							echo '<span class="wpr-grid-current-page">'. esc_html($i) .'</span>';
-						} else {
-							echo '<a href="'. esc_url(get_pagenum_link( $i, true )) .'">'. esc_html($i) .'</a>';
-						}
-					}
-				}
-
-				if ( 'yes' === $settings['pagination_prev_next'] || 'yes' === $settings['pagination_first_last'] ) {
-					echo '<div class="wpr-grid-pagi-right-arrows">';
-
-					if ( 'yes' === $settings['pagination_prev_next'] ) {
-						if ( $paged < $pages ) {
-							echo '<a href="'. esc_url(get_pagenum_link( $paged + 1, true )) .'" class="wpr-next-page">';
-								echo '<span>'. esc_html($settings['pagination_next_text']) .'</span>';
-								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							echo '</a>';
-						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-							echo '<span class="wpr-next-page wpr-disabled-arrow">';
-								echo '<span>'. esc_html($settings['pagination_next_text']) .'</span>';
-								echo Utilities::get_wpr_icon( $settings['pagination_pn_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							echo '</span>';
-						}
-					}
-
-					if ( 'yes' === $settings['pagination_first_last'] ) {
-						if ( $paged <= $pages - 1 ) {
-							echo '<a href="'. esc_url(get_pagenum_link( $pages, true )) .'" class="wpr-last-page">';
-								echo '<span>'. esc_html($settings['pagination_last_text']) .'</span>';
-								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							echo '</a>';
-						} elseif ( 'yes' === $settings['pagination_disabled_arrows'] ) {
-							echo '<span class="wpr-last-page wpr-disabled-arrow">';
-								echo '<span>'. esc_html($settings['pagination_last_text']) .'</span>';
-								echo Utilities::get_wpr_icon( $settings['pagination_fl_icon'], 'right' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							echo '</span>';
-						}
-					}
-
-					echo '</div>';
-				}
-			}
-
-		// Load More / Infinite Scroll
-		} else {
-			echo '<a href="'. esc_url(get_pagenum_link( $paged + 1, true )) .'" class="wpr-load-more-btn" data-e-disable-page-transition >';
-				echo esc_html($settings['pagination_load_more_text']);
-			echo '</a>';
-
-			echo '<div class="wpr-pagination-loading">';
-				switch ( $settings['pagination_animation'] ) {
-					case 'loader-1':
-						echo '<div class="wpr-double-bounce">';
-							echo '<div class="wpr-child wpr-double-bounce1"></div>';
-							echo '<div class="wpr-child wpr-double-bounce2"></div>';
-						echo '</div>';
-						break;
-					case 'loader-2':
-						echo '<div class="wpr-wave">';
-							echo '<div class="wpr-rect wpr-rect1"></div>';
-							echo '<div class="wpr-rect wpr-rect2"></div>';
-							echo '<div class="wpr-rect wpr-rect3"></div>';
-							echo '<div class="wpr-rect wpr-rect4"></div>';
-							echo '<div class="wpr-rect wpr-rect5"></div>';
-						echo '</div>';
-						break;
-					case 'loader-3':
-						echo '<div class="wpr-spinner wpr-spinner-pulse"></div>';
-						break;
-					case 'loader-4':
-						echo '<div class="wpr-chasing-dots">';
-							echo '<div class="wpr-child wpr-dot1"></div>';
-							echo '<div class="wpr-child wpr-dot2"></div>';
-						echo '</div>';
-						break;
-					case 'loader-5':
-						echo '<div class="wpr-three-bounce">';
-							echo '<div class="wpr-child wpr-bounce1"></div>';
-							echo '<div class="wpr-child wpr-bounce2"></div>';
-							echo '<div class="wpr-child wpr-bounce3"></div>';
-						echo '</div>';
-						break;
-					case 'loader-6':
-						echo '<div class="wpr-fading-circle">';
-							echo '<div class="wpr-circle wpr-circle1"></div>';
-							echo '<div class="wpr-circle wpr-circle2"></div>';
-							echo '<div class="wpr-circle wpr-circle3"></div>';
-							echo '<div class="wpr-circle wpr-circle4"></div>';
-							echo '<div class="wpr-circle wpr-circle5"></div>';
-							echo '<div class="wpr-circle wpr-circle6"></div>';
-							echo '<div class="wpr-circle wpr-circle7"></div>';
-							echo '<div class="wpr-circle wpr-circle8"></div>';
-							echo '<div class="wpr-circle wpr-circle9"></div>';
-							echo '<div class="wpr-circle wpr-circle10"></div>';
-							echo '<div class="wpr-circle wpr-circle11"></div>';
-							echo '<div class="wpr-circle wpr-circle12"></div>';
-						echo '</div>';
-						break;
-					
-					default:
-						break;
-				}
-			echo '</div>';
-
-			echo '<p class="wpr-pagination-finish">'. esc_html($settings['pagination_finish_text']) .'</p>';
-		}
-
-		echo '</div>';
-	}
-
 	// Grid Settings
 	public function add_grid_settings( $settings ) {
 		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
@@ -9730,6 +8624,9 @@ class Wpr_Grid extends Widget_Base {
 		} else {
 			$stick_last_element_to_bottom = 'no';
 		}
+
+		global $wp_query;
+		$this->current_post_type = $wp_query->query_vars['post_type'] ?? $settings['query_source'];
 
 		$gutter_hr_widescreen = isset($settings['layout_gutter_hr_widescreen']['size']) ? $settings['layout_gutter_hr_widescreen']['size'] : $settings['layout_gutter_hr']['size'];
 		$gutter_hr_desktop = $settings['layout_gutter_hr']['size'];
@@ -9777,7 +8674,7 @@ class Wpr_Grid extends Widget_Base {
 			'filters_animation_duration' => $settings['filters_animation_duration'],
 			'filters_animation_delay' => $settings['filters_animation_delay'],
 			'pagination_type' => $settings['pagination_type'],
-			'pagination_max_pages' => $this->get_max_num_pages( $settings ),
+			'pagination_max_pages' => WPR_Grid_Helpers::get_max_num_pages( $settings ),
 		];
 
 		if ( 'list' === $settings['layout_select'] ) {
@@ -9810,13 +8707,107 @@ class Wpr_Grid extends Widget_Base {
 			'download' => $settings['lightbox_popup_download'],
 		];
 
-		// $layout_settings['grid_settings'] = [esc_attr( json_encode( $settings ) )];
-		if ( 'yes' === $settings['filters_experiment'] ) {
-			$layout_settings['grid_settings'] = $settings;
+		if ( 'yes' === $settings['filters_experiment'] || 'yes' === $settings['advanced_filters'] ) {
+			$layout_settings['grid_settings'] = [
+				// General Settings
+				'layout_select' => isset($settings['layout_select']) ? $settings['layout_select'] : null,
+				'layout_animation' => isset($settings['layout_animation']) ? $settings['layout_animation'] : null,
+				'layout_animation_duration' => isset($settings['layout_animation_duration']) ? $settings['layout_animation_duration'] : null,
+				'layout_animation_delay' => isset($settings['layout_animation_delay']) ? $settings['layout_animation_delay'] : null,
+				'pagination_type' => isset($settings['pagination_type']) ? $settings['pagination_type'] : null,
+				'pagination_max_pages' => WPR_Grid_Helpers::get_max_num_pages($settings),
+
+				// Filter Settings
+				'filters_deeplinking' => isset($settings['filters_deeplinking']) ? $settings['filters_deeplinking'] : null,
+				'filters_linkable' => isset($settings['filters_linkable']) ? $settings['filters_linkable'] : null,
+				'filters_default_filter' => isset($settings['filters_default_filter']) ? $settings['filters_default_filter'] : null,
+				'filters_count' => isset($settings['filters_count']) ? $settings['filters_count'] : null,
+				'filters_hide_empty' => isset($settings['filters_hide_empty']) ? $settings['filters_hide_empty'] : null,
+				'filters_animation' => isset($settings['filters_animation']) ? $settings['filters_animation'] : null,
+				'filters_animation_duration' => isset($settings['filters_animation_duration']) ? $settings['filters_animation_duration'] : null,
+				'filters_animation_delay' => isset($settings['filters_animation_delay']) ? $settings['filters_animation_delay'] : null,
+
+				// Lightbox Settings
+				'lightbox_popup_autoplay' => isset($settings['lightbox_popup_autoplay']) ? $settings['lightbox_popup_autoplay'] : null,
+				'lightbox_popup_pause' => isset($settings['lightbox_popup_pause']) ? $settings['lightbox_popup_pause'] : null,
+				'lightbox_popup_progressbar' => isset($settings['lightbox_popup_progressbar']) ? $settings['lightbox_popup_progressbar'] : null,
+				'lightbox_popup_counter' => isset($settings['lightbox_popup_counter']) ? $settings['lightbox_popup_counter'] : null,
+				'lightbox_popup_arrows' => isset($settings['lightbox_popup_arrows']) ? $settings['lightbox_popup_arrows'] : null,
+				'lightbox_popup_captions' => isset($settings['lightbox_popup_captions']) ? $settings['lightbox_popup_captions'] : null,
+				'lightbox_popup_thumbnails' => isset($settings['lightbox_popup_thumbnails']) ? $settings['lightbox_popup_thumbnails'] : null,
+				'lightbox_popup_thumbnails_default' => isset($settings['lightbox_popup_thumbnails_default']) ? $settings['lightbox_popup_thumbnails_default'] : null,
+				'lightbox_popup_sharing' => isset($settings['lightbox_popup_sharing']) ? $settings['lightbox_popup_sharing'] : null,
+				'lightbox_popup_zoom' => isset($settings['lightbox_popup_zoom']) ? $settings['lightbox_popup_zoom'] : null,
+				'lightbox_popup_fullscreen' => isset($settings['lightbox_popup_fullscreen']) ? $settings['lightbox_popup_fullscreen'] : null,
+				'lightbox_popup_download' => isset($settings['lightbox_popup_download']) ? $settings['lightbox_popup_download'] : null,
+
+				// Query Settings
+				'query_source' => isset($settings['query_source']) ? $settings['query_source'] : null,
+				'current_query_source' => $this->current_post_type,
+				'query_author' => isset($settings['query_author']) ? $settings['query_author'] : null,
+				'query_posts_per_page' => isset($settings['query_posts_per_page']) ? $settings['query_posts_per_page'] : null,
+				'query_offset' => isset($settings['query_offset']) ? $settings['query_offset'] : null,
+				'query_randomize' => isset($settings['query_randomize']) ? $settings['query_randomize'] : null,
+				'order_posts' => isset($settings['order_posts']) ? $settings['order_posts'] : null,
+				'order_posts_by_acf' => isset($settings['order_posts_by_acf']) ? $settings['order_posts_by_acf'] : null,
+				'order_direction' => isset($settings['order_direction']) ? $settings['order_direction'] : null,
+				'query_exclude_no_images' => isset($settings['query_exclude_no_images']) ? $settings['query_exclude_no_images'] : null,
+				'query_selection' => isset($settings['query_selection']) ? $settings['query_selection'] : null,
+				'query_tax_selection' => isset($settings['query_tax_selection']) ? $settings['query_tax_selection'] : null,
+				'query_manual' => isset($settings['query_manual_' . $settings['query_source']]) ? $settings['query_manual_' . $settings['query_source']] : null,
+				'display_scheduled_posts' => isset($settings['display_scheduled_posts']) ? $settings['display_scheduled_posts'] : null,
+				'query_not_found_text' => isset($settings['query_not_found_text']) ? $settings['query_not_found_text'] : null,
+				'layout_image_crop' => [
+					'layout_image_crop_size' => isset($settings['layout_image_crop_size']) ? $settings['layout_image_crop_size'] : null,
+					'layout_image_crop_custom_dimension' => isset($settings['layout_image_crop_custom_dimension']) ? $settings['layout_image_crop_custom_dimension'] : null,
+				],
+				'image_effects' => isset($settings['image_effects']) ? $settings['image_effects'] : null,
+				'image_effects_animation_timing' => isset($settings['image_effects_animation_timing']) ? $settings['image_effects_animation_timing'] : null,
+				'image_effects_size' => isset($settings['image_effects_size']) ? $settings['image_effects_size'] : null,
+				'image_effects_direction' => isset($settings['image_effects_direction']) ? $settings['image_effects_direction'] : null,
+				'open_links_in_new_tab' => isset($settings['open_links_in_new_tab']) ? $settings['open_links_in_new_tab'] : null,
+				'overlay_post_link' => isset($settings['overlay_post_link']) ? $settings['overlay_post_link'] : null,
+				'secondary_img_on_hover' => isset($settings['secondary_img_on_hover']) ? $settings['secondary_img_on_hover'] : null,
+				'grid_lazy_loading' => isset($settings['grid_lazy_loading']) ? $settings['grid_lazy_loading'] : null,
+				'overlay_animation' => isset($settings['overlay_animation']) ? $settings['overlay_animation'] : null,
+				'overlay_animation_size' => isset($settings['overlay_animation_size']) ? $settings['overlay_animation_size'] : null,
+				'overlay_animation_timing' => isset($settings['overlay_animation_timing']) ? $settings['overlay_animation_timing'] : null,
+				'overlay_animation_tr' => isset($settings['overlay_animation_tr']) ? $settings['overlay_animation_tr'] : null,
+				'overlay_image' => isset($settings['overlay_image']) ? $settings['overlay_image'] : null,
+				'title_pointer' => isset($settings['title_pointer']) ? $settings['title_pointer'] : null,
+				'title_pointer_animation' => isset($settings['title_pointer_animation']) ? $settings['title_pointer_animation'] : null,
+				'read_more_animation' => isset($settings['read_more_animation']) ? $settings['read_more_animation'] : null,
+				'tax1_pointer' => isset($settings['tax1_pointer']) ? $settings['tax1_pointer'] : null,
+				'tax1_pointer_animation' => isset($settings['tax1_pointer_animation']) ? $settings['tax1_pointer_animation'] : null,
+				'tax2_pointer' => isset($settings['tax2_pointer']) ? $settings['tax2_pointer'] : null,
+				'tax2_pointer_animation' => isset($settings['tax2_pointer_animation']) ? $settings['tax2_pointer_animation'] : null,
+				'tax1_custom_color_switcher' => isset($settings['tax1_custom_color_switcher']) ? $settings['tax1_custom_color_switcher'] : null,
+				'tax1_custom_color_field_text' => isset($settings['tax1_custom_color_field_text']) ? $settings['tax1_custom_color_field_text'] : null,
+				'tax1_custom_color_field_bg' => isset($settings['tax1_custom_color_field_bg']) ? $settings['tax1_custom_color_field_bg'] : null,
+				'layout_pagination' => isset($settings['layout_pagination']) ? $settings['layout_pagination'] : null,
+				'check_ajax_filter' => 'yes',
+				
+				// Taxonomies
+				// Dynamically add taxonomy settings
+				] + array_reduce(array_keys($this->post_taxonomies ?? []), function($carry, $slug) use ($settings) {
+					$carry['query_taxonomy_'. $slug] = isset($settings['query_taxonomy_'. $slug]) ? $settings['query_taxonomy_'. $slug] : null;
+					return $carry;
+				}, []) + array_reduce(array_keys($this->post_types ?? []), function($carry, $slug) use ($settings) {
+					$carry['query_exclude_'. $slug] = isset($settings['query_exclude_'. $slug]) ? $settings['query_exclude_'. $slug] : null;
+					$carry['query_manual_'. $slug] = isset($settings['query_manual_'. $slug]) ? $settings['query_manual_'. $slug] : null;
+					return $carry;
+				}, []) + [
+
+				// Repeater Controls
+				'grid_elements' => isset($settings['grid_elements']) ? $settings['grid_elements'] : null, // Assuming 'items' is a repeater control
+
+				// Add any necessary controls from styles tab here if needed
+			];
 		}
 
 		$this->add_render_attribute( 'grid-settings', [
 			'data-settings' => wp_json_encode( $layout_settings ),
+			'data-advanced-filters' => ( 'yes' === $settings['advanced_filters'] ) ? 'yes' : 'no'
 		] );
 	}
 
@@ -9888,7 +8879,7 @@ class Wpr_Grid extends Widget_Base {
 		$settings = $this->get_settings();
 		
 		// Get Posts
-		$posts = new \WP_Query( $this->get_main_query_args() );
+		$posts = new \WP_Query( WPR_Grid_Helpers::get_main_query_args($settings, []) );
 
 		// Loop: Start
 		if ( $posts->have_posts() ) :
@@ -9907,7 +8898,6 @@ class Wpr_Grid extends Widget_Base {
 			$render_attribute = $this->get_render_attribute_string( 'slider-settings' );
 		}
 
-		// Grid Wrap
 		echo '<section class="wpr-grid elementor-clearfix" '. $render_attribute .'>';
 
 		while ( $posts->have_posts() ) : $posts->the_post();
@@ -9919,34 +8909,34 @@ class Wpr_Grid extends Widget_Base {
 			echo '<article class="'. esc_attr( $post_class ) .'">';
 
 			// Password Protected Form
-			$this->render_password_protected_input( $settings );
+			WPR_Grid_Helpers::render_password_protected_input( $settings );
 
 			// Inner Wrapper
 			echo '<div class="wpr-grid-item-inner">';
 
 			// Content: Above Media
-			$this->get_elements_by_location( 'above', $settings, get_the_ID() );
+			WPR_Grid_Helpers::get_elements_by_location( 'above', $settings, get_the_ID() );
 
 			// Media
 			if ( has_post_thumbnail() ) {
-				echo '<div class="wpr-grid-media-wrap'. esc_attr($this->get_image_effect_class( $settings )) .' " data-overlay-link="'. esc_attr( $settings['overlay_post_link'] ) .'">';
+				echo '<div class="wpr-grid-media-wrap'. esc_attr(WPR_Grid_Helpers::get_image_effect_class( $settings )) .' " data-overlay-link="'. esc_attr( $settings['overlay_post_link'] ) .'">';
 					// Post Thumbnail
-					$this->render_post_thumbnail( $settings, get_the_ID() );
+					WPR_Grid_Helpers::render_post_thumbnail( $settings, get_the_ID() );
 
 					// Media Hover
 					echo '<div class="wpr-grid-media-hover wpr-animation-wrap">';
 						// Media Overlay
-						$this->render_media_overlay( $settings );
+						WPR_Grid_Helpers::render_media_overlay( $settings );
 
 						// Content: Over Media
-						$this->get_elements_by_location( 'over', $settings, get_the_ID() );
+						WPR_Grid_Helpers::get_elements_by_location( 'over', $settings, get_the_ID() );
 
 					echo '</div>';
 				echo '</div>';
 			}
 
 			// Content: Below Media
-			$this->get_elements_by_location( 'below', $settings, get_the_ID() );
+			WPR_Grid_Helpers::get_elements_by_location( 'below', $settings, get_the_ID() );
 
 			echo '</div>'; // End .wpr-grid-item-inner
 
@@ -9972,14 +8962,39 @@ class Wpr_Grid extends Widget_Base {
 		}
 
 		// Pagination
-		$this->render_grid_pagination( $settings );
+		WPR_Grid_Helpers::render_grid_pagination( $settings );
 
 		// No Posts Found
 		else:
+		
+		if ( 'yes' === $settings['advanced_filters'] ) {
+			// Grid Settings
+			if ( 'slider' !== $settings['layout_select'] ) {
+				$this->add_grid_settings( $settings );
+				$render_attribute = $this->get_render_attribute_string( 'grid-settings' );
 
+			// Slider Settings
+			} else {
+				$this->add_slider_settings( $settings );
+				$render_attribute = $this->get_render_attribute_string( 'slider-settings' );
+			}
+
+			echo '<section class="wpr-grid elementor-clearfix" '. $render_attribute .'>';
+
+				if ( 'dynamic' === $settings['query_selection'] ) {
+					echo '<h2>'. esc_html($settings['query_not_found_text']) .'</h2>';
+				}
+
+			// Grid Wrap
+			echo '</section>';
+
+			// Pagination
+			WPR_Grid_Helpers::render_grid_pagination( $settings );
+		} else {
 			if ( 'dynamic' === $settings['query_selection'] ) {
 				echo '<h2>'. esc_html($settings['query_not_found_text']) .'</h2>';
 			}
+		}
 
 		// Loop: End
 		endif;

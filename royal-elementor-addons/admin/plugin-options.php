@@ -434,6 +434,7 @@ function wpr_addons_settings_page() {
         <?php submit_button( '', 'wpr-options-button' ); ?>
 
         <div class="wpr-settings-group wpr-settings-navigation">
+            <a href="#filters-tab">Filters</a> /
             <a href="#general-tab">General</a> / 
             <a href="#optimizers-tab">Optimizers</a> / 
             <a href="#woocommerce-tab">WooCommerce</a> / 
@@ -1498,6 +1499,7 @@ function wpr_addons_settings_page() {
                     <li><span>White Label Branding</span></li>
                     <li><span>Elementor Pro Not Required</span></li>
                     <li><span>Custom Field Widget</span></li>
+                    <li><span>Advanced Filters Widget</span></li>
                     <li>And More is Comming Soon...</li>
                 </ul>
             </div>

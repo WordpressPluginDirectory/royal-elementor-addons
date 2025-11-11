@@ -101,18 +101,18 @@ class Plugin {
 
 		// Twitter
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-load-more-tweets.php';
-
+		
 		// Meta Keys
 		require WPR_ADDONS_PATH . 'classes/wpr-custom-meta-keys.php';
 
 		// Grid
-		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-grid-posts.php';
+		require WPR_ADDONS_PATH . 'classes/modules/wpr-grid-helpers.php';
+		
+		// Woo Grid
+		require WPR_ADDONS_PATH . 'classes/modules/wpr-woo-grid-helpers.php';
 
 		// Media Grid
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-grid-media.php';
-
-		// Woo Grid
-		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-woo-products.php';
 
 		// Particles
 		if ( 'on' === get_option('wpr-particles', 'on') ) {//TODO: make this check automatic(loop through) for all extensions
@@ -355,6 +355,13 @@ class Plugin {
 		wp_register_style(
 			'wpr-flipster-css',
 			WPR_ADDONS_URL . 'assets/css/lib/flipster/jquery.flipster.min.css',
+			[],
+			Plugin::instance()->get_version()
+		);
+
+		wp_register_style(
+			'wpr-date-picker-css',
+			WPR_ADDONS_URL . 'assets/css/lib/air-datepicker/air-datepicker.css',
 			[],
 			Plugin::instance()->get_version()
 		);
@@ -616,14 +623,35 @@ class Plugin {
 			'3.0.5',
 			true
 		);
+		
+		wp_register_script(
+			'imagesloaded',
+			WPR_ADDONS_URL . 'assets/js/lib/isotope/imagesloaded'. $this->script_suffix() .'.js',
+			[
+				'jquery'
+			],
+			'5.0.0',
+			true
+		);
 
 		wp_register_script(
 			'wpr-isotope',
 			WPR_ADDONS_URL . 'assets/js/lib/isotope/isotope'. $this->script_suffix() .'.js',
 			[
 				'jquery',
+				'imagesloaded'
 			],
 			'3.0.8',
+			true
+		);
+
+		wp_register_script(
+			'wpr-date-picker-js',
+			WPR_ADDONS_URL . 'assets/js/lib/air-datepicker/air-datepicker.js',
+			[
+				'jquery',
+			],
+			'',
 			true
 		);
 
@@ -1037,6 +1065,12 @@ class Plugin {
 					'name' => 'wpr-custom-field',
 					'title' => __('Custom Field', 'wpr-addons'),
 					'icon' => 'wpr-icon eicon-database',
+					'categories' => '["'. $category .'"]',
+				],
+				[
+					'name' => 'wpr-advanced-filters',
+					'title' => __('Advanced Filters', 'wpr-addons'),
+					'icon' => 'wpr-icon eicon-filter',
 					'categories' => '["'. $category .'"]',
 				],
 			];
