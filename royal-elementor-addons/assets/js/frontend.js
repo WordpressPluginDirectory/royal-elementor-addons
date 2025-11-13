@@ -5,6 +5,7 @@
 	var actionTargetProductId;
 	var finalURL = window.location.href;
 	var gridLoadMoreItems;
+	var initialItems;
 	var paramsObj = {};
 
 	var WprElements = {
@@ -1369,7 +1370,7 @@
 
 				isotopeFilters( settings );
 
-				var initialItems = 0;
+				WprElements.changeInitialItems(0);
 
 				// Filtering Transitions
 				iGrid.on( 'arrangeComplete', function( event, filteredItems ) {
@@ -1425,7 +1426,7 @@
 						}
 					}
 
-					initialItems = filteredItems.length;
+					WprElements.changeInitialItems(filteredItems.length);
 				});
 
 				// iGrid.imagesLoaded().progress( function( instance, image ) {
@@ -2181,7 +2182,8 @@
 				// Click Event
 				if ( !settings.grid_settings ) {
 					$scope.find( '.wpr-grid-filters span' ).on( 'click', function() {
-						initialItems = 0;
+						WprElements.changeInitialItems(0);
+
 						var filterClass = $(this).data( 'filter' ),
 							filterWrap = $(this).parent( 'li' ),
 							filterRole = filterWrap.attr( 'data-role' );
@@ -2712,7 +2714,7 @@
 										WprElements.mediaHoverLink($scope, iGrid);
 										lazyLoadObserver();
 										// iGrid.removeClass('wpr-zero-opacity');
-										initialItems = 0;
+										WprElements.changeInitialItems(0);
 									}, 800);
 								},
 								error: function(error) {
@@ -11929,6 +11931,7 @@
 	
 								// Cache the response
 								// localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+								WprElements.changeInitialItems(0);
 								updateGrid(response, false, start, targetGrid, settings, widgetSelector);
 							},
 							error: function(error) {
@@ -12402,6 +12405,10 @@
 
 		changeFinalURL: function(url) {
 			finalURL = url;
+		},
+
+		changeInitialItems: function(items) {
+			initialItems = items;
 		},
 
 		// Isotope Layout

@@ -645,6 +645,7 @@
 /* GOGA */
 .wpr-pro-element a,
 .wpr-pro-element > a,
+.wpr-expert-element a,
 .wpr-expert-element > a {
   display: block;
   position: absolute;

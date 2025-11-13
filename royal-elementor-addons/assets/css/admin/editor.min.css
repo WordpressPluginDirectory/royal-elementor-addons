@@ -45,6 +45,16 @@
 	position: relative !important;
 }
 
+#elementor-panel-category-wpr-premium-widgets .elementor-element-wrapper.elementor-element--promotion:last-child {
+	grid-row: 1 !important;
+    grid-column: 1 !important;
+}
+
+#elementor-panel-category-wpr-premium-widgets .elementor-element-wrapper.elementor-element--promotion:nth-child(13) {
+	grid-row: 1 !important;
+	grid-column: 2 !important;
+}
+
 .elementor-element--promotion .wpr-icon:after {
 	top: 22px;
 	right: -1px;
