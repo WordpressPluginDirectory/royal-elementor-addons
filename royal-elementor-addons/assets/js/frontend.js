@@ -2155,19 +2155,17 @@
 
 				// Hide Empty Filters
 				if ( 'yes' === settings.filters_hide_empty ) {
-					if ( !settings.grid_settings ) {
-						$scope.find( '.wpr-grid-filters span' ).each(function() {
-							var searchClass = $(this).attr( 'data-filter' );
+					$scope.find( '.wpr-grid-filters span' ).each(function() {
+						var searchClass = $(this).attr( 'data-filter' );
 
-							if ( '*' !== searchClass ) {
-								if ( 0 === iGrid.find(searchClass).length ) {
-									$(this).parent( 'li' ).addClass( 'wpr-hidden-element' );
-								} else {
-									$(this).parent( 'li' ).removeClass( 'wpr-hidden-element' );
-								}
+						if ( '*' !== searchClass ) {
+							if ( 0 === iGrid.find(searchClass).length ) {
+								$(this).parent( 'li' ).addClass( 'wpr-hidden-element' );
+							} else {
+								$(this).parent( 'li' ).removeClass( 'wpr-hidden-element' );
 							}
-						});
-					}
+						}
+					});
 				}
 
 				// Set a Default Filter
@@ -2621,8 +2619,6 @@
 					event.stopPropagation();
 					event.stopImmediatePropagation();
 
-					// iGrid.isotopewpr('destroy');
-					// $scope.find('.wpr-grid').html(loader);
 					iGrid.isotopewpr('remove', iGrid.children('.wpr-grid-item'));
 					if ( iGrid.find('.wpr-grid-loader-wrap').length < 1 ) {
 						iGrid.append(loader);
@@ -2666,8 +2662,11 @@
 										const end2 = performance.now();
 										console.log(`AJAX call took ${end2 - start2} ms`);
 
-										var newItems = $(response.data.output);
-										if ( !newItems ) {
+										var newItems;
+
+										if ( response.data && response.data.output ) {
+											newItems = $(response.data.output);
+										} else {
 											newItems = $(response);
 										}
 										
@@ -2781,8 +2780,13 @@
 								},
 								success: function( response ) {
 									pagesLoadedExperiment++;
+									var items;
 									// iGrid.css('opacity', 0);
-									var items = $(response.data.output);	
+									if ( response.data && response.data.output ) {
+										items = $(response.data.output);
+									} else {
+										items = $(response);
+									}
 		
 									// $data.each(function() {
 									// 	$(this).addClass('wpr-grid-hidden-item');
@@ -10378,6 +10382,21 @@
 					var nextSelect = $(this).closest('.wpr-af-select-wrap').nextAll('.wpr-af-select-wrap').first().find('.wpr-af-dependent-select');
 					var relatedTax = $(this).data('taxonomy');
 
+					// Log data-taxonomy from all previous selects (not just the first)
+					const prevSelects = $(this)
+						.closest('.wpr-af-select-wrap')
+						.prevAll('.wpr-af-select-wrap')
+						.find('select');
+
+					const taxonomies = prevSelects
+						.map(function() { return $(this).data('taxonomy'); })
+						.get();
+
+					// Add current relatedTax before logging
+					taxonomies.unshift(relatedTax);
+
+					console.log(taxonomies); // array of all taxonomies including relatedTax
+
 					// Reset and disable all following selects
 					$(this).nextAll('.wpr-af-dependent-select').each(function() {
 						$(this).prop('disabled', true).empty().append('<option value="0">' + noneLabel + '</option>');
@@ -10400,6 +10419,7 @@
 							related_taxonomy: relatedTax
 						},
 						success: function(response) {
+							console.log(response);
 							if (response.success && response.data.length) {
 								var options = '<option value="">' + targetSelect.find('option:first').text() + '</option>';
 								response.data.forEach(function(term) {

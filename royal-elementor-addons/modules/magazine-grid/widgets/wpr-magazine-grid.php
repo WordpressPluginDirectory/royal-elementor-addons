@@ -759,10 +759,15 @@ class Wpr_Magazine_Grid extends Widget_Base {
 			[
 				'type' => Controls_Manager::SLIDER,
 				'label' => esc_html__( 'Container Height', 'wpr-addons' ),
+				'size_units' => [ 'px', 'vh' ],
 				'range' => [
 					'px' => [
 						'min' => 100,
 						'max' => 1500,
+					],
+					'vh' => [
+						'min' => 10,
+						'max' => 100,
 					],
 				],
 				'default' => [
@@ -770,7 +775,7 @@ class Wpr_Magazine_Grid extends Widget_Base {
 					'size' => 520,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .wpr-magazine-grid' => 'min-height: {{SIZE}}px;',
+					'{{WRAPPER}} .wpr-magazine-grid' => 'min-height: {{SIZE}}{{UNIT}};',
 				],
 				'separator' => 'before'
 			]

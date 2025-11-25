@@ -1,7 +1,7 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1040
+Stable tag: 1.7.1041
 Requires at least: 5.0
 Tested up to: 6.8.3
 Requires PHP: 5.6
@@ -453,8 +453,12 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1041 - 2025-11-25 =
+* FIXED: Advanced Filters minor issues with some Template Kits - See it in Action [**Advanced Filters Preview**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-wpo-pp-details-tab).
+* FIXED: Minor Bugs
+
 = Royal Elementor Addons v1.7.1040 - 2025-11-18 =
-* Fixed: Advanced Filters minor issues with some Template Kits - See it in Action [**Advanced Filters Preview**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-wpo-pp-details-tab).
+* FIXED: Advanced Filters minor issues with some Template Kits - See it in Action [**Advanced Filters Preview**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-wpo-pp-details-tab).
 
 = Royal Elementor Addons v1.7.1039 - 2025-11-13 =
 * NEW: First Kit Where we have implemented Advanced Filters (Filter any type of CPT, Taxonomy and Metafields) - See it in Action [**Advanced Filters Preview 1**](https://demosites.royal-elementor-addons.com/fashion-v2/shop-fashion-v2/?ref=rea-wpo-pp-details-tab).

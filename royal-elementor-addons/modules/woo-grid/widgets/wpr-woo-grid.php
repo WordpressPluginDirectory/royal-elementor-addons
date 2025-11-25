@@ -9040,6 +9040,8 @@ class Wpr_Woo_Grid extends Widget_Base {
 		if ( 'yes' === $settings['filters_experiment'] || 'yes' === $settings['advanced_filters'] ) {
 			$layout_settings['grid_settings'] = [
 				// General Settings
+				'filters_experiment' => isset($settings['filters_experiment']) ? $settings['filters_experiment'] : null,
+				'advanced_filters' => isset($settings['advanced_filters']) ? $settings['advanced_filters'] : null,
 				'layout_select' => isset($settings['layout_select']) ? $settings['layout_select'] : null,
 				'layout_animation' => isset($settings['layout_animation']) ? $settings['layout_animation'] : null,
 				'layout_animation_duration' => isset($settings['layout_animation_duration']) ? $settings['layout_animation_duration'] : null,
@@ -9120,7 +9122,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				
 				// Taxonomies
 				// Dynamically add taxonomy settings
-				] + array_reduce(array_keys($this->post_taxonomies ?? []), function($carry, $slug) use ($settings) {
+				] + array_reduce(array_keys($this->post_taxonomies ?? ['product_cat' => 'product_cat', 'product_tag' => 'product_tag']), function($carry, $slug) use ($settings) {
 					$carry['query_taxonomy_'. $slug] = isset($settings['query_taxonomy_'. $slug]) ? $settings['query_taxonomy_'. $slug] : null;
 					return $carry;
 				}, []) + array_reduce(array_keys($this->post_types ?? []), function($carry, $slug) use ($settings) {

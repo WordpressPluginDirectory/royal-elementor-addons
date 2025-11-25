@@ -84,6 +84,10 @@ public function get_dependent_terms() {
 		$options[] = [
 			'id' => $term->term_id,
 			'name' => $term->name,
+			// 'posts' => $posts,
+			// 'related_tax' => $related_taxonomy,
+			// 'related_term' => $related_term->slug,
+			// 'taxonomy' => $taxonomy,
 		];
 	}
 
@@ -583,11 +587,19 @@ public function get_dependent_terms() {
 				}	
 
 				if ( !empty($tax_query) ) {
-					$args['tax_query'] = $tax_query;
+					if ( !empty($args['tax_query']) ) {
+						$args['tax_query'] = array_merge( $args['tax_query'], $tax_query );
+					} else {
+						$args['tax_query'] = $tax_query;
+					}
 				}
 
 				if ( !empty($meta_query) )  {
-					$args['meta_query'] = $meta_query;
+					if ( !empty($args['meta_query']) ) {
+						$args['tax_query'] = array_merge( $args['tax_query'], $tax_query );
+					} else {
+						$args['meta_query'] = $meta_query;
+					}
 				}
 			}
 		}

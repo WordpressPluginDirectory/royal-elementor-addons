@@ -590,15 +590,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 						}
 					}
 				}
-			}
 
-			if ( !empty($tax_query) ) {
-				$args['tax_query'] = $tax_query;
-			}
+				if ( !empty($tax_query) ) {
+					if ( !empty($args['tax_query']) ) {
+						$args['tax_query'] = array_merge( $args['tax_query'], $tax_query );
+					} else {
+						$args['tax_query'] = $tax_query;
+					}
+				}
 
-            if ( !empty($meta_query) )  {
-                $args['meta_query'] = $meta_query;
-            }
+				if ( !empty($meta_query) )  {
+					if ( !empty($args['meta_query']) ) {
+						$args['tax_query'] = array_merge( $args['tax_query'], $tax_query );
+					} else {
+						$args['meta_query'] = $meta_query;
+					}
+				}
+			}
 		}
 
 		return $args;
