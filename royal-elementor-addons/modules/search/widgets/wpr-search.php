@@ -960,6 +960,8 @@ class Wpr_Search extends Widget_Base {
 
 	public function add_control_number_of_results() {}
 
+	public function add_control_enable_meta_query() {}
+
 	public function add_control_show_password_protected() {
 		if ( current_user_can( 'administrator' ) ) {
 			$this->add_control(
@@ -1154,6 +1156,8 @@ class Wpr_Search extends Widget_Base {
 		$this->add_control_ajax_search();
 
 		$this->add_control_number_of_results();
+
+		$this->add_control_enable_meta_query();
 
 		$this->add_control_show_password_protected();
 
@@ -2109,6 +2113,7 @@ class Wpr_Search extends Widget_Base {
 				'wpr-taxonomy-type' => isset($settings['query_taxonomy_'. $settings['search_query']]) ? $settings['query_taxonomy_'. $settings['search_query']] : '',
 				'number-of-results' => isset($settings['number_of_results']) && (defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) ? $settings['number_of_results'] : 2,
 				'ajax-search' => isset($settings['ajax_search']) ? $settings['ajax_search'] : '',
+				'meta-query' => isset($settings['enable_meta_query']) ? $settings['enable_meta_query'] : '',
 				'show-description' => isset($settings['show_description']) ? $settings['show_description'] : '',
 				'number-of-words' => isset($settings['number_of_words_in_excerpt']) ? $settings['number_of_words_in_excerpt'] : '',
 				'show-ajax-thumbnails' => isset($settings['show_ajax_thumbnails']) ? $settings['show_ajax_thumbnails'] : '',

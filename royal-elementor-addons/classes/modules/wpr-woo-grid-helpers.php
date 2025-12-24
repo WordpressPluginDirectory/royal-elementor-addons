@@ -286,6 +286,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$args['posts_per_page'] = $posts_per_page;
 			if (!empty($settings['query_randomize'])) {
 				$args['orderby'] = $settings['query_randomize'];
+			} else {
+				$args['orderby'] = get_query_var('orderby') ? get_query_var('orderby') : $settings['current_query_orderby'];
+				$args['order'] = $settings['order_direction'] ? $settings['order_direction'] : $settings['current_query_order'];
 			}
 			$args['post_type'] = 'product'; // GOGA: needs check
 		}
@@ -321,7 +324,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$args['order'] = 'DESC';
 			} else {
 				$args['order'] = $settings['order_direction'];
-				$args['orderby']  = 'menu_order';
+				if ( 'current' === $settings[ 'query_selection' ] ) {
+					$args['orderby']  = 'menu_order title';
+				} else {
+					$args['orderby']  = $settings['query_orderby'];
+				}
 			}
 		}
 
@@ -725,13 +732,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 					] );
 				}
 			} else {
-				foreach ( get_object_taxonomies( 'product' ) as $tax ) {
-					if ( ! empty($settings[ 'query_taxonomy_'. $tax ]) ) {
-						array_push( $tax_query, [
-							'taxonomy' => $tax,
-							'field' => 'id',
-							'terms' => $settings[ 'query_taxonomy_'. $tax ]
-						] );
+				if ( 'current' != $settings['query_selection'] ) {
+					foreach ( get_object_taxonomies( 'product' ) as $tax ) {
+						if ( ! empty($settings[ 'query_taxonomy_'. $tax ]) ) {
+							array_push( $tax_query, [
+								'taxonomy' => $tax,
+								'field' => 'id',
+								'terms' => $settings[ 'query_taxonomy_'. $tax ]
+							] );
+						}
 					}
 				}
 			}
@@ -751,6 +760,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				        'terms' => $term
 				    ] );
 				}
+			}
+
+			if ( isset($settings['current_query_source']) && !empty($settings['current_query_source']) ) {
+				array_push( $tax_query, [
+					'taxonomy' => $settings['current_query_tax'],
+					'field' => 'slug',
+					'terms' => $settings['current_query_source']
+				] );
 			}
 		}
 
@@ -2359,7 +2376,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		// Loop: End
 		else :
 
-			if ( 'dynamic' === $settings['query_selection'] ) {
+			if ( 'dynamic' === $settings['query_selection'] || 'current' === $settings['query_selection'] ) {
 				echo '<h2>'. esc_html($settings['query_not_found_text']) .'</h2>';
 			}
 

@@ -113,6 +113,22 @@ class Wpr_Flip_Carousel extends Widget_Base {
 				// ]
 			]
 		);
+
+		$repeater->add_control(
+			'slide_subcaption',
+			[
+				'label' => esc_html__( 'Subcaption', 'wpr-addons' ),
+				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
+				'default' => 'Subcaption',
+				'description' => 'Show/Hide Subcaption from Settings tab.'
+				// 'condition' => [
+				// 	'enable_figcaption' => 'yes'
+				// ]
+			]
+		);
 		
 		$repeater->add_control(
 			'enable_slide_link',
@@ -343,6 +359,19 @@ class Wpr_Flip_Carousel extends Widget_Base {
 				'return_value' => 'yes',
 				'default' => '',
 				'separator' => 'before'
+			]
+		);
+		
+		$this->add_control(
+			'enable_subcaption',
+			[
+				'label' => __( 'Show subcaption', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'default' => '',
+				'condition' => [
+					'enable_figcaption' => 'yes'
+				]
 			]
 		);
 
@@ -977,8 +1006,8 @@ class Wpr_Flip_Carousel extends Widget_Base {
 		);
 
 		$this->end_controls_section();
-				
-        $this->start_controls_section(
+		
+		$this->start_controls_section(
 			'section_flip_carousel_caption_styles',
 			[
 				'label' => esc_html__( 'Caption', 'wpr-addons' ),
@@ -1139,6 +1168,137 @@ class Wpr_Flip_Carousel extends Widget_Base {
 		);
 
 		$this->end_controls_section();
+				
+        $this->start_controls_section(
+			'section_flip_carousel_subcaption_styles',
+			[
+				'label' => esc_html__( 'Subcaption', 'wpr-addons' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'enable_subcaption' => 'yes'
+				]
+			]
+		);
+			
+		$this->add_control(
+			'subcaption_color',
+			[
+				'label'  => esc_html__( 'Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#777777',
+				'selectors' => [
+					'{{WRAPPER}} .subcaption' => 'color: {{VALUE}}',
+				],
+			]
+		);
+			
+		$this->add_control(
+			'subcaption_background_color',
+			[
+				'label'  => esc_html__( 'Background Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#FFF',
+				'selectors' => [
+					'{{WRAPPER}} .subcaption' => 'background-color: {{VALUE}}',
+				],
+			]
+		);
+		
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'content_typography_subcaption',
+				'label' => __( 'Typography', 'wpr-addons' ),
+				'selector' => '{{WRAPPER}} .subcaption',
+				'fields_options' => [
+					'typography' => [
+						'default' => 'custom',
+					],
+					'font_weight' => [
+						'default' => '',
+					],
+					'font_family' => [
+						'default' => 'Roboto',
+					],
+					'font_style' => [
+						'default' => 'normal'
+					],
+					'font_size'   => [
+						'default' => [
+							'size' => '12',
+							'unit' => 'px',
+						]
+					]
+				]
+			]
+		);
+
+		$this->add_responsive_control(
+			'subcaption_padding',
+			[
+				'label' => esc_html__( 'Padding', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'default' => [
+					'top' => 10,
+					'right' => 0,
+					'bottom' => 10,
+					'left' => 0,
+				],
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .subcaption span' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'separator' => 'before'
+			]
+		);
+
+		$this->add_responsive_control(
+			'subcaption_margin',
+			[
+				'label' => esc_html__( 'Margin', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .subcaption span' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				]
+			]
+		);
+
+		$this->add_responsive_control(
+			'subcaption_alignment',
+			[
+				'label' => esc_html__( 'Alignment', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default' => 'center',
+				'separator' => 'before',
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-right',
+					],
+				],
+                'selectors' => [
+					'{{WRAPPER}} .subcaption' => 'text-align: {{VALUE}};',
+				]
+			]
+		);
+
+		$this->end_controls_section();
     }
 
 	public function flip_carousel_attributes($settings) {
@@ -1208,9 +1368,15 @@ class Wpr_Flip_Carousel extends Widget_Base {
 					$figcaption = '';
 				}
 
+				if ( 'yes' === $settings['enable_subcaption'] ) {
+					$subcaption = '<div class="subcaption"><span style="width: 100%;">'. esc_html($element['slide_subcaption']) .'</span></div>';
+				} else {
+					$subcaption = '';
+				}
+
 				$inner_figure = 'after' === $settings['flipcaption_position']
-						? ''. $flip_slide_image . $figcaption .''
-						: ''. $figcaption . $flip_slide_image .'';
+						? ''. $flip_slide_image . $figcaption . $subcaption .''
+						: ''. $figcaption . $subcaption . $flip_slide_image .'';
 
 				$figure = 'yes' === $element['enable_slide_link']
 						? '<a '. $this->get_render_attribute_string( 'slide_link'. $i ) .'>' . wp_kses_post($inner_figure) . '</a>'

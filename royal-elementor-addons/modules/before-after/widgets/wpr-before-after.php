@@ -5,6 +5,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Image_Size;
+use Elementor\Group_Control_Border;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Group_Control_Box_Shadow;
@@ -251,6 +252,51 @@ class Wpr_Before_After extends Widget_Base {
 				'condition' => [
 					'label_display!' => 'none',
 				]
+			]
+		);
+
+		$this->end_controls_section();
+
+		// Section: Request New Feature
+		Utilities::wpr_add_section_request_feature( $this, Controls_Manager::RAW_HTML, '' );
+
+		// Section: Pro Features
+		Utilities::pro_features_list_section( $this, '', Controls_Manager::RAW_HTML, 'before-after', [
+			'Vertical Image Comparison',
+			'Move Images on Mouse Move (Hover)',
+			'Set Default Divider Position (% After Image to show)',
+			'Show Labels on Image Hover',
+		] );
+
+		// Styles ====================
+		// Section: General ----------
+		$this->start_controls_section(
+			'section_style_general',
+			[
+				'label' => esc_html__( 'General', 'wpr-addons' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+				'show_label' => false,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'general_border',
+				'label' => esc_html__( 'Border', 'wpr-addons' ),
+				'selector' => '{{WRAPPER}} .wpr-ba-image-container'
+			]
+		);
+
+		$this->add_control(
+			'general_border_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-ba-image-container' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -545,17 +591,6 @@ class Wpr_Before_After extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// Section: Request New Feature
-		Utilities::wpr_add_section_request_feature( $this, Controls_Manager::RAW_HTML, '' );
-
-		// Section: Pro Features
-		Utilities::pro_features_list_section( $this, '', Controls_Manager::RAW_HTML, 'before-after', [
-			'Vertical Image Comparison',
-			'Move Images on Mouse Move (Hover)',
-			'Set Default Divider Position (% After Image to show)',
-			'Show Labels on Image Hover',
-		] );
-
 		// Styles ====================
 		// Section: Labels -----------
 		$this->start_controls_section(
@@ -705,6 +740,29 @@ class Wpr_Before_After extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-ba-label > div' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_responsive_control(
+			'labels_margin',
+			[
+				'label' => esc_html__( 'Margin', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-ba-label > div' => 'margin: {{SIZE}}{{UNIT}};',
 				],
 				'separator' => 'before',
 			]

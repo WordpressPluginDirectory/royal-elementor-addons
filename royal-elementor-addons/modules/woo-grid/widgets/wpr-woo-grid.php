@@ -9075,6 +9075,10 @@ class Wpr_Woo_Grid extends Widget_Base {
 
 				// Query Settings
 				'query_source' => 'product',
+				'current_query_tax' => isset(get_queried_object()->taxonomy) ? get_queried_object()->taxonomy : '',
+				'current_query_source' => isset(get_queried_object()->taxonomy) ? get_queried_object()->slug : '',
+				'current_query_order' => isset($settings['order_direction']) ? $settings['order_direction'] : (get_query_var('order') ? get_query_var('order') : 'ASC'),
+				'current_query_orderby' => get_query_var('orderby') ? get_query_var('orderby') : 'menu_order title',
 				'query_author' => isset($settings['query_author']) ? $settings['query_author'] : null,
 				'query_posts_per_page' => isset($settings['query_posts_per_page']) ? $settings['query_posts_per_page'] : null,
 				'query_offset' => isset($settings['query_offset']) ? $settings['query_offset'] : null,
@@ -9313,7 +9317,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 		echo '</section>';
 
 		if ( 'slider' === $settings['layout_select'] ) {
-			if ( $posts->found_posts > (int) $settings['layout_slider_amount'] &&  (int) $settings['layout_slider_amount'] < $settings['query_posts_per_page'] ) {
+			if ( $posts->found_posts > (int) $settings['layout_slider_amount'] &&  ( (int) $settings['layout_slider_amount'] < $settings['query_posts_per_page'] || empty($settings['query_posts_per_page']) ) ) {
 				// Slider Navigation
 				echo '<div class="wpr-grid-slider-arrow-container">';
 					echo '<div class="wpr-grid-slider-prev-arrow wpr-grid-slider-arrow" id="wpr-grid-slider-prev-'. esc_attr($this->get_id()) .'">'. Utilities::get_wpr_icon( $settings['layout_slider_nav_icon'], '' ) .'</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

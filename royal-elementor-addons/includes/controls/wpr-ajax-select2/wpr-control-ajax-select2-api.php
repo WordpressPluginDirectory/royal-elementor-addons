@@ -38,6 +38,11 @@ class Wpr_Control_Ajax_Select2_Api {
 			'numberposts' => 15
 		];
 		
+		if ( isset( $request['ids'] ) ) {
+			$ids = explode( ',', $request['ids'] );
+			$args['post__in'] = $ids;
+		}
+		
 		if ( isset( $request['s'] ) ) {
 			$args['s'] = $request['s'];
 		}

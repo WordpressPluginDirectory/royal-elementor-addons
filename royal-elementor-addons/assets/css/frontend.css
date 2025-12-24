@@ -2221,7 +2221,7 @@ div[class*="wpr-sub-menu-fx"] .wpr-mega-menu .wpr-sub-mega-menu.wpr-animate-sub 
     display: -ms-flexbox;
     display: flex;
     overflow: hidden;
-    white-space: nowrap;
+    white-space: normal;
     -ms-text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
@@ -13688,6 +13688,7 @@ select.wpr-category-select {
 
 .wpr-flip-carousel .flipster__button,
 .wpr-flip-carousel .flipcaption,
+.wpr-flip-carousel .subcaption,
 .wpr-flip-carousel .flipster__nav__link {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -18044,6 +18045,19 @@ input.wpr-date-filter-end {
   -webkit-transform: rotate(0);
       -ms-transform: rotate(0);
           transform: rotate(0);
+}
+
+.wpr-toggle-icon svg {
+    display: block;
+}
+
+.wpr-advanced-accordion h1,
+.wpr-advanced-accordion h2,
+.wpr-advanced-accordion h3,
+.wpr-advanced-accordion h4,
+.wpr-advanced-accordion h5,
+.wpr-advanced-accordion h6 {
+    margin: 0;
 }
 
 .wpr-advanced-accordion .wpr-acc-panel {

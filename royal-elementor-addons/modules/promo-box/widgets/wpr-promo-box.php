@@ -1502,6 +1502,7 @@ class Wpr_Promo_Box extends Widget_Base {
 	protected function render() {
 		// Get Settings
 		$settings = $this->get_settings();
+		$settings_new = $this->get_settings_for_display();
 
 		$image_src = Group_Control_Image_Size::get_attachment_image_src( $settings['image']['id'], 'image_size', $settings );
 		$content_image_src = Group_Control_Image_Size::get_attachment_image_src( $settings['content_image']['id'], 'content_image_size', $settings );
@@ -1515,13 +1516,18 @@ class Wpr_Promo_Box extends Widget_Base {
 		}
 
 		$content_btn_element = 'div';
-		$content_link = $settings['content_link']['url'];
+		
+		if ( $settings_new['content_link'] ) {
+			$content_link = $settings_new['content_link']['url'];
+		} else {
+			$content_link = $settings['content_link']['url'];
+		}
 
 		if ( '' !== $content_link ) {
 
 			$content_btn_element = 'a';
 
-			$this->add_render_attribute( 'link_attribute', 'href', esc_url( $settings['content_link']['url'] ) );
+			$this->add_render_attribute( 'link_attribute', 'href', esc_url( $content_link ) );
 
 			if ( $settings['content_link']['is_external'] ) {
 				$this->add_render_attribute( 'link_attribute', 'target', '_blank' );

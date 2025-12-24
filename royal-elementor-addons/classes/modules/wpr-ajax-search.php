@@ -111,38 +111,55 @@ if ( ! defined( 'ABSPATH' ) ) {
                 }
             } 
         }
-        
+
+        $keyword = sanitize_text_field( $_POST['wpr_keyword'] );
         $can_view_protected_posts = current_user_can('read_private_posts');
+        $meta_query = [];
+
+        if ( 'yes' === sanitize_text_field( $_POST['wpr_exclude_without_thumb'] ) ) {
+            $meta_query[] = [
+                'key' => '_thumbnail_id',
+            ];
+        }
         
         if ( ( 'yes' !== sanitize_text_field($_POST['wpr_show_ps_pt'] ) ) || !$can_view_protected_posts ) {
-            $the_query = new \WP_Query( 
+            $args =
                 [
                     'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
-                    's' => sanitize_text_field( $_POST['wpr_keyword'] ), 
+                    's' => sanitize_text_field( $_POST['wpr_keyword'] ),
                     'post_type' => $_POST['wpr_query_type'] === 'all' || (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code())  ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
                     'offset' => sanitize_text_field($_POST['wpr_search_results_offset']),
-                    'meta_query' => 'yes' === sanitize_text_field($_POST['wpr_exclude_without_thumb']) ? [
-                        ['key' => '_thumbnail_id']
-                    ] : '',
+                    'meta_query' => $meta_query ?: '',
                     'tax_query' => $tax_query,
                     'post_status' => in_array('attachment', $all_post_types) ? ['publish', 'inherit'] : 'publish',
                     'post_password' => ''
-                ]
-            );
+                ];
         } else {
-            $the_query = new \WP_Query( 
+            $args =
                 [
                     'posts_per_page' => sanitize_text_field($_POST['wpr_number_of_results']), 
-                    's' => sanitize_text_field( $_POST['wpr_keyword'] ), 
+                    's' => sanitize_text_field( $_POST['wpr_keyword'] ),
                     'post_type' => $_POST['wpr_query_type'] === 'all' || (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code())  ? $all_post_types : array( sanitize_text_field($_POST['wpr_query_type']) ),
                     'offset' => sanitize_text_field($_POST['wpr_search_results_offset']),
-                    'meta_query' => 'yes' === sanitize_text_field($_POST['wpr_exclude_without_thumb']) ? [
-                        ['key' => '_thumbnail_id']
-                    ] : '',
+                    'meta_query' => $meta_query ?: '',
                     'tax_query' => $tax_query,
                     'post_status' => in_array('attachment', $all_post_types) ? ['publish', 'inherit'] : 'publish',
+                ];
+        }
+
+        $the_query = new \WP_Query( $args );
+
+        if ( !$the_query->have_posts() && $keyword !== '' && 'yes' === sanitize_text_field( $_POST['wpr_meta_query'] ) ) {
+            $fallback_args = $args;
+            $fallback_args['s'] = ''; // disable default search
+            $fallback_args['meta_query'] = [
+                [
+                    'value'   => $keyword,
+                    'compare' => 'LIKE'
                 ]
-            );
+            ];
+
+            $the_query = new \WP_Query($fallback_args);
         }
         
         if( $the_query->have_posts() ) :

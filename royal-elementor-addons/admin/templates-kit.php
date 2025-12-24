@@ -1008,6 +1008,11 @@ function real_mime_types( $defaults, $file, $filename, $mimes ) {
 }
 
 function real_mimes( $defaults, $filename ) {
+    $validate = wp_check_filetype( $filename );
+    if ( $validate['type'] == false ) {
+        die(__("File type is not allowed.", "wpr-addons"));
+    }
+
     if ( strpos( $filename, 'main' ) !== false ) {
         $defaults['ext']  = 'xml';
         $defaults['type'] = 'text/xml';

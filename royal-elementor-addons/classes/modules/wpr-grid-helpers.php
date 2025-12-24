@@ -28,71 +28,90 @@ if ( ! defined( 'ABSPATH' ) ) {
 		add_action('wp_ajax_nopriv_wpr_get_dependent_terms', [$this, 'get_dependent_terms']);
     }
 
-public function get_dependent_terms() {
-	// check_ajax_referer('wpr_addons_elementor', 'nonce');
+	public function get_dependent_terms() {
+		// check_ajax_referer('wpr_addons_elementor', 'nonce');
 
-	if ( empty($_POST['taxonomy']) || empty($_POST['parent_term']) ) {
-		wp_send_json_error('Missing data');
-	}
-
-	$taxonomy    = sanitize_text_field($_POST['taxonomy']);
-	$parent_raw  = sanitize_text_field($_POST['parent_term']);
-
-	// Determine if parent_term is ID or slug
-	if ( is_numeric($parent_raw) ) {
-		$related_term = get_term(intval($parent_raw));
-	} else {
-		// Optional: detect the related taxonomy (requires an extra POST param or default)
-		$related_taxonomy = sanitize_text_field($_POST['related_taxonomy'] ?? '');
-		if ( empty($related_taxonomy) ) {
-			wp_send_json_error('Missing related taxonomy for slug');
+		if ( empty($_POST['taxonomy']) || empty($_POST['parent_term']) ) {
+			wp_send_json_error('Missing data');
 		}
-		$related_term = get_term_by('slug', $parent_raw, $related_taxonomy);
+
+		$taxonomy    = sanitize_text_field($_POST['taxonomy']);
+		$parent_raw  = sanitize_text_field($_POST['parent_term']);
+
+		// Determine if parent_term is ID or slug
+		if ( is_numeric($parent_raw) ) {
+			$related_term = get_term(intval($parent_raw));
+		} else {
+			// Optional: detect the related taxonomy (requires an extra POST param or default)
+			$related_taxonomy = sanitize_text_field($_POST['related_taxonomy'] ?? '');
+			if ( empty($related_taxonomy) ) {
+				wp_send_json_error('Missing related taxonomy for slug');
+			}
+			$related_term = get_term_by('slug', $parent_raw, $related_taxonomy);
+		}
+
+		if ( ! $related_term || is_wp_error($related_term) ) {
+			wp_send_json_error('Invalid parent term');
+		}
+
+		$related_taxonomy = $related_term->taxonomy;
+		$tax_array = [];
+
+		if ( isset($_POST['tax_array']) ) {
+			$related_taxonomies = $_POST['tax_array'];
+			$related_terms = $_POST['parent_terms'];
+
+			// Add relation AND
+			$tax_array['relation'] = 'AND';
+
+			foreach ( $related_taxonomies as $index => $tax ) {
+				if ( isset($related_terms[$index]) && $related_terms[$index] !== '' ) {
+					$tax_array[] = [
+						'taxonomy' => sanitize_text_field($tax),
+						'field'    => 'term_id',
+						'terms'    => intval($related_terms[$index]),
+					];
+				}
+			}
+		} else {
+			$tax_array[] = [
+					'taxonomy' => $related_taxonomy,
+					'field'    => 'term_id',
+					'terms'    => $related_term->term_id,
+			];
+		}
+
+		// Get all posts with the related term
+		$posts = get_posts([
+			'post_type'      => 'any',
+			'posts_per_page' => -1,
+			'tax_query'      => $tax_array,
+			'fields' => 'ids',
+		]);
+
+		if ( empty($posts) ) {
+			wp_send_json_success([]);
+		}
+
+		// Get all terms from the target taxonomy used in these posts
+		$terms = wp_get_object_terms($posts, $taxonomy, [
+			'hide_empty' => true,
+		]);
+
+		$options = [];
+		foreach ( $terms as $term ) {
+			$options[] = [
+				'id' => $term->term_id,
+				'name' => $term->name,
+				// 'posts' => $posts,
+				// 'related_tax' => $related_taxonomy,
+				// 'related_term' => $related_term->slug,
+				// 'taxonomy' => $taxonomy,
+			];
+		}
+
+		wp_send_json_success($options);
 	}
-
-	if ( ! $related_term || is_wp_error($related_term) ) {
-		wp_send_json_error('Invalid parent term');
-	}
-
-	$related_taxonomy = $related_term->taxonomy;
-
-	// Get all posts with the related term
-	$posts = get_posts([
-		'post_type'      => 'any',
-		'posts_per_page' => -1,
-		'tax_query'      => [
-			[
-				'taxonomy' => $related_taxonomy,
-				'field'    => 'term_id',
-				'terms'    => $related_term->term_id,
-			]
-		],
-		'fields' => 'ids',
-	]);
-
-	if ( empty($posts) ) {
-		wp_send_json_success([]);
-	}
-
-	// Get all terms from the target taxonomy used in these posts
-	$terms = wp_get_object_terms($posts, $taxonomy, [
-		'hide_empty' => true,
-	]);
-
-	$options = [];
-	foreach ( $terms as $term ) {
-		$options[] = [
-			'id' => $term->term_id,
-			'name' => $term->name,
-			// 'posts' => $posts,
-			// 'related_tax' => $related_taxonomy,
-			// 'related_term' => $related_term->slug,
-			// 'taxonomy' => $taxonomy,
-		];
-	}
-
-	wp_send_json_success($options);
-}
     
 	// Get Taxonomies Related to Post Type
 	public static function get_related_taxonomies() {
@@ -772,7 +791,11 @@ public function get_dependent_terms() {
 			$src2 = '';
 		}
 
-		$alt = '' === wp_get_attachment_caption( $id ) ? get_the_title() : wp_get_attachment_caption( $id );
+		if ( !empty( get_post_meta( $id, '_wp_attachment_image_alt', true ) ) ) {
+			$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
+		} else {
+			$alt = '' === wp_get_attachment_caption( $id ) ? get_the_title() : wp_get_attachment_caption( $id );
+		}
 
 		if ( has_post_thumbnail() ) {
 			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'" data-img-on-hover="'. esc_attr( $settings['secondary_img_on_hover'] ) .'"  data-src-secondary="'. esc_url( $src2 ) .'">';
@@ -865,13 +888,14 @@ public function get_dependent_terms() {
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				if ( 'word_count' === $settings['element_trim_text_by']) {
-				$show_dots = $settings['element_show_dots'] === 'yes' ? '...' : '';
-				echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'], $show_dots )) .'</p>';
+				if ( 'word_count' === $settings['element_trim_text_by'] ) {
+					$show_dots = $settings['element_show_dots'] === 'yes' ? '...' : '';
+					$the_excerpt = str_replace('Edit Template', '', get_the_excerpt());
+					echo '<p>'. esc_html(wp_trim_words( $the_excerpt, $settings['element_word_count'], $show_dots )) .'</p>';
 				} else {
-				// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
-				// echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';	
-				echo '<p>' . esc_html($trimmed_excerpt) . '...' . '</p>';
+					// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
+					// echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';	
+					echo '<p>' . esc_html($trimmed_excerpt) . '...' . '</p>';
 				}
 			echo '</div>';
 		echo '</div>';
@@ -1980,7 +2004,7 @@ public function get_dependent_terms() {
 		// Loop: End
 		else :
 
-			if ( 'dynamic' === $settings['query_selection'] ) {
+			if ( 'dynamic' === $settings['query_selection'] || 'current' === $settings['query_selection'] ) {
 				echo '<h2>'. esc_html($settings['query_not_found_text']) .'</h2>';
 			}
 			

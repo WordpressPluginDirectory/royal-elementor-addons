@@ -581,6 +581,19 @@ class Wpr_Form_Builder extends Widget_Base {
 		);
 
 		$repeater->add_control(
+			'alt_label',
+			[
+				'label' => esc_html__( 'Alternative Label', 'wpr-addons' ),
+				'description' => esc_html__( 'This Label will be used in Submit Actions instead of the Main Label.', 'wpr-addons' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => '',
+				'dynamic' => [
+					'active' => true,
+				],
+			]
+		);
+
+		$repeater->add_control(
 			'field_sub_label',
 			[
 				'label' => esc_html__( 'Sub Label', 'wpr-addons' ),
@@ -3651,6 +3664,7 @@ class Wpr_Form_Builder extends Widget_Base {
 				'label' . $i => [
 					'for' => $this->get_attribute_id( $item ),
 					'class' => 'wpr-form-field-label',
+					'data-alt-label' => ! empty( $item['alt_label'] ) ? esc_attr( $item['alt_label'] ) : esc_attr( $item['field_label'] ),
 				],
 			]
 		);

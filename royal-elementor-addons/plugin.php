@@ -175,7 +175,8 @@ class Plugin {
 
 		if ( class_exists('WooCommerce') ) {
 			 if ( 'on' === get_option('wpr_override_woo_templates', 'on') ) {
-				 require WPR_ADDONS_PATH . 'includes/woocommerce/woocommerce-config.php';
+				// add_filter( 'astra_enable_woocommerce_integration', '__return_false' );
+				require WPR_ADDONS_PATH . 'includes/woocommerce/woocommerce-config.php';
 			 }
 
 			// Add Remove From Wishlist
