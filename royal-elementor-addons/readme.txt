@@ -1,7 +1,7 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1043
+Stable tag: 1.7.1045
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 5.6
@@ -453,6 +453,16 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1045 - 2026-01-05 =
+* ADDED: Support for Royal Backup and Reset Plugin - [**Royal Backup and Reset Plugin**](https://wordpress.org/plugins/royal-backup-reset/#description).
+* FIXED: Advanced Filters minor issues with some Template Kits - See it in Action [**Advanced Filters Preview**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-wpo-pp-details-tab).
+
+= Royal Elementor Addons v1.7.1044 - 2026-01-04 =
+* ADDED: Elementor AI Image Generation Template Kit - [**AI Image Generation**](https://demosites.royal-elementor-addons.com/ai-image-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor AI SAAS Platform Template Kit - [**AI SAAS Platform**](https://demosites.royal-elementor-addons.com/ai-saas-v1//?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Fast Food Restaurant Template Kit - [**Fast Food Restaurant**](https://demosites.royal-elementor-addons.com/fast-food-v1/?ref=rea-wpo-pp-details-tab).
+* FIXED: Advanced Filters minor issues with some Template Kits - See it in Action [**Advanced Filters Preview**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.7.1043 - 2025-12-29 =
 * FIXED: Advanced Filters minor issues with some Template Kits - See it in Action [**Advanced Filters Preview**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-wpo-pp-details-tab).
 * FIXED: Minor Bugs

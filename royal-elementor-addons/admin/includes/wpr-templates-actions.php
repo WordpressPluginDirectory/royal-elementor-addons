@@ -318,6 +318,7 @@ class WPR_Templates_Actions {
 					'ajaxurl' => admin_url( 'admin-ajax.php' ),
 					'resturl' => get_rest_url() . 'wpraddons/v1',
 					'nonce' => wp_create_nonce( 'wpr-templates-kit-js' ),
+					'royal_backup_reset_active' => is_plugin_active( 'royal-backup-reset/royal-backup-reset.php' ),
 				]
 			);
 		}
