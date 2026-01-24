@@ -1093,6 +1093,10 @@
   background: #FF5959;
 }
 
+.wpr-expert-widgets > ul > li a {
+  color: #fff;
+}
+
 .wpr-expert-widgets > ul > li:nth-child(2n) {
   background-color: #f44;
 }
@@ -1720,6 +1724,12 @@ div.fs-notice.updated, div.fs-notice.success {
 @media screen and (max-width: 1280px) {
   .wpr-elements.wpr-elements-general .wpr-element:nth-child(2) h3 {
     font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  .wpr-nav-tab-wrapper a {
+    padding: 13px 30px;
   }
 }
 

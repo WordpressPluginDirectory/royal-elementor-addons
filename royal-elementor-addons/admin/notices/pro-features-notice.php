@@ -47,27 +47,39 @@ class WprProFeaturesNotice {
 
         if ( is_admin() && 'toplevel_page_wpr-addons' == $current_screen->id ) {
             echo '<div class="wpr-pro-features-notice-wrap">';
-            echo '<div class="notice wpr-pro-features-notice is-dismissible">
-                        <div class="wpr-pro-features-notice-logo">
-                            <img src="'. esc_url(WPR_ADDONS_ASSETS_URL) .'/img/logo-128x128.png">
-                        </div>
-                        <div>
-                            <h3><span>Big Update</span><br>Dynamic Content</h3>
-                            <p>We are happy to announce that <strong>Royal Elementor Addons Expert</strong> version now supports <strong>Dynamic Content</strong> wich includes:</p>
-                            <ul class="wpr-new-widgets-list">
-                                <li><strong>Dynamic Tags (Elementor)</strong></li>
-                                <li><strong>Advanced Custom Fields (Extended)</strong></li>
-                                <li><strong>Custom Post Type Generator</strong></li>
-                                <li><strong>Custom Taxonomy Generator</strong></li>
-                                <li><a target="_blank" href="https://www.youtube.com/watch?v=wis1rQTn1tg">Product Wishlist (WooCommerce)</a></li>
-                                <li><a target="_blank" href="https://www.youtube.com/watch?v=wis1rQTn1tg">Product Compare (WooCommerce)</a></li>
-                            </ul>
+                echo '<div class="notice wpr-pro-features-notice is-dismissible">
+                    <h2><span>Big Update</span></h2>
+                    <p>We are happy to announce that <strong>Royal Elementor Addons Expert</strong> version now supports <strong>Dynamic Content</strong> and <strong>Advanced Filters</strong> </p>
+                    <div class="wpr-dynamic-content-notice">
+                        <h3>Dynamic Content</h3>
+                        <ul class="wpr-new-widgets-list">
+                            <li><strong>Dynamic Tags (Elementor)</strong></li>
+                            <li><strong>Advanced Custom Fields (Extended)</strong></li>
+                            <li><strong>Custom Post Type Generator</strong></li>
+                            <li><strong>Custom Taxonomy Generator</strong></li>
+                            <li><a target="_blank" href="https://www.youtube.com/watch?v=wis1rQTn1tg">Product Wishlist (WooCommerce)</a></li>
+                            <li><a target="_blank" href="https://www.youtube.com/watch?v=wis1rQTn1tg">Product Compare (WooCommerce)</a></li>
+                        </ul>
 
-                            <a class="wpr-pro-features-btn" href="https://royal-elementor-addons.com/#purchasepro?ref=rea-plugin-backend-expertnoticebanner-checkbtn-upgrade-expert#purchasepro" target="_blank">Upgrade to Expert</a>
-                            <a class="wpr-pro-features-btn wpr-dynamic-tutorial" href="https://www.youtube.com/watch?v=kE1zmi3fxh8" target="_blank">Dynamic Tutorial</a>
-                        </div>
-                        <canvas id="wpr-notice-confetti"></canvas>';
-            echo '</div>';
+                        <a class="wpr-pro-features-btn wpr-dynamic-tutorial" href="https://www.youtube.com/watch?v=kE1zmi3fxh8" target="_blank"><span class="dashicons dashicons-video-alt3"></span> Dynamic Tutorial</a>
+                    </div>
+                    <div class="wpr-advanced-filters-notice">
+                        <h3>Advanced Filters</h3>
+                        <ul class="wpr-new-widgets-list">
+                            <li><strong><a target="_blank" href="https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/">Use with any CPT, Taxonomy or Field</a></strong></li>
+                            <li><strong><a target="_blank" href="https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/">Filter by Price, Color, Brand, Rating, etc...</a></strong></li>
+                            <li><strong>AJAX Ready for Fast Interaction</strong></li>
+                            <li><strong>Interdependent filters</strong></li>
+                            <li><strong>Manual Apply Button</strong></li>
+                            <li><strong>Advanced Custom Fields (ACF) Ready</strong></li>
+                        </ul>
+
+                        <a class="wpr-pro-features-btn wpr-dynamic-tutorial" href="https://www.youtube.com/watch?v=ejbvzt2BkJE" target="_blank"><span class="dashicons dashicons-video-alt3"></span> Advanced Filters Tutorial</a>
+                    </div>
+                    <a class="wpr-pro-features-btn wpr-upgrade-expert" href="https://royal-elementor-addons.com/#purchasepro?ref=rea-plugin-backend-expertnoticebanner-checkbtn-upgrade-expert#purchasepro" target="_blank">Upgrade to Expert</a>
+                        
+                    <canvas id="wpr-notice-confetti"></canvas>';
+                echo '</div>';
             echo '</div>';
         }
     }
@@ -159,45 +171,58 @@ class WprProFeaturesNotice {
 
             .wpr-settings-page-header .wpr-pro-features-notice.notice {
                 display: flex !important;
-                position: absolute !important;
-                top: 30%;
+                width: 600px;
+                position: absolute;
+                top: 100px;
                 left: 50%;
-                transform: translateX(-50%);
-                width: 410px;
+                transform: translate(-50%);
                 align-items: center;
-                margin-top: 20px;
-                margin-bottom: 20px;
-                padding: 30px;
+                justify-content: center;
+                padding: 135px 65px 100px;
                 border: 0 !important;
                 box-shadow: 0 0 5px rgb(0 0 0 / 0.3);
-                padding-left: 40px;
                 z-index: 999;
                 border-radius: 3px;
             }
 
-            .wpr-pro-features-notice-logo {
-                display: none;
-                margin-right: 30px;
+            .wpr-dynamic-content-notice {
+                padding-right: 50px;
+                border-right: 1px solid #e8e8e8;
             }
 
-            .wpr-pro-features-notice-logo img {
-                max-width: 100%;
+            .wpr-advanced-filters-notice {
+                padding-left: 50px;
+            }
+
+            .wpr-pro-features-notice h2 span {
+                position: absolute;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+
+                display: inline-block;
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 0.4px;
+                color: #fff;
+                background-color: #f51f3d;
+                padding: 5px 18px 7px;
+                border-radius: 3px;
+            }
+
+            .wpr-pro-features-notice h2 + p {
+                position: absolute;
+                top: 50px;
+                width: 400px;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
             }
 
             .wpr-pro-features-notice h3 {
                 font-size: 32px;
                 margin-top: 0;
                 margin-bottom: 20px;
-            }
-
-            .wpr-pro-features-notice h3 span {
-              display: inline-block;
-              margin-bottom: 15px;
-              font-size: 12px;
-              color: #fff;
-              background-color: #f51f3d;
-              padding: 2px 12px 4px;
-              border-radius: 3px;
             }
 
             .wpr-pro-features-notice p {
@@ -228,6 +253,22 @@ class WprProFeaturesNotice {
                 font-weight: 500;
                 letter-spacing: 0.3px;
             }
+
+            .wpr-pro-features-btn .dashicons {
+                width: 16px;
+                height: 16px;
+                font-size: 16px;
+                margin-top: 2px;
+            }
+
+            .wpr-upgrade-expert {
+                position: absolute;
+                bottom: 25px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 7px 25px 9px;
+            }
+
 
             .wpr-pro-features-btn.wpr-dynamic-tutorial {
                 background: #e1ad01;

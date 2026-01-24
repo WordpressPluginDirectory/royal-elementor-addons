@@ -371,6 +371,8 @@ function wpr_addons_settings_page() {
         <a href="https://youtu.be/f_3tNiBC3dw?t=238" target="_blank"><?php esc_html_e( 'How to use WooCommerce Builder Widgets', 'wpr-addons' ); ?></a>
         <br><br>
         <a href="https://www.youtube.com/watch?v=wis1rQTn1tg" target="_blank"><?php esc_html_e( 'How to use Wishlist & Compare', 'wpr-addons' ); ?></a>
+        <br><br>
+        <a href="https://www.youtube.com/watch?v=ejbvzt2BkJE" target="_blank"><?php esc_html_e( ' How to use Advanced Filters', 'wpr-addons' ); ?></a>
     </div>
     <div class="wpr-elements wpr-elements-woo">
     <?php
@@ -1496,6 +1498,7 @@ function wpr_addons_settings_page() {
                 <ul>
                     <li><span>Dedicated Support</span></li>
                     <li><span>Free and Pro Functionality Included</span></li>
+                    <li><span><span style="color: yellow;">*New</span> - Advanced Filters - <a href="https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-plugin-backend-freevsprotab-filters">View Demos</a></span></li>
                     <li><span>Extended Custom Field Options </span></li>
                     <li><span>Ability to build Dynamic Websites</span></li>
                     <li><span>Dynamic Tags for All Widgets</span></li>
