@@ -191,7 +191,7 @@ function wpr_addons_templates_kit_page() {
                 </div>
 
                 <div class="wpr-import-help">
-                    <a href="https://royal-elementor-addons.com/contactus/?ref=rea-plugin-backend-templates-import-screen" target="_blank">Having trouble with template import?&nbsp;&nbsp;Get help <span class="dashicons dashicons-sos"></span></a>
+                    <a href="https://wordpress.org/support/plugin/royal-elementor-addons/" target="_blank">Having trouble with template import?&nbsp;&nbsp;Get help <span class="dashicons dashicons-sos"></span></a>
                 </div>
             </div>
         </div>

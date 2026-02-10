@@ -1,9 +1,9 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1046
+Stable tag: 1.7.1048
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 6.9.1
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -456,7 +456,13 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
-= Royal Elementor Addons v1.7.1046 - 2026-01-023 =
+= Royal Elementor Addons v1.7.1048 - 2026-02-10 =
+* ADDED: Elementor Logistic Template Kit - [**Logistic / Transportation**](https://demosites.royal-elementor-addons.com/logistic-v1/?ref=rea-wpo-pp-details-tab).
+
+= Royal Elementor Addons v1.7.1047 - 2026-02-03 =
+* ADDED: Elementor AI Support BOT Template Kit - [**AI Support BOT**](https://demosites.royal-elementor-addons.com/ai-support-bot-v1/?ref=rea-wpo-pp-details-tab).
+
+= Royal Elementor Addons v1.7.1046 - 2026-01-23 =
 * FIXED: Minor Bugs
 
 = Royal Elementor Addons v1.7.1045 - 2026-01-05 =

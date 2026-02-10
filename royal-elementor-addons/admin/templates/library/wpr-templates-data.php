@@ -42,6 +42,20 @@ class WPR_Templates_Data {
 					'priority' => 10,
 				],
 			],
+			'logistic' => [
+				'v1' => [
+					'name' => 'Logistic V1',
+					'pages' => 'home,services,about-us,gallery,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free logistics delivery global supply warehouse distribution shipment transportation service cargo freight packaging shipping trucking trucks business corporate trailer relocation warehous',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 20,
+				],
+			],
 			'christmas' => [
 				'v1' => [
 					'name' => 'Christmas V1(Shop)',
@@ -1801,12 +1815,26 @@ class WPR_Templates_Data {
 					'priority' => 260,
 				],
 			],
+			'ai-support-bot' => [
+				'v1' => [
+					'name' => 'AI Support Bot V1',
+					'pages' => 'home,features,integration,pricing,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free ai artificial intelligence bot ai support platform customer support automation assistance business machine learning analysis machine learning ai automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering ai code ai digital agency ai website ai templates ai saas ai agency',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 1,
+				],
+			],
 			'ai-saas' => [
 				'v1' => [
 					'name' => 'AI Saas Platform ',
 					'pages' => 'home,use-cases,about,integrations,blog,contact,',
 					'plugins' => '{}',
-					'tags' => 'free data analysis machine learning ai automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering ai code ai digital agency ai website ai templates saas',
+					'tags' => 'free data analysis machine learning ai automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering ai code ai digital agency ai website ai templates ai saas ai agency',
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
@@ -1820,7 +1848,7 @@ class WPR_Templates_Data {
 					'name' => 'AI Image generation',
 					'pages' => 'home,features,about,user-hub,pricing,job-board,blog,contact,',
 					'plugins' => '{}',
-					'tags' => 'free data analysis machine learning ai image automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering ai website ai templates',
+					'tags' => 'free data analysis machine learning ai image automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering ai website ai templates ai saas ai agency',
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
@@ -1834,7 +1862,7 @@ class WPR_Templates_Data {
 					'name' => 'AI Matrix - Data, Machines & AI ',
 					'pages' => 'home,about,features,resources,case-study,contact,',
 					'plugins' => '{}',
-					'tags' => 'free data analysis machine learning ai automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application ai website ai templates artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering',
+					'tags' => 'free data analysis machine learning ai automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application ai website ai templates artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering ai saas ai agency',
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => true,
@@ -2396,6 +2424,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','our-services','our-process','our-clients','pricing-plans','projects','project-details','faq','blog','contact',],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'logistic-v1' => [
+				'name' => 'Logistic V1',
+				'pages' => ['home','services','about-us','gallery','blog','contact'],
+				'preview' => ['home','services','about-us','gallery','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
 			'travel-blog-v1' => [
 				'name' => 'Travel Blog',
 				'pages' => ['home','home-v1','home-v2','about','contact'],
@@ -2563,6 +2597,12 @@ class WPR_Templates_Data {
 				'pages' => ['home','about','services','doctors','contact'],
 				'preview' => ['home','about-us','service','doctors','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'ai-support-bot-v1' => [
+				'name' => 'AI Support Bot V1',
+				'pages' => ['home','features','integration','pricing','blog','contact'],
+				'preview' => ['home','features','integration','pricing','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'cryptocurrency-v1' => [
 				'name' => 'Cryptocurrency',
