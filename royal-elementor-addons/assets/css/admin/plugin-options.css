@@ -1187,6 +1187,149 @@
   color: #59626a;
 }
 
+/*--------------------------------------------------------------
+== Backup Plugin Popup
+--------------------------------------------------------------*/
+.wpr-backup-plugin-popup {
+  max-width: 500px;
+  text-align: center;
+  padding: 40px 30px 30px;
+}
+
+.wpr-backup-plugin-popup header {
+  margin-bottom: 25px;
+}
+
+.wpr-backup-plugin-popup .wpr-backup-icon {
+  font-size: 50px;
+  color: #6a4bff;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.wpr-backup-plugin-popup h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+  color: #23282d;
+}
+
+.wpr-backup-plugin-popup p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.wpr-backup-plugin-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.wpr-install-backup-plugin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 26px !important;
+  font-size: 14px !important;
+  height: auto !important;
+  background-color: #6a4bff !important;
+  border-color: #6a4bff !important;
+}
+
+.wpr-install-backup-plugin:hover,
+.wpr-install-backup-plugin:focus {
+  background-color: #5a3de6 !important;
+  border-color: #5a3de6 !important;
+}
+
+.wpr-install-backup-plugin .dashicons {
+  font-size: 12px;
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
+  vertical-align: middle;
+  position: relative;
+  top: 2px;
+}
+
+.wpr-backup-btn-text {
+  vertical-align: middle;
+}
+
+.wpr-skip-backup-plugin {
+  color: #999;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.wpr-skip-backup-plugin:hover {
+  color: #555;
+  text-decoration: underline;
+}
+
+.wpr-install-backup-plugin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.wpr-install-backup-plugin.wpr-loading {
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.wpr-install-backup-plugin.wpr-loading .wpr-backup-btn-arrow {
+  display: none;
+}
+
+.wpr-backup-dot-flashing {
+  display: inline-block;
+  margin-left: 10px;
+  position: relative;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #fff;
+  animation: wprDotFlashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+
+.wpr-backup-dot-flashing::before,
+.wpr-backup-dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.wpr-backup-dot-flashing::before {
+  left: -8px;
+  animation: wprDotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.wpr-backup-dot-flashing::after {
+  left: 8px;
+  animation: wprDotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes wprDotFlashing {
+  0% {
+    background-color: #fff;
+  }
+  50%, 100% {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
 .wpr-conditions.wpr-tab-archive .global-condition-select,
 .wpr-conditions.wpr-tab-archive .singles-condition-select,
 .wpr-conditions.wpr-tab-product_archive .global-condition-select,

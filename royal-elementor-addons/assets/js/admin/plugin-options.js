@@ -955,7 +955,150 @@ jQuery(document).ready(function( $ ) {
 				},
 				success: function( response ) {}
 			});
-		}, 1000);  
+		}, 1000);
+	});
+
+	/*
+	** Backup Plugin Popup -------------------------
+	*/
+	var backupPopup = $('.wpr-backup-plugin-popup-wrap'),
+		pendingEditUrl = null,
+		pendingTemplateName = null;
+
+	// Intercept Edit Template button clicks
+	$(document).on('click', '.wpr-edit-template', function(e) {
+		// Store the edit URL and template name
+		pendingEditUrl = $(this).attr('href');
+		var $listItem = $(this).closest('li');
+		pendingTemplateName = $listItem.find('.wpr-title').text().trim() || 'Template';
+
+		// Check if reminder should be shown based on mode and dismissed status
+		var showAlways = WprPluginOptions.backup_reminder_mode === 'show_always';
+		var reminderDismissed = WprPluginOptions.backup_reminder_dismissed && !showAlways;
+
+		// If backup plugin is active and reminder should be shown, trigger Royal Backup's reminder popup
+		if ( WprPluginOptions.backup_plugin_active && !reminderDismissed ) {
+			e.preventDefault();
+
+			// Set transient via AJAX and reload to show Royal Backup's reminder
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'wpr_set_pending_template',
+					nonce: WprPluginOptions.nonce,
+					pending_edit_url: pendingEditUrl,
+					pending_template_name: pendingTemplateName
+				},
+				success: function() {
+					// Reload with parameter to trigger Royal Backup's reminder
+					// Pass the edit URL and template name in parameters for reliable redirect
+					var currentUrl = window.location.href;
+					// Remove any existing wpr_pending_template and wpr_template_name parameters
+					currentUrl = currentUrl.replace(/([?&])wpr_pending_template=[^&]*(&|$)/, '$1').replace(/[?&]$/, '');
+					currentUrl = currentUrl.replace(/([?&])wpr_template_name=[^&]*(&|$)/, '$1').replace(/[?&]$/, '');
+					var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
+					window.location.href = currentUrl + separator + 'wpr_pending_template=' + encodeURIComponent(pendingEditUrl) + '&wpr_template_name=' + encodeURIComponent(pendingTemplateName);
+				}
+			});
+			return false;
+		}
+
+		// If popup was dismissed (never show installation prompt) or backup reminder dismissed (and not show_always), go to editing
+		if ( WprPluginOptions.backup_popup_dismissed || reminderDismissed ) {
+			return true;
+		}
+
+		// Backup plugin not active and not dismissed - show installation popup
+		e.preventDefault();
+		backupPopup.fadeIn();
+	});
+
+	// Close backup popup (X button) - skip and proceed to edit
+	backupPopup.find('.close-popup').on('click', function() {
+		backupPopup.fadeOut();
+		if ( pendingEditUrl ) {
+			window.location.href = pendingEditUrl;
+		}
+	});
+
+	// Skip backup and never show again
+	$('.wpr-skip-backup-plugin').on('click', function(e) {
+		e.preventDefault();
+		backupPopup.fadeOut();
+
+		// Save preference to never show again
+		$.post(ajaxurl, {
+			action: 'wpr_dismiss_backup_popup',
+			nonce: WprPluginOptions.nonce
+		});
+
+		// Update local state
+		WprPluginOptions.backup_popup_dismissed = true;
+
+		if ( pendingEditUrl ) {
+			window.location.href = pendingEditUrl;
+		}
+	});
+
+	// Install/Activate backup plugin
+	$('.wpr-install-backup-plugin').on('click', function() {
+		var $button = $(this),
+			$btnText = $button.find('.wpr-backup-btn-text'),
+			$dots = $button.find('.wpr-backup-dot-flashing'),
+			$skipLink = $('.wpr-skip-backup-plugin');
+
+		// Prevent double-clicks
+		if ( $button.hasClass('wpr-loading') ) {
+			return;
+		}
+
+		// Show loading state with appropriate text
+		$button.addClass('wpr-loading');
+		if ( WprPluginOptions.backup_plugin_installed ) {
+			$btnText.text('Activating Backup Plugin');
+		} else {
+			$btnText.text('Installing Backup Plugin');
+		}
+		$dots.show();
+		$skipLink.hide();
+
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'wpr_install_activate_backup_plugin',
+				nonce: WprPluginOptions.nonce,
+				pending_edit_url: pendingEditUrl || '',
+				pending_template_name: pendingTemplateName || ''
+			},
+			success: function(response) {
+				if ( response.success ) {
+					// Update the plugin status
+					WprPluginOptions.backup_plugin_active = true;
+					WprPluginOptions.backup_plugin_installed = true;
+
+					// Reload with parameter to prevent backup plugin redirect
+					var currentUrl = window.location.href;
+					var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
+					window.location.href = currentUrl + separator + 'wpr_pending_template=1';
+				} else {
+					// Show error and restore button
+					alert('Error: ' + (response.data.message || 'Failed to install plugin'));
+					$button.removeClass('wpr-loading');
+					$btnText.text('Start Backup Process');
+					$dots.hide();
+					$skipLink.show();
+				}
+			},
+			error: function() {
+				alert('An error occurred. Please try again.');
+				$button.removeClass('wpr-loading');
+				$btnText.text('Start Backup Process');
+				$dots.hide();
+				$skipLink.show();
+			}
+		});
 	});
 
 }); // end dom ready

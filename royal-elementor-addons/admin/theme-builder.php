@@ -75,6 +75,9 @@ function wpr_addons_theme_builder_page() {
     <!-- Create Templte Popup -->
     <?php WPR_Templates_Loop::render_create_template_popup(); ?>
 
+    <!-- Backup Plugin Popup -->
+    <?php WPR_Templates_Loop::render_backup_plugin_popup(); ?>
+
     <!-- Tabs -->
     <div class="nav-tab-wrapper wpr-nav-tab-wrapper">
         <a href="?page=wpr-theme-builder&tab=wpr_tab_header" data-title="Header" class="nav-tab <?php echo ($active_tab == 'wpr_tab_header') ? 'nav-tab-active' : ''; ?>">

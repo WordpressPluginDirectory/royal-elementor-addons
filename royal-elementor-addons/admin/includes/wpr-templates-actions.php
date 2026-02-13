@@ -35,6 +35,15 @@ class WPR_Templates_Actions {
 		// Reset Template
 		add_action( 'wp_ajax_wpr_delete_template', [ $this, 'wpr_delete_template' ] );
 
+		// Install/Activate Backup Plugin
+		add_action( 'wp_ajax_wpr_install_activate_backup_plugin', [ $this, 'wpr_install_activate_backup_plugin' ] );
+
+		// Dismiss Backup Popup Permanently
+		add_action( 'wp_ajax_wpr_dismiss_backup_popup', [ $this, 'wpr_dismiss_backup_popup' ] );
+
+		// Set Pending Template for Backup Reminder
+		add_action( 'wp_ajax_wpr_set_pending_template', [ $this, 'wpr_set_pending_template' ] );
+
 		// Register Elementor AJAX Actions
 		add_action( 'elementor/ajax/register_actions', [ $this, 'register_elementor_ajax_actions' ] );
 
@@ -257,6 +266,113 @@ class WPR_Templates_Actions {
 	}
 
 	/**
+	** Install/Activate Backup Plugin
+	*/
+	public function wpr_install_activate_backup_plugin() {
+		$nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+
+		if ( !wp_verify_nonce( $nonce, 'wpr-plugin-options-js' ) || !current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( ['message' => 'Unauthorized'] );
+		}
+
+		// Save pending template data as transient EARLY (before any success returns).
+		if ( isset($_POST['pending_edit_url']) && !empty($_POST['pending_edit_url']) ) {
+			$template_data = array(
+				'url'  => sanitize_url( $_POST['pending_edit_url'] ),
+				'name' => isset( $_POST['pending_template_name'] ) ? sanitize_text_field( $_POST['pending_template_name'] ) : '',
+			);
+			set_transient( 'wpr_pending_template_edit', $template_data, 5 * MINUTE_IN_SECONDS );
+		}
+
+		$plugin_slug = 'royal-backup-reset';
+		$plugin_file = 'royal-backup-reset/royal-backup-reset.php';
+
+		// Check if plugin is already active
+		if ( is_plugin_active( $plugin_file ) ) {
+			wp_send_json_success( ['status' => 'active', 'message' => 'Plugin is already active'] );
+		}
+
+		// Check if plugin is installed but not active
+		if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin_file ) ) {
+			$result = activate_plugin( $plugin_file );
+			if ( is_wp_error( $result ) ) {
+				wp_send_json_error( ['message' => $result->get_error_message()] );
+			}
+			wp_send_json_success( ['status' => 'activated', 'message' => 'Plugin activated successfully'] );
+		}
+
+		// Plugin needs to be installed
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+
+		$api = plugins_api( 'plugin_information', [
+			'slug' => $plugin_slug,
+			'fields' => ['sections' => false],
+		] );
+
+		if ( is_wp_error( $api ) ) {
+			wp_send_json_error( ['message' => $api->get_error_message()] );
+		}
+
+		$skin = new \WP_Ajax_Upgrader_Skin();
+		$upgrader = new \Plugin_Upgrader( $skin );
+		$result = $upgrader->install( $api->download_link );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( ['message' => $result->get_error_message()] );
+		}
+
+		if ( $result === false ) {
+			wp_send_json_error( ['message' => 'Plugin installation failed'] );
+		}
+
+		// Activate the plugin
+		$activate_result = activate_plugin( $plugin_file );
+		if ( is_wp_error( $activate_result ) ) {
+			wp_send_json_error( ['message' => $activate_result->get_error_message()] );
+		}
+
+		wp_send_json_success( ['status' => 'installed', 'message' => 'Plugin installed and activated successfully'] );
+	}
+
+	/**
+	 * Dismiss backup popup permanently for the current user.
+	 */
+	public function wpr_dismiss_backup_popup() {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'wpr-plugin-options-js' ) || ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( [ 'message' => 'Unauthorized' ] );
+		}
+
+		$user_id = get_current_user_id();
+		update_user_meta( $user_id, 'wpr_dismiss_backup_popup', '1' );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Set pending template transient for Royal Backup reminder.
+	 */
+	public function wpr_set_pending_template() {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'wpr-plugin-options-js' ) || ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( [ 'message' => 'Unauthorized' ] );
+		}
+
+		if ( isset( $_POST['pending_edit_url'] ) && ! empty( $_POST['pending_edit_url'] ) ) {
+			$template_data = array(
+				'url'  => sanitize_url( $_POST['pending_edit_url'] ),
+				'name' => isset( $_POST['pending_template_name'] ) ? sanitize_text_field( $_POST['pending_template_name'] ) : '',
+			);
+			set_transient( 'wpr_pending_template_edit', $template_data, 5 * MINUTE_IN_SECONDS );
+		}
+
+		wp_send_json_success();
+	}
+
+	/**
 	** Enqueue Scripts and Styles
 	*/
 	public function templates_library_scripts( $hook ) {
@@ -297,11 +413,22 @@ class WPR_Templates_Actions {
 		    // enqueue JS
 		    wp_enqueue_script( 'wpr-plugin-options-js', WPR_ADDONS_URL .'assets/js/admin/plugin-options.js', ['jquery'], $version );
 
+			// Get Royal Backup reminder popup mode setting
+			$backup_reminder_mode = 'allow_dismiss';
+			if ( is_plugin_active( 'royal-backup-reset/royal-backup-reset.php' ) ) {
+				$backup_reminder_mode = get_option( 'royalbr_reminder_popup_mode', 'allow_dismiss' );
+			}
+
 			wp_localize_script(
 				'wpr-plugin-options-js',
 				'WprPluginOptions', // This is used in the js file to group all of your scripts together
 				[
 					'nonce' => wp_create_nonce( 'wpr-plugin-options-js' ),
+					'backup_plugin_active' => is_plugin_active( 'royal-backup-reset/royal-backup-reset.php' ),
+					'backup_plugin_installed' => file_exists( WP_PLUGIN_DIR . '/royal-backup-reset/royal-backup-reset.php' ),
+					'backup_popup_dismissed' => (bool) get_user_meta( get_current_user_id(), 'wpr_dismiss_backup_popup', true ),
+					'backup_reminder_dismissed' => (bool) get_user_meta( get_current_user_id(), 'royalbr_dismiss_backup_reminder', true ),
+					'backup_reminder_mode' => $backup_reminder_mode,
 				]
 			);
 

@@ -4,7 +4,7 @@
  * Description: The only plugin you need for Elementor page builder.
  * Plugin URI: https://royal-elementor-addons.com/
  * Author: WP Royal
- * Version: 1.7.1048
+ * Version: 1.7.1049
  * License: GPLv3
  * Author URI: https://royal-elementor-addons.com/
  * Elementor tested up to: 3.35.3
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'WPR_ADDONS_VERSION', '1.7.1048' );
+define( 'WPR_ADDONS_VERSION', '1.7.1049' );
 
 define( 'WPR_ADDONS__FILE__', __FILE__ );
 define( 'WPR_ADDONS_PLUGIN_BASE', plugin_basename( WPR_ADDONS__FILE__ ) );
@@ -224,7 +224,8 @@ register_activation_hook( __FILE__, 'royal_elementor_addons_activation_time' );
 
 // Plugin Deactivation
 function royal_elementor_addons_deactivate() {
-
+	// Reset "never show backup popup" preference so it shows again on reactivation.
+	delete_metadata( 'user', 0, 'wpr_dismiss_backup_popup', '', true );
 }
 
 // hook already exists with template kits notice

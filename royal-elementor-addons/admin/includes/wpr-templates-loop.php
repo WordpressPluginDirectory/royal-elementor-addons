@@ -505,6 +505,34 @@ class WPR_Templates_Loop {
 	}
 
 	/**
+	** Render Backup Plugin Popup
+	*/
+	public static function render_backup_plugin_popup() {
+	?>
+
+    <!-- Backup Plugin Install Popup -->
+    <div class="wpr-backup-plugin-popup-wrap wpr-admin-popup-wrap">
+        <div class="wpr-backup-plugin-popup wpr-admin-popup">
+            <span class="close-popup dashicons dashicons-no-alt"></span>
+        	<header>
+	            <h2><?php esc_html_e( 'Create a Backup Before Editing', 'wpr-addons' ); ?></h2>
+	            <p><?php esc_html_e( 'Before making changes to your template, we recommend creating a backup of your site. This way, you can easily restore it if something goes wrong.', 'wpr-addons' ); ?></p>
+			</header>
+			<div class="wpr-backup-plugin-actions">
+				<button type="button" class="wpr-install-backup-plugin button button-primary">
+					<span class="wpr-backup-btn-text"><?php esc_html_e( 'Start Backup Process', 'wpr-addons' ); ?></span>
+					<span class="wpr-backup-btn-arrow dashicons dashicons-arrow-right-alt"></span>
+					<span class="wpr-backup-dot-flashing" style="display: none;"></span>
+				</button>
+				<a href="#" class="wpr-skip-backup-plugin"><?php esc_html_e( 'Skip and never show this again', 'wpr-addons' ); ?></a>
+			</div>
+        </div>
+    </div>
+
+	<?php
+	}
+
+	/**
 	** Check if Library Template Exists
 	*/
 	public static function template_exists( $slug ) {
