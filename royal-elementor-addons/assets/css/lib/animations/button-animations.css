@@ -1610,7 +1610,8 @@
   height: 100%;
   opacity: 0;
 }
-.wpr-button-none:hover:before {
+.wpr-button-none:hover:before,
+.wpr-button-none:focus:before {
   opacity: 1;
 }
 

@@ -1,30 +1,31 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
-Tags: elementor, elementor templates, elementor addons, widgets for elementor, elementor widgets, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1049
+Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
+Stable tag: 1.7.1050
 Requires at least: 5.0
 Tested up to: 6.9.1
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Elementor Post Grid, Portfolio, Woocommerce Grid builder Widgets. Slider, Carousel, Form, Testimonial, Gallery, Nav menu addons, Elementor widgets & Elementor templates. Just best elementor addons. Collection of unique addons for elementor. Elementor woocommerce builder & Elementor woocommerce templates. Elementor Mega Menu Builder.
+Elementor templates, Header footer builder, Elementor Post Grid, Woocommerce Grid builder, Slider, Forms, Gallery, Nav menu addons, Elementor widgets. Just best elementor addons. Collection of unique addons for elementor. Elementor woocommerce builder & Elementor woocommerce templates. Elementor Mega Menu Builder.
 
 == Description ==
 
 **Royal Elementor addons** is the most versatile, intuitive, and easy to use [Popular Page Builder](https://wordpress.org/plugins/elementor/) extension. Our goal is to provide you with the tools to make things happen, efficiently, and fast compare to other elementor addons. Choosing us is not only a mindset, but it is also a requirement if you intend to gain an edge over your competitors when creating your website. The best part is that you can design anything **without having to touch a single line of code**.
 
-Comes with **100+ Elementor addons, 140+ Elementor Templates KIT (Growing Each Week), Theme Builder, WooCommerce Builder, Elementor Mega Menu Builder, Advanced Filters (filter any CPT, taxonomies and metafields), Popup Builder, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
+Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each Week), Theme Builder, WooCommerce Builder, Elementor Mega Menu Builder, Advanced Sticky Header, Header Footer Builder, Forms Builder, Advanced Filters (filter any CPT, taxonomies and metafields), AJAX Search, Popup Builder, Post Slider and Carousel, Product Slider and Carousel, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
 
 *Free and Pro functionalities are mixed in the Widget Demos below.*
 
-[**Plugin Demo Page**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
-[**Elementor Templates Demo Page**](https://demosites.royal-elementor-addons.com/elementor-templates/?ref=rea-wpo-pp-details-tab)
-[**Woocommerce Elementor Templates Demo Page**](https://demosites.royal-elementor-addons.com/elementor-templates/?ref=rea-wpo-pp-details-tab#filter:category-shop)
+✅[**Plugin Home Page**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
+✅[**Elementor Templates Home Page**](https://demosites.royal-elementor-addons.com/elementor-templates/?ref=rea-wpo-pp-details-tab)
+✅[**Woocommerce Elementor Templates Demo Page**](https://demosites.royal-elementor-addons.com/elementor-templates/?ref=rea-wpo-pp-details-tab#filter:category-shop)
 
 **Widget List:**
 
 - [**Mega Menu with Off-Canvas mobile menu support**](https://royal-elementor-addons.com/elementor-mega-menu-widget/?ref=rea-wpo-pp-details-tab)
+- [**Nav Menu**](https://royal-elementor-addons.com/elementor-menu-widget/?ref=rea-wpo-pp-details-tab)
 - [**Post Grid**](https://royal-elementor-addons.com/elementor-grid-widget-examples/?ref=rea-wpo-pp-details-tab#filter:category-blog-grid)
 - [**Post Carousel**](https://royal-elementor-addons.com/elementor-grid-widget-examples/post-carousel-examples/?ref=rea-wpo-pp-details-tab#filter:category-portfolio-grid)
 - [**Post Slider**](https://royal-elementor-addons.com/elementor-grid-widget-examples/post-slider-examples/?ref=rea-wpo-pp-details-tab)
@@ -39,7 +40,6 @@ Comes with **100+ Elementor addons, 140+ Elementor Templates KIT (Growing Each W
 - [**Advanced Slider - Carousel**](https://royal-elementor-addons.com/elementor-advanced-slider-widget/?ref=rea-wpo-pp-details-tab)
 - [**Charts - Horizontal/Vertical, Line, Radar, Doughnut, Pie, Polar Area**](https://royal-elementor-addons.com/elementor-charts-widget/?ref=rea-wpo-pp-details-tab)
 - [**Testimonial Slider**](https://royal-elementor-addons.com/elementor-testimonials-slider-widget/?ref=rea-wpo-pp-details-tab)
-- [**Nav Menu**](https://royal-elementor-addons.com/elementor-menu-widget/?ref=rea-wpo-pp-details-tab)
 - [**Onepage Navigation**](https://royal-elementor-addons.com/elementor-one-page-navigation-widget/?ref=rea-wpo-pp-details-tab)
 - [**Pricing Table**](https://royal-elementor-addons.com/elementor-pricing-table-widget/?ref=rea-wpo-pp-details-tab)
 - [**Content Toggle**](https://royal-elementor-addons.com/elementor-content-toggle-widget/?ref=rea-wpo-pp-details-tab)
@@ -52,7 +52,10 @@ Comes with **100+ Elementor addons, 140+ Elementor Templates KIT (Growing Each W
 - [**Promo Box**](https://royal-elementor-addons.com/elementor-promo-box-widget/?ref=rea-wpo-pp-details-tab) 
 - [**Before After Slider - Image comparison Slider**](https://royal-elementor-addons.com/elementor-before-after-widget/?ref=rea-wpo-pp-details-tab)
 - [**Image Hotspots**](https://royal-elementor-addons.com/elementor-image-hotspot-widget/?ref=rea-wpo-pp-details-tab)
-- [**Forms**](https://royal-elementor-addons.com/elementor-forms-widget/?ref=rea-wpo-pp-details-tab)
+- [**Contact Form 7 Styler**](https://royal-elementor-addons.com/forms-widget/contact-form-7/?ref=rea-wpo-pp-details-tab)
+- [**Ninja Forms Styler**](https://royal-elementor-addons.com/elementor-forms-widget/ninja-forms/?ref=rea-wpo-pp-details-tab)
+- [**WP Forms Styler**](https://royal-elementor-addons.com/elementor-forms-widget/wp-forms/?ref=rea-wpo-pp-details-tab)
+- [**Caldera Forms Styler**](https://royal-elementor-addons.com/elementor-forms-widget/caldera-forms/?ref=rea-wpo-pp-details-tab)
 - [**MailChimp**](https://royal-elementor-addons.com/elementor-mailchimp-subscription-widget/?ref=rea-wpo-pp-details-tab)
 - [**Content Ticker**](https://royal-elementor-addons.com/elementor-content-ticker-widget/?ref=rea-wpo-pp-details-tab)
 - [**Button**](https://royal-elementor-addons.com/elementor-button-widget/?ref=rea-wpo-pp-details-tab)
@@ -456,7 +459,13 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
-= Royal Elementor Addons v1.7.1048 - 2026-02-12 =
+= Royal Elementor Addons v1.7.1050 - 2026-03-05 =
+* Fixed: Some Bugs.
+* ADDED: Elementor Template Kit: Business Landing Page V4 - [**Landing Page Business V4**](https://demosites.royal-elementor-addons.com/landing-page-business-v4/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Cosmetics V4 - [**Cosmetics V1**](https://demosites.royal-elementor-addons.com/cosmetic-v1/?ref=rea-wpo-pp-details-tab).
+
+
+= Royal Elementor Addons v1.7.1049 - 2026-02-12 =
 * ADDED: Backup Reminder when editing Theme Builder Elementor Templates.
 
 = Royal Elementor Addons v1.7.1048 - 2026-02-10 =

@@ -50,6 +50,20 @@ class Wpr_Dual_Color_Heading extends Widget_Base {
         // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-grid-help-btn';
     		return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
     }
+	public function add_control_text_shadow_type() {
+		$this->add_control(
+			'text_shadow_type',
+			[
+				'label' => esc_html__( 'Type', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'default',
+				'options' => [
+					'default' => esc_html__( 'Default', 'wpr-addons' ),
+					'lng-pro' => esc_html__( 'Long (Pro)', 'wpr-addons' ),
+				],
+			]
+		);
+	}
 
 	protected function register_controls() {
 
@@ -374,6 +388,7 @@ class Wpr_Dual_Color_Heading extends Widget_Base {
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 15,
+					'unit' => 'px'
 				],
 				'range' => [
 					'px' => [
@@ -395,6 +410,7 @@ class Wpr_Dual_Color_Heading extends Widget_Base {
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 0,
+					'unit' => 'px'
 				],
 				'range' => [
 					'px' => [
@@ -563,6 +579,94 @@ class Wpr_Dual_Color_Heading extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'shadow_section',
+			[
+				'label' => esc_html__( 'Shadow', 'wpr-addons' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+		
+		$this->add_control_text_shadow_type();
+
+		$this->add_group_control(
+			Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => 'text_shadow',
+				'selector' => '{{WRAPPER}} .wpr-dual-title .second',
+				'condition' => [
+					'text_shadow_type' => 'default',
+				],
+			]
+		);
+
+		$this->add_control(
+			'text_long_shadow_color',
+			[
+				'label' => esc_html__( 'Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#e8e8e8',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-dual-title' => '--wpr-ls-color: {{VALUE}}',
+				],
+				'condition' => [
+					'text_shadow_type' => 'long',
+				],
+				'render_type' => 'template',
+			]
+		);
+
+		$this->add_responsive_control(
+			'text_long_shadow_size',
+			[
+				'label' => esc_html__( 'Size', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => ['px'],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => 10,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-dual-title' => '--wpr-ls-size: {{SIZE}}{{UNIT}}',
+				],
+				'render_type' => 'template',
+				'condition' => [
+					'text_shadow_type' => 'long',
+				],
+			]
+		);
+
+		$this->add_control(
+			'text_long_shadow_direction',
+			[
+				'label' => esc_html__( 'Direction', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'bottom-left',
+				'options' => [
+					'top-left' => esc_html__( 'Top Left', 'wpr-addons' ),
+					'top-right' => esc_html__( 'Top Right', 'wpr-addons' ),
+					'bottom-left' => esc_html__( 'Bottom Left', 'wpr-addons' ),
+					'bottom-right' => esc_html__( 'Bottom Right', 'wpr-addons' ),
+					'top' => esc_html__( 'Top', 'wpr-addons' ),
+					'bottom' => esc_html__( 'Bottom', 'wpr-addons' ),
+					'left' => esc_html__( 'Left', 'wpr-addons' ),
+					'right' => esc_html__( 'Right', 'wpr-addons' ),
+				],
+				'prefix_class' => 'wpr-ls-dir-',
+				'render_type' => 'template',
+				'condition' => [
+					'text_shadow_type' => 'long',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 		
 		$this->start_controls_section(
@@ -712,6 +816,12 @@ class Wpr_Dual_Color_Heading extends Widget_Base {
 		$this->add_inline_editing_attributes('title', 'none');
 		$this->add_inline_editing_attributes('description', 'basic');
 		$this->add_inline_editing_attributes('content', 'advanced');
+
+		$this->add_render_attribute( 'dual_title', 'class', 'wpr-dual-title' );
+
+		if ( 'long' === $settings['text_shadow_type'] ) {
+			$this->add_render_attribute( 'dual_title', 'class', 'wpr-shadow-long' );
+		}
 		
 		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
 
@@ -724,7 +834,7 @@ class Wpr_Dual_Color_Heading extends Widget_Base {
         ?>
 			<div class="wpr-dual-heading-wrap">
 				<div class="wpr-dual-title-wrap">
-					<<?php echo esc_attr($dual_heading_tag); ?> class="wpr-dual-title">
+					<<?php echo esc_attr( $dual_heading_tag ); ?> <?php echo $this->get_render_attribute_string( 'dual_title' ); ?>>
 					<?php if (!empty($settings['primary_heading'])) : ?>
 						<span class="first"><?php echo esc_html($settings['primary_heading']); ?></span>
 					<?php endif; ?>

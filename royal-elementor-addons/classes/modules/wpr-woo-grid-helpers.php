@@ -1892,6 +1892,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		switch ( $type ) {
 			case 'title':
 				WPR_Woo_Grid_Helpers::render_product_title( $settings, $class, $general_settings );
+				do_action( 'wpr_woo_grid_after_title', $post_id );
 				break;
 
 			case 'excerpt':

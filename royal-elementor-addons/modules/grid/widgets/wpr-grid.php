@@ -1062,7 +1062,7 @@ class Wpr_Grid extends Widget_Base {
 			'advanced_filters',
 			[
 				'label' => esc_html__( 'Enable Advanced Filters', 'wpr-addons' ),
-				'description' => esc_html__( 'Turn on Only with Advanced Filters widget.', 'wpr-addons' ),
+				'description' => esc_html__( 'Turn on Only with Advanced Filters widget. Works with Load More and Infinite Scroll Pagination for now (Other Pagination Types will be applied in next updates as well).', 'wpr-addons' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'no',
 				'return_value' => 'yes',

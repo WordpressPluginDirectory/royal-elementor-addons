@@ -411,6 +411,18 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 1,
 				],
+				'v4' => [
+					'name' => 'Landing Page - Business V4',
+					'pages' => 'home,insight,business-plans,features,blog,single-blog,',
+					'plugins' => '{}',
+					'tags' => 'free digital product single-page landing page one page onepage landingpage agency digital app business corporate creative lead capture marketing startup',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 1,
+				],
 			],
 			'landing-page-digital-product' => [
 				'v1' => [
@@ -684,6 +696,20 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'New',
 					'priority' => 4,
+				],
+			],
+			'cosmetic' => [
+				'v1' => [
+					'name' => 'Cosmetic Shop V1',
+					'pages' => 'home,shop,single-product,cart,checkout,about,faq,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'free cosmetics store shop woo woocommerce estore ecommerce product estetic beauty skincare makeup haircare customers health essentials nail perfumes',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 15,
 				],
 			],
 			'woo-auto-parts' => [
@@ -2483,6 +2509,12 @@ class WPR_Templates_Data {
 				'pages' => ['home','home-v2','food','about','contact','faq','blog'],
 				'preview' => ['home','home-woo-food-v2','shop-woo-food-v1','about','contact','faq','blog'],
 				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'cosmetic-v1' => [
+				'name' => 'Cosmetic Shop V1',
+				'pages' => ['home','shop','cart','about','faq','blog','contact',],
+				'preview' => ['home','shop','cart','about','faq','blog','contact',],
+				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'estore-v1' => [
 				'name' => 'Electronic Store - V1',

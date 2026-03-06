@@ -3662,6 +3662,7 @@ i[class*="wpr-rating-icon-"] {
 .wpr-grid-pagi-right-arrows,
 .wpr-grid-pagination .wpr-load-more-btn {
     display: inline-block;
+    cursor: pointer;
 }
 
 .wpr-load-more-btn,
@@ -6432,6 +6433,22 @@ body:not(.elementor-editor-active) .wpr-template-popup {
 /*--------------------------------------------------------------
   == Advanced Slider
   --------------------------------------------------------------*/
+
+/* Editor Fix */
+.elementor-editor-active[data-elementor-device-mode="desktop"] .elementor-hidden-desktop .wpr-advanced-slider,
+.elementor-editor-active[data-elementor-device-mode="desktop"] .elementor-hidden-desktop .wpr-slider-item,
+.elementor-editor-active[data-elementor-device-mode="desktop"] .elementor-hidden-desktop .slick-list,
+.elementor-editor-active[data-elementor-device-mode="laptop"] .elementor-hidden-laptop .wpr-slider-item,
+.elementor-editor-active[data-elementor-device-mode="laptop"] .elementor-hidden-laptop .wpr-advanced-slider,
+.elementor-editor-active[data-elementor-device-mode="laptop"] .elementor-hidden-laptop .slick-list,
+.elementor-editor-active[data-elementor-device-mode="tablet"] .elementor-hidden-tablet .wpr-advanced-slider,
+.elementor-editor-active[data-elementor-device-mode="tablet"] .elementor-hidden-tablet .wpr-slider-item,
+.elementor-editor-active[data-elementor-device-mode="tablet"] .elementor-hidden-tablet .slick-list,
+.elementor-editor-active[data-elementor-device-mode="mobile"] .elementor-hidden-mobile .wpr-advanced-slider,
+.elementor-editor-active[data-elementor-device-mode="mobile"] .elementor-hidden-mobile .wpr-slider-item,
+.elementor-editor-active[data-elementor-device-mode="mobile"] .elementor-hidden-mobile .slick-list {
+    max-height: 300px;
+}
 
 .wpr-advanced-slider-wrap {
     position: relative;
@@ -13790,6 +13807,40 @@ select.wpr-category-select {
     display: inline-block;
 }
 
+/* For Long Shadow */
+.wpr-dual-title {
+  --wpr-ls-color: #e8e8e8;
+  --wpr-ls-size: 10px;
+  --wpr-ls-step: calc(var(--wpr-ls-size) / 10);
+}
+
+/* direction vectors */
+.wpr-ls-dir-bottom-left  .second{ --dx: -1; --dy:  1; }
+.wpr-ls-dir-bottom-right .second{ --dx:  1; --dy:  1; }
+.wpr-ls-dir-top-left     .second{ --dx: -1; --dy: -1; }
+.wpr-ls-dir-top-right    .second{ --dx:  1; --dy: -1; }
+.wpr-ls-dir-left         .second{ --dx: -1; --dy:  0; }
+.wpr-ls-dir-right        .second{ --dx:  1; --dy:  0; }
+.wpr-ls-dir-top          .second{ --dx:  0; --dy: -1; }
+.wpr-ls-dir-bottom       .second{ --dx:  0; --dy:  1; }
+
+/* “long” shadow (example with 12 layers) */
+.wpr-dual-title.wpr-shadow-long .second{
+  text-shadow:
+    calc(var(--dx)*1*var(--wpr-ls-step)) calc(var(--dy)*1*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*2*var(--wpr-ls-step)) calc(var(--dy)*2*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*3*var(--wpr-ls-step)) calc(var(--dy)*3*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*4*var(--wpr-ls-step)) calc(var(--dy)*4*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*5*var(--wpr-ls-step)) calc(var(--dy)*5*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*6*var(--wpr-ls-step)) calc(var(--dy)*6*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*7*var(--wpr-ls-step)) calc(var(--dy)*7*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*8*var(--wpr-ls-step)) calc(var(--dy)*8*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*9*var(--wpr-ls-step)) calc(var(--dy)*9*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*10*var(--wpr-ls-step)) calc(var(--dy)*10*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*11*var(--wpr-ls-step)) calc(var(--dy)*11*var(--wpr-ls-step)) 0 var(--wpr-ls-color),
+    calc(var(--dx)*12*var(--wpr-ls-step)) calc(var(--dy)*12*var(--wpr-ls-step)) 0 var(--wpr-ls-color);
+}
+
 /*--------------------------------------------------------------
  == Taxonomy List
 --------------------------------------------------------------*/
@@ -19495,6 +19546,14 @@ input.wpr-date-filter-end {
 
 .wpr-form-field-type-hidden {
     display: none;
+}
+
+.wpr-form-field-type-recaptcha-v2 .wpr-recaptcha-v2-wrap {
+    min-height: 1px;
+}
+
+.wpr-form-field-type-recaptcha-v2 .wpr-recaptcha-v2-container {
+    display: inline-block;
 }
 
 .wpr-form-field-type-recaptcha-v3 {

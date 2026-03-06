@@ -537,6 +537,9 @@ class Wpr_Button extends Widget_Base {
 					'{{WRAPPER}} .wpr-button::after' => 'color: {{VALUE}}',
 					'{{WRAPPER}}.wpr-button-icon-style-inline .wpr-button:hover .wpr-button-icon' => 'color: {{VALUE}}',
 					'{{WRAPPER}}.wpr-button-icon-style-inline .wpr-button:hover .wpr-button-icon svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .wpr-button:focus .wpr-button-text' => 'color: {{VALUE}}',
+					'{{WRAPPER}}.wpr-button-icon-style-inline .wpr-button:focus .wpr-button-icon' => 'color: {{VALUE}}',
+					'{{WRAPPER}}.wpr-button-icon-style-inline .wpr-button:focus .wpr-button-icon svg' => 'fill: {{VALUE}}',
 				],
 			]
 		);

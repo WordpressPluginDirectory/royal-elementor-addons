@@ -263,6 +263,24 @@ class Wpr_Control_Ajax_Select2_Api {
 			$merged_meta_keys = array_unique( array_merge( $merged_meta_keys, $array ) );
 		}
 		
+		// Collect term meta keys from all public taxonomies
+		$taxonomies = get_taxonomies( [ 'public' => true ], 'names' );
+		foreach ( $taxonomies as $taxonomy ) {
+			$terms = get_terms( [ 'taxonomy' => $taxonomy, 'hide_empty' => false ] );
+			if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+				foreach ( $terms as $term ) {
+					$term_meta = get_term_meta( $term->term_id );
+					if ( is_array( $term_meta ) ) {
+						foreach ( array_keys( $term_meta ) as $meta_key ) {
+							if ( '_' !== substr( (string) $meta_key, 0, 1 ) ) {
+								$merged_meta_keys[] = $meta_key;
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		// Rekey
 		$merged_meta_keys = array_values($merged_meta_keys);
 	

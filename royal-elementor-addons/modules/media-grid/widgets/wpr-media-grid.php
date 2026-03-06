@@ -6660,7 +6660,10 @@ class Wpr_Media_Grid extends Widget_Base {
 				$attachments_count = count($attachments);
 			}
 
-			for ( $i = 0; $i < $attachments_count; $i++ ) { 
+			for ( $i = 0; $i < $attachments_count; $i++ ) {
+				if ( !isset( $settings['query_manual_attachment'][$i]['id'] ) ) {
+					continue;
+				}
 				array_push( $post_ids, $settings['query_manual_attachment'][$i]['id'] );
 			}
 
@@ -7504,9 +7507,15 @@ class Wpr_Media_Grid extends Widget_Base {
 
 		// Load More / Infinite Scroll
 		} else {
-			echo '<a href="'. esc_url(get_pagenum_link( $paged + 1, true )) .'" class="wpr-load-more-btn" data-e-disable-page-transition >';
-				echo esc_html($settings['pagination_load_more_text']);
-			echo '</a>';
+			if ( 'yes' === $settings['filters_experiment'] ) {
+				echo '<a class="wpr-load-more-btn" data-e-disable-page-transition >';
+					echo esc_html($settings['pagination_load_more_text']);
+				echo '</a>';
+			} else {
+				echo '<a href="'. esc_url(get_pagenum_link( $paged + 1, true )) .'" class="wpr-load-more-btn" data-e-disable-page-transition >';
+					echo esc_html($settings['pagination_load_more_text']);
+				echo '</a>';
+			}
 
 			echo '<div class="wpr-pagination-loading">';
 				switch ( $settings['pagination_animation'] ) {

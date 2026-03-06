@@ -10,6 +10,8 @@
 
 	var WprElements = {
 
+		gridInitialItems: {},
+
 		init: function() {
 
 			var widgets = {
@@ -150,7 +152,7 @@
 				parallaxMultiLayer();
 			}
 
-			if ( $scope.hasClass('wpr-sticky-section-yes') ) {
+			if ( $scope.hasClass('wpr-sticky-section-yes') && typeof WprConfig !== 'undefined' && WprConfig.sticky_section === 'on'  ) {
 				$(document).ready(function() {
 					stickySection();
 				});
@@ -247,18 +249,24 @@
 					if ( 'yes' !== $scope.data('wpr-replace-header') && 'yes' !== $scope.data('wpr-sticky-hide') ) {
 						// Function to be called when mutations are observed
 						const handleMutations = debounce(function(mutationsList) {
+							// if (!$scope[0] || !document.body.contains($scope[0])) return;
+							// var isGTranslate = function(node) {
+							// 	if (!node || !node.getAttribute) return false;
+							// 	var id = node.getAttribute('id') || '';
+							// 	if (id.indexOf('google_translate') !== -1 || id.indexOf('gtranslate') !== -1) return true;
+							// 	return node.closest && (node.closest('#google_translate_element') || node.closest('.gtranslate'));
+							// };
 							for (let mutation of mutationsList) {
+								// if (mutation.type === 'childList' && !isGTranslate(mutation.target)) {
 								if (mutation.type === 'childList') {
-									// Recalculate variables when new content is added
 									$(window).trigger('scroll');
 									recalculateVariables();
+									break;
 								}
 							}
 						}, 100); 
 	
 						const observer = new MutationObserver(handleMutations);
-	
-						// Start observing the target node for configured mutations
 						observer.observe(document.body, { childList: true, subtree: true });
 					}
 				}
@@ -1261,6 +1269,7 @@
 
 		widgetGrid: function( $scope ) {
 			var iGrid = $scope.find( '.wpr-grid' ),
+				scopeId = $scope.attr('data-id'),
 				loadedItems,
 				experimentActionCount = $scope.hasClass('elementor-widget-wpr-woo-grid') ? 'wpr_get_filtered_count_products' : 
 									 $scope.hasClass('elementor-widget-wpr-media-grid') ? 'wpr_get_media_filtered_count' : 'wpr_get_filtered_count_posts',
@@ -1373,7 +1382,7 @@
 
 				isotopeFilters( settings );
 
-				WprElements.changeInitialItems(0);
+				WprElements.changeInitialItems(0, scopeId);
 
 				// Filtering Transitions
 				iGrid.on( 'arrangeComplete', function( event, filteredItems ) {
@@ -1395,7 +1404,7 @@
 					}
 
 					for ( var key in filteredItems ) {
-						if ( initialItems == 0 || key > initialItems - 1 ) {
+						if ( WprElements.getInitialItems(scopeId) == 0 || key > WprElements.getInitialItems(scopeId) - 1 ) {
 							initStager += settings.animation_delay;
 							$scope.find( filteredItems[key]['element'] ).find( '.wpr-grid-item-inner' ).css({
 								'opacity' : '1',
@@ -1429,7 +1438,7 @@
 						}
 					}
 
-					WprElements.changeInitialItems(filteredItems.length);
+					WprElements.changeInitialItems(filteredItems.length, scopeId);
 				});
 
 				// iGrid.imagesLoaded().progress( function( instance, image ) {
@@ -1462,7 +1471,10 @@
 							threshold = 300;
 							navClass = scopeClass +' .wpr-load-more-btn';
 						}
-	
+
+						// Advanced Filters + infinite-scroll: grid uses same AJAX as load more (handled in widgetAdvancedFilters)
+						var skipPathInfiniteScroll = ( 'infinite-scroll' === settings.pagination_type && iGrid.attr( 'data-advanced-filters' ) === 'yes' );
+						if ( ! skipPathInfiniteScroll ) {
 						iGrid.infiniteScroll({
 							path: scopeClass +' .wpr-grid-pagination a',
 							hideNav: navClass,
@@ -1581,6 +1593,7 @@
 							iGrid.infiniteScroll( 'loadNextPage' );
 							return false;
 						});
+						}
 					} else {
 						$scope.find( '.wpr-load-more-btn' ).on( 'click', function() {
 							alert( 'Load More is Disabled in the Editor! Please Preview this Page to see it in action' );
@@ -2183,11 +2196,12 @@
 				// Click Event
 				if ( !settings.grid_settings ) {
 					$scope.find( '.wpr-grid-filters span' ).on( 'click', function() {
-						WprElements.changeInitialItems(0);
+					WprElements.changeInitialItems(0, scopeId);
 
-						var filterClass = $(this).data( 'filter' ),
-							filterWrap = $(this).parent( 'li' ),
-							filterRole = filterWrap.attr( 'data-role' );
+					// Check why this was removed
+					var filterClass = $(this).data( 'filter' ),
+						filterWrap = $(this).parent( 'li' ),
+						filterRole = filterWrap.attr( 'data-role' );
 	
 						// Active Filter Class
 						$scope.find( '.wpr-grid-filters span' ).removeClass( 'wpr-active-filter' );
@@ -2716,7 +2730,7 @@
 										WprElements.mediaHoverLink($scope, iGrid);
 										lazyLoadObserver();
 										// iGrid.removeClass('wpr-zero-opacity');
-										WprElements.changeInitialItems(0);
+										WprElements.changeInitialItems(0, scopeId);
 									}, 800);
 								},
 								error: function(error) {
@@ -8541,10 +8555,53 @@
 
 			var fileUrl = {};
 
+			// reCAPTCHA v3 script
 			if ( $('body').find('.wpr-form-field-type-recaptcha-v3').length > 0 ) {
 					var script = document.createElement('script');
 					script.src = 'https://www.google.com/recaptcha/api.js?render='+ $scope.find('#g-recaptcha-response').data('site-key') +'';
 					document.body.appendChild(script);
+			}
+
+			// reCAPTCHA v2 (checkbox) script and render
+			if ( $('body').find('.wpr-form-field-type-recaptcha-v2').length > 0 ) {
+				var renderV2Containers = function() {
+					var $containers = (typeof $scope !== 'undefined') ? $scope.find('.wpr-recaptcha-v2-container') : $('.wpr-recaptcha-v2-container');
+					$containers.each(function() {
+						var $container = $(this);
+						if ( $container.attr('id') && !$container.data('recaptcha-rendered') ) {
+							var widgetId = grecaptcha.render( $container.attr('id'), {
+								'sitekey': $container.data('sitekey'),
+								'size': $container.data('size') || 'normal',
+								'theme': $container.data('theme') || 'light'
+							});
+							$container.data('widget-id', widgetId);
+							$container.data('recaptcha-rendered', true);
+						}
+					});
+				};
+				if ( typeof grecaptcha !== 'undefined' ) {
+					renderV2Containers();
+				} else {
+					if ( !window.wprRecaptchaV2Onload ) {
+						window.wprRecaptchaV2Onload = function() {
+							$( '.wpr-recaptcha-v2-container' ).each(function() {
+								var $c = $(this);
+								if ( $c.attr('id') && !$c.data('recaptcha-rendered') ) {
+									var w = grecaptcha.render( $c.attr('id'), {
+										'sitekey': $c.data('sitekey'),
+										'size': $c.data('size') || 'normal',
+										'theme': $c.data('theme') || 'light'
+									});
+									$c.data('widget-id', w);
+									$c.data('recaptcha-rendered', true);
+								}
+							});
+						};
+						var scriptV2 = document.createElement('script');
+						scriptV2.src = 'https://www.google.com/recaptcha/api.js?onload=wprRecaptchaV2Onload&render=explicit';
+						document.body.appendChild(scriptV2);
+					}
+				}
 			}
 
 			var currentTab = 0; // Current tab is set to be the first tab (0)
@@ -8667,19 +8724,65 @@
 				} 
 				
 				function processRecaptcha(callback) {
-					if ($scope.find('#g-recaptcha-response').length > 0) {
+					var $v2Container = $scope.find('.wpr-form-field-type-recaptcha-v2 .wpr-recaptcha-v2-container');
+					var hasV2 = $v2Container.length > 0;
+					var hasV3 = $scope.find('#g-recaptcha-response').length > 0 && $scope.find('#g-recaptcha-response').attr('data-site-key');
+
+					if ( hasV2 ) {
+						var widgetId = $v2Container.data('widget-id');
+						var token = ( typeof grecaptcha !== 'undefined' && widgetId !== undefined ) ? grecaptcha.getResponse(widgetId) : '';
+						if ( !token || token === '' ) {
+							setTimeout(function() {
+								$scope.find('.wpr-button').find('.wpr-double-bounce').addClass('wpr-loader-hidden');
+								$scope.find('.wpr-button>span').removeClass('wpr-loader-hidden');
+								$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">'+ (WprConfig.recaptcha_error || 'Please complete the captcha.') +'</p>');
+							}, 100);
+							callback(false);
+							return;
+						}
+						$.ajax({
+							type: 'POST',
+							url: WprConfig.ajaxurl,
+							data: {
+								action: 'wpr_verify_recaptcha',
+								'g-recaptcha-response': token,
+								recaptcha_version: 'v2'
+							},
+							success: function(response) {
+								if ( !response.success ) {
+									setTimeout(function() {
+										$scope.find('.wpr-button').find('.wpr-double-bounce').addClass('wpr-loader-hidden');
+										$scope.find('.wpr-button>span').removeClass('wpr-loader-hidden');
+										$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
+									}, 500);
+									callback(false);
+								} else {
+									callback(true);
+								}
+							},
+							error: function() {
+								setTimeout(function() {
+									$scope.find('.wpr-button').find('.wpr-double-bounce').addClass('wpr-loader-hidden');
+									$scope.find('.wpr-button>span').removeClass('wpr-loader-hidden');
+									$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
+								}, 500);
+								callback(false);
+							}
+						});
+						return;
+					}
+
+					if ( hasV3 ) {
 						grecaptcha.ready(function() {
 							grecaptcha.execute(WprConfig.site_key, {action: 'submit'}).then(function(token) {
-								// Set the token value to the hidden input field
 								$scope.find('#g-recaptcha-response').val(token);
-	
-								// Perform the AJAX call after the token is set
 								$.ajax({
 									type: 'POST',
 									url: WprConfig.ajaxurl,
 									data: {
 										action: 'wpr_verify_recaptcha',
-										'g-recaptcha-response': token
+										'g-recaptcha-response': token,
+										recaptcha_version: 'v3'
 									},
 									success: function(response) {
 										if( !response.success ) {
@@ -8688,9 +8791,9 @@
 												$scope.find('.wpr-button>span').removeClass('wpr-loader-hidden');
 												$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
 											}, 500);
-											callback(false); // Call the callback with failure
+											callback(false);
 										} else {
-											callback(true); // Call the callback with success
+											callback(true);
 										}
 									},
 									error: function(error) {
@@ -8700,14 +8803,15 @@
 											$scope.find('.wpr-button>span').removeClass('wpr-loader-hidden');
 											$scope.find('form').append('<p class="wpr-submit-notice wpr-submit-error">'+ WprConfig.recaptcha_error +'</p>');
 										}, 500);
-										callback(false); // Call the callback with failure
+										callback(false);
 									}
 								});
 							});
 						});
-					} else {
-						callback(true); // Call the callback if there's no reCAPTCHA
+						return;
 					}
+
+					callback(true);
 				}
 
 				// Call the processRecaptcha function and pass a callback that submits the form on success
@@ -10257,6 +10361,7 @@
 				viewMoreLess = $scope.find('.wpr-view-more-less'),
 				actionSelector = $('body').find('.wpr-grid[data-advanced-filters="yes"]').first(),
 				widgetSelector = $('body').find('.wpr-grid[data-advanced-filters="yes"]').first().closest('[class*="elementor-widget-wpr-"]'),
+				gridScopeId = widgetSelector.attr('data-id'),
 				isWooGrid = actionSelector.length && actionSelector.closest('.elementor-widget-wpr-woo-grid').length > 0,
 				experimentActionCount = isWooGrid ? 'wpr_get_filtered_count_products' : 'wpr_get_filtered_count_posts',
 				experimentActionContent = isWooGrid ? 'wpr_woo_grid_filters_ajax' : 'wpr_grid_filters_ajax',
@@ -10269,6 +10374,136 @@
 			if ( widgetSelector.length > 0 ) {
 				if ( widgetSelector.find('.wpr-grid-pagination').data('pages') <= 1 ) {
 					widgetSelector.find('.wpr-load-more-btn').hide();
+				}
+			}
+
+			// Infinite scroll with Advanced Filters: same AJAX as load more (offset + wpr_url_params from URL)
+			if ( actionSelector.length > 0 ) {
+				var gridDataSettings = actionSelector.attr( 'data-settings' );
+				if ( gridDataSettings ) {
+					try {
+						var gridSettings = JSON.parse( gridDataSettings );
+						if ( gridSettings.pagination_type === 'infinite-scroll' ) {
+							widgetSelector.find( '.wpr-load-more-btn' ).hide();
+							widgetSelector.find( '.wpr-grid-pagination' ).css( { 'display': 'flex', 'justify-content': 'center' } );
+							var afInfiniteScrollLoading = false,
+								afInfiniteScrollFoundPosts = null,
+								afScrollThresholdPx = 400;
+							$( window ).off( 'scroll.afInfiniteScroll' ).on( 'scroll.afInfiniteScroll', function() {
+								if ( WprElements.editorCheck() || ! widgetSelector.length ) return;
+								var currentCount = widgetSelector.find( '.wpr-grid-item' ).length;
+								var perPage = ( gridSettings.grid_settings && gridSettings.grid_settings.query_posts_per_page ) || gridSettings.query_posts_per_page || 9;
+								if ( currentCount <= perPage ) {
+									afInfiniteScrollFoundPosts = null;
+								}
+								if ( afInfiniteScrollFoundPosts !== null && currentCount >= afInfiniteScrollFoundPosts ) return;
+								if ( afInfiniteScrollLoading ) return;
+								var paginationEl = widgetSelector.find( '.wpr-grid-pagination' )[ 0 ];
+								if ( ! paginationEl ) return;
+								var rect = paginationEl.getBoundingClientRect();
+								if ( rect.top > $( window ).height() + afScrollThresholdPx ) return;
+								afInfiniteScrollLoading = true;
+								settings = typeof gridSettings !== 'undefined' ? gridSettings : ( actionSelector.attr( 'data-settings' ) ? JSON.parse( actionSelector.attr( 'data-settings' ) ) : {} );
+								finalURL = window.location.href;
+								$('.wpr-advanced-filters-wrap').each(function() {
+									var wrap = $(this);
+									if ( wrap.find('input[type="checkbox"], input[type="radio"], input.wpr-rating-filter').length > 0 ) {
+										wrap.find('input[type="checkbox"], input[type="radio"], input.wpr-rating-filter').each(function() {
+											if ( $(this).is(':checked') || $(this).hasClass('wpr-rating-filter') ) {
+												updateURL( $(this).attr('name'), $(this).val(), $(this), finalURL );
+											}
+										});
+									}
+									wrap.find('input[type="text"], input[type="date"]').each(function() {
+										updateURL( $(this).attr('name'), $(this).val(), $(this), finalURL );
+									});
+									if ( wrap.find('select').length === 1 ) {
+										var sel = wrap.find('select');
+										updateURL( sel.attr('name'), sel.val(), sel, finalURL );
+									} else if ( wrap.find('select').length > 1 ) {
+										wrap.find('select').each(function() {
+											updateURL( $(this).attr('name'), $(this).val(), $(this), finalURL );
+										});
+									}
+									if ( wrap.find('.wpr-af-range-apply-btn').length > 0 && wrap.data('wpr-applied') == 'yes' ) {
+										var minInp = wrap.find('.wpr-af-rf-control-min-input'), maxInp = wrap.find('.wpr-af-rf-control-max-input'), sn = minInp.attr('name'), sv = [];
+										if ( minInp.length && maxInp.length && sn ) {
+											var mn = parseRangeInputVal(minInp.val()), mx = parseRangeInputVal(maxInp.val());
+											sv.push(isNaN(mn) ? (minInp.attr('min') || minInp.data('min')) : mn);
+											sv.push(isNaN(mx) ? (maxInp.attr('max') || maxInp.data('max')) : mx);
+											updateURL( sn, sv, wrap.find('.wpr-af-range-apply-btn'), finalURL );
+										}
+									} else if ( wrap.find('.wpr-af-range-container').length > 0 && wrap.data('wpr-applied') == 'yes' ) {
+										var minInp = wrap.find('.wpr-af-rf-control-min-input'), maxInp = wrap.find('.wpr-af-rf-control-max-input'), sn = minInp.attr('name'), sv = [];
+										if ( minInp.length && maxInp.length && sn ) {
+											var mn = parseRangeInputVal(minInp.val()), mx = parseRangeInputVal(maxInp.val());
+											sv.push(isNaN(mn) ? (minInp.attr('min') || minInp.data('min')) : mn);
+											sv.push(isNaN(mx) ? (maxInp.attr('max') || maxInp.data('max')) : mx);
+											updateURL( sn, sv, wrap.find('.wpr-af-range-container'), finalURL );
+										}
+									}
+								});
+								var paramsObj = {};
+								(new URL(finalURL)).searchParams.forEach( function( value, key ) { paramsObj[key] = value; } );
+								settings.grid_settings = settings.grid_settings || {};
+								settings.grid_settings.query_offset = currentCount;
+								widgetSelector.find( '.wpr-grid-pagination' ).find( '.wpr-pagination-loading' ).show();
+								var orderby = widgetSelector.find( 'select.orderby' ).length > 0 ? widgetSelector.find( 'select.orderby' ).val() : '';
+								$.ajax( {
+									type: 'POST',
+									url: WprConfig.ajaxurl,
+									data: {
+										action: experimentActionContent,
+										nonce: WprConfig.nonce,
+										wpr_offset: currentCount,
+										wpr_item_length: currentCount,
+										grid_settings: settings.grid_settings,
+										wpr_url_params: paramsObj,
+										orderby: orderby,
+									},
+									success: function( response ) {
+										var rawItems = response.data && response.data.output ? $( response.data.output ) : $();
+										var items = rawItems.filter ? rawItems.filter( '.wpr-grid-item' ) : rawItems;
+										if ( response.data && response.data.found_posts != null ) {
+											afInfiniteScrollFoundPosts = response.data.found_posts;
+										} else if ( items.length === 0 ) {
+											afInfiniteScrollFoundPosts = currentCount;
+										} else if ( items.length < perPage ) {
+											afInfiniteScrollFoundPosts = currentCount + items.length;
+										}
+										if ( items.length ) {
+											actionSelector.append( items );
+											actionSelector.isotopewpr( 'appended', items );
+											items.imagesLoaded().progress( function() {
+												WprElements.isotopeLayout( settings, '', widgetSelector, true, $scope );
+												setTimeout( function() {
+													WprElements.isotopeLayout( settings, '', widgetSelector, true, $scope );
+												}, 100 );
+												setTimeout( function() { actionSelector.addClass( 'grid-images-loaded' ); }, 500 );
+											} );
+											WprElements.lightboxPopup( settings, widgetSelector, actionSelector );
+											if ( actionSelector.data( 'lightGallery' ) ) {
+												actionSelector.data( 'lightGallery' ).destroy( true );
+												actionSelector.lightGallery( settings.lightbox );
+											}
+											WprElements.mediaHoverLink( widgetSelector, actionSelector );
+										}
+										widgetSelector.find( '.wpr-grid-pagination' ).find( '.wpr-pagination-loading' ).hide();
+										if ( ! response.data || response.data.found_posts <= widgetSelector.find( '.wpr-grid-item' ).length ) {
+											widgetSelector.find( '.wpr-grid-pagination' ).find( '.wpr-pagination-finish' ).fadeIn( 1000 );
+											widgetSelector.find( '.wpr-grid-pagination' ).delay( 1000 ).fadeOut( 500 );
+										}
+										window.dispatchEvent( new Event( 'resize' ) );
+										afInfiniteScrollLoading = false;
+									},
+									error: function() {
+										widgetSelector.find( '.wpr-grid-pagination' ).find( '.wpr-pagination-loading' ).hide();
+										afInfiniteScrollLoading = false;
+									},
+								} );
+							} );
+						}
+					} catch ( e ) {}
 				}
 			}
 
@@ -10287,6 +10522,21 @@
 				toSlider.on('input', () => controlToSlider(fromSlider, toSlider, toInput));
 				fromInput.on('change', () => controlFromInput(fromSlider, fromInput, toInput));
 				toInput.on('change', () => controlToInput(toSlider, fromInput, toInput));
+				// Format displayed value on blur when using delimiters (e.g. user types "1234" -> "1,234.00")
+				fromInput.on('blur', function() {
+					var rangeContainer = $(this).closest('.wpr-af-range-container');
+					if (rangeContainer.data('format-numbers') === 'yes') {
+						var n = parseRangeInputVal($(this).val());
+						if (!isNaN(n)) setRangeInputVal($(this), n, rangeContainer);
+					}
+				});
+				toInput.on('blur', function() {
+					var rangeContainer = $(this).closest('.wpr-af-range-container');
+					if (rangeContainer.data('format-numbers') === 'yes') {
+						var n = parseRangeInputVal($(this).val());
+						if (!isNaN(n)) setRangeInputVal($(this), n, rangeContainer);
+					}
+				});
 			}
 
             if ( $scope.find('input[name="wpr_af_date"]').length > 0 ) {
@@ -10659,24 +10909,27 @@
 								rangeCheckMin = $('[data-id="' + $(this).data('rf-id') + '"]').find('.wpr-af-rf-control-min-input'),
 								rangeCheckMax = $('[data-id="' + $(this).data('rf-id') + '"]').find('.wpr-af-rf-control-max-input');
 
-							if (values && values.includes(',') && rangeCheckMin.filter((_, el) => values.split(',')[0] == $(el).val()).length > 0) {
+							if (values && values.includes(',') && rangeCheckMin.filter((_, el) => parseRangeInputVal(values.split(',')[0]) === parseRangeInputVal($(el).val())).length > 0) {
 								let [minValue, maxValue] = values.split(','),
-									rangeMin = rangeCheckMin.filter((_, el) => minValue == $(el).val()),
-									rangeMax = rangeCheckMax.filter((_, el) => maxValue == $(el).val()),
+									rangeMin = rangeCheckMin.filter((_, el) => parseRangeInputVal(minValue) === parseRangeInputVal($(el).val())),
+									rangeMax = rangeCheckMax.filter((_, el) => parseRangeInputVal(maxValue) === parseRangeInputVal($(el).val())),
 									outerContainer = rangeMin.closest('.wpr-advanced-filters-wrap'),
 									rangeContainer = outerContainer.find('.wpr-af-range-container'),
 									fromSlider = rangeContainer.find('.wpr-af-from-slider'),
 									toSlider = rangeContainer.find('.wpr-af-to-slider'),
 									fromSliderText = rangeContainer.find('.wpr-af-rs-value-min'),
-									toSliderText = rangeContainer.find('.wpr-af-rs-value-max');
+									toSliderText = rangeContainer.find('.wpr-af-rs-value-max'),
+									minVal = rangeMin.attr('min') || rangeMin.data('min'),
+									maxVal = rangeMax.attr('max') || rangeMax.data('max'),
+									fmt = (v) => rangeContainer.data('format-numbers') === 'yes' ? formatRangeDisplay(v, rangeContainer) : v;
 
-								fromSlider.val(rangeMin.attr('min'));
-								toSlider.val(rangeMax.attr('max'));
-								fromSliderText.text(rangeMin.attr('min'));
-								toSliderText.text(rangeMax.attr('max'));
+								fromSlider.val(minVal);
+								toSlider.val(maxVal);
+								fromSliderText.text(fmt(minVal));
+								toSliderText.text(fmt(maxVal));
 		
-								rangeMin.val(rangeMin.attr('min')).trigger('input');
-								rangeMax.val(rangeMax.attr('max')).trigger('input');
+								rangeMin.val(fmt(minVal)).attr('value', rangeMin.val()).trigger('input');
+								rangeMax.val(fmt(maxVal)).attr('value', rangeMax.val()).trigger('input');
 
 								rangeContainer.find('input.wpr-af-from-slider').trigger('change');
 
@@ -10770,11 +11023,12 @@
 					
 						// Range Filter
 						if (thisWrap.find('.wpr-af-rf-control').length > 0) {
-							var rangeValues = $(this).find('.wpr-af-rf-control input[type="number"]').map(function () {
-								return $(this).val();
-							}).get();
+							var minInp = thisWrap.find('.wpr-af-rf-control-min-input'),
+								maxInp = thisWrap.find('.wpr-af-rf-control-max-input'),
+								rangeDisplay = [minInp.val(), maxInp.val()].join(' - '),
+								rangeRealVal = [parseRangeInputVal(minInp.val()), parseRangeInputVal(maxInp.val())];
 
-							values.push({ label: label, value: rangeValues.join(' - '), realVal: rangeValues});
+							values.push({ label: label, value: rangeDisplay, realVal: rangeRealVal});
 						}
 	
 						thisWrap.find('select').each(function () {
@@ -10888,14 +11142,14 @@
 						var rangeContainer = $(this),
 							rangeActive = rangeContainer.attr('data-active'),
 							uniqueID = rangeContainer.closest('.elementor-element').data('id'),
-							minInput = rangeContainer.find('input.wpr-af-rf-control-min-input'),
-							maxInput = rangeContainer.find('input.wpr-af-rf-control-max-input'),
-							minValue = minInput.val(),
-							minAllowed = minInput.attr('min'),
-							maxValue = maxInput.val(),
-							maxAllowed = maxInput.attr('max'),
-							isMinAtDefault = minValue == minAllowed,
-							isMaxAtDefault = maxValue == maxAllowed;
+							minInput = rangeContainer.find('.wpr-af-rf-control-min-input'),
+							maxInput = rangeContainer.find('.wpr-af-rf-control-max-input'),
+							minValue = parseRangeInputVal(minInput.val()),
+							minAllowed = parseRangeInputVal(minInput.attr('min') || minInput.data('min')),
+							maxValue = parseRangeInputVal(maxInput.val()),
+							maxAllowed = parseRangeInputVal(maxInput.attr('max') || maxInput.data('max')),
+							isMinAtDefault = minValue === minAllowed || (isNaN(minValue) && isNaN(minAllowed)),
+							isMaxAtDefault = maxValue === maxAllowed || (isNaN(maxValue) && isNaN(maxAllowed));
 
 						if ( isMinAtDefault && isMaxAtDefault ) {
 							$('span[data-rf-id="'+ uniqueID +'"]').remove();
@@ -11006,36 +11260,44 @@
 					
 					if ( $scope.find('.wpr-af-range-apply-btn').length > 0 ) {
 						$scope.on('click', '.wpr-af-range-apply-btn', function() {
-							var selectedElement = $scope.find('.wpr-af-rf-control').find('input[type="number"]');
-							var selectedValue = [];
-							var selectedName = selectedElement.attr('name');
-			
-							selectedElement.each(function() {
-								selectedValue.push($(this).val());
-							});
-			
-							if ( 'yes' == $(this).closest('.wpr-advanced-filters-wrap').data('enable-ajax') ) {
-								$(this).closest('.wpr-advanced-filters-wrap').attr('data-wpr-applied', 'yes');
-								ajaxFilters($(this));
-							} else {
-								updateURL(selectedName, selectedValue, $(this));
+							var minInput = $scope.find('.wpr-af-rf-control-min-input'),
+								maxInput = $scope.find('.wpr-af-rf-control-max-input'),
+								selectedName = minInput.attr('name'),
+								selectedValue = [];
+							if (minInput.length && maxInput.length) {
+								var minVal = parseRangeInputVal(minInput.val());
+								var maxVal = parseRangeInputVal(maxInput.val());
+								selectedValue.push(isNaN(minVal) ? minInput.attr('min') || minInput.data('min') : minVal);
+								selectedValue.push(isNaN(maxVal) ? maxInput.attr('max') || maxInput.data('max') : maxVal);
+							}
+							if ( selectedValue.length ) {
+								if ( 'yes' == $(this).closest('.wpr-advanced-filters-wrap').data('enable-ajax') ) {
+									$(this).closest('.wpr-advanced-filters-wrap').attr('data-wpr-applied', 'yes');
+									ajaxFilters($(this));
+								} else {
+									updateURL(selectedName, selectedValue, $(this));
+								}
 							}
 						});
 					} else {
-						$scope.find('.wpr-af-range-container').find('input[type="range"], input[type="number"]').on('change', function() {
-							var selectedElement = $scope.find('.wpr-af-rf-control').find('input[type="number"]');
-							var selectedValue = [];
-							var selectedName = selectedElement.attr('name');
-			
-							selectedElement.each(function() {
-								selectedValue.push($(this).val());
-							});
-			
-							if ( 'yes' == $(this).closest('.wpr-advanced-filters-wrap').data('enable-ajax') ) {
-								$(this).closest('.wpr-advanced-filters-wrap').attr('data-wpr-applied', 'yes');
-								ajaxFilters($(this));
-							} else {
-								updateURL(selectedName, selectedValue, $(this));
+						$scope.find('.wpr-af-range-container').find('input[type="range"], .wpr-af-rf-control-min-input, .wpr-af-rf-control-max-input').on('change', function() {
+							var minInput = $scope.find('.wpr-af-rf-control-min-input'),
+								maxInput = $scope.find('.wpr-af-rf-control-max-input'),
+								selectedName = minInput.attr('name'),
+								selectedValue = [];
+							if (minInput.length && maxInput.length) {
+								var minVal = parseRangeInputVal(minInput.val());
+								var maxVal = parseRangeInputVal(maxInput.val());
+								selectedValue.push(isNaN(minVal) ? minInput.attr('min') || minInput.data('min') : minVal);
+								selectedValue.push(isNaN(maxVal) ? maxInput.attr('max') || maxInput.data('max') : maxVal);
+							}
+							if ( selectedValue.length ) {
+								if ( 'yes' == $(this).closest('.wpr-advanced-filters-wrap').data('enable-ajax') ) {
+									$(this).closest('.wpr-advanced-filters-wrap').attr('data-wpr-applied', 'yes');
+									ajaxFilters($(this));
+								} else {
+									updateURL(selectedName, selectedValue, $(this));
+								}
 							}
 						});
 					}
@@ -11043,86 +11305,122 @@
 			}
 
 			function controlFromInput(fromSlider, fromInput, toInput) {
+				const rangeContainer = fromInput.closest('.wpr-af-range-container');
+				const minAllowed = parseRangeInputVal(fromInput.attr('min') || fromInput.data('min'));
 				const [from, to] = getParsed(fromInput, toInput);
 				fillSlider(fromInput, toInput);
 				setToggleAccessible(fromInput, 'from');
 				if (from > to) {
 					fromSlider.val(to).attr('value', to);
-					fromInput.val(to).attr('value', to);
+					setRangeInputVal(fromInput, to, rangeContainer);
 				} else {
 					fromSlider.val(from).attr('value', from);
-					fromInput.val(from).attr('value', from);
+					setRangeInputVal(fromInput, from, rangeContainer);
 				}
 
-				if ( from < +fromInput.attr('min') ) {
-					fromInput.val(+fromInput.attr('min')).attr('value', +fromInput.attr('min'));
-					fromSlider.val(+fromInput.attr('min')).attr('value', +fromInput.attr('min'));
+				if (!isNaN(minAllowed) && from < minAllowed) {
+					fromSlider.val(minAllowed).attr('value', minAllowed);
+					setRangeInputVal(fromInput, minAllowed, rangeContainer);
 				}
 			}
 			
 			function controlToInput(toSlider, fromInput, toInput) {
+				const rangeContainer = toInput.closest('.wpr-af-range-container');
+				const maxAllowed = parseRangeInputVal(toInput.attr('max') || toInput.data('max'));
 				const [from, to] = getParsed(fromInput, toInput);
 				fillSlider(fromInput, toInput);
 				setToggleAccessible(toInput, 'to');
 
 				if (from <= to) {
-					if ( to > +toInput.attr('max') ) {
-						toSlider.val(+toInput.attr('max')).attr('value', +toInput.attr('max'));
-						toInput.val(+toInput.attr('max')).attr('value', +toInput.attr('max'));
+					if (!isNaN(maxAllowed) && to > maxAllowed) {
+						toSlider.val(maxAllowed).attr('value', maxAllowed);
+						setRangeInputVal(toInput, maxAllowed, rangeContainer);
 					} else {
 						toSlider.val(to).attr('value', to);
-						toInput.val(to).attr('value', to);
+						setRangeInputVal(toInput, to, rangeContainer);
 					}
 				} else {
-					if ( to > +toInput.attr('max') ) {
-						toInput.val(+toInput.attr('max')).attr('value', +toInput.attr('max'));
+					if (!isNaN(maxAllowed) && to > maxAllowed) {
+						setRangeInputVal(toInput, maxAllowed, rangeContainer);
 					} else {
-						toInput.val(from).attr('value', from);
+						setRangeInputVal(toInput, from, rangeContainer);
 					}
 				}
 			}
 			
+			function parseRangeInputVal(val) {
+				if (val === '' || val == null) return NaN;
+				const str = String(val).replace(/,/g, '');
+				return parseFloat(str);
+			}
+
+			function formatRangeDisplay(val, rangeContainer) {
+				if (rangeContainer && rangeContainer.data('format-numbers') === 'yes') {
+					const num = parseRangeInputVal(val);
+					if (!isNaN(num)) {
+						const decimals = Math.max(0, Math.min(4, parseInt(rangeContainer.data('decimal-places'), 10) || 2));
+						return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+					}
+				}
+				return val;
+			}
+
+			function setRangeInputVal($input, num, rangeContainer) {
+				if (rangeContainer && rangeContainer.data('format-numbers') === 'yes') {
+					$input.val(formatRangeDisplay(num, rangeContainer));
+				} else {
+					$input.val(num);
+				}
+				$input.attr('value', $input.val());
+			}
+
 			function controlFromSlider(fromSlider, toSlider, fromInput) {
+				const rangeContainer = fromSlider.closest('.wpr-af-range-container');
 				const [from, to] = getParsed(fromSlider, toSlider);
 				fillSlider(fromSlider, toSlider);
 				setToggleAccessible(fromSlider, 'from');
 				if (from > to) {
 					fromSlider.val(to).attr('value', to);
-					fromInput.val(to).attr('value', to);
-					$scope.find('.wpr-af-rs-value-min').text(to);
+					setRangeInputVal(fromInput, to, rangeContainer);
+					$scope.find('.wpr-af-rs-value-min').text(formatRangeDisplay(to, rangeContainer));
 				} else {
 					fromSlider.val(from).attr('value', from);
-					fromInput.val(from).attr('value', from);
-					$scope.find('.wpr-af-rs-value-min').text(from);
+					setRangeInputVal(fromInput, from, rangeContainer);
+					$scope.find('.wpr-af-rs-value-min').text(formatRangeDisplay(from, rangeContainer));
 				}
 			}
 			
 			function controlToSlider(fromSlider, toSlider, toInput) {
+				const rangeContainer = fromSlider.closest('.wpr-af-range-container');
 				const [from, to] = getParsed(fromSlider, toSlider);
 				fillSlider(fromSlider, toSlider);
 				setToggleAccessible(toSlider, 'to');
 				if (from <= to) {
 					toSlider.val(to).attr('value', to);
-					toInput.val(to).attr('value', to);
-					$scope.find('.wpr-af-rs-value-max').text(to);
+					setRangeInputVal(toInput, to, rangeContainer);
+					$scope.find('.wpr-af-rs-value-max').text(formatRangeDisplay(to, rangeContainer));
 				} else {
-					toInput.val(from).attr('value', from);
+					setRangeInputVal(toInput, from, rangeContainer);
 					toSlider.val(from).attr('value', from);
-					$scope.find('.wpr-af-rs-value-max').text(from);
+					$scope.find('.wpr-af-rs-value-max').text(formatRangeDisplay(from, rangeContainer));
 				}
 			}
 			
 			function getParsed(currentFrom, currentTo) {
-				const from = parseInt(currentFrom.val(), 10);
-				const to = parseInt(currentTo.val(), 10);
-				return [from, to];
+				const from = parseRangeInputVal(currentFrom.val());
+				const to = parseRangeInputVal(currentTo.val());
+				return [isNaN(from) ? 0 : from, isNaN(to) ? 0 : to];
 			}
 
 			function fillSlider(fromSlider, toSlider) {
-				const min = parseFloat(toSlider.prop('min'));
-				const max = parseFloat(toSlider.prop('max'));
-				const from = Math.min(parseFloat(fromSlider.val()), parseFloat(toSlider.val()));
-				const to = Math.max(parseFloat(fromSlider.val()), parseFloat(toSlider.val()));
+				const rangeContainer = fromSlider.closest('.wpr-af-range-container');
+				const rangeEl = rangeContainer.find('.wpr-af-from-slider')[0] ? rangeContainer.find('.wpr-af-from-slider') : toSlider;
+				const min = parseFloat(rangeEl.prop('min')) || parseRangeInputVal(rangeEl.attr('min')) || parseRangeInputVal(rangeEl.data('min')) || 0;
+				const max = parseFloat(rangeEl.prop('max')) || parseRangeInputVal(rangeEl.attr('max')) || parseRangeInputVal(rangeEl.data('max')) || 0;
+				const fromVal = parseRangeInputVal(fromSlider.val());
+				const toVal = parseRangeInputVal(toSlider.val());
+				const from = Math.min(fromVal, toVal);
+				const to = Math.max(fromVal, toVal);
 			
 				const rangeDistance = max - min;
 				const fromPercent = (((from - min) / rangeDistance) * 100) > 0 ? ((from - min) / rangeDistance) * 100 : 0;
@@ -11192,24 +11490,29 @@
 					} else {
 						// Reset range inputs to their min/max values
 						$('body').find('.wpr-advanced-filters-wrap .wpr-af-range-container').each(function() {
-							let rangeMin = $(this).find('input[type="number"].wpr-af-rf-control-min-input'),
-								rangeMax = $(this).find('input[type="number"].wpr-af-rf-control-max-input'),
-								thisFromSlider = $(this).find('input[type="range"].wpr-af-from-slider'),
-								thisToSlider = $(this).find('input[type="range"].wpr-af-to-slider'),
-								thisFromSliderText = $(this).find('.wpr-af-rs-value-min'),
-								thisToSliderText = $(this).find('.wpr-af-rs-value-max');
+							let rangeContainer = $(this),
+								rangeMin = rangeContainer.find('.wpr-af-rf-control-min-input'),
+								rangeMax = rangeContainer.find('.wpr-af-rf-control-max-input'),
+								thisFromSlider = rangeContainer.find('input[type="range"].wpr-af-from-slider'),
+								thisToSlider = rangeContainer.find('input[type="range"].wpr-af-to-slider'),
+								thisFromSliderText = rangeContainer.find('.wpr-af-rs-value-min'),
+								thisToSliderText = rangeContainer.find('.wpr-af-rs-value-max'),
+								minVal = rangeMin.attr('min') || rangeMin.data('min'),
+								maxVal = rangeMax.attr('max') || rangeMax.data('max'),
+								formatRange = rangeContainer.data('format-numbers') === 'yes',
+								fmt = function(v) { return formatRange && !isNaN(parseRangeInputVal(v)) ? formatRangeDisplay(v, rangeContainer) : v; };
 								
-							rangeMin.val(rangeMin.attr('min')).attr('value', rangeMin.attr('min'));
-							rangeMax.val(rangeMax.attr('max')).attr('value', rangeMax.attr('max'));
+							rangeMin.val(fmt(minVal)).attr('value', rangeMin.val());
+							rangeMax.val(fmt(maxVal)).attr('value', rangeMax.val());
 
 							fillSlider(rangeMin, rangeMax);
 
-							thisFromSlider.val(rangeMin.attr('min')).attr('value', rangeMin.attr('min'));
-							thisToSlider.val(rangeMax.attr('max')).attr('value', rangeMax.attr('max'));
-							thisFromSliderText.text(rangeMin.attr('min'));
-							thisToSliderText.text(rangeMax.attr('max'));
+							thisFromSlider.val(minVal).attr('value', minVal);
+							thisToSlider.val(maxVal).attr('value', maxVal);
+							thisFromSliderText.text(fmt(minVal));
+							thisToSliderText.text(fmt(maxVal));
 							
-							$(this).attr('data-active', 'no');
+							rangeContainer.attr('data-active', 'no');
 						});
 
 						// Reset all select elements to their default option (usually the first option)
@@ -11468,25 +11771,27 @@
 					}
 
 					if ( $(this).find('.wpr-af-range-apply-btn').length > 0 && $(this).data('wpr-applied') == 'yes' ) {
-						var selectedElement = $(this).find('.wpr-af-rf-control').find('input[type="number"]');
-						var selectedValue = [];
-						var selectedName = selectedElement.attr('name');
-
-						selectedElement.each(function() {
-							selectedValue.push($(this).val());
-						});
-						
-						updateURL(selectedName, selectedValue, $(this).find('.wpr-af-range-apply-btn'), finalURL);
+						var minInp = $(this).find('.wpr-af-rf-control-min-input'),
+							maxInp = $(this).find('.wpr-af-rf-control-max-input'),
+							selectedName = minInp.attr('name'),
+							selectedValue = [];
+						if ( minInp.length && maxInp.length && selectedName ) {
+							var mn = parseRangeInputVal(minInp.val()), mx = parseRangeInputVal(maxInp.val());
+							selectedValue.push(isNaN(mn) ? minInp.attr('min') || minInp.data('min') : mn);
+							selectedValue.push(isNaN(mx) ? maxInp.attr('max') || maxInp.data('max') : mx);
+							updateURL(selectedName, selectedValue, $(this).find('.wpr-af-range-apply-btn'), finalURL);
+						}
 					} else if ( $(this).find('.wpr-af-range-container').length > 0 && ($(this).data('wpr-applied') == 'yes' || self.hasClass('wpr-af-apply-btn')) ) {
-						var selectedElement = $(this).find('.wpr-af-rf-control').find('input[type="number"]');
-						var selectedValue = [];
-						var selectedName = selectedElement.attr('name');
-
-						selectedElement.each(function() {
-							selectedValue.push($(this).val());
-						});
-						
-						updateURL(selectedName, selectedValue, $(this).find('.wpr-af-range-container'), finalURL);
+						var minInp = $(this).find('.wpr-af-rf-control-min-input'),
+							maxInp = $(this).find('.wpr-af-rf-control-max-input'),
+							selectedName = minInp.attr('name'),
+							selectedValue = [];
+						if ( minInp.length && maxInp.length && selectedName ) {
+							var mn = parseRangeInputVal(minInp.val()), mx = parseRangeInputVal(maxInp.val());
+							selectedValue.push(isNaN(mn) ? minInp.attr('min') || minInp.data('min') : mn);
+							selectedValue.push(isNaN(mx) ? maxInp.attr('max') || maxInp.data('max') : mx);
+							updateURL(selectedName, selectedValue, $(this).find('.wpr-af-range-container'), finalURL);
+						}
 					}
                 });
 
@@ -11533,7 +11838,7 @@
             }
 
 			function updateURL(selectedName, selectedValue, element, ajaxFilterURL = '') {
-				
+				if ( !selectedName ) return;
 				var currentURL = window.location.href,
 					dataRelation = '',
 					dataFilterType = '';
@@ -11982,10 +12287,10 @@
 									data: response.data.output,
 									timestamp: new Date().getTime()
 								};
-	
+
 								// Cache the response
 								// localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-								WprElements.changeInitialItems(0);
+								WprElements.changeInitialItems(0, gridScopeId);
 								updateGrid(response, false, start, targetGrid, settings, widgetSelector);
 							},
 							error: function(error) {
@@ -12461,8 +12766,16 @@
 			finalURL = url;
 		},
 
-		changeInitialItems: function(items) {
-			initialItems = items;
+		changeInitialItems: function(items, scopeId) {
+			if (scopeId) {
+				WprElements.gridInitialItems[scopeId] = items;
+			} else {
+				initialItems = items;
+			}
+		},
+
+		getInitialItems: function(scopeId) {
+			return (scopeId && WprElements.gridInitialItems[scopeId] !== undefined) ? WprElements.gridInitialItems[scopeId] : initialItems;
 		},
 
 		// Isotope Layout

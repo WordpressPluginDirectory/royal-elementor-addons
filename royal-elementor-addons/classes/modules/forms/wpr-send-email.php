@@ -71,6 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$all_fields_content = [];
 
             foreach ($_POST['form_content'] as $key => $value) {
+				$value[2] = wp_unslash($value[2]);
                 $all_fields_content[] = is_array($value[1]) ? trim($value[2]) . ': ' . implode("\n", $value[1]) : trim($value[2]) . ': ' . $value[1];
             }
             $all_fields_content = implode("\n", $all_fields_content);

@@ -304,7 +304,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 
 		echo '<'. esc_attr($element_username_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-                echo '<a>'. $item['user']['name'] .'</a>';
+                echo '<a>'. $item['author']['name'] .'</a>';
 			echo '</div>';
 		echo '</'. esc_attr($element_username_tag) .'>';
 	}
@@ -314,7 +314,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
             echo '<small>';
-                echo '<a href="https://twitter.com/' . $item['user']['screen_name'] .'">@'. $item['user']['screen_name'] .'</a>';
+                echo '<a href="https://twitter.com/' . $item['author']['userName'] .'">@'. $item['author']['userName'] .'</a>';
             echo '</small>';
 			echo '</div>';
 		echo '</div>';
@@ -326,7 +326,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			echo '<div class="inner-block">';
             ?>
             <figure>
-                <img src="<?php echo $item['user']['profile_image_url'] ?>" alt="Image">
+                <img src="<?php echo $item['author']['profilePicture'] ?>" alt="Image">
             </figure>
             <?php
 			echo '</div>';
@@ -340,7 +340,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				echo '<a href="'. esc_url('https://twitter.com/'. $item['user']['screen_name'] .'"/status/"'. $item['id'] ) .'" class="wpr-button-effect '. esc_attr($read_more_animation) .'">';
+				echo '<a href="'. esc_url('https://twitter.com/'. $item['author']['name'] .'"/status/"'. $item['id'] ) .'" class="wpr-button-effect '. esc_attr($read_more_animation) .'">';
 
 				// // Icon: Before
 				// if ( 'before' === $settings['element_extra_icon_pos'] ) {
@@ -362,15 +362,14 @@ class Wpr_Twitter_Feed extends Widget_Base {
 	}
 
 	public function render_post_caption($settings, $class, $item) {
-
-		if ( !isset($item['full_text']) || '' === $item['full_text'] ) {
+		if ( !isset($item['text']) || '' === $item['text'] ) {
 			return;
 		}
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
                 echo '<p>';
-                    $string = preg_replace("~[[:alpha:]]+://[^<p>[:space:]]+[[:alnum:]/]~", "<a href=\"\\0\">\\0</a>", $item['full_text']);
+                    $string = preg_replace("~[[:alpha:]]+://[^<p>[:space:]]+[[:alnum:]/]~", "<a href=\"\\0\">\\0</a>", $item['text']);
                     $new_string = preg_replace('/\#([a-z0-9]+)/i', '<a href="https://twitter.com/hashtag/$1?src=hashtag_click">#$1</a>', $string);
 					if ( isset( $settings['element_word_count'] ) ) {
 						echo wp_trim_words(preg_replace('/\@([a-z0-9]+)/i', '<a href="https://twitter.com/$1">@$1</a>' ,$new_string), $settings['element_word_count']);
@@ -397,7 +396,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 				// }
 
                 // echo wp_date(get_option( 'date_format' ), strtotime($item['created_at'])) 
-                echo human_time_diff(strtotime($item['created_at'])) .' '. esc_html__('ago', 'wpr-addons');
+                echo human_time_diff(strtotime($item['createdAt'])) .' '. esc_html__('ago', 'wpr-addons');
 
 				// Icon: After
 				// if ( 'after' === $settings['element_extra_icon_pos'] ) {
@@ -445,15 +444,14 @@ class Wpr_Twitter_Feed extends Widget_Base {
 	}
 
 	public function render_post_likes($settings, $class, $item) {
-
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">'; 
 
             ?>
-            <a href="https://twitter.com/intent/like?tweet_id=<?php echo $item['id'] ?>&related=<?php echo $item['user']['screen_name'] ?>" target="_blank" title="Likes">
+            <a href="https://twitter.com/intent/like?tweet_id=<?php echo $item['id'] ?>&related=<?php echo $item['author']['name'] ?>" target="_blank" title="Likes">
                 <span class=""><i class="fas fa-heart"></i></span>
                 <span class="wpr-tweet-likes">
-                    <?php echo $item['favorite_count'] ?>
+                    <?php echo $item['likeCount'] ?>
                 </span>
             </a>
             <?php
@@ -468,7 +466,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			echo '<div class="inner-block">'; 
 
             ?>
-            <a href="https://twitter.com/intent/tweet?in_reply_to=<?php echo $item['id'] ?>&related=<?php echo $item['user']['screen_name'] ?>" target="_blank" title="Comments">
+            <a href="https://twitter.com/intent/tweet?in_reply_to=<?php echo $item['id'] ?>&related=<?php echo $item['author']['name'] ?>" target="_blank" title="Comments">
                 <span class=""><i class="fas fa-comment"></i></span>
             </a>
             <?php
@@ -483,10 +481,10 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			echo '<div class="inner-block">'; 
 
             ?>
-            <a href="https://twitter.com/intent/retweet?tweet_id=<?php echo $item['id'] ?>&related=<?php echo $item['user']['screen_name'] ?>" target="_blank" title="Retweets">
+            <a href="https://twitter.com/intent/retweet?tweet_id=<?php echo $item['id'] ?>&related=<?php echo $item['author']['name'] ?>" target="_blank" title="Retweets">
                 <span class=""><i class="fa fa-retweet"></i></span>
                 <span class="wpr-retweets">
-                    <?php echo $item['retweet_count'] ?>
+                    <?php echo $item['retweetCount'] ?>
                 </span>
             </a>
             <?php
@@ -503,15 +501,24 @@ class Wpr_Twitter_Feed extends Widget_Base {
 	}
 
 	public function render_post_media($settings, $class, $item) {
+
+// echo '<pre>';
+// print_r( $item );
+// echo '</pre>';
 		
-		if ( isset($item['extended_entities']) && null !== $item['extended_entities'] ) {
-			if ( $item['extended_entities']['media'] ) {
-				$media = $item['extended_entities']['media'];
-			} else if ( isset( $item['retweeted_status']['entities']['media'] ) ) {
-				$media = $item['retweeted_status']['entities']['media'];
-			} else if ( isset( $item['quoted_status']['entities']['media'] ) ) {
-				$media = $item['quoted_status']['entities']['media'];
-			} else {
+		if ( isset($item['extendedEntities']) && null !== $item['extendedEntities'] ) {
+			if ( isset($item['extendedEntities']['media'] ) && !empty( $item['extendedEntities']['media'] ) ) {
+				$media = $item['extendedEntities']['media'];
+			}
+			// Altered logic for Retweets
+			else if ( isset($item['retweeted_tweet']['extendedEntities']['media']) ) {
+				$media = $item['retweeted_tweet']['extendedEntities']['media'];
+			} 
+			// Altered logic for Quoted Tweets
+			else if ( isset($item['quoted_tweet']['extendedEntities']['media']) ) {
+				$media = $item['quoted_tweet']['extendedEntities']['media'];
+			}
+			else {
 				$media = [];
 			}
 		}
@@ -520,7 +527,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			echo '<div class="'. esc_attr($class) .'">';
 				echo '<div class="inner-block">'; 
 					// && $media[0]['type'] == 'photo'
-					echo (isset( $media[0] )) ? '<img class="wpr-twit-image" src="' . $media[0]['media_url_https'] . '">' : '';
+					echo ( isset( $media[0] ) && !empty($media) ) ? '<img class="wpr-twit-image" src="' . $media[0]['media_url_https'] . '">' : '';
 				echo '</div>';
 			echo '</div>';
 		}
@@ -739,30 +746,16 @@ class Wpr_Twitter_Feed extends Widget_Base {
 		}
 
         $this->add_control(
-            'twitter_feed_consumer_key',
+            'twitter_io_api_key',
             [
-                'label' => esc_html__('Consumer Key', 'wpr-addons'),
+                'label' => esc_html__('API key', 'wpr-addons'),
                 'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
 				],
                 'label_block' => false,
                 'default' => '',
-                'description' => '<a href="https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret" target="_blank">Get Consumer Key.</a> Create a new app or select existing app and grab the <b>consumer key.</b>',
-            ]
-        );
-
-        $this->add_control(
-            'twitter_feed_consumer_secret',
-            [
-                'label' => esc_html__('Consumer Secret', 'wpr-addons'),
-                'type' => Controls_Manager::TEXT,
-				'dynamic' => [
-					'active' => true,
-				],
-                'label_block' => false,
-                'default' => '',
-                'description' => '<a href="https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret" target="_blank">Get Consumer Secret.</a> Create a new app or select existing app and grab the <b>consumer secret.</b>',
+				'description' => '<a href="https://twitterapi.io/" target="_blank">Get API Key.</a>Create Account, Go to Dashboard and grab the <b>API Key.</b>',
             ]
         );
 
@@ -1012,6 +1005,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 				'separator' => 'before',
 				'condition' => [
 					'layout_select!' => 'carousel',
+					'test' => 'yes',
 				]
 			]
 		);
@@ -4672,8 +4666,8 @@ class Wpr_Twitter_Feed extends Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-		if ( empty($settings['twitter_feed_consumer_key']) || empty($settings['twitter_feed_consumer_secret']) ) {
-			echo '<p class="wpr-token-missing">'. esc_html__('Please insert Consumer and Secret Keys in respective fields', 'wpr-addons') .'</p>';
+		if ( empty($settings['twitter_io_api_key']) ) {
+			echo '<p class="wpr-token-missing">'. esc_html__('Please insert API key', 'wpr-addons') .'</p>';
 			return;
 		}
 
@@ -4687,36 +4681,11 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			array_push($twitter_feed_account_names, $value['twitter_feed_account_name']);
 		}
 
-        $token = get_transient('wpr_' . $settings['number_of_posts'] . '_' . $this->get_ID() . '_' . implode("_", $twitter_feed_account_names) . '_tf_token');
 	    $expiration = !empty( $settings['auto_clear_cache'] ) && !empty( $settings['twitter_feed_cache_limit'] ) ? absint( $settings['twitter_feed_cache_limit'] ) * MINUTE_IN_SECONDS : DAY_IN_SECONDS;
-	    $cache_key = 'wpr_' . implode("_", $twitter_feed_account_names) . '_' . $expiration . '_' . md5( $settings['twitter_feed_hashtag_name'] . $settings['twitter_feed_consumer_key'] . $settings['twitter_feed_consumer_secret'] ) . '_tf_cache' . '_' . $settings['number_of_posts'];
+	    $cache_key = 'wpr_' . implode("_", $twitter_feed_account_names) . '_' . $expiration . '_' . md5( $settings['twitter_feed_hashtag_name'] . $settings['twitter_io_api_key']) . '_tf_cache' . '_' . $settings['number_of_posts'];
         $items_array = get_transient( $cache_key );
 
         if ($items_array === false) {
-			if (empty($token)) {
-				$credentials = base64_encode($settings['twitter_feed_consumer_key'] . ':' . $settings['twitter_feed_consumer_secret']);
-
-				add_filter('https_ssl_verify', '__return_false');
-
-				$response = wp_remote_post('https://api.twitter.com/oauth2/token', [
-					'method' => 'POST',
-					'httpversion' => '1.1',
-					'blocking' => true,
-					'headers' => [
-						'Authorization' => 'Basic ' . $credentials,
-						'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8',
-					],
-					'body' => ['grant_type' => 'client_credentials'],
-				]);
-
-				$body = json_decode(wp_remote_retrieve_body($response));
-
-				if ($body) {
-					set_transient('wpr_' . $settings['number_of_posts'] . '_' . $this->get_ID() . '_' . implode("_", $twitter_feed_account_names) . '_tf_token', $body->access_token, $expiration);
-					$token = $body->access_token;
-				}
-			}
-
 			add_filter('https_ssl_verify', '__return_false');
 
 			$response = [];
@@ -4729,16 +4698,36 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			foreach ($settings['twitter_accounts'] as $key=>$value) {
 
 				array_push($twitter_feed_account_names, $value['twitter_feed_account_name']);
-				$response[$key] = wp_remote_get('https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' . $value['twitter_feed_account_name'] . '&count='. $settings['number_of_posts'] .'&tweet_mode=extended', [
-					'httpversion' => '1.1',
-					'blocking' => true,
-					'headers' => [
-						'Authorization' => "Bearer $token",
-					],
-				]);
 
+				$base_url = 'https://api.twitterapi.io/twitter/user/last_tweets';
+				// 2. Add query parameters (userName and limit)
+				$url = add_query_arg( array(
+					'userName' => $value['twitter_feed_account_name'], // REMOVE the "@" symbol; use "userName"
+					'limit'    => $settings['number_of_posts'],           // Use "limit" instead of "count"
+				), $base_url );
+
+				// 3. Set the Request Headers
+				$args = array(
+					'headers' => array(
+						'x-api-key' => $settings['twitter_io_api_key'], // Use your Twitter API
+					),
+					'timeout'   => 20,
+					'sslverify' => false, // Better to put this directly in the args for local testing
+				);
+
+				// 4. Make the Request
+				$response[$key] = wp_remote_get( $url, $args );
+
+				// Debugging
 				if ( is_wp_error( $response[$key] ) ) {
-					// return $html;
+					echo "WP_Error: " . $response[$key]->get_error_message();
+				} else {
+					$code = wp_remote_retrieve_response_code( $response[$key] );
+					$body = wp_remote_retrieve_body( $response[$key] );
+				}
+				// 5. Handle Errors and Parse Data
+				if (is_wp_error($response[$key])) {
+					return 'Error: ' . $response[$key]->get_error_message();
 				}
 		
 				if ( ! empty( $response[$key]['response'] ) && $response[$key]['response']['code'] == 200 ) {
@@ -4748,8 +4737,13 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			}
 		}
 
+		$cover_picture = '';
+		if ( isset($items_array[0]) ) {
+			$cover_picture = $items_array[0]['data']['tweets'][0]['author']['coverPicture'];
+		}
+
         $header_banner_placeholder = WPR_ADDONS_ASSETS_URL . 'img/placeholder.png';
-        $header_banner = $items_array[0][0]['user']['profile_banner_url'] ? $items_array[0][0]['user']['profile_banner_url'] : $header_banner_placeholder;
+        $header_banner = $cover_picture ? $cover_picture : $header_banner_placeholder;
 
 		$columns_mobile = isset($settings['columns_mobile']) ? $settings['columns_mobile'] : $settings['columns'];
 		$columns_tablet = isset($settings['columns_tablet']) ? $settings['columns_tablet'] : $settings['columns'];
@@ -4774,8 +4768,7 @@ class Wpr_Twitter_Feed extends Widget_Base {
 
 		$twitter_settings['twitter_load_more_settings'] = [
 			'number_of_posts' => $settings['number_of_posts'],
-			'twitter_feed_consumer_key' => $settings['twitter_feed_consumer_key'],
-			'twitter_feed_consumer_secret' => $settings['twitter_feed_consumer_secret'],
+			'twitter_io_api_key' => $settings['twitter_io_api_key'],
 			'twitter_feed_hashtag_name' => $settings['twitter_feed_hashtag_name'],
 			// 'image_effects' => $settings['image_effects'],
 			// 'image_effects' => $settings['image_effects_size'],
@@ -4850,20 +4843,20 @@ class Wpr_Twitter_Feed extends Widget_Base {
 				
 				<div class="wpr-tf-header-content">
 				<div class="wpr-tf-header-profile-img">
-					<img src="<?php echo str_replace('_normal', '', $items_array[0][0]['user']['profile_image_url']) ?>" alt="Image">
+					<img src="<?php echo str_replace('_normal', '', $items_array[0]['data']['tweets'][0]['author']['profilePicture']) ?>" alt="Image">
 					<div class="wpr-tf-statistics">
 						<div class="wpr-tf-header-user">
-							<p class="wpr-tf-header-user-name"><?php echo $items_array[0][0]['user']['name'] ?></p>
-							<p class="wpr-tf-header-user-acc-name"><a href="<?php echo $items_array[0][0]['user']['screen_name'] ?>" target="_blank"><?php echo '@'. $items_array[0][0]['user']['screen_name'] ?></a></p>
+							<p class="wpr-tf-header-user-name"><?php echo $items_array[0]['data']['tweets'][0]['author']['name'] ?></p>
+							<p class="wpr-tf-header-user-acc-name"><a href="<?php echo $items_array[0]['data']['tweets'][0]['author']['userName'] ?>" target="_blank"><?php echo '@'. $items_array[0]['data']['tweets'][0]['author']['userName'] ?></a></p>
 						</div>
-						<span class=""><a href='https://twitter.com/<?php echo $items_array[0][0]['user']['screen_name'] ?>' target="_blank"><span><?php echo $this->format_numbers($items_array[0][0]['user']['statuses_count']) ?></span><span><?php esc_html__(' Tweets', 'wpr-addons') ?></span></a></span>
-						<span class=""><a href='https://twitter.com/<?php echo $items_array[0][0]['user']['screen_name'] ?>/following' target="_blank"><span><?php echo $this->format_numbers($items_array[0][0]['user']['friends_count']) ?></span><span><?php esc_html__(' Following', 'wpr-addons') ?></span></a></span>
-						<span class=""><a href='https://twitter.com/<?php echo $items_array[0][0]['user']['screen_name'] ?>/followers' target="_blank"><span><?php echo $this->format_numbers($items_array[0][0]['user']['followers_count']) ?></span><span><?php esc_html__(' Followers', 'wpr-addons') ?></span></a></span>
+						<span class=""><a href='https://twitter.com/<?php echo $items_array[0]['data']['tweets'][0]['author']['userName'] ?>' target="_blank"><span><?php echo $this->format_numbers($items_array[0]['data']['tweets'][0]['author']['statusesCount']) ?></span><span><?php echo esc_html__(' Tweets', 'wpr-addons'); ?></span></a></span>
+						<span class=""><a href='https://twitter.com/<?php echo $items_array[0]['data']['tweets'][0]['author']['userName'] ?>/following' target="_blank"><span><?php echo $this->format_numbers($items_array[0]['data']['tweets'][0]['author']['following']) ?></span><span><?php echo esc_html__(' Following', 'wpr-addons'); ?></span></a></span>
+						<span class=""><a href='https://twitter.com/<?php echo $items_array[0]['data']['tweets'][0]['author']['userName'] ?>/followers' target="_blank"><span><?php echo $this->format_numbers($items_array[0]['data']['tweets'][0]['author']['fastFollowersCount']) ?></span><span><?php echo esc_html__(' Followers', 'wpr-addons'); ?></span></a></span>
 					</div>
 				</div>
 	
 					<span class="wpr-twitter-follow-btn-wrap">
-						<a class="wpr-twitter-follow-btn" rel="nofollow" href="https://twitter.com/intent/follow?screen_name=<?php echo $items_array[0][0]['user']['screen_name'] ?>" target="_blank">
+						<a class="wpr-twitter-follow-btn" rel="nofollow" href="https://twitter.com/intent/follow?screen_name=<?php echo $items_array[0]['data']['tweets'][0]['author']['userName'] ?>" target="_blank">
 							Follow
 						</a>
 					</span>
@@ -4889,7 +4882,6 @@ class Wpr_Twitter_Feed extends Widget_Base {
 		if ( 'yes' === $settings['enable_cs_pag'] ) {
 			echo '<div class="swiper-pagination"></div>';
 		}
-
         echo '<div '. wp_kses_post( $this->get_render_attribute_string( 'twitter_feed' ) ) .'>';
 
         foreach ( $items_array as $key=>$items ) :
@@ -4915,15 +4907,15 @@ class Wpr_Twitter_Feed extends Widget_Base {
 			}
 		}
 
-        foreach ( $items as $item) :
+        foreach ( $items['data']['tweets'] as $item ) :
                 
         $banner_placeholder = WPR_ADDONS_ASSETS_URL . 'img/placeholder.png';
-        $banner = $item['user']['profile_banner_url'] ? $item['user']['profile_banner_url'] : $banner_placeholder;
+        // $banner = $item['author']['profile_banner_url'] ? $item['author']['profile_banner_url'] : $banner_placeholder;
         ?>
                 <div class="wpr-tweet elementor-clearfix">
                         <article class="media">
 
-                            <?php 
+                            <?php
                                 // Content: Above Media
                                 echo $this->get_elements_by_location( 'above', $settings, $item );
                             ?>

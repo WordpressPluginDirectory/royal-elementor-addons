@@ -925,6 +925,39 @@ class Pricing_Table extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'heading_align',
+			[
+				'label' => esc_html__( 'Alignment', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default' => 'center',
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-right',
+					],
+				],
+				// 'selectors_dictionary' => [
+				// 	'flex-start' => 'justify-content: flex-start; text-align: left;',
+				// 	'center' => 'justify-content: center; text-align: center;',
+				// 	'flex-end' => 'justify-content: flex-end; text-align: right;',
+				// ],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-pricing-table-heading' => 'text-align: {{VALUE}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_responsive_control(
 			'heading_section_padding',
 			[
 				'label' => esc_html__( 'Padding', 'wpr-addons' ),
@@ -1140,6 +1173,40 @@ class Pricing_Table extends Widget_Base {
 					],
 				],
 				'selector' => '{{WRAPPER}} .wpr-pricing-table-price'
+			]
+		);
+
+		$this->add_responsive_control(
+			'price_align',
+			[
+				'label' => esc_html__( 'Alignment', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default' => 'center',
+				'options' => [
+					'flex-start' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'flex-end' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-right',
+					],
+				],
+				'selectors_dictionary' => [
+					'flex-start' => 'justify-content: flex-start; text-align: left;',
+					'center' => 'justify-content: center; text-align: center;',
+					'flex-end' => 'justify-content: flex-end; text-align: right;',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-pricing-table-price' => '{{VALUE}};',
+					'{{WRAPPER}} .wpr-pricing-table-price-inner' => '{{VALUE}};',
+				],
+				'separator' => 'before',
 			]
 		);
 
@@ -1785,6 +1852,34 @@ class Pricing_Table extends Widget_Base {
 		);
 
 		$this->add_control(
+			'btn_align',
+			[
+				'label' => esc_html__( 'Alignment', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default' => 'center',
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-right',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-pricing-table-button' => 'text-align: {{VALUE}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
 			'btn_section_padding',
 			[
 				'label' => esc_html__( 'Section Padding', 'wpr-addons' ),
@@ -1847,6 +1942,18 @@ class Pricing_Table extends Widget_Base {
 		);
 
 		$this->add_control(
+			'btn_icon_color',
+			[
+				'label' => esc_html__( 'Icon Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-pricing-table-btn i' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
 			'btn_border_color',
 			[
 				'label' => esc_html__( 'Border Color', 'wpr-addons' ),
@@ -1897,6 +2004,18 @@ class Pricing_Table extends Widget_Base {
 				'default' => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-pricing-table-btn:hover' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'btn_icon_hover_color',
+			[
+				'label' => esc_html__( 'Icon Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-pricing-table-btn:hover i' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -2013,6 +2132,36 @@ class Pricing_Table extends Widget_Base {
 				'name' => 'btn_typography',
 				'selector' => '{{WRAPPER}} .wpr-pricing-table-btn',
 				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'btn_icon_style_divider',
+			[
+				'type' => Controls_Manager::DIVIDER,
+				'style' => 'thick',
+			]
+		);
+
+		$this->add_responsive_control(
+			'btn_icon_size',
+			[
+				'label' => esc_html__( 'Icon Size', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em' ],
+				'range' => [
+					'px' => [
+						'min' => 1,
+						'max' => 200,
+					],
+					'em' => [
+						'min' => 0.1,
+						'max' => 10,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-pricing-table-btn i' => 'font-size: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -2678,9 +2827,9 @@ class Pricing_Table extends Widget_Base {
 
 						<?php if ( '' !== $item['select_icon']['value'] &&  $item['btn_position'] === 'after' ) : ?>
 						<i class="<?php echo esc_attr( $item['select_icon']['value'] ); ?>"></i>
+						<?php endif; ?>
 
 					</span>
-					<?php endif; ?>
 				</a>
 				
 			<?php elseif ( $item['type_select'] === 'divider' ) : ?>
