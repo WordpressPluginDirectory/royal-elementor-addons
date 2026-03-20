@@ -1,9 +1,9 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1050
+Stable tag: 1.7.1052
 Requires at least: 5.0
-Tested up to: 6.9.1
+Tested up to: 6.9.4
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -14,7 +14,7 @@ Elementor templates, Header footer builder, Elementor Post Grid, Woocommerce Gri
 
 **Royal Elementor addons** is the most versatile, intuitive, and easy to use [Popular Page Builder](https://wordpress.org/plugins/elementor/) extension. Our goal is to provide you with the tools to make things happen, efficiently, and fast compare to other elementor addons. Choosing us is not only a mindset, but it is also a requirement if you intend to gain an edge over your competitors when creating your website. The best part is that you can design anything **without having to touch a single line of code**.
 
-Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each Week), Theme Builder, WooCommerce Builder, Elementor Mega Menu Builder, Advanced Sticky Header, Header Footer Builder, Forms Builder, Advanced Filters (filter any CPT, taxonomies and metafields), AJAX Search, Popup Builder, Post Slider and Carousel, Product Slider and Carousel, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
+Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each Week), Theme Builder, elementor Custom Widget Builder, WooCommerce Builder, Elementor Mega Menu Builder, Advanced Sticky Header, Header Footer Builder, Forms Builder, Advanced Filters (filter any CPT, taxonomies and metafields), AJAX Search, Popup Builder, Post Slider and Carousel, Product Slider and Carousel, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
 
 *Free and Pro functionalities are mixed in the Widget Demos below.*
 
@@ -30,6 +30,7 @@ Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each W
 - [**Post Carousel**](https://royal-elementor-addons.com/elementor-grid-widget-examples/post-carousel-examples/?ref=rea-wpo-pp-details-tab#filter:category-portfolio-grid)
 - [**Post Slider**](https://royal-elementor-addons.com/elementor-grid-widget-examples/post-slider-examples/?ref=rea-wpo-pp-details-tab)
 - [**Advanced Filters (filter any CPT, taxonomies and metafields)**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/?ref=rea-wpo-pp-details-tab)
+- [**Custom Widget Builder (build any type of elementor widgets for your projects)**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
 - [**Form Builder**](https://royal-elementor-addons.com/elementor-form-builder-widget/?ref=rea-wpo-pp-details-tab)
 - [**WooCommerce Product Grid**](https://royal-elementor-addons.com/elementor-grid-widget-examples/?ref=rea-wpo-pp-details-tab#filter:category-woo-grid)
 - [**WooCommerce Product Carousel**](https://royal-elementor-addons.com/elementor-grid-widget-examples/product-carousel-examples/?ref=rea-wpo-pp-details-tab)
@@ -120,6 +121,27 @@ Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each W
 - [**Elementor Theme Builder & Woocommerce Builder**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab#headerfooterbuilder) - Header Footer Builder, Post & Product Archive builder, Single Post & Product builder, Single Page, Search, category, tags, 404, author, data page template builder.
 - [**Dynamic Website Builder**](https://www.youtube.com/watch?v=kE1zmi3fxh8) - Use Dynamic Tags to create Websites Driven by Dynamic Content. Create Custom Post Types and Custom Taxonomies. Style and customize Custom Fields, Custom Post Type & Custom Taxonomies Templates. Add Dynamic Product Data even for Woocommerce Archive Grid and Single Products Pages and much more. Supported Advanced Custom Fields: Text, Textarea, Number, Range, Email, URL, Password, Select, Checkbox, Radio Button, True / False, Gallery, Image, Repeater, File, Flexible Content, Clone, WYSIWYG Editor, oEmbed, Date Picker, Relationship, Taxonomy, Time Picker, Color Picker, Post Object, Accordion, Tab, Google Map. [View Dynamic Websites Prebuilt Demos](https://demosites.royal-elementor-addons.com/elementor-templates/#filter:category-dynamic)
 - [**Advanced Filters for Elementor**](https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/) - Advanced Filters lets you filter any **Custom Post Types (CPT), Taxonomies and Metafields** in WordPress using Elementor. You can create filters like Price, Color, Brand, Size, Material, Rating or any other. Please watch this [Video Tutorial](https://www.youtube.com/watch?v=ejbvzt2BkJE) to learn more about it.
+- [**Widget Builder - Create Custom Elementor Widgets Without Code**](https://royal-elementor-addons.com) - Build your own fully-functional Elementor widgets visually — no coding skills required. The Widget Builder lets you design custom widgets from scratch using an intuitive drag-and-drop control panel and a built-in code editor for those who want full creative control.  
+
+	How it works:
+
+	1. Add controls (text fields, color pickers, sliders, selects, media uploaders, and 20+ more) to your widget's Content, Style, and Advanced tabs — just like any native Elementor widget.
+	2. Use simple template tags like {{title}} or {{image.url}} in the HTML editor to output control values dynamically.
+	3. Add custom CSS and JavaScript to style and power your widget's behavior.
+	4. Hit Preview to test your widget live inside Elementor, then Save — your widget is instantly available in the Elementor editor, ready to use on any page.
+
+	Key highlights:
+
+	- 20+ supported control types including text, number, color, slider, dimensions, select, media, gallery, icons, typography, background, border, box shadow, and more
+	- Group controls for typography, background, borders, and shadows — matching native Elementor quality
+	- Conditional logic with {{#if}} template tags to show/hide content based on control values
+	- Built-in Monaco code editor (same editor used in VS Code) for HTML, CSS, and JavaScript
+	- Link external CSS/JS libraries directly from the Includes panel
+	- Live preview inside Elementor before saving
+	- Custom icon and category assignment so your widgets feel native
+	- Generated widgets are lightweight, performant, and stored as standard Elementor widget classes
+
+	Whether you need a custom testimonial card, a pricing box with unique styling, a branded CTA section, or any element that doesn't exist as a pre-built widget — the Widget Builder lets you create it yourself in minutes, not hours.
 - [**Mega Menu Builder**](https://royal-elementor-addons.com/elementor-mega-menu-widget/?ref=rea-wpo-pp-details-tab#popupbuilder?ref=rea-wpo-pp-details-tab#popupbuilder) - Build any type of WordPress mega menu with Menu Badges and Icons, use any elementor widgets in Mega menu content, supports Ajax loading of mega menu items for maximum page loading speed. Off-Canvas Mobile and Desktop Menus support.
 - [**Advanced Sticky Menu - Create eye-catching Sticky Header Effects**](https://prnt.sc/pCVM2ayA_vVV) check demos (scroll to see menu effects): 
 	[Demo 1 - Replace Header on Scroll, change it's background Color and make it Transparent, replace Logo ](https://demosites.royal-elementor-addons.com/construction-v3/?ref=rea-wpo-pp-details-tab)
@@ -135,7 +157,7 @@ Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each W
 - White Label Branding (Change Plugin Name, Description, Developer / Agency, Website URL, Menu Label
 and other custom branding related settings)
 - Sticky Section (Can be used for creating Sticky Header / Menu)
-- Custom CSS - apply custom css to any section.
+- Custom CSS - apply custom css to any elementor section.
 
 **Elementor Wocommerce Builder Templates Kits**
 
@@ -459,6 +481,12 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1052 - 2026-03-20 =
+* ADDED: Elementor Template Kit: Crypto Trade V1 - [**Crypto-Trade V4**](https://demosites.royal-elementor-addons.com/crypto-trade-v1/?ref=rea-wpo-pp-details-tab).
+
+= Royal Elementor Addons v1.7.1051 - 2026-03-09 =
+* ADDED: A Widget Builder that helps you easily create custom widgets for Elementor
+
 = Royal Elementor Addons v1.7.1050 - 2026-03-05 =
 * Fixed: Some Bugs.
 * ADDED: Elementor Template Kit: Business Landing Page V4 - [**Landing Page Business V4**](https://demosites.royal-elementor-addons.com/landing-page-business-v4/?ref=rea-wpo-pp-details-tab).

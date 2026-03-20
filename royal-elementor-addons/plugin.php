@@ -1107,6 +1107,9 @@ class Plugin {
 
 	protected function add_actions() {
 
+		// Widget Builder
+		new \WprAddons\Modules\WidgetBuilder\Init();
+
 		// User Cookie
 		add_action( 'init', [$this, 'wpr_some_init_actions' ]);
 
