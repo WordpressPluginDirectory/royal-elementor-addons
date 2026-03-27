@@ -61,15 +61,23 @@ function add_mega_menu_cpt_support( $value ) {
 // Create Menu Template
 function wpr_create_mega_menu_template() {
 
-    $nonce = $_POST['nonce'];
-
-    if ( !wp_verify_nonce( $nonce, 'wpr-mega-menu-js' )  || !current_user_can( 'manage_options' ) ) {
-      return; // Get out of here, the nonce is rotten!
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpr-mega-menu-js' ) || ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Invalid request.' ] );
+        return;
     }
 
-    // $menu_id = intval( $_REQUEST['menu'] );
-    // $menu_item_id = intval( $_REQUEST['item'] );
-    $menu_item_id = intval( $_POST['item_id'] );
+    if ( ! isset( $_POST['item_id'] ) ) {
+        wp_send_json_error( [ 'message' => 'Missing item_id.' ] );
+        return;
+    }
+
+    $menu_item_id = absint( $_POST['item_id'] );
+    $menu_item = get_post( $menu_item_id );
+    if ( ! $menu_item || $menu_item->post_type !== 'nav_menu_item' ) {
+        wp_send_json_error( [ 'message' => 'Invalid menu item.' ] );
+        return;
+    }
+
     $mega_menu_id = get_post_meta( $menu_item_id, 'wpr-mega-menu-item', true );
 
     if ( ! $mega_menu_id ) {
@@ -112,7 +120,7 @@ function render_settings_popup() {
     <div class="wpr-mm-settings-popup-wrap">
         <div class="wpr-mm-settings-popup">
             <div class="wpr-mm-settings-popup-header">
-                <span class="wpr-mm-popup-logo" style="background:url('<?php echo WPR_ADDONS_ASSETS_URL .'img/logo-40x40.png'; ?>') no-repeat center center / contain;">RE</span>
+                <span class="wpr-mm-popup-logo" style="background:url('<?php echo esc_url( WPR_ADDONS_ASSETS_URL . 'img/logo-40x40.png' ); ?>') no-repeat center center / contain;">RE</span>
                 <span><?php esc_html_e('Royal Mega Menu', 'wpr-addons'); ?></span>
                 <span class="wpr-mm-popup-title"><?php esc_html_e('Menu Item: ', 'wpr-addons'); ?><span></span></span>
                 <span class="dashicons dashicons-no-alt wpr-mm-settings-close-popup-btn"></span>
@@ -252,20 +260,81 @@ function render_settings_popup() {
     <?php
 }
 
+/**
+ * Allowed mega menu setting keys (whitelist for sanitization).
+ *
+ * @return array
+ */
+function wpr_mega_menu_allowed_settings_keys() {
+    return [
+        'wpr_mm_enable',
+        'wpr_mm_position',
+        'wpr_mm_width',
+        'wpr_mm_custom_width',
+        'wpr_mm_mobile_content',
+        'wpr_mm_render',
+        'wpr_mm_icon_picker',
+        'wpr_mm_icon_color',
+        'wpr_mm_icon_size',
+        'wpr_mm_badge_text',
+        'wpr_mm_badge_color',
+        'wpr_mm_badge_bg_color',
+        'wpr_mm_badge_animation',
+    ];
+}
+
+/**
+ * Sanitize a single mega menu setting value.
+ *
+ * @param mixed $value Raw value.
+ * @param string $key Setting key.
+ * @return mixed Sanitized value.
+ */
+function wpr_sanitize_mega_menu_setting( $value, $key ) {
+    if ( ! is_scalar( $value ) ) {
+        return '';
+    }
+    $value = (string) $value;
+    if ( in_array( $key, [ 'wpr_mm_icon_color', 'wpr_mm_badge_color', 'wpr_mm_badge_bg_color' ], true ) ) {
+        return sanitize_text_field( $value );
+    }
+    if ( $key === 'wpr_mm_icon_size' || $key === 'wpr_mm_custom_width' ) {
+        return absint( $value );
+    }
+    return sanitize_text_field( $value );
+}
+
 // Save Mega Menu Settings
 function wpr_save_mega_menu_settings() {
 
-    $nonce = $_POST['nonce'];
-
-    if ( !wp_verify_nonce( $nonce, 'wpr-mega-menu-js' )  || !current_user_can( 'manage_options' ) ) {
-      exit; // Get out of here, the nonce is rotten!
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpr-mega-menu-js' ) || ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Invalid request.' ] );
+        return;
     }
 
-    if ( isset($_POST['item_settings']) ) {
-        update_post_meta( $_POST['item_id'], 'wpr-mega-menu-settings', $_POST['item_settings'] );
+    if ( ! isset( $_POST['item_id'] ) || ! isset( $_POST['item_settings'] ) || ! is_array( $_POST['item_settings'] ) ) {
+        wp_send_json_error( [ 'message' => 'Missing item_id or item_settings.' ] );
+        return;
     }
 
-    wp_send_json_success($_POST['item_settings']);
+    $item_id = absint( $_POST['item_id'] );
+    $item_post = get_post( $item_id );
+    if ( ! $item_post || $item_post->post_type !== 'nav_menu_item' ) {
+        wp_send_json_error( [ 'message' => 'Invalid menu item.' ] );
+        return;
+    }
+
+    $allowed_keys = wpr_mega_menu_allowed_settings_keys();
+    $raw         = wp_unslash( $_POST['item_settings'] );
+    $sanitized   = [];
+    foreach ( $allowed_keys as $key ) {
+        if ( array_key_exists( $key, $raw ) ) {
+            $sanitized[ $key ] = wpr_sanitize_mega_menu_setting( $raw[ $key ], $key );
+        }
+    }
+
+    update_post_meta( $item_id, 'wpr-mega-menu-settings', $sanitized );
+    wp_send_json_success( $sanitized );
 }
 
 // Get Menu Items Data

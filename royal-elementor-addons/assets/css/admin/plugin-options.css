@@ -403,7 +403,7 @@
           box-sizing: border-box;
   position: relative;
   width: 24%;
-  padding: 22px 30px;
+  padding: 20px;
   margin-right: 1%;
   margin-bottom: 20px;
   -webkit-box-shadow: 0 0 15px rgba(0,0,0,0.05);
@@ -483,7 +483,7 @@
 }
 
 .wpr-woo-template-info label {
-  min-width: 45px;
+  min-width: 34px;
 }
 
 .wpr-woo-template-info label,
@@ -513,6 +513,21 @@
   font-size: 12px;
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
+}
+
+.wpr-elements-extensions {
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.wpr-elements-extensions .wpr-element {
+  width: 32%;
+}
+
+.wpr-elements-extensions .wpr-element-info h3,
+.wpr-elements-extensions .wpr-element-info span {
+  max-width: 80%;
 }
 
 .wpr-sticky-video-tutorial,
@@ -561,9 +576,9 @@
 .wpr-setting-custom-ckbox label {
   position: relative;
   display: block;
-  width: 45px;
-  height: 23px;
-  border-radius: 20px;
+  width: 34px;
+  height: 17px;
+  border-radius: 15px;
   background: #e8e8e8;
   cursor: pointer;
   -webkit-touch-callout: none;
@@ -583,10 +598,10 @@
   content: ' ';
   display: block;
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 17px;
-  height: 17px;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   background: #fff;
   -webkit-transition: all 0.2s ease-in;
@@ -605,7 +620,7 @@
 .wpr-element-info input:checked + label:after,
 .wpr-elements-toggle input:checked + label:after,
 .wpr-setting-custom-ckbox input:checked + label:after {
-  left: 24px;
+  left: 18px;
 }
 
 .wpr-new-element:before {

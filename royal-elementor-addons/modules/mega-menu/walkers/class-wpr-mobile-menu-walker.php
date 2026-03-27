@@ -199,6 +199,7 @@ class Wpr_Mobile_Menu_Walker extends \Walker_Nav_Menu {
 				} else {
 					$elementor = \Elementor\Plugin::instance();
 					$mega_id = get_post_meta( $item->ID, 'wpr-mega-menu-item', true);
+					// \WprAddons\Classes\Utilities::enqueue_inner_template_assets( $mega_id );
 					$content = $elementor->frontend->get_builder_content_for_display($mega_id);
 
 					$output .= '<div class="wpr-mobile-sub-mega-menu">';

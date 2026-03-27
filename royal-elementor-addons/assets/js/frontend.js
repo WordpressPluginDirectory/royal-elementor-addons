@@ -71,6 +71,9 @@
 				'wpr-form-builder.default': WprElements.widgetFormBuilder,
 				'wpr-image-scroll.default': WprElements.widgetImageScroll,
 				'wpr-video-playlist.default': WprElements.widgetVideoPlaylist,
+				'wpr-password-protected-content.default': WprElements.widgetPasswordProtectedContent,
+				'wpr-circle-menu.default': WprElements.widgetCircleMenu,
+				'wpr-unfold.default': WprElements.widgetUnfold,
 				'global': WprElements.widgetSection,
 
 				// Single
@@ -803,6 +806,49 @@
 						selector.stop().fadeOut();
 					}
 				}
+			}
+
+			// Same-page anchor scroll (like onepage nav) – only when Consider Sticky Header setting is enabled
+			if ( $navMenu.attr( 'data-consider-header' ) === 'yes' ) {
+				var scrollSpeed = parseInt( $navMenu.attr( 'data-scroll-speed' ), 10 ) || 500;
+
+				function getScrollTopForSection( sectionPos ) {
+					if ( $( '[data-wpr-sticky-section="yes"]' ).first().length ) {
+						return sectionPos - $( '[data-wpr-sticky-section="yes"]' ).first().height();
+					}
+					return sectionPos;
+				}
+
+				$scope.find( '.wpr-nav-menu a, .wpr-mobile-nav-menu a' ).on( 'click', function( e ) {
+					var href = $( this ).attr( 'href' );
+					if ( ! href || href === '#' ) { return; }
+					var hashIndex = href.indexOf( '#' );
+					if ( hashIndex === -1 ) { return; }
+					var hash = href.slice( hashIndex );
+					if ( hash === '#' ) { return; }
+					var isSamePage = ( href.charAt( 0 ) === '#' ) || ( this.pathname === window.location.pathname && this.hostname === window.location.hostname );
+					if ( ! isSamePage ) { return; }
+					var $section = $( hash );
+					if ( ! $section.length ) { return; }
+					e.preventDefault();
+					e.stopImmediatePropagation();
+					var sectionPos = $section.offset().top;
+					$( 'html, body' ).animate( {
+						scrollTop: getScrollTopForSection( sectionPos )
+					}, scrollSpeed );
+				} );
+
+				$( document ).ready( function() {
+					var hash = window.location.hash;
+					if ( ! hash || hash === '#' ) { return; }
+					var $section = $( hash );
+					if ( ! $section.length ) { return; }
+					if ( ! $scope.find( 'a[href*="' + hash + '"]' ).length ) { return; }
+					var sectionPos = $section.offset().top;
+					$( 'html, body' ).animate( {
+						scrollTop: getScrollTopForSection( sectionPos )
+					}, scrollSpeed );
+				} );
 			}
 
 		}, // End widgetNavMenu
@@ -2748,6 +2794,7 @@
 			function loadMoreExperiment() {
 				$scope.find('.wpr-load-more-btn').on('click', function(event) {
 					event.preventDefault();
+					event.stopPropagation();
 
 					var thisTaxonomy,
 						thisFilter;
@@ -8048,6 +8095,7 @@
 				type: 'POST',
 				data: {
 					action: 'count_wishlist_items',
+					nonce: WprConfig.nonce,
 					element_addcart_simple_txt: $scope.find('.wpr-wishlist-products').attr('element_addcart_simple_txt'),
 					element_addcart_grouped_txt: $scope.find('.wpr-wishlist-products').attr('element_addcart_grouped_txt'),
 					element_addcart_variable_txt: $scope.find('.wpr-wishlist-products').attr('element_addcart_variable_txt')
@@ -8439,6 +8487,7 @@
 				type: 'POST',
 				data: {
 					action: 'count_compare_items',
+					nonce: WprConfig.nonce,
 				},
 				success: function(response) {
 					let compare_count = response.compare_count;
@@ -8499,6 +8548,7 @@
 				type: 'POST',
 				data: {
 					action: 'count_compare_items',
+					nonce: WprConfig.nonce,
 					remove_text: $scope.find('.wpr-compare-table-wrap').attr('remove_from_compare_text'),
 					compare_empty_text: $scope.find('.wpr-compare-table-wrap').attr('compare_empty_text'),
 					element_addcart_simple_txt: $scope.find('.wpr-compare-table-wrap').attr('element_addcart_simple_txt'),
@@ -9974,6 +10024,7 @@
 				type: 'POST',
 				data: {
 					action: 'count_wishlist_items',
+					nonce: WprConfig.nonce,
 				},
 				success: function(response) {
 					if ( $scope.find('.wpr-wishlist-count').css('display') == 'none' && 0 < response.wishlist_count ) {
@@ -10025,6 +10076,7 @@
 					type: 'POST',
 					data: {
 						action: 'update_mini_wishlist',
+						nonce: WprConfig.nonce,
 						product_id: actionTargetProductId,
 					},
 					success: function(response) {
@@ -10045,6 +10097,7 @@
 					type: 'POST',
 					data: {
 						action: 'update_mini_wishlist',
+						nonce: WprConfig.nonce,
 						product_id: actionTargetProductId,
 					},
 					success: function(response) {
@@ -12738,6 +12791,148 @@
 			} // Data Table CSV export
 
 		}, // End widgetDataTable
+
+		widgetPasswordProtectedContent: function( $scope ) {
+			var ppcForm = $scope.find( '.wpr-ppc-form' );
+
+			if ( ! ppcForm.length ) {
+				return;
+			}
+
+			ppcForm.on( 'submit', function(e) {
+				e.preventDefault();
+
+				var $form = $(this),
+					$container = $scope.find( '.wpr-ppc-container' ),
+					$error = $form.find( '.wpr-ppc-error' ),
+					$input = $form.find( '.wpr-ppc-password-input' );
+
+				$error.hide();
+
+				$.ajax({
+					url: WprConfig.ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpr_ppc_verify_password',
+						widget_id: $form.data( 'widget-id' ),
+						post_id: $form.data( 'post-id' ),
+						password: $input.val(),
+						nonce: $form.data( 'nonce' )
+					},
+					success: function( response ) {
+						if ( response.success ) {
+							$container.hide().html( '<div class="wpr-ppc-content">' + response.data.content + '</div>' ).fadeIn( 600 );
+
+							// Re-init Elementor widgets
+							if ( window.elementorFrontend && elementorFrontend.elementsHandler ) {
+								$container.find( '.elementor-element' ).each( function() {
+									elementorFrontend.elementsHandler.runReadyTrigger( $( this ) );
+								});
+							}
+						} else {
+							$error.text( response.data.message ).show();
+						}
+					},
+					error: function() {
+						$error.text( 'Something went wrong. Please try again.' ).show();
+					}
+				});
+			});
+		}, // End widgetPasswordProtectedContent
+
+		widgetCircleMenu: function( $scope ) {
+			var $wrapper = $scope.find( '.wpr-circle-menu-wrapper' ),
+				settings = $wrapper.data( 'settings' );
+
+			if ( ! settings ) {
+				return;
+			}
+
+			$wrapper.find( '.wpr-circle-menu-box' ).circleMenu({
+				direction: settings.menuDirection,
+				item_diameter: settings.menuDiameter.size,
+				circle_radius: settings.menuRadius.size,
+				speed: settings.menuSpeed.size,
+				delay: settings.menuDelay.size,
+				step_out: settings.menuStepOut.size,
+				step_in: settings.menuStepIn.size,
+				trigger: settings.menuTrigger,
+				transition_function: settings.menuTransition
+			});
+
+			$wrapper.find( '.wpr-circle-menu-box li' ).css( 'visibility', 'visible' );
+		}, // End widgetCircleMenu
+
+		widgetUnfold: function( $scope ) {
+			var $btn = $scope.find( '.wpr-unfold-btn' ),
+				$wrapper = $scope.find( '.wpr-unfold-wrapper' ),
+				$data = $scope.find( '.wpr-unfold-data' ),
+				$dataInner = $scope.find( '.wpr-unfold-data-inner' ),
+				$collapseIcon = $btn.find( '.wpr-unfold-collapse-icon' ),
+				$expandIcon = $btn.find( '.wpr-unfold-expand-icon' ),
+				config = $wrapper.data( 'config' ),
+				duration = parseInt( config.transition_duration, 10 ) || 300,
+				collapseHeight = parseInt( config.collapse_height, 10 ) || 79,
+				hasIcons = $collapseIcon.length > 0 || $expandIcon.length > 0;
+
+			function updateText( text ) {
+				if ( hasIcons ) {
+					var textNode = $btn.contents().filter(function() {
+						return this.nodeType === 3;
+					})[0];
+					if ( textNode ) {
+						textNode.nodeValue = text;
+					}
+				} else {
+					$btn.html( text );
+				}
+			}
+
+			function updateIcons( state ) {
+				if ( hasIcons ) {
+					if ( 'collapse' === state ) {
+						$collapseIcon.show();
+						$expandIcon.hide();
+					} else {
+						$expandIcon.show();
+						$collapseIcon.hide();
+					}
+				}
+			}
+
+			// Initial state
+			if ( collapseHeight >= $dataInner.outerHeight() ) {
+				$btn.hide();
+				$data.addClass( 'active' ).height( 'auto' );
+			} else {
+				$btn.show();
+				$data.removeClass( 'active' ).height( collapseHeight );
+			}
+
+			$btn.off( 'click' ).on( 'click', function() {
+				var isActive = $data.hasClass( 'active' );
+
+				if ( isActive ) {
+					$data.stop().animate( { height: collapseHeight }, duration );
+					updateText( config.expand_text );
+					updateIcons( 'expand' );
+				} else {
+					$data.stop().animate( { height: $dataInner.outerHeight() }, duration, function() {
+						$data.height( 'auto' );
+					});
+					updateText( config.collapse_text );
+					updateIcons( 'collapse' );
+				}
+
+				$data.toggleClass( 'active' );
+
+				if ( isActive ) {
+					requestAnimationFrame(function() {
+						$data[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+					});
+				}
+			});
+		}, // End widgetUnfold
 
 		// Editor Check
 		editorCheck: function() {

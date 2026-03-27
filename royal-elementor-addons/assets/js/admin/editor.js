@@ -2,17 +2,31 @@
 
 	"use strict";
 
-	var mutationObserver = new MutationObserver(function(mutations) {
+	var panelMutationObserver = new MutationObserver(function(mutations) {
+		// Prevent Bubble up on Section Click
+		$('.elementor-control-type-section').on( 'click', function( event ) {
+			var current = $(this),
+			attrClass = current.attr( 'class' ),
+			firstIndex = attrClass.indexOf( 'elementor-control-section_' ),
+			lastIndex = attrClass.indexOf( 'elementor-control-type-section' ) - 1,
+			sectionClass = attrClass.substring( firstIndex, lastIndex );
+
+			setTimeout( function() {
+				if ( $('.'+ sectionClass).length > 0 ) {
+					$( '#elementor-panel-content-wrapper' ).scrollTop( $('.'+ sectionClass).offset().top - 100 );
+				}
+			}, 10 );
+		});
+
 		// Elementor Search Input
 		if ( $('#elementor-panel-elements-search-input').length ) {
-
-			var searchTimeout = null;  
+			var searchTimeout = null;
+			var popupURL = registered_modules.adminURL + 'admin.php?page=wpr-popups';
+			
 			$('#elementor-panel-elements-search-input').on( 'keyup', function(e) {
 				if ( e.which === 13 ) {
 					return false;
 				}
-
-				var val = $(this).val();
 
 				if (searchTimeout != null) {
 					clearTimeout(searchTimeout);
@@ -21,26 +35,195 @@
 				searchTimeout = setTimeout(function() {
 					searchTimeout = null;
 
+					var searchVal = $('#elementor-panel-elements-search-input').val();
+
+					let keywords = ["appointment", "book"]; // Keywords to look for
+		
+					// Check if any keyword matches the input
+					let keywordFound = keywords.some(function(keyword) {
+						return keyword.includes(searchVal) || searchVal.includes(keyword);
+					});
+			
+					// If a keyword is found and the div doesn't already exist
+					if ((keywordFound &&  searchVal !== '') && $('.wpr-elementor-search-notice').length < 1 ) {
+						// Append the new div
+						let infoBox = `
+							<div class="wpr-elementor-search-notice">
+								Looking for Booking Solution? Check out the <a href="https://www.youtube.com/watch?v=asdMBXpd2Nw" target="_blank">Video Tutorial</a>.
+							</div>
+						`;
+						$('#elementor-panel-elements-wrapper').prepend(infoBox);
+					}
+
+					if ( searchVal.includes('par') && $('.wpr-elementor-search-notice').length < 1 ) {
+						$('#elementor-panel-elements-wrapper').prepend('\
+							<div class="wpr-elementor-search-notice">\
+							<strong>Parallax Background</strong> is only available for the Container (Section) elements. <strong>Edit any container (section)</strong> > <strong>"Styles"</strong> tab > <strong>"Parallax - Royal Addons"</strong>.\
+							</div>\
+						');
+					}
+
+					if ( searchVal.includes('stic') && $('.wpr-elementor-search-notice').length < 1 ) {
+						$('#elementor-panel-elements-wrapper').prepend('\
+							<div class="wpr-elementor-search-notice">\
+							<strong>Sticky Section</strong> is only available for the Container (Section) elements. <strong>Edit any container (section)</strong> > <strong>"Advanced"</strong> tab > <strong>"Sticky Section - Royal Addons"</strong>.\
+							</div>\
+						');
+					}
+
+					if ( searchVal.includes('cart') && $('.wpr-elementor-search-notice').length < 1 && !registered_modules.isWooCommerceActive ) {
+						$('#elementor-panel-elements-wrapper').prepend('\
+							<div class="wpr-elementor-search-notice">\
+							Please Install/Activate <strong>WooCommerce</strong> in order to use <strong>REA WOO</strong> Widgets.\
+							</div>\
+						');
+					}
+
+					if ( searchVal.includes('pop') && $('.wpr-elementor-search-notice').length < 1 ) {
+						$('#elementor-panel-elements-wrapper').prepend('\
+							<div class="wpr-elementor-search-notice">\
+							In Order to Create <strong>Popups</strong> go to <a href='+ popupURL +' target="_blank"><strong>Dashboard</strong> > <strong>Royal Addons</strong> > <strong>Popup Builder</strong></a>\
+							or Watch <a href="https://www.youtube.com/watch?v=TbKTNpuXM68" target="_blank">Video Tutorial</a></div>\
+						');
+					}
+
 					elementorCommon.ajax.addRequest( 'wpr_elementor_search_data', {
 						data: {
-						    search_query: val,
+						    search_query: searchVal,
 						},
 						success: function() {
-							console.log('Success!');
+							// console.log(searchVal);
 						}
 					});
 				}, 1000);
 			});
-
 		}
+
+		// Promote Premium Widgets
+		// if ( $('#elementor-panel-category-wpr-widgets').length ) {
+			$('.elementor-element--promotion').on('click', function() {
+				var dialogButton = $('.dialog-button');
+
+				if ( $(this).find('.wpr-icon').length ) {
+
+					dialogButton.hide();
+					$('.wpr-see-it-in-action').remove();
+					$('.wpr-see-it-in-action-upgrade').remove();
+					$('.wpr-upgrade-dynamic-content').remove();
+
+					var url = '',
+						upgradeURL = '',
+						upgradeText = 'Ugrade to Pro',
+						dialogueMessage = 'Advanced Filters lets you filter by <b>Colors, Brands, Ratings, Price Range</b>, or any <b>Custom Meta Field</b>. It also supports <b>Custom Post Types (CPT)</b>, and you can create dynamic dependent dropdowns for a faster, more intuitive browsing experience.',
+						title = $(this).find('.title').text();
+
+					if ( title === 'My Account') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v1/my-account-fashion-v1/?ref=rea-plugin-panel-pro-widgets-myacc-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-myacc-upgrade-pro#purchasepro';
+					} else if ( title === 'Woo Category Grid') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v1/?ref=rea-plugin-panel-pro-widgets-catgrid-seeitinaction#catgridprev';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-catgrid-upgrade-pro#purchasepro';
+					} else if ( title === 'Product Filters') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v1/shop-fashion-v1/?ref=rea-plugin-panel-pro-widgets-prodfilters-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-prodfilters-upgrade-pro#purchasepro';
+					} else if ( title === 'Product Breadcrumbs') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v1/product/mans-bluish-hoodie/?ref=rea-plugin-panel-pro-widgets-breadcru-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-breadcru-upgrade-pro#purchasepro';
+					} else if ( title === 'Wishlist Button') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v2/shop-fashion-v2/?ref=rea-plugin-panel-pro-widgets-wishbutt-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-wishbutt-upgrade-expert#purchasepro';
+						upgradeText = 'Ugrade to Expert';
+					} else if ( title === 'Mini Wishlist') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v2/shop-fashion-v2/?ref=rea-plugin-panel-pro-widgets-miniwish-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-miniwish-upgrade-expert#purchasepro';
+						upgradeText = 'Ugrade to Expert';
+					} else if ( title === 'Wishlist Table') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v2/shop-fashion-v2/?ref=rea-plugin-panel-pro-widgets-wishtable-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-wishtable-upgrade-expert#purchasepro';
+						upgradeText = 'Ugrade to Expert';
+					} else if ( title === 'Compare Button') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v2/shop-fashion-v2/?ref=rea-plugin-panel-pro-widgets-compbutt-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-compbutt-upgrade-expert#purchasepro';
+						upgradeText = 'Ugrade to Expert';
+					} else if ( title === 'Mini Compare') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v2/shop-fashion-v2/?ref=rea-plugin-panel-pro-widgets-minicomp-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-minicomp-upgrade-expert#purchasepro';
+						upgradeText = 'Ugrade to Expert';
+					} else if ( title === 'Compare Table') {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v2/shop-fashion-v2/?ref=rea-plugin-panel-pro-widgets-comptable-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-comptable-upgrade-expert#purchasepro';
+						upgradeText = 'Ugrade to Expert';
+					} else if ( title == 'Post Breadcrumbs') {
+						url += 'https://demosites.royal-elementor-addons.com/construction-v3/2023/04/01/experience-quality-craftsmanship-with-our-construction-team/?ref=rea-plugin-panel-pro-widgets-postbreadcru-seeitinaction';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-postbreadcru-upgrade-expert#purchasepro';
+						upgradeText = 'Ugrade to Expert';
+					} else if ( title  == 'Category Grid' ) {
+						url += 'https://demosites.royal-elementor-addons.com/fashion-v1/?ref=rea-plugin-panel-pro-widgets-catgrid-seeitinaction#catgridprev';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-catgrid-upgrade-expert#purchasepro';
+						upgradeText = 'Upgrade to Expert';
+					} else if ( title  == 'Custom Field' ) {
+						url += 'https://youtu.be/kE1zmi3fxh8?t=765';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-customfield-upgrade-expert#purchasepro';
+						upgradeText = 'Upgrade to Expert';
+					} else if ( title  == 'Advanced Filters' ) {
+						url += 'https://demosites.royal-elementor-addons.com/woo-advanced-filters-preview/preview-links/';
+						upgradeURL = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-pro-widgets-advancedfilters-upgrade-expert#purchasepro';
+						upgradeText = 'Upgrade to Expert';
+					}
+
+					if ( !dialogButton.next('a').length ) {
+						dialogButton.after('<a href="'+ url +'" target="_blank" class="wpr-see-it-in-action dialog-button elementor-button elementor-button-success">See it in action</a>');
+						$('.wpr-see-it-in-action').after('<a href="'+ upgradeURL +'" target="_blank" class="wpr-see-it-in-action-upgrade e-accent dialog-button elementor-button">'+ upgradeText +'</a>');
+					} else {
+						$('.wpr-see-it-in-action').attr('href', url);
+					}
+
+					if ( title == 'Advanced Filters' ) {
+						$('.dialog-message').html( dialogueMessage );
+					}
+
+					$('.wpr-see-it-in-action').css({
+						'display' : 'block',
+						'margin-bottom' : '12px'
+					});
+
+					$('.wpr-see-it-in-action-upgrade').css({
+						'display' : 'block'
+					});
+				} else {
+					dialogButton.show();
+					dialogButton.next('a').hide();
+				}
+			});
+		// }
+
+		// Promote Dynamic Tags
+		$('.elementor-control-dynamic-switcher').on('click', function() {
+			$('.wpr-see-it-in-action').remove();
+			$('.wpr-see-it-in-action-upgrade').remove();
+			$('.wpr-upgrade-dynamic-content').remove();
+
+			let defaultText = 'Create more personalized and dynamic sites by populating data from various sources with dozens of dynamic tags to choose from.';
+			let customText = '<br><br> Dynamic Content functionality is available for <strong>Royal Elementor Addons Expert</strong> plugin as well as for <strong>Elementor Pro</strong> plugin. With <strong>Royal Elementor Addons Expert Plan</strong> you can create Custom Post Types, Custom Taxonomies, add any type of Custom Fields and many other cool features to create Dynamic Websites.';
+
+			$('.dialog-buttons-widget .dialog-message').html('');
+			$('.dialog-buttons-widget .dialog-message').html(defaultText + customText);
+
+			let dialogButton = $('.dialog-buttons-widget .dialog-button'),
+				url = 'https://royal-elementor-addons.com/?ref=rea-plugin-panel-dynamic-content-banner-upgrade-expert#purchasepro';
+
+			dialogButton.text('Upgrade Elementor');
+			dialogButton.after('<div class="wpr-upgrade-dynamic-content"><div style="margin:8px 0 20px;">OR</div><a href="'+ url +'" target="_blank" style="display:block; margin-bottom: 10px; padding:9px 22px;" class="dialog-button elementor-button elementor-button-success">Upgrade Royal Elementor Addons</a><a href="https://www.youtube.com/watch?v=kE1zmi3fxh8" target="_blank" style="display:block; padding:9px 22px;" class="dialog-button elementor-button elementor-button-success">Video Tutorial</a></div>');
+			dialogButton.next('a').css('display','block');
+
+		});
 	});
 
 	// Listen to Elementor Panel Changes
-	mutationObserver.observe($('#elementor-panel')[0], {
+	panelMutationObserver.observe($('#elementor-panel')[0], {
 	  childList: true,
 	  subtree: true,
 	});
-
 
 	// Make our custom css visible in the panel's front-end
 	elementor.hooks.addFilter( 'editor/style/styleText', function( css, context ) {
@@ -64,37 +247,247 @@
 	});
 	
 	// Shortcode Widget: Select Template
-	function selectShortcodeTemplate( model, e, textarea ) {
-			var data = e.params.data;
+	function selectShortcodeTemplate( model, e, select, textarea ) {
+			var shortcode = model.attributes.settings.attributes.shortcode,
+				shortcode = shortcode.replace ( /[^\d.]/g, '' );
+
+			if ( shortcode === select.val() ) {
+				return;
+			}
 
 			// Update Settings
-			model.attributes.settings.attributes.shortcode = '[wpr-template id="'+ data.id +'"]';
+			model.attributes.settings.attributes.shortcode = '[wpr-template id="'+ select.val() +'"]';
 
 			// Update Textarea
-			textarea.val('[wpr-template id="'+ data.id +'"]');
+			textarea.val('[wpr-template id="'+ select.val() +'"]');
 
 			// Refresh Preview
 			model.renderRemoteServer();
 	}
 
+    elementor.hooks.addAction( 'panel/open_editor/widget/wpr-form-builder', function( panel, model, view ) {
+		var $parent = panel.$el.find('#elementor-panel');
+		var $element = panel.$el.find( '.elementor-repeater-fields' );
+
+		var stepObserver = new MutationObserver(function(mutations) {
+			mutations.forEach((mutation) => {
+				// console.log('steps mutation', mutation);
+				if (mutation.type === 'childList') {
+					mutation.addedNodes.forEach((node) => {
+						if (node.nodeType === Node.ELEMENT_NODE) {
+							// Find the child element with the specific class within the node
+							const repeaterFields = node.querySelectorAll('.elementor-repeater-fields');
+							const childElement = node.querySelectorAll('.elementor-repeater-row-tools');
+							const childElement2 = node.querySelectorAll('.elementor-repeater-row-controls');
+
+							if ( childElement2 ) {
+								let selectElement = [];
+								
+								if ( selectElement.length == 0 ) {
+									childElement2.forEach(function(item) {
+										selectElement.push(item.querySelector('select'));
+									});
+								}
+								
+								// If the child element exists and the select value is 'step', add the certain class to it
+								if (childElement && selectElement.length > 0) {
+									childElement.forEach(function(item, i) {
+										if ( selectElement[i] && selectElement[i].value == 'step' ) {
+											item.classList.add('wpr-step-editor-bg');
+										}
+									});
+								}
+
+								// model.get('settings').attributes.form_fields.models.forEach(function(thisModel, i) {
+								// 	if ( thisModel.attributes.field_type == 'step' ) {
+								// 		$('.elementor-repeater-fields').eq(i).find('.elementor-repeater-row-tools').addClass('wpr-step-editor-bg');
+								// 	}
+								// });
+
+								// if (selectElement) {
+								// 	selectElement.forEach(function(item, i) {
+								// 		item.addEventListener('change', () => {
+								// 			if (childElement && selectElement) {
+								// 				if (item.value === 'step') {
+								// 					childElement[i].classList.add('wpr-step-editor-bg');
+								// 				} else {
+								// 					childElement[i].classList.remove('wpr-step-editor-bg');
+								// 				}
+								// 			}
+								// 		});
+								// 	});
+								// }
+							}
+						}
+					});
+				}
+			});
+		});
+
+		stepObserver.observe($('#elementor-panel')[0], {
+			childList: true,
+			subtree: true,
+		});
+
+		changeStepBackground();
+
+		elementor.channels.editor.on('section:activated', function (sectionName, editor) {
+			// model.get('settings').attributes.form_fields.models.forEach(function(thisModel, i) {
+			// 	if ( thisModel.attributes.field_type == 'step' ) {
+			// 		$('.elementor-repeater-fields').eq(i).find('.elementor-repeater-row-tools').addClass('wpr-step-editor-bg');
+			// 	}
+			// });
+			updateDynamicOptions(view);
+		});
+
+		function changeStepBackground() {
+	
+			$element.each(function() {
+				if ($(this).find('select').val() == 'step') {
+					$(this).find('.elementor-repeater-row-tools').addClass('wpr-step-editor-bg');
+				}
+			});
+			
+			$('#elementor-panel').off('change', 'select').on('change', 'select', function() {
+				if ( $(this).val() == 'step' ) {
+					$(this).closest('.elementor-repeater-row-controls').prev('.elementor-repeater-row-tools').addClass('wpr-step-editor-bg');
+				} else if ($(this).closest('.elementor-repeater-row-controls').prev('.elementor-repeater-row-tools').hasClass('wpr-step-editor-bg')) {
+					$(this).closest('.elementor-repeater-row-controls').prev('.elementor-repeater-row-tools').removeClass('wpr-step-editor-bg');
+				}
+			});
+		}
+							
+
+		view.listenTo(view.model.get('settings').get('form_fields'), 'add change remove', function (e) {
+			updateDynamicOptions(view);
+		});
+
+		function updateDynamicOptions () {
+			var formFieldsModel = view.model.get('settings').get('form_fields');
+
+			var emailField = view.model.get('settings').get('email_field');
+			var firstNameField = view.model.get('settings').get('first_name_field');
+			var lastNameField = view.model.get('settings').get('last_name_field');
+			var phoneField = view.model.get('settings').get('phone_field');
+			var birthdayField = view.model.get('settings').get('birthday_field');
+			var addressField = view.model.get('settings').get('address_field');
+			var countryField = view.model.get('settings').get('country_field');
+			var cityField = view.model.get('settings').get('city_field');
+			var stateField = view.model.get('settings').get('state_field');
+			var zipField = view.model.get('settings').get('zip_field');
+
+			var emailSelectControl = panel.$el.find('.elementor-control-email_field').find('select[data-setting="email_field"]');
+			var firstNameSelectControl = panel.$el.find('.elementor-control-first_name_field').find('select[data-setting="first_name_field"]');
+			var lastNameSelectControl = panel.$el.find('.elementor-control-last_name_field').find('select[data-setting="last_name_field"]');
+			var phoneSelectControl = panel.$el.find('.elementor-control-phone_field').find('select[data-setting="phone_field"]');
+			var birthdaySelectControl = panel.$el.find('.elementor-control-birthday_field').find('select[data-setting="birthday_field"]');
+			var addressSelectControl = panel.$el.find('.elementor-control-address_field').find('select[data-setting="address_field"]');
+			var countrySelectControl = panel.$el.find('.elementor-control-country_field').find('select[data-setting="country_field"]');
+			var citySelectControl = panel.$el.find('.elementor-control-city_field').find('select[data-setting="city_field"]');
+			var stateSelectControl = panel.$el.find('.elementor-control-state_field').find('select[data-setting="state_field"]');
+			var zipSelectControl = panel.$el.find('.elementor-control-zip_field').find('select[data-setting="zip_field"]');
+
+			var selectControls = [emailSelectControl, firstNameSelectControl, lastNameSelectControl, phoneSelectControl, birthdaySelectControl, addressSelectControl, countrySelectControl, citySelectControl, stateSelectControl, zipSelectControl];
+			var fieldValues = [emailField, firstNameField, lastNameField, phoneField, birthdayField, addressField, countryField, cityField, stateField, zipField];
+
+			var options = {
+				'none': 'None'
+			};
+			
+			var prevFieldId;
+
+			formFieldsModel.each(function (field, index) {
+				var fieldLabel = field.get('field_label');
+				var fieldId = field.get('field_id');
+
+				if ( prevFieldId == fieldId ) {
+					$('#elementor-panel').find(':input[value='+ field.attributes._id +']').closest('.elementor-repeater-fields').find(':input[data-setting="field_id"]').val(field.attributes._id);
+					$('#elementor-panel').find(':input[value='+ field.attributes._id +']').closest('.elementor-repeater-fields').find('.wpr-form-field-shortcode').val('id=["'+ field.attributes._id +'"]');
+					field.attributes.field_id = field.attributes._id;
+				}
+
+				prevFieldId = fieldId;
+
+				if ( !fieldId ) {
+					$('#elementor-panel').find(':input[value='+ field.attributes._id +']').closest('.elementor-repeater-fields').find(':input[data-setting="field_id"]').val(field.attributes._id);
+					$('#elementor-panel').find(':input[value='+ field.attributes._id +']').closest('.elementor-repeater-fields').find('.wpr-form-field-shortcode').val('id=["'+ field.attributes._id +'"]');
+					field.attributes.field_id = field.attributes._id;
+				}
+	
+				options[fieldId] = fieldLabel;
+			});
+			
+			view.model.setSetting('email_field', _.extend(emailField, { options }));
+			view.model.setSetting('first_name_field', _.extend(firstNameField, { options }));
+			view.model.setSetting('last_name_field', _.extend(lastNameField, { options }));
+			view.model.setSetting('phone_field', _.extend(phoneField, { options }));
+			view.model.setSetting('birthday_field', _.extend(birthdayField, { options }));
+			view.model.setSetting('address_field', _.extend(addressField, { options }));
+			view.model.setSetting('country_field', _.extend(countryField, { options }));
+			view.model.setSetting('city_field', _.extend(cityField, { options }));
+			view.model.setSetting('state_field', _.extend(stateField, { options }));
+			view.model.setSetting('zip_field', _.extend(zipField, { options }));
+
+			_.each(selectControls, function (control) {
+				control.empty();
+			});
+
+			_.each(options, function (label, value) {
+				_.each(selectControls, function (control, i) {
+					const isSelected = fieldValues[i] === value ? ' selected' : '';
+					control.append('<option value="' + value + '"' + isSelected + '>' + label + '</option>');
+				});
+			});
+		};
+
+		// Change the selector below to match the field_id field in your repeater
+		const customIdFieldSelector = 'input[data-setting="field_id"]';
+	  
+		// Change the selector below to match the shortcode field in your repeater
+		const shortcodeFieldSelector = '.wpr-form-field-shortcode';
+	  
+		// Listen for changes in the field_id field
+		$('#elementor-panel').on('input', customIdFieldSelector, function() {
+			
+		  // Get the new field_id value
+		  const newCustomId = $(this).val();
+	  
+		  // Find the corresponding shortcode field in the same repeater item
+		  const $shortcodeField = $(this).closest('.elementor-repeater-fields').find(shortcodeFieldSelector);
+	  
+		  // Update the shortcode with the new field_id value
+		  let updatedShortcode;
+		  const currentShortcode = $shortcodeField.val();
+		  const match = currentShortcode.match(/\[id="[^"]*"\]/);
+	  
+		  if (match) {
+			updatedShortcode = currentShortcode.replace(match[0], `[id="${newCustomId}"]`);
+		  } else {
+			updatedShortcode = `[id="${newCustomId}"]`;
+		  }
+	  
+		  // Set the updated shortcode in the shortcode field
+		  $shortcodeField.val(updatedShortcode);
+		});
+    });
+
 	elementor.hooks.addAction( 'panel/open_editor/widget/shortcode', function( panel, model, view ) {
 
-		var $select = panel.$el.find('.elementor-control-type-select2').find('select'),
+		var $select = panel.$el.find('.elementor-control-type-wpr-ajaxselect2'),
 			$textarea = panel.$el.find('.elementor-control-type-textarea').find('textarea');
 
 		// Change
 		$select.on( 'select2:select', function( e ) {
-			selectShortcodeTemplate( model, e, $textarea );
+			selectShortcodeTemplate( model, e, $select, $textarea );
 		});
 
 		// Render
-		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-type-select2', function(){
+		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-type-wpr-ajaxselect2', function(){
 			$(this).find( 'select' ).on( 'select2:select', function( e ) {
-				selectShortcodeTemplate( model, e, $textarea );
+				selectShortcodeTemplate( model, e, $select, $textarea );
 			} );
 		});
 	} );
-
 
 	// WPR Grid Widget: Select Element (Filter Taxonomies)
 	function filterGridTaxonomies( data, value ) {
@@ -103,7 +496,9 @@
 		for ( var key in data ) {
 			if ( key !== value ) {
 				for ( var i = 0; i < data[key].length; i++ ) {
-					options.push( '.elementor-control-element_select select option[value="'+ data[key][i] +'"]' );
+					if ( !data[value].includes(data[key][i]) ) {
+						options.push( '.elementor-control-element_select select option[value="'+ data[key][i] +'"]' );
+					}
 				}
 			}
 		}
@@ -155,11 +550,30 @@
 	elementor.hooks.addAction( 'panel/open_editor/widget/wpr-grid', function( panel, model, view ) {
 		var $querySource = panel.$el.find('.elementor-control-query_source').find( 'select' ),
 			taxonomies = JSON.parse( panel.$el.find('.elementor-control-element_select_filter').find('input').val() ),
-			metaKeys = JSON.parse( panel.$el.find('.elementor-control-post_meta_keys_filter').find('input').val() );
+			metaKeys = '';
+
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'wpr_get_custom_meta_keys',
+				nonce: registered_modules.nonce
+			},
+			success: function( response ) {
+				if (response.success) {
+					metaKeys = JSON.parse(response.data);
+
+					// Open
+					filterGridMetaKeys( metaKeys, $querySource.val() );
+				}
+			},
+			error: function( error ) {
+				console.log(error);
+			}
+		});
 
 		// Open
 		filterGridTaxonomies( taxonomies, $querySource.val() );
-		filterGridMetaKeys( metaKeys, $querySource.val() );
 
 		// Change
 		$querySource.on( 'change', function() {
@@ -175,7 +589,7 @@
 			} );
 		});
 
-		// Render Layout Select
+		// GOGA - Render Layout Select (Remove If extra)
 		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-layout_select', function(){
 			disableListLocation( $(this).find( 'select' ).val() );
 
@@ -186,6 +600,15 @@
 
 		// Render Grid Elements
 		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-grid_elements', function() {
+
+			// Render Layout Select
+			panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-layout_select', function(){
+				disableListLocation( $(this).find( 'select' ).val() );
+	
+				$(this).find( 'select' ).on( 'change', function() {
+					disableListLocation( $(this).val() );
+				} );
+			});
 
 			$(this).find( '.elementor-control-element_select select' ).on( 'change', function() {
 				var wrapper = $(this).closest( '.elementor-repeater-row-controls' );
@@ -207,40 +630,48 @@
 			} );
 		});
 
-		var sOffsets = {};
-
-		// Prevent Bubble on Click
-		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-type-section', function() {
-			var current = $(this),
-				attrClass = current.attr( 'class' ),
-				firstIndex = attrClass.indexOf( 'elementor-control-section_' ),
-				lastIndex = attrClass.indexOf( 'elementor-control-type-section' ) - 1;
-
-			var oKey = attrClass.substring( firstIndex, lastIndex ),
-				oProperty = current.offset().top;
-
-			sOffsets[oKey] = oProperty;
-
-			setTimeout(function() {
-				current.on( 'click', function( event ) {
-					var current = $(this),
-						attrClass = current.attr( 'class' ),
-						firstIndex = attrClass.indexOf( 'elementor-control-section_' ),
-						lastIndex = attrClass.indexOf( 'elementor-control-type-section' ) - 1,
-						sectionClass = attrClass.substring( firstIndex, lastIndex );
-
-					setTimeout( function() {
-						$( '#elementor-panel-content-wrapper' ).scrollTop( sOffsets[sectionClass] - 100 );
-					}, 10 );
-				});
-			}, 100 );
-		});
 	} );
 
 	// Image Grid
 	elementor.hooks.addAction( 'panel/open_editor/widget/wpr-media-grid', function( panel, model, view ) {
+
 		// Render Grid Elements
 		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-grid_elements', function() {
+			$(this).find( '.elementor-control-element_select select' ).on( 'change', function() {
+				var wrapper = $(this).closest( '.elementor-repeater-row-controls' );
+
+				if ( 'lightbox' === $(this).val() ) {
+					wrapper.find('.elementor-control-element_location').find( 'select' ).val( 'over' ).trigger( 'change' );
+					wrapper.find('.elementor-control-element_animation').find( 'select' ).val( 'fade-in' ).trigger( 'change' );
+					wrapper.find('.elementor-control-element_align_hr').find( 'input' ).eq(1).prop('checked',true).trigger( 'change' );
+					wrapper.find('.elementor-control-element_lightbox_overlay').find( 'input' ).prop('checked',true).trigger( 'change' );
+					wrapper.find('.elementor-control-element_extra_icon_pos').find( 'select' ).val( 'before' ).trigger( 'change' );
+					setTimeout(function() {
+						wrapper.find('.elementor-control-element_extra_icon_pos').addClass( 'elementor-hidden-control' );
+					}, 100 );
+				} else {
+					wrapper.find('.elementor-control-element_extra_text_pos').find( 'select' ).val( 'none' ).trigger( 'change' );
+					wrapper.find('.elementor-control-element_extra_icon_pos').find( 'select' ).val( 'none' ).trigger( 'change' );
+					wrapper.find('.elementor-control-element_extra_icon_pos').removeClass( 'elementor-hidden-control' );
+				}
+			} );
+		});
+	} );
+
+	// Instagram Feed
+	elementor.hooks.addAction( 'panel/open_editor/widget/wpr-instagram-feed', function( panel, model, view ) {
+
+		// Render Layout Select
+		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-inst_layout_select', function(){
+			disableListLocation( $(this).find( 'select' ).val() );
+
+			$(this).find( 'select' ).on( 'change', function() {
+				disableListLocation( $(this).val() );
+			} );
+		});
+		
+		// Render Grid Elements
+		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-insta_feed_elements', function() {
 			$(this).find( '.elementor-control-element_select select' ).on( 'change', function() {
 				var wrapper = $(this).closest( '.elementor-repeater-row-controls' );
 
@@ -284,62 +715,36 @@
 					wrapper.find('.elementor-control-element_extra_icon_pos').removeClass( 'elementor-hidden-control' );
 				}
 			} );
-		});	
-
-		var sOffsets = {};
-
-		// Prevent Bubble on Click - not working - //tmp
-		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-type-section', function() {
-			var current = $(this),
-				attrClass = current.attr( 'class' ),
-				firstIndex = attrClass.indexOf( 'elementor-control-section_' ),
-				lastIndex = attrClass.indexOf( 'elementor-control-type-section' ) - 1;
-
-			var oKey = attrClass.substring( firstIndex, lastIndex ),
-				oPropery = current.offset().top;
-
-			sOffsets[oKey] = oPropery;
-
-			setTimeout(function() {
-				current.on( 'click', function( event ) {
-					var current = $(this),
-						attrClass = current.attr( 'class' ),
-						firstIndex = attrClass.indexOf( 'elementor-control-section_' ),
-						lastIndex = attrClass.indexOf( 'elementor-control-type-section' ) - 1,
-						sectionClass = attrClass.substring( firstIndex, lastIndex );
-
-					setTimeout( function() {
-						$( '#elementor-panel-content-wrapper' ).scrollTop( sOffsets[sectionClass] - 100 );
-					}, 10 );
-				});
-			}, 100 );
 		});
+
 	} );
 
-	// Instagram Feed
-	elementor.hooks.addAction( 'panel/open_editor/widget/wpr-instagram-feed', function( panel, model, view ) {
-		// Render Grid Elements
-		panel.$el.find('#elementor-controls').on( 'DOMNodeInserted ', '.elementor-control-insta_feed_elements', function() {
-			$(this).find( '.elementor-control-element_select select' ).on( 'change', function() {
-				var wrapper = $(this).closest( '.elementor-repeater-row-controls' );
+	// Refresh Mega Menu
+	elementor.hooks.addAction( 'panel/open_editor/widget/wpr-mega-menu', function( panel, model, view ) {
+		model.renderRemoteServer();
+	});
 
-				if ( 'lightbox' === $(this).val() ) {
-					wrapper.find('.elementor-control-element_location').find( 'select' ).val( 'over' ).trigger( 'change' );
-					wrapper.find('.elementor-control-element_animation').find( 'select' ).val( 'fade-in' ).trigger( 'change' );
-					wrapper.find('.elementor-control-element_align_hr').find( 'input' ).eq(1).prop('checked',true).trigger( 'change' );
-					wrapper.find('.elementor-control-element_lightbox_overlay').find( 'input' ).prop('checked',true).trigger( 'change' );
-					wrapper.find('.elementor-control-element_extra_icon_pos').find( 'select' ).val( 'before' ).trigger( 'change' );
-					setTimeout(function() {
-						wrapper.find('.elementor-control-element_extra_icon_pos').addClass( 'elementor-hidden-control' );
-					}, 100 );
-				} else {
-					wrapper.find('.elementor-control-element_extra_text_pos').find( 'select' ).val( 'none' ).trigger( 'change' );
-					wrapper.find('.elementor-control-element_extra_icon_pos').find( 'select' ).val( 'none' ).trigger( 'change' );
-					wrapper.find('.elementor-control-element_extra_icon_pos').removeClass( 'elementor-hidden-control' );
-				}
-			} );
-		});
-	} );
+	
+	// GOGA - Refresh Countdown check with duke
+	// elementor.hooks.addAction( 'panel/open_editor/widget/wpr-countdown', function( panel, model, view ) {
+
+	// 	panel.$el.find('#elementor-controls').on( 'change', '.elementor-control-countdown_type', function() {
+	// 		elementor.reloadPreview();
+	// 	});
+
+	// 	panel.$el.find('#elementor-controls').on( 'change', '.elementor-control-due_date', function() {
+	// 		elementor.reloadPreview();
+	// 	});
+
+	// 	panel.$el.find('#elementor-controls').on( 'change', '.elementor-control-evergreen_hours', function() {
+	// 		elementor.reloadPreview();
+	// 	});
+
+	// 	panel.$el.find('#elementor-controls').on( 'change', '.elementor-control-evergreen_minutes', function() {
+	// 		elementor.reloadPreview();
+	// 	});
+
+	// });
 
 	// Get Referrer Link
 	var referrer = document.referrer;
@@ -407,5 +812,48 @@
 			preview.closest('body').find('#wpr-library-btn').trigger('click');
 		});
 	}
+
+}( jQuery ) );
+
+( function( $ ) {
+
+	'use strict';
+
+	var WprMegaMenuEditor = {
+
+		activeSection: false,
+
+		currentElement: false,
+
+		currentSection: false,
+
+		prevSection: false,
+
+
+		init: function() {
+			elementor.channels.editor.on( 'section:activated', WprMegaMenuEditor.sectionActivated );
+		},
+
+		sectionActivated: function( sectionName, editor ) {
+
+			let currentElement = WprMegaMenuEditor.currentElement = editor.getOption( 'editedElementView' ) || false;
+
+			if ( ! currentElement ) {
+				return;
+			}
+
+			if ( 'wpr-mega-menu' == currentElement.model.get( 'widgetType' ) ) {
+
+				// if ( 'section_general' === sectionName ) {}
+				// currentElement.model.renderRemoteServer();
+			}
+
+		}
+
+	};
+
+	$( window ).on( 'elementor:init', WprMegaMenuEditor.init );
+
+	window.WprMegaMenuEditor = WprMegaMenuEditor;
 
 }( jQuery ) );

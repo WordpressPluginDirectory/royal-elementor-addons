@@ -272,6 +272,33 @@ class Wpr_Nav_Menu extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'menu_consider_header',
+			[
+				'label' => esc_html__( 'Consider Sticky Header', 'wpr-addons' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+				'description' => esc_html__( 'Enable this to account for Royal Sticky Header when scrolling to sections (same-page anchor links).', 'wpr-addons' ),
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'menu_scroll_speed',
+			[
+				'label' => esc_html__( 'Scroll Speed', 'wpr-addons' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => 10,
+				'min' => 0,
+				'max' => 1000,
+				'step' => 50,
+				'description' => esc_html__( 'Duration (ms) for smooth scroll when using same-page anchor links.', 'wpr-addons' ),
+				'condition' => [
+					'menu_consider_header' => 'yes',
+				],
+			]
+		);
+
 		$this->end_controls_section(); // End Controls Section
 
 		// Section: Menu Items -------
@@ -1831,7 +1858,9 @@ class Wpr_Nav_Menu extends Widget_Base {
 		}
 
 		// Main Menu
-		echo '<nav class="wpr-nav-menu-container wpr-nav-menu-'. esc_attr($settings['menu_layout']) .'" data-trigger="'. esc_attr($settings['menu_items_submenu_trigger']) .'">';
+		$consider_header = ! empty( $settings['menu_consider_header'] ) ? $settings['menu_consider_header'] : '';
+		$scroll_speed = isset( $settings['menu_scroll_speed'] ) ? absint( $settings['menu_scroll_speed'] ) : 500;
+		echo '<nav class="wpr-nav-menu-container wpr-nav-menu-'. esc_attr($settings['menu_layout']) .'" data-trigger="'. esc_attr($settings['menu_items_submenu_trigger']) .'" data-consider-header="'. esc_attr( $consider_header ) .'" data-scroll-speed="'. esc_attr( $scroll_speed ) .'">';
 			echo ''. $menu_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</nav>';
 

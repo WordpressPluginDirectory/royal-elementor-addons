@@ -1,7 +1,7 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1052
+Stable tag: 1.7.1053
 Requires at least: 5.0
 Tested up to: 6.9.4
 Requires PHP: 5.6
@@ -14,7 +14,7 @@ Elementor templates, Header footer builder, Elementor Post Grid, Woocommerce Gri
 
 **Royal Elementor addons** is the most versatile, intuitive, and easy to use [Popular Page Builder](https://wordpress.org/plugins/elementor/) extension. Our goal is to provide you with the tools to make things happen, efficiently, and fast compare to other elementor addons. Choosing us is not only a mindset, but it is also a requirement if you intend to gain an edge over your competitors when creating your website. The best part is that you can design anything **without having to touch a single line of code**.
 
-Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each Week), Theme Builder, elementor Custom Widget Builder, WooCommerce Builder, Elementor Mega Menu Builder, Advanced Sticky Header, Header Footer Builder, Forms Builder, Advanced Filters (filter any CPT, taxonomies and metafields), AJAX Search, Popup Builder, Post Slider and Carousel, Product Slider and Carousel, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
+Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each Week), Theme Builder, elementor Custom Widget Builder, WooCommerce Builder, Elementor Mega Menu Builder, Advanced Sticky Header, Header Footer Builder, Forms Builder, Advanced Filters (filter any CPT, taxonomies and metafields), AJAX Search, Conditional visibility logic (show or hide widgets based on user role), Popup Builder, Post Slider and Carousel, Product Slider and Carousel, Premade Widget Blocks & Extensions.** Creative and self-intuitive widgets to take your WordPress website to the next level. **All widgets are Free** and the Pro Version offers even more advanced functionality.
 
 *Free and Pro functionalities are mixed in the Widget Demos below.*
 
@@ -80,9 +80,13 @@ Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each W
 - [**Page List for Mega Menu**](https://royal-elementor-addons.com/elementor-mega-menu-widget/?ref=rea-wpo-pp-details-tab)
 - [**Data Table**](https://royal-elementor-addons.com/elementor-data-table-widget/?ref=rea-wpo-pp-details-tab)
 - [**Readeing Progress Bar**](https://royal-elementor-addons.com/elementor-reading-progress-bar-widget/?ref=rea-wpo-pp-details-tab)
-- [**Offcanvas Menu - sidebar menu**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
-- [**Twitter Feed**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
-- [**Instagram Feed**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
+- [**Offcanvas Menu - sidebar menu**](https://royal-elementor-addons.com/elementor-offcanvas-menu-widget/?ref=rea-wpo-pp-details-tab)
+- [**Twitter Feed**](https://royal-elementor-addons.com/elementor-twitter-feed-widget/?ref=rea-wpo-pp-details-tab)
+- [**Instagram Feed**](https://royal-elementor-addons.com/elementor-instagram-feed-widget/?ref=rea-wpo-pp-details-tab)
+- [**Unfold Widget**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
+- [**Circle Menu Widget**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
+- [**Password Protected Widget**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab)
+
 
 **Woocommerce Widgets:**
 
@@ -149,7 +153,7 @@ Comes with **100+ Elementor addons, 150+ Elementor Templates KIT (Growing Each W
 	[Demo 3 - Only show Header when Scrolling Up](https://demosites.royal-elementor-addons.com/digital-marketing-agency-v2/?ref=rea-wpo-pp-details-tab)
 	[Demo 4 - Replace Header and add Shadow, Replace Logo and Menu background Colors](https://demosites.royal-elementor-addons.com/personal-blog-v1/?ref=rea-wpo-pp-details-tab)
 	[Demo 5 - Scale Logo, Scale Header and Change its background Color](https://demosites.royal-elementor-addons.com/digital-marketing-agency-v1/?ref=rea-wpo-pp-details-tab)
-
+- [**Conditional visibility logic**](https://royal-elementor-addons.com) - Show or hide elementor widgets based on user role.
 - [**Popup Builder**](https://royal-elementor-addons.com/?ref=rea-wpo-pp-details-tab#popupbuilder) - (Offer Sales Banners, Subscriptions Banners, GDPR Cookie Consent & Compliance Notice, Cookie Notice, Age Verification), 20+ Premade Popup Templates included in popup library
 - [**Parallax Scrolling**](https://royal-elementor-addons.com/elementor-parallax-background/?ref=rea-wpo-pp-details-tab) - Parallax effect extension
 - [**Parallax Multi-Layer Effect**](https://royal-elementor-addons.com/elementor-parallax-background/?ref=rea-wpo-pp-details-tab#multiparallax) -  extension
@@ -481,6 +485,14 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1053 - 2026-03-27 =
+* ADDED: Elementor Template Kit: AI Automation V1 - [**AI Automation V1**](https://demosites.royal-elementor-addons.com/ai-automation-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Visibility Conditions Extension - show or hide elements/widgets based on rules
+* ADDED: Elementor Unfold Widget
+* ADDED: Elementor Circle Menu Widget
+* ADDED: Elementor Password Protected Widget
+* FIXED: Latest Vulnerebilities
+
 = Royal Elementor Addons v1.7.1052 - 2026-03-20 =
 * ADDED: Elementor Template Kit: Crypto Trade V1 - [**Crypto-Trade V4**](https://demosites.royal-elementor-addons.com/crypto-trade-v1/?ref=rea-wpo-pp-details-tab).
 

@@ -262,25 +262,29 @@ class Wpr_Control_Ajax_Select2_Api {
 		foreach ( $data as $array ) {
 			$merged_meta_keys = array_unique( array_merge( $merged_meta_keys, $array ) );
 		}
-		
-		// Collect term meta keys from all public taxonomies
+
+		// Collect term meta keys in one query, only from public taxonomies (same as old get_terms loop)
+		global $wpdb;
 		$taxonomies = get_taxonomies( [ 'public' => true ], 'names' );
-		foreach ( $taxonomies as $taxonomy ) {
-			$terms = get_terms( [ 'taxonomy' => $taxonomy, 'hide_empty' => false ] );
-			if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
-				foreach ( $terms as $term ) {
-					$term_meta = get_term_meta( $term->term_id );
-					if ( is_array( $term_meta ) ) {
-						foreach ( array_keys( $term_meta ) as $meta_key ) {
-							if ( '_' !== substr( (string) $meta_key, 0, 1 ) ) {
-								$merged_meta_keys[] = $meta_key;
-							}
-						}
+		if ( ! empty( $taxonomies ) ) {
+			$termmeta = $wpdb->termmeta;
+			$term_taxonomy = $wpdb->term_taxonomy;
+			$like = $wpdb->esc_like( '_' ) . '%';
+			$placeholders = implode( ',', array_fill( 0, count( $taxonomies ), '%s' ) );
+			$params = array_merge( array_values( $taxonomies ), [ $like ] );
+			$term_meta_keys = $wpdb->get_col( $wpdb->prepare(
+				"SELECT DISTINCT tm.meta_key FROM {$termmeta} tm INNER JOIN {$term_taxonomy} tt ON tm.term_id = tt.term_id WHERE tt.taxonomy IN ($placeholders) AND tm.meta_key NOT LIKE %s AND tm.meta_key != ''",
+				$params
+			) );
+			if ( ! empty( $term_meta_keys ) && is_array( $term_meta_keys ) ) {
+				foreach ( $term_meta_keys as $meta_key ) {
+					if ( '_' !== substr( (string) $meta_key, 0, 1 ) ) {
+						$merged_meta_keys[] = $meta_key;
 					}
 				}
 			}
 		}
-		
+
 		// Rekey
 		$merged_meta_keys = array_values($merged_meta_keys);
 	

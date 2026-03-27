@@ -1897,6 +1897,20 @@ class WPR_Templates_Data {
 					'priority' => 1,
 				],
 			],
+			'ai-automation' => [
+				'v1' => [
+					'name' => 'AI Automation V1',
+					'pages' => 'home,about,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free ai automation digital solutions enterprise engineering business cyber cybersecurity workflow infrastructure intelligence chatbot data marketing analytics data analysis machine learning ai image automation algorithm autonomous processing artificial intelligence science generative quantum neuromorphic technology servers web it tech crypto cyber ittech advanced technology it technique computer windows technician digital calculations computing digital chat gpt chatgpt bard gemini application artificial intelligence machine learning neural networks data science generative AI llms text generation image generation AI content creation prompt engineering ai website ai templates ai saas ai agency ',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 1,
+				],
+			],
 			'aimatrix' => [
 				'v1' => [
 					'name' => 'AI Matrix - Data, Machines & AI ',
@@ -2648,6 +2662,12 @@ class WPR_Templates_Data {
 				'name' => 'AI Support Bot V1',
 				'pages' => ['home','features','integration','pricing','blog','contact'],
 				'preview' => ['home','features','integration','pricing','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'ai-automation-v1' => [
+				'name' => 'AI Automation V1',
+				'pages' => ['home','about','blog','contact'],
+				'preview' => ['home','about','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'cryptocurrency-v1' => [

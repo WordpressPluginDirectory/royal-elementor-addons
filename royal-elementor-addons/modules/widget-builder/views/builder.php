@@ -73,11 +73,8 @@ if ( $widget_id ) {
 
 		<!-- Bottom Action Bar -->
 		<div class="wpr-wb-panel-footer">
-			<button type="button" class="wpr-wb-footer-btn" id="wpr-wb-btn-preview" title="<?php esc_attr_e( 'Preview in Elementor', 'wpr-addons' ); ?>">
-				<?php esc_html_e( 'PREVIEW', 'wpr-addons' ); ?>
-			</button>
 			<button type="button" class="wpr-wb-footer-btn wpr-wb-footer-btn-save" id="wpr-wb-btn-save" title="<?php esc_attr_e( 'Save Widget', 'wpr-addons' ); ?>">
-				<?php esc_html_e( 'SAVE', 'wpr-addons' ); ?>
+				<i class="eicon-save"></i> <?php esc_html_e( 'SAVE', 'wpr-addons' ); ?>
 			</button>
 		</div>
 		<button type="button" class="wpr-wb-collapsed-save-btn" id="wpr-wb-collapsed-save" title="<?php esc_attr_e( 'Save Widget', 'wpr-addons' ); ?>">

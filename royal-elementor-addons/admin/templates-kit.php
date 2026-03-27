@@ -392,7 +392,8 @@ function wpr_import_templates_kit() {
      */
     function wpr_sanitize_svg($svg_content) {
         $dom = new DOMDocument();
-        $dom->loadXML($svg_content, LIBXML_NOENT | LIBXML_DTDLOAD);
+        // Use LIBXML_NONET to prevent XXE via external entity resolution; avoid LIBXML_NOENT and LIBXML_DTDLOAD.
+        $dom->loadXML($svg_content, LIBXML_NONET);
      
         // Remove scripts
         $scripts = $dom->getElementsByTagName('script');
@@ -478,24 +479,18 @@ function download_template( $kit, $file ) {
 
     $tmp_file = download_url( $remote_file_url );
 
-    // WP Error.
+    // WP Error - do not use fallback URLs to prevent content injection from untrusted domains.
     if ( is_wp_error( $tmp_file ) ) {
-        // Fallback URL
-        $remote_file_url = 'https://mysitetutorial.com/library/templates-kit/'. $kit .'/main.xml?='. $randomNum;
-        $tmp_file = download_url( $remote_file_url );
+        // Track Import Failed Kit
+        wpr_track_import_failed_kit( $kit );
 
-        if ( is_wp_error( $tmp_file ) ) {
-            // Track Import Failed Kit
-            wpr_track_import_failed_kit( $kit );
+        wp_send_json_error([
+            'error' => esc_html__('Error: Import File download failed.', 'wpr-addons'),
+            'help' => esc_html__('Please contact Customer Support and send this Error.', 'wpr-addons'),
+            'problem' => 'download'
+        ]);
 
-            wp_send_json_error([
-                'error' => esc_html__('Error: Import File download failed.', 'wpr-addons'),
-                'help' => esc_html__('Please contact Customer Support and send this Error.', 'wpr-addons'),
-                'problem' => 'download'
-            ]);
-            
-            return false;
-        }
+        return false;
     }
 
     // Array based on $_FILE as seen in PHP file uploads.
@@ -537,6 +532,16 @@ function download_template( $kit, $file ) {
 ** Validate Template
 */
 function vts( $kit ) {
+    // Reject empty or invalid kit to prevent download from untrusted sources.
+    if ( ! is_string( $kit ) || '' === trim( $kit ) ) {
+        wp_send_json_error([
+            'error' => esc_html__('Error: Invalid template kit.', 'wpr-addons'),
+            'help' => esc_html__('Please select a valid template kit.', 'wpr-addons'),
+            'problem' => 'download'
+        ]);
+        return false;
+    }
+
     // Avoid Cache
     $randomNum = substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ"), 0, 7);
 

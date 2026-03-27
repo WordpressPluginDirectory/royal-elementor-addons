@@ -119,6 +119,7 @@ function wpr_register_addons_settings() {
     register_setting('wpr-extension-settings', 'wpr-parallax-background');
     register_setting('wpr-extension-settings', 'wpr-parallax-multi-layer');
     register_setting('wpr-extension-settings', 'wpr-custom-css');
+    register_setting('wpr-extension-settings', 'wpr-display-conditions');
     register_setting('wpr-extension-settings', 'wpr-sticky-section');
 
     // Element Toggle
@@ -837,7 +838,7 @@ function wpr_addons_settings_page() {
                 <h4>
                     <span><?php esc_html_e( 'reCAPTCHA v2 (Checkbox) Site Key', 'wpr-addons' ); ?></span>
                     <br>
-                    <a href="https://www.google.com/recaptcha/admin" target="_blank"><?php esc_html_e( 'How to get reCAPTCHA keys?', 'wpr-addons' ); ?></a>
+                    <a href="https://www.google.com/recaptcha/intro/v3.html" target="_blank"><?php esc_html_e( 'How to get reCAPTCHA keys?', 'wpr-addons' ); ?></a>
                     <p class="wpr-settings-group-description"><?php esc_html_e( 'Use reCAPTCHA v2 checkbox in Form Builder. Create a "reCAPTCHA v2" type key in Google reCAPTCHA admin.', 'wpr-addons' ); ?></p>
                 </h4>
 
@@ -1578,9 +1579,9 @@ function wpr_addons_settings_page() {
         // array of option names
         $option_names = $new_allowed_options[ 'wpr-extension-settings' ];
 
-        echo '<div class="wpr-elements">';
+        echo '<div class="wpr-elements wpr-elements-extensions">';
 
-        foreach ($option_names as $option_name) {  
+        foreach ($option_names as $option_name) {
             $option_title = ucwords( preg_replace( '/-/i', ' ', preg_replace('/wpr-||-toggle/i', '', $option_name ) ));
 
             echo '<div class="wpr-element">';
@@ -1627,6 +1628,8 @@ function wpr_addons_settings_page() {
                         }
                     } elseif ( 'wpr-custom-css' === $option_name ) {
                         echo '<br><span>Tip: Edit any Section > Navigate to Advanced tab</span>';
+                    } elseif ( 'wpr-display-conditions' === $option_name ) {
+                        echo '<br><span>Tip: Edit any Element > Navigate to Visibility tab</span>';
                     }
 
                     // echo '<a href="https://royal-elementor-addons.com/elementor-particle-effects/?ref=rea-plugin-backend-extentions-prev">'. esc_html('View Extension Demo', 'wpr-addons') .'</a>';

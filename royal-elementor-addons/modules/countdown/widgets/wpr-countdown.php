@@ -1162,6 +1162,7 @@ class Wpr_Countdown extends Widget_Base {
 		if ( ! empty( $settings['timer_actions'] ) && ! in_array( 'redirect', $settings['timer_actions'] ) ) {
 			if ( in_array( 'load-template', $settings['timer_actions'] ) ) {
 				// Load Elementor Template
+				\WprAddons\Classes\Utilities::enqueue_inner_template_assets( $settings['load_template'] );
 				echo \Elementor\Plugin::instance()->frontend->get_builder_content( $settings['load_template'], false ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}

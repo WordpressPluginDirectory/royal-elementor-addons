@@ -927,7 +927,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				if ( 'word_count' === $settings['element_trim_text_by'] ) {
 					echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
 				} else {
-					echo substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...';
+					$letter_count = isset( $settings['element_letter_count'] ) ? absint( $settings['element_letter_count'] ) : 0;
+					echo esc_html( substr( html_entity_decode( get_the_title(), ENT_QUOTES, 'UTF-8' ), 0, $letter_count ) ) . '...';
 				}
 				echo '</a>';
 			echo '</div>';
@@ -986,7 +987,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				// Taxonomies
 				foreach ( $terms as $term ) {
-					echo '<a '. $pointer_item_class .' href="'. esc_url(get_term_link( $term->term_id )) .'">'. esc_html( $term->name );
+					if ( ! $term || ! isset( $term->term_id, $term->name ) ) {
+						continue;
+					}
+					$term_link = get_term_link( $term->term_id );
+					if ( is_wp_error( $term_link ) ) {
+						continue;
+					}
+					echo '<a '. $pointer_item_class .' href="'. esc_url( $term_link ) .'">'. esc_html( $term->name );
 						if ( ++$count !== count( $terms ) ) {
 							echo '<span class="tax-sep">'. esc_html($settings['element_tax_sep']) .'</span>';
 						}
@@ -1043,7 +1051,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				// Taxonomies
 				foreach ( $terms as $term ) {
-					echo '<a '. $pointer_item_class .' href="'. esc_url(get_term_link( $term->term_id )) .'">'. esc_html( $term->name );
+					if ( ! $term || ! isset( $term->term_id, $term->name ) ) {
+						continue;
+					}
+					$term_link = get_term_link( $term->term_id );
+					if ( is_wp_error( $term_link ) ) {
+						continue;
+					}
+					echo '<a '. $pointer_item_class .' href="'. esc_url( $term_link ) .'">'. esc_html( $term->name );
 						if ( ++$count !== count( $terms ) ) {
 							echo '<span class="tax-sep">'. esc_html($settings['element_tax_sep']) .'</span>';
 						}
@@ -2313,9 +2328,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	public function wpr_woo_grid_filters_ajax() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpr-addons-js' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'wpr-addons' ) ) );
+		}
+		if ( ! isset( $_POST['grid_settings'] ) || ! is_array( $_POST['grid_settings'] ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid request.', 'wpr-addons' ) ) );
+		}
 		$start = microtime(true);
 		// Get Settings
-		$settings = $_POST['grid_settings'];
+		$settings = wp_unslash( $_POST['grid_settings'] );
 
 		ob_start();
 

@@ -5238,8 +5238,9 @@ class Wpr_Magazine_Grid extends Widget_Base {
 				echo '<a  target="'. $open_links_in_new_tab .'" '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
 				if ( 'word_count' === $settings['element_trim_text_by'] ) {
 					echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
-				} else {
-					echo substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) . '...';
+				} else if ( 'letter_count' === $settings['element_trim_text_by'] ) {
+					$letter_count = isset( $settings['element_letter_count'] ) ? absint( $settings['element_letter_count'] ) : 0;
+					echo esc_html( substr( html_entity_decode( get_the_title(), ENT_QUOTES, 'UTF-8' ), 0, $letter_count ) ) . '...';
 				}
 				echo '</a>';
 			echo '</div>';
@@ -5274,10 +5275,10 @@ class Wpr_Magazine_Grid extends Widget_Base {
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				if ( 'word_count' === $settings['element_trim_text_by']) {
-				echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'] )) .'</p>';
-				} else {
-				// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
-				echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';
+					echo '<p>'. esc_html(wp_trim_words( get_the_excerpt(), $settings['element_word_count'] )) .'</p>';
+				} else if ( 'letter_count' === $settings['element_trim_text_by'] ) {
+					// echo '<p>'. substr(html_entity_decode(get_the_title()), 0, $settings['element_letter_count']) .'...' . '</p>';
+					echo '<p>'. esc_html(implode('', array_slice( str_split(get_the_excerpt()), 0, $settings['element_letter_count'] ))) .'...' .'</p>';
 				}
 			echo '</div>';
 		echo '</div>';

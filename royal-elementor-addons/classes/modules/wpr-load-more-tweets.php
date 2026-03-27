@@ -357,9 +357,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     public function wpr_load_more_tweets_function() {
 
-        $settings = $_POST['wpr_load_more_settings'];
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpr-addons-js' ) ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'wpr-addons' ) ) );
+        }
 
-				$credentials = base64_encode($settings['twitter_feed_consumer_key'] . ':' . $settings['twitter_feed_consumer_secret']);
+        if ( empty( $_POST['wpr_load_more_settings'] ) || ! is_array( $_POST['wpr_load_more_settings'] ) ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Invalid request.', 'wpr-addons' ) ) );
+        }
+
+        $settings = wp_unslash( $_POST['wpr_load_more_settings'] );
+
+        // Consumer key/secret must never be sent from frontend; use server-stored options or skip this flow.
+        $consumer_key    = isset( $settings['twitter_feed_consumer_key'] ) ? $settings['twitter_feed_consumer_key'] : '';
+        $consumer_secret = isset( $settings['twitter_feed_consumer_secret'] ) ? $settings['twitter_feed_consumer_secret'] : '';
+        if ( '' === $consumer_key || '' === $consumer_secret ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Twitter API credentials are not configured for load more.', 'wpr-addons' ) ) );
+        }
+
+				$credentials = base64_encode( $consumer_key . ':' . $consumer_secret );
 
 				add_filter('https_ssl_verify', '__return_false');
 

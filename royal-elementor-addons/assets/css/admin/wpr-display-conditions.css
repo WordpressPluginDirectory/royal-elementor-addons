@@ -1,0 +1,43 @@
+/* Visibility Tab Icon */
+.elementor-panel .elementor-panel-navigation .elementor-tab-control-wpr_display_conditions span::before {
+	content: '\e8ac';
+	font-family: 'eicons';
+	font-size: 15px;
+	display: block;
+}
+
+/* Visibility sections: title takes full width for dot positioning */
+.elementor-panel [class*="elementor-control-wpr_dc_"] .elementor-panel-heading-title {
+	flex-grow: 1;
+	text-align: left;
+}
+
+/* Green dot on sections with active conditions */
+.wpr-dc-status-active .elementor-panel-heading-title {
+	position: relative;
+}
+
+.wpr-dc-status-active .elementor-panel-heading-title::after {
+	content: '';
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	background: #28a745;
+	border-radius: 50%;
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* Pro Features section title styling */
+.elementor-control-wpr_dc_pro_features .elementor-panel-heading-toggle,
+.elementor-control-wpr_dc_pro_features .elementor-section-title {
+	color: #f54;
+	line-height: 20px;
+}
+
+.elementor-control-wpr_dc_pro_features .elementor-section-title .dashicons {
+	font-size: 13px;
+	line-height: 20px;
+}

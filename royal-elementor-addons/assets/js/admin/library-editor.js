@@ -27,6 +27,14 @@
 			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/wpr-content-toggle.default', function( $scope ) {
 				$scope.find( '.wpr-template-edit-btn' ).on( 'click', WprElementorEditorPopup.renderPopup );
 			} );
+
+			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/wpr-unfold.default', function( $scope ) {
+				$scope.find( '.wpr-template-edit-btn' ).on( 'click', WprElementorEditorPopup.renderPopup );
+			} );
+
+			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/wpr-password-protected-content.default', function( $scope ) {
+				$scope.find( '.wpr-template-edit-btn' ).on( 'click', WprElementorEditorPopup.renderPopup );
+			} );
 		},
 
 		renderPopup: function( link ) {

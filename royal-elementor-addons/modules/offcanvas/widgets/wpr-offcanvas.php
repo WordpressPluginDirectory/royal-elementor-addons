@@ -270,6 +270,10 @@ class Wpr_Offcanvas extends Widget_Base {
 
 		$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
 
+		// Load the nested template's widget assets (icon fonts, widget CSS, etc.)
+		// so that widgets inside the template (e.g. Icon List) render correctly.
+		Utilities::enqueue_inner_template_assets( $id );
+
 		return Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $id, $has_css ) . $edit_link;
 	}
 

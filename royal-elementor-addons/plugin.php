@@ -90,6 +90,7 @@ class Plugin {
 				'wpr-parallax-multi-layer'  => get_option( 'wpr-parallax-multi-layer', 'on' ),
 				'wpr-sticky-section'        => get_option( 'wpr-sticky-section', 'on' ),
 				'wpr-custom-css'            => get_option( 'wpr-custom-css', 'on' ),
+				'wpr-display-conditions'    => get_option( 'wpr-display-conditions', 'on' ),
 				'wpr_override_woo_templates'=> get_option( 'wpr_override_woo_templates', 'on' ),
 			];
 		}
@@ -151,6 +152,11 @@ class Plugin {
 		// Custom CSS
 		if ( 'on' === $this->wpr_get_extension_option( 'wpr-custom-css' ) ) {
 			require WPR_ADDONS_PATH . 'extensions/wpr-custom-css.php';
+		}
+
+		// Display Conditions (Visibility)
+		if ( 'on' === $this->wpr_get_extension_option( 'wpr-display-conditions' ) ) {
+			require WPR_ADDONS_PATH . 'extensions/wpr-display-conditions.php';
 		}
 
 		// Mega Menu
@@ -266,17 +272,32 @@ class Plugin {
 	public function register_ajax_hooks() {
         add_action( 'wp_ajax_mailchimp_subscribe', [new Utilities, 'ajax_mailchimp_subscribe'] );
         add_action( 'wp_ajax_nopriv_mailchimp_subscribe', [new Utilities, 'ajax_mailchimp_subscribe'] );
+        add_action( 'wp_ajax_wpr_ppc_verify_password', [new Utilities, 'ajax_ppc_verify_password'] );
+        add_action( 'wp_ajax_nopriv_wpr_ppc_verify_password', [new Utilities, 'ajax_ppc_verify_password'] );
 	}
 
-	public function mega_menu_ajax_loading() {
+	public function mega_menu_ajax_loading( \WP_REST_Request $request ) {
+		$item_id = $request->get_param( 'item_id' );
+		if ( $item_id === null || $item_id === '' ) {
+			return new \WP_REST_Response( '', 400 );
+		}
+		$item_id = absint( $item_id );
+		if ( $item_id === 0 ) {
+			return new \WP_REST_Response( '', 400 );
+		}
+		$item_post = get_post( $item_id );
+		if ( ! $item_post || $item_post->post_type !== 'nav_menu_item' ) {
+			return new \WP_REST_Response( '', 403 );
+		}
+		$mega_id = get_post_meta( $item_id, 'wpr-mega-menu-item', true );
+		if ( ! $mega_id || ! get_post( $mega_id ) ) {
+			return new \WP_REST_Response( '', 404 );
+		}
 		$elementor = \Elementor\Plugin::instance();
-		$mega_id = get_post_meta( $_GET['item_id'], 'wpr-mega-menu-item', true);
-		$type = get_post_meta(get_the_ID(), '_wpr_template_type', true) || get_post_meta($mega_id, '_elementor_template_type', true);
+		$type = get_post_meta( get_the_ID(), '_wpr_template_type', true ) || get_post_meta( $mega_id, '_elementor_template_type', true );
 		$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
-		
-		$content = $elementor->frontend->get_builder_content_for_display($mega_id, $has_css);
-
-		wp_send_json( $content );
+		$content = $elementor->frontend->get_builder_content_for_display( (int) $mega_id, $has_css );
+		return new \WP_REST_Response( $content, 200 );
 	}
 
 	public function register_megamenu_route() {
@@ -773,7 +794,15 @@ class Plugin {
 			true
 		);
 
-		wp_register_script( 
+		wp_register_script(
+			'wpr-circle-menu',
+			WPR_ADDONS_URL . 'assets/js/lib/circle-menu/circle-menu.min.js',
+			[ 'jquery' ],
+			'2.0.0',
+			true
+		);
+
+		wp_register_script(
 			'wpr-perfect-scroll-js',
 			 WPR_ADDONS_URL .'assets/js/lib/perfect-scrollbar/perfect-scrollbar.min.js', 
 			 [ 'jquery' ], 

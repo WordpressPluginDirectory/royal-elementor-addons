@@ -62,6 +62,10 @@ if ( ! defined( 'ABSPATH' ) ) {
             'message' => $message
         ];
 
+        if (get_post_type($post_id) !== 'wpr_submissions') {
+            wp_send_json_error('Invalid post');
+        }
+
         $actions_whitelist = [
             'wpr_form_builder_email',
             'wpr_form_builder_submissions',

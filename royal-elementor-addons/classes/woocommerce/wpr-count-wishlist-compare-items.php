@@ -25,23 +25,30 @@ class WPR_Count_Wishlist_Compare_Items {
 	// Add two new functions for handling cookies
 	public function get_wishlist_from_cookie() {
         if (isset($_COOKIE['wpr_wishlist'])) {
-            return json_decode(stripslashes($_COOKIE['wpr_wishlist']), true);
+            $raw = json_decode(stripslashes($_COOKIE['wpr_wishlist']), true);
+            return is_array($raw) ? array_filter(array_map('absint', $raw)) : array();
         } else if ( isset($_COOKIE['wpr_wishlist_'. get_current_blog_id() .'']) ) {
-            return json_decode(stripslashes($_COOKIE['wpr_wishlist_'. get_current_blog_id() .'']), true);
+            $raw = json_decode(stripslashes($_COOKIE['wpr_wishlist_'. get_current_blog_id() .'']), true);
+            return is_array($raw) ? array_filter(array_map('absint', $raw)) : array();
         }
         return array();
 	}
     
     function get_compare_from_cookie() {
         if (isset($_COOKIE['wpr_compare'])) {
-            return json_decode(stripslashes($_COOKIE['wpr_compare']), true);
+            $raw = json_decode(stripslashes($_COOKIE['wpr_compare']), true);
+            return is_array($raw) ? array_filter(array_map('absint', $raw)) : array();
         } else if ( isset($_COOKIE['wpr_compare_'. get_current_blog_id() .'']) ) {
-            return json_decode(stripslashes($_COOKIE['wpr_compare_'. get_current_blog_id() .'']), true);
+            $raw = json_decode(stripslashes($_COOKIE['wpr_compare_'. get_current_blog_id() .'']), true);
+            return is_array($raw) ? array_filter(array_map('absint', $raw)) : array();
         }
         return array();
     }
     
     function count_wishlist_items() {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpr-addons-js' ) ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'wpr-addons' ) ) );
+        }
         $user_id = get_current_user_id();
         
         if ($user_id > 0) {
@@ -59,9 +66,9 @@ class WPR_Count_Wishlist_Compare_Items {
        $wishlist_product_array = [];
 
         $settings = [
-            'element_addcart_simple_txt' => isset($_POST['element_addcart_simple_txt']) ? $_POST['element_addcart_simple_txt'] : '', 
-            'element_addcart_grouped_txt' => isset($_POST['element_addcart_grouped_txt']) ? $_POST['element_addcart_grouped_txt'] : '', 
-            'element_addcart_variable_txt' => isset($_POST['element_addcart_variable_txt']) ? $_POST['element_addcart_grouped_txt'] : ''
+            'element_addcart_simple_txt' => isset($_POST['element_addcart_simple_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_simple_txt'] ) ) : '', 
+            'element_addcart_grouped_txt' => isset($_POST['element_addcart_grouped_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_grouped_txt'] ) ) : '', 
+            'element_addcart_variable_txt' => isset($_POST['element_addcart_variable_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_variable_txt'] ) ) : ( isset($_POST['element_addcart_grouped_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_grouped_txt'] ) ) : '' )
         ];
             
         foreach ($wishlist as $product_id) {
@@ -88,6 +95,9 @@ class WPR_Count_Wishlist_Compare_Items {
     }
     
     public function count_compare_items() {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpr-addons-js' ) ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Security check failed.', 'wpr-addons' ) ) );
+        }
         $user_id = get_current_user_id();
         
         if ($user_id > 0) {
@@ -128,11 +138,11 @@ class WPR_Count_Wishlist_Compare_Items {
 		$table_hidden = '';
 
         $settings = [
-            'compare_empty_text' => isset($_POST['compare_empty_text']) ? $_POST['compare_empty_text'] : '',
-            'remove_from_compare_text' => isset($_POST['remove_text']) ? sanitize_text_field($_POST['remove_text']) : '',
-            'element_addcart_simple_txt' => isset($_POST['element_addcart_simple_txt']) ? $_POST['element_addcart_simple_txt'] : '', 
-            'element_addcart_grouped_txt' => isset($_POST['element_addcart_grouped_txt']) ? $_POST['element_addcart_grouped_txt'] : '', 
-            'element_addcart_variable_txt' => isset($_POST['element_addcart_variable_txt']) ? $_POST['element_addcart_grouped_txt'] : ''
+            'compare_empty_text' => isset($_POST['compare_empty_text']) ? wp_kses_post( wp_unslash( $_POST['compare_empty_text'] ) ) : '',
+            'remove_from_compare_text' => isset($_POST['remove_text']) ? sanitize_text_field( wp_unslash( $_POST['remove_text'] ) ) : '',
+            'element_addcart_simple_txt' => isset($_POST['element_addcart_simple_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_simple_txt'] ) ) : '', 
+            'element_addcart_grouped_txt' => isset($_POST['element_addcart_grouped_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_grouped_txt'] ) ) : '', 
+            'element_addcart_variable_txt' => isset($_POST['element_addcart_variable_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_variable_txt'] ) ) : ( isset($_POST['element_addcart_grouped_txt']) ? wp_kses_post( wp_unslash( $_POST['element_addcart_grouped_txt'] ) ) : '' )
         ];
 
 		if ($user_id > 0) {
@@ -153,7 +163,7 @@ class WPR_Count_Wishlist_Compare_Items {
 
         ob_start();
 
-		echo '<p class="wpr-compare-empty '. $notification_hidden .'">'. $settings['compare_empty_text'] .'</p>';
+		echo '<p class="wpr-compare-empty '. esc_attr( $notification_hidden ) .'">'. $settings['compare_empty_text'] .'</p>';
         
         // Start the table
 		echo '<div class="wpr-compare-products '. $table_hidden .'">';

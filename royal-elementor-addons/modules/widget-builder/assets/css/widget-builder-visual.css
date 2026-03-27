@@ -374,6 +374,11 @@
 .wpr-wb-footer-btn-save {
 	background: #6d4aff;
 	color: #fff !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	flex-direction: row-reverse;
 }
 
 .wpr-wb-footer-btn-save:hover {
