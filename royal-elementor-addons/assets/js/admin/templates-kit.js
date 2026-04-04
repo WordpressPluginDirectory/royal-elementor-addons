@@ -214,6 +214,10 @@ jQuery(document).ready(function( $ ) {
 								WprTemplatesKit.requiredPlugins[slug] = true;
 							}
 						});
+                    } else {
+						// Plugin not available on wp.org or other install error - skip it so import can continue
+						console.warn('Plugin "' + slug + '" could not be installed (error: ' + xhr.errorCode + '). Skipping.');
+						WprTemplatesKit.requiredPlugins[slug] = true;
                     }
                 },
             });

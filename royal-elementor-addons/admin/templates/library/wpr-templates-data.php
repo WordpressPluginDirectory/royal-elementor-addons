@@ -1866,7 +1866,7 @@ class WPR_Templates_Data {
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
-					'priority' => 1,
+					'priority' => 3,
 				],
 			],
 			'ai-saas' => [

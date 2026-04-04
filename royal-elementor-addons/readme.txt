@@ -1,7 +1,7 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1053
+Stable tag: 1.7.1056
 Requires at least: 5.0
 Tested up to: 6.9.4
 Requires PHP: 5.6
@@ -485,6 +485,12 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1056 - 2026-04-03 =
+* FIXED: Minor Issues
+
+= Royal Elementor Addons v1.7.1054 - 2026-04-02 =
+* FIXED: Template Kit Import Issues
+
 = Royal Elementor Addons v1.7.1053 - 2026-03-27 =
 * ADDED: Elementor Template Kit: AI Automation V1 - [**AI Automation V1**](https://demosites.royal-elementor-addons.com/ai-automation-v1/?ref=rea-wpo-pp-details-tab).
 * ADDED: Visibility Conditions Extension - show or hide elements/widgets based on rules
