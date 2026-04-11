@@ -53,7 +53,49 @@ class Wpr_Video_Playlist extends Widget_Base {
 	public function is_reload_preview_required() {
 		return true;
 	}
-	
+
+	public function add_control_playlist_query() {
+		$this->add_control(
+			'playlist_query',
+			[
+				'label' => esc_html__( 'Playlist Query', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'custom',
+				'options' => [
+					'custom' => esc_html__( 'Custom URLs', 'wpr-addons' ),
+					'pro-ytpl' => esc_html__( 'YouTube Playlist (Pro)', 'wpr-addons' ),
+				],
+			]
+		);
+	}
+
+	public function add_control_youtube_api_key() {}
+
+	public function add_control_youtube_playlist_id() {}
+
+	public function add_repeater_args_video_urls() {
+		return [
+			'label' => esc_html__( 'Video URLs', 'wpr-addons' ),
+			'type' => Controls_Manager::REPEATER,
+			'default' => [
+				[ 'video_url' => [ 'url' => 'https://youtu.be/OrtzJs-wzlw' ] ],
+				[ 'video_url' => [ 'url' => 'https://youtu.be/zCfzzUuX8HE' ] ],
+				[ 'video_url' => [ 'url' => 'https://youtu.be/Abw5LIIfgEo' ] ],
+			],
+			'title_field' => '{{ video_url.url }}',
+			'condition' => [
+				'playlist_query' => 'custom',
+			],
+		];
+	}
+
+	public function add_repeater_args_custom_title() {
+		return [
+			'type' => Controls_Manager::HIDDEN,
+			'default' => '',
+		];
+	}
+
 	protected function register_controls() {
 
 		$this->start_controls_section(
@@ -73,44 +115,13 @@ class Wpr_Video_Playlist extends Widget_Base {
             ]
         );
 
-		$this->add_control(
-			'playlist_query',
-			[
-				'label' => esc_html__( 'Playlist Query', 'wpr-addons' ),
-				'type' => \Elementor\Controls_Manager::SELECT,
-				'default' => 'custom',
-				'options' => [
-					'custom' => esc_html__( 'Custom URLs', 'wpr-addons' ),
-					'playlist' => esc_html__( 'YouTube Playlist', 'wpr-addons' ),
-				],
-			]
-		);
+		$this->add_control_playlist_query();
 
-		$this->add_control(
-			'youtube_api_key',
-			[
-				'label' => esc_html__( 'YouTube API Key', 'wpr-addons' ),
-				'type' => \Elementor\Controls_Manager::TEXT,
-				'default' => '',
-				'description' => 'To get your <strong>Youtube API Key</strong> please watch this <strong><a href="https://youtu.be/LLAZUTbc97I" target="_blank">Video Tutorial</a></strong>.',
-				'condition' => [
-					'playlist_query' => 'playlist',
-				],
-			]
-		);
+		// Upgrade to Pro Notice.
+		Utilities::upgrade_pro_notice( $this, Controls_Manager::RAW_HTML, 'video-playlist', 'playlist_query', [ 'pro-ytpl' ] );
 
-		$this->add_control(
-			'youtube_playlist_id',
-			[
-				'label' => esc_html__( 'YouTube Playlist ID', 'wpr-addons' ),
-				'type' => \Elementor\Controls_Manager::TEXT,
-				'default' => '',
-				'description' => 'To get your <strong>Youtube Playlist ID</strong> go to YouTube Channel, select Playlist and find E.g: <strong>list=PLjFiZESrp9558M7Rghnk5s4sMq6m3RyOb</strong> in the URL and copy the ID.',
-                'condition' => [
-                    'playlist_query' => 'playlist',
-                ],
-			]
-		);
+		$this->add_control_youtube_api_key();
+		$this->add_control_youtube_playlist_id();
         $this->add_control(
             'title_group_title',
             [
@@ -125,7 +136,7 @@ class Wpr_Video_Playlist extends Widget_Base {
             [
                 'label' => esc_html__( 'HTML Tag', 'wpr-addons' ),
                 'type' => \Elementor\Controls_Manager::SELECT,
-                'default' => 'h6',
+                'default' => 'h3',
                 'options' => [
                     'h1' => 'H1',
                     'h2' => 'H2',
@@ -148,58 +159,94 @@ class Wpr_Video_Playlist extends Widget_Base {
                 'default' => esc_html__( 'Now Playing', 'wpr-addons' ),
             ]
         );
-    
+
         $this->add_control(
             'urls_group_title',
             [
                 'label' => esc_html__( 'Custom Video URLs', 'wpr-addons' ),
                 'type' => \Elementor\Controls_Manager::HEADING,
                 'separator' => 'before',
-            ]
-        );
-
-        $repeater = new \Elementor\Repeater();
-    
-        $repeater->add_control(
-            'video_url',
-            [
-                'label' => esc_html__( 'Video URL', 'wpr-addons' ),
-                'type' => \Elementor\Controls_Manager::URL,
-                'default' => [
-                    'url' => 'https://youtu.be/OrtzJs-wzlw',
-                ],
-                'label_block' => true,
-            ]
-        );
-    
-        $this->add_control(
-            'video_urls',
-            [
-                'label' => esc_html__( 'Video URLs', 'wpr-addons' ),
-                'type' => \Elementor\Controls_Manager::REPEATER,
-                'fields' => $repeater->get_controls(),
-                'default' => [
-                    [ 'video_url' => [ 'url' => 'https://youtu.be/OrtzJs-wzlw' ] ],
-                    [ 'video_url' => [ 'url' => 'https://youtu.be/zCfzzUuX8HE' ] ],
-                    [ 'video_url' => [ 'url' => 'https://youtu.be/Abw5LIIfgEo' ] ],
-                    [ 'video_url' => [ 'url' => 'https://youtu.be/dcpehUVAx0k' ] ],
-                    [ 'video_url' => [ 'url' => 'https://youtu.be/-wTaxzBxo6E' ] ],
-                    [ 'video_url' => [ 'url' => 'https://youtu.be/9qJH__RF--I' ] ],
-                ],
-                'title_field' => '{{ video_url.url }}',
                 'condition' => [
                     'playlist_query' => 'custom',
                 ],
             ]
-        );    
+        );
+
+		$repeater = new Repeater();
+
+		$repeater->add_control(
+			'video_url',
+			[
+				'label' => esc_html__( 'Video URL', 'wpr-addons' ),
+				'type' => Controls_Manager::URL,
+				'default' => [
+					'url' => 'https://youtu.be/OrtzJs-wzlw',
+				],
+				'label_block' => true,
+			]
+		);
+
+		$repeater->add_control(
+			'custom_title',
+			$this->add_repeater_args_custom_title()
+		);
+
+		$video_urls_args = $this->add_repeater_args_video_urls();
+		$video_urls_args['fields'] = $repeater->get_controls();
+
+		$this->add_control(
+			'video_urls',
+			$video_urls_args
+		);
+
+		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
+			$this->add_control(
+				'video_urls_pro_notice',
+				[
+					'type' => Controls_Manager::RAW_HTML,
+					'raw' => __('More than 3 Items are<br>available in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-panel-form-builder-upgrade-pro#purchasepro" target="_blank">Pro version</a></strong>'),
+					'content_classes' => 'wpr-pro-notice',
+					'condition' => [
+						'playlist_query' => 'custom',
+					],
+				]
+			);
+		}
 
 		$this->end_controls_section();
+
+		// Section: Pro Features
+		Utilities::pro_features_list_section( $this, '', Controls_Manager::RAW_HTML, 'video-playlist', [
+			'Dynamic YouTube Playlist Query',
+			'Unlimited Custom Video Items',
+            'Custom Video Titles for Custom Items',
+		] );
 
 		$this->start_controls_section(
 			'general_section',
 			[
 				'label' => esc_html__( 'General', 'wpr-addons' ),
 				'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'playlist_position',
+			[
+				'label' => esc_html__( 'Playlist Position', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'toggle' => false,
+				'default' => 'right',
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-left',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-h-align-right',
+					],
+				],
 			]
 		);
 
@@ -219,7 +266,27 @@ class Wpr_Video_Playlist extends Widget_Base {
             \Elementor\Group_Control_Typography::get_type(),
             [
                 'name' => 'title_typography',
-                'label' => esc_html__( 'Title Typography', 'wpr-addons' ),
+                'label' => esc_html__( 'Playlist Title Typography', 'wpr-addons' ),
+                'selector' => '{{WRAPPER}} .wpr-vplaylist-heading span',
+				'fields_options' => [
+					'typography' => [
+						'default' => 'custom',
+					],
+					'font_size' => [
+						'default' => [
+							'size' => '15',
+							'unit' => 'px'
+						]
+					]
+				]
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'current_title_typography',
+                'label' => esc_html__( 'Video Title Typography', 'wpr-addons' ),
                 'selector' => '{{WRAPPER}} .wpr-vplaylist-current-title, {{WRAPPER}} .wpr-vplaylist-info-title',
 				'fields_options' => [
 					'typography' => [
@@ -301,15 +368,23 @@ class Wpr_Video_Playlist extends Widget_Base {
         $title_tag       = !empty($settings['title_tag']) ? $settings['title_tag'] : 'h6';
         $playlist_title  = !empty($settings['playlist_title']) ? $settings['playlist_title'] : esc_html__('Now Playing', 'wpr-addons');
         $playlist_query  = !empty($settings['playlist_query']) ? $settings['playlist_query'] : 'custom';
+		$playlist_position = ! empty( $settings['playlist_position'] ) ? $settings['playlist_position'] : 'right';
+		$playlist_position_class = 'left' === $playlist_position ? ' wpr-vplaylist-pos-left' : '';
 
         $video_urls = [];
+		$video_titles = [];
 
         if ( 'playlist' === $playlist_query && !empty($settings['youtube_playlist_id']) ) {
             $video_urls = $this->get_youtube_playlist_videos($settings['youtube_playlist_id'], $settings['youtube_api_key']);
         } elseif ( !empty($settings['video_urls']) && is_array($settings['video_urls']) ) {
-            foreach ( $settings['video_urls'] as $video_item ) {
+			$is_pro_active = defined( 'WPR_ADDONS_PRO_VERSION' ) && function_exists( 'wpr_fs' ) && wpr_fs()->can_use_premium_code();
+            foreach ( $settings['video_urls'] as $index => $video_item ) {
+				if ( ! $is_pro_active && $index >= 3 ) {
+					break;
+				}
                 if ( !empty($video_item['video_url']['url']) ) {
                     $video_urls[] = esc_url($video_item['video_url']['url']);
+					$video_titles[] = (isset($video_item['custom_title']) && ! empty( $video_item['custom_title'] )) ? sanitize_text_field( $video_item['custom_title'] ) : '';
                 }
             }
         }
@@ -318,7 +393,7 @@ class Wpr_Video_Playlist extends Widget_Base {
             return;
         }
 
-        echo '<div class="wpr-vplaylist-wrap">';
+        echo '<div class="wpr-vplaylist-wrap' . esc_attr( $playlist_position_class ) . '">';
 
             // Video Player
             echo '<div class="video-player-wrap">';
@@ -342,7 +417,7 @@ class Wpr_Video_Playlist extends Widget_Base {
                     echo '</div>';
                 echo '</div>';
 
-                echo '<div class="wpr-vplaylist-thumbs" data-urls=\'' . esc_attr(wp_json_encode($video_urls)) . '\'>';
+                echo '<div class="wpr-vplaylist-thumbs" data-urls=\'' . esc_attr(wp_json_encode($video_urls)) . '\' data-titles=\'' . esc_attr(wp_json_encode($video_titles)) . '\'>';
                     echo '<ul></ul>';
                 echo '</div>';
 

@@ -1481,7 +1481,7 @@ class Wpr_Tabs extends Widget_Base {
 			'activeTab' 		=> $settings['active_tab'],
 			'trigger' 			=>  $settings['tabs_trigger'],
 			'autoplay' 			=> isset($settings['autoplay']) ? $settings['autoplay'] : '',
-			'autoplaySpeed'		=> absint( $settings['autoplay_duration'] * 1000 ),
+			'autoplaySpeed'		=> absint( ( floatval( $settings['autoplay_duration'] ?: 1 ) ) * 1000 ),
 		];
 
 		$this->add_render_attribute( 'tabs-attribute', [

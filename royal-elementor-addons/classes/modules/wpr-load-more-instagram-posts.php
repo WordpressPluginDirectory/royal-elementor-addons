@@ -23,14 +23,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		add_action('wp_ajax_nopriv_wpr_load_more_instagram_posts', [$this, 'wpr_load_more_instagram_posts_function']);
     }
 
-	public function call_instagram_api($access_token, $settings) {
-		$url = 'https://graph.instagram.com/me/media?fields=id,media_type,media_url,thumbnail_url,permalink,username,caption,timestamp&access_token='. $access_token .'&limit='. ($settings['limit'] + $_POST['next_post_index']);
+	public function call_instagram_api( $access_token, $settings, $next_post_index ) {
+		$limit = isset( $settings['limit'] ) ? absint( $settings['limit'] ) : 0;
+		$next_post_index = absint( $next_post_index );
+		$access_token = rawurlencode( (string) $access_token );
+		$url = 'https://graph.instagram.com/me/media?fields=id,media_type,media_url,thumbnail_url,permalink,username,caption,timestamp&access_token='. $access_token .'&limit='. ( $limit + $next_post_index );
 		$response = wp_remote_get($url);
-		$body = json_decode($response['body']);
-		if(!isset($body)) {
-			return $response['body'];
+		if ( is_wp_error( $response ) || empty( $response['body'] ) ) {
+			return [];
 		}
-		return $body->data;	
+		$body = json_decode($response['body']);
+		if ( ! isset( $body->data ) || ! is_array( $body->data ) ) {
+			return [];
+		}
+		return $body->data;
 	}
 
 	// Get Animation Class
@@ -54,14 +60,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	// Render Post Title
 	public function render_post_username( $settings, $class, $result ) {
 
-		$target = 'yes' == $_POST['wpr_load_more_settings']['open_in_new_tab'] ? '_blank' : '_self';
+		$target = ( isset( $settings['open_in_new_tab'] ) && 'yes' === $settings['open_in_new_tab'] ) ? '_blank' : '_self';
 
 		$tags_whitelist = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
 		$element_username_tag = Utilities::validate_html_tags_wl( $settings['element_username_tag'], 'h2', $tags_whitelist );
 
 		echo '<'. esc_attr($element_username_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				echo '<a href="'. $result->permalink .'" target="'. $target .'">';
+				echo '<a href="'. esc_url( $result->permalink ) .'" target="'. esc_attr( $target ) .'">';
 					echo esc_html($result->username);
 				echo '</a>';
 			echo '</div>';
@@ -96,9 +102,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				// Date
 				if ( 'yes' === $settings['element_hide_year'] ) {
-					echo date('F j', strtotime($result->timestamp));
+					echo esc_html( date('F j', strtotime($result->timestamp)) );
 				} else {
-					echo date(get_option( 'date_format' ), strtotime($result->timestamp));
+					echo esc_html( date(get_option( 'date_format' ), strtotime($result->timestamp)) );
 				}
 
 				// Icon: After
@@ -116,11 +122,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	public function render_post_icon($settings, $class, $result) {
 
-		$target = 'yes' == $_POST['wpr_load_more_settings']['open_in_new_tab'] ? '_blank' : '_self';
+		$target = ( isset( $settings['open_in_new_tab'] ) && 'yes' === $settings['open_in_new_tab'] ) ? '_blank' : '_self';
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-			   echo '<a href='. $result->permalink .' target='. $target .'>';
+			   echo '<a href="'. esc_url( $result->permalink ) .'" target="'. esc_attr( $target ) .'">';
 				echo '<i class="fab fa-instagram"></i>';
 			   echo '</a>';
 			echo '</div>';
@@ -392,28 +398,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 	// Render Media Overlay
 	public function render_media_overlay( $settings, $result ) {
 
-		$target = 'yes' == $_POST['wpr_load_more_settings']['open_in_new_tab'] ? '_blank' : '_self';
+		$target = ( isset( $settings['open_in_new_tab'] ) && 'yes' === $settings['open_in_new_tab'] ) ? '_blank' : '_self';
 
-		echo '<div class="wpr-insta-feed-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. $result->permalink .'" data-target="'. $target .'">';
+		echo '<div class="wpr-insta-feed-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_url( $result->permalink ) .'" data-target="'. esc_attr( $target ) .'">';
 
 		echo '</div>';
 	}
 
     public function wpr_load_more_instagram_posts_function() {
-		$settings = $_POST['wpr_load_more_settings'];
-		
-		if ( get_transient('wpr_instagram_access_token'. $_POST['wpr_insta_feed_widget_id']) ) {
-			$instagram_token = get_transient('wpr_instagram_access_token'. $_POST['wpr_insta_feed_widget_id']);
-		} else {
-			$instagram_token = $settings['instagram_access_token'];
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpr-addons-js' ) ) {
+			wp_die();
 		}
-		
-        foreach($this->call_instagram_api($instagram_token, $_POST['wpr_load_more_settings']) as $key=>$result) : ?>
+
+		if ( empty( $_POST['wpr_load_more_settings'] ) || ! is_array( $_POST['wpr_load_more_settings'] ) ) {
+			wp_die();
+		}
+
+		$settings = wp_unslash( $_POST['wpr_load_more_settings'] );
+		$widget_id = isset( $_POST['wpr_insta_feed_widget_id'] ) ? sanitize_text_field( wp_unslash( $_POST['wpr_insta_feed_widget_id'] ) ) : '';
+		$next_post_index = isset( $_POST['next_post_index'] ) ? absint( wp_unslash( $_POST['next_post_index'] ) ) : 0;
+
+		$instagram_token = '';
+		if ( $widget_id ) {
+			$instagram_token = get_transient( 'wpr_instagram_access_token'. $widget_id );
+			if ( empty( $instagram_token ) ) {
+				$instagram_token = get_option( 'wpr_instagram_access_token_to_compare'. $widget_id );
+			}
+		}
+
+		if ( empty( $instagram_token ) ) {
+			wp_die();
+		}
+
+        foreach ( $this->call_instagram_api( $instagram_token, $settings, $next_post_index ) as $key => $result ) : ?>
             <?php 
 				if ( $key >= 6 && (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) ) {
 					break;
 				}
-				if ($key < $_POST['next_post_index']) :
+				if ($key < $next_post_index) :
 					continue; 
 				endif;
 			?>
@@ -422,37 +444,37 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <figure>
                     <?php
                         // Content: Below Media
-                        echo $this->get_elements_by_location( 'above', $_POST['wpr_load_more_settings'], $result );
+                        echo $this->get_elements_by_location( 'above', $settings, $result );
                     ?>
-                    <div class="wpr-insta-feed-media-wrap <?php echo esc_attr($this->get_image_effect_class( $_POST['wpr_load_more_settings'] )) ?>" data-overlay-link="<?php echo esc_attr( $_POST['wpr_load_more_settings']['overlay_post_link'] ) ?>">
+                    <div class="wpr-insta-feed-media-wrap <?php echo esc_attr($this->get_image_effect_class( $settings )) ?>" data-overlay-link="<?php echo esc_attr( $settings['overlay_post_link'] ) ?>">
                     <?php if ( 'CAROUSEL_ALBUM' == $result->media_type || 'IMAGE' == $result->media_type ) : ?>
-                        <div class="wpr-insta-feed-image-wrap" data-src=<?php echo $result->media_url ?>>
-                            <img src=<?php echo $result->media_url  ?> alt="">
+                        <div class="wpr-insta-feed-image-wrap" data-src="<?php echo esc_url( $result->media_url ); ?>">
+                            <img src="<?php echo esc_url( $result->media_url ); ?>" alt="">
                         </div>
                     <?php else : ?>
-                        <div class="wpr-insta-feed-image-wrap" data-src=<?php echo $result->thumbnail_url ?>>
-                            <img class="wpr-insta-feed-thumb" src=<?php echo $result->thumbnail_url ?> alt="">
+                        <div class="wpr-insta-feed-image-wrap" data-src="<?php echo esc_url( $result->thumbnail_url ); ?>">
+                            <img class="wpr-insta-feed-thumb" src="<?php echo esc_url( $result->thumbnail_url ); ?>" alt="">
                         </div>
                     <?php endif ; ?>
                         <div class="wpr-insta-feed-media-hover wpr-animation-wrap">
                             <?php
                                 // Media Overlay
-                                $this->render_media_overlay( $_POST['wpr_load_more_settings'], $result );
+                                $this->render_media_overlay( $settings, $result );
 
                                 // Content: Over Media
-                                $this->get_elements_by_location( 'over', $_POST['wpr_load_more_settings'], $result );
+                                $this->get_elements_by_location( 'over', $settings, $result );
                             ?>
                         </div>
                     </div>
                     <?php
                         // Content: Below Media
-                        echo $this->get_elements_by_location( 'below', $_POST['wpr_load_more_settings'], $result );
+                        echo $this->get_elements_by_location( 'below', $settings, $result );
                     ?>
                 </figure>
             </div>
         <?php endforeach;
         
-        die();
+        wp_die();
     }
  }
 

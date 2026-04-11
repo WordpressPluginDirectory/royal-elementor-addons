@@ -72,8 +72,11 @@ class Utilities {
 			'Twitter Feed' => ['twitter-feed', 'https://royal-elementor-addons.com/elementor-twitter-feed-widget/', '', ''],
 			'Image Scroll' => ['image-scroll', 'https://royal-elementor-addons.com/elementor-image-scroll-widget/', '', ''],
 			'Date' => ['date', 'https://royal-elementor-addons.com/elementor-date-widget/', '', ''],
-			// 'Video Playlist' => ['video-playlist', 'https://royal-elementor-addons.com/elementor-video-playlist-widget/', '', ''],
+			'Video Playlist' => ['video-playlist', '', '', 'new'],
 			'Password Protected Content' => ['password-protected-content', '', '', 'new'],
+			'Icon Box' => ['icon-box', '', '', 'new'],
+			'Separator' => ['separator', '', '', 'new'],
+			// 'Random Image' => ['random-image', '', '', 'new'],
 			'Circle Menu' => ['circle-menu', '', '', 'new'],
 			'Unfold' => ['unfold', '', '', 'new'],
 		];
@@ -1394,4 +1397,71 @@ class Utilities {
 		return $value;
 	}
 
+	public static function get_all_breakpoints( $type = 'assoc' ) {
+		$devices = array(
+			'desktop' => __( 'Desktop', 'elementor' ),
+		);
+	
+		if (
+			class_exists( '\Elementor\Plugin' ) &&
+			isset( \Elementor\Plugin::$instance->breakpoints ) &&
+			method_exists( \Elementor\Plugin::$instance->breakpoints, 'get_active_breakpoints' )
+		) {
+			$active_breakpoints = \Elementor\Plugin::$instance->breakpoints->get_active_breakpoints();
+	
+			if ( is_array( $active_breakpoints ) ) {
+				foreach ( $active_breakpoints as $key => $breakpoint ) {
+					if ( 'desktop' === $key ) {
+						continue;
+					}
+	
+					$label = '';
+	
+					if ( is_object( $breakpoint ) && method_exists( $breakpoint, 'get_label' ) ) {
+						$label = $breakpoint->get_label();
+					}
+	
+					if ( '' === $label ) {
+						$label = ucwords( str_replace( '_', ' ', $key ) );
+					}
+	
+					$devices[ $key ] = $label;
+				}
+			}
+		}
+	
+		if ( ! isset( $devices['tablet'] ) ) {
+			$devices['tablet'] = __( 'Tablet', 'elementor' );
+		}
+	
+		if ( ! isset( $devices['mobile'] ) ) {
+			$devices['mobile'] = __( 'Mobile', 'elementor' );
+		}
+	
+		$order = array(
+			'widescreen',
+			'desktop',
+			'laptop',
+			'tablet_extra',
+			'tablet',
+			'mobile_extra',
+			'mobile',
+		);
+	
+		$ordered_devices = array();
+	
+		foreach ( $order as $breakpoint_key ) {
+			if ( isset( $devices[ $breakpoint_key ] ) ) {
+				$ordered_devices[ $breakpoint_key ] = $devices[ $breakpoint_key ];
+			}
+		}
+	
+		foreach ( $devices as $breakpoint_key => $label ) {
+			if ( ! isset( $ordered_devices[ $breakpoint_key ] ) ) {
+				$ordered_devices[ $breakpoint_key ] = $label;
+			}
+		}
+	
+		return ( 'keys' === $type ) ? array_keys( $ordered_devices ) : $ordered_devices;
+	}
 }

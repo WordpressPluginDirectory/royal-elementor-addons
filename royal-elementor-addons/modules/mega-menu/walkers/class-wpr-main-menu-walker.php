@@ -197,7 +197,9 @@ class Wpr_Main_Menu_Walker extends \Walker_Nav_Menu {
 				$type = get_post_meta(get_the_ID(), '_wpr_template_type', true) || get_post_meta($mega_id, '_elementor_template_type', true);
 				$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
 
-				// \WprAddons\Classes\Utilities::enqueue_inner_template_assets( $mega_id );
+				if ( ! is_admin() && ! wp_doing_ajax() ) {
+					\WprAddons\Classes\Utilities::enqueue_inner_template_assets( $mega_id );
+				}
 				$content = $elementor->frontend->get_builder_content_for_display($mega_id, $has_css);
 				$output .= '<div class="wpr-sub-mega-menu">'. $content .'</div>';
 			}

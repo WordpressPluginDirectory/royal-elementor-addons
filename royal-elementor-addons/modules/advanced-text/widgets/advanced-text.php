@@ -815,8 +815,8 @@ class Advanced_Text extends Widget_Base {
 		}
 
 		$anim_duration = [
-			absint( $anim_duration_value * 1000 ),
-			absint( $settings['anim_delay'] * 1000 ),
+			absint( floatval( $anim_duration_value ) * 1000 ),
+			absint( floatval( $settings['anim_delay'] ) * 1000 ),
 		];
 
 		$anim_duration = implode( ',', $anim_duration );

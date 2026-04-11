@@ -2379,7 +2379,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 				'iframeMaxWidth' => '60%',
 				'hash' => false,
 				'autoplay' => $settings['lightbox_popup_autoplay'],
-				'pause' => $settings['lightbox_popup_pause'] * 1000,
+				'pause' => absint( ( floatval( $settings['lightbox_popup_pause'] ?: 1 ) ) * 1000 ),
 				'progressBar' => $settings['lightbox_popup_progressbar'],
 				'counter' => $settings['lightbox_popup_counter'],
 				'controls' => $settings['lightbox_popup_arrows'],

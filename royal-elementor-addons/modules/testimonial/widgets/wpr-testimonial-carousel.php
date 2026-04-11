@@ -2888,11 +2888,11 @@ class Wpr_Testimonial_Carousel extends Widget_Base {
 		$options = [
 			'rtl' => $is_rtl,
 			'infinite' => ( $settings['testimonial_loop'] === 'yes' ),
-			'speed' => absint( $settings['testimonial_effect_duration'] * 1000 ),
+			'speed' => absint( ( floatval( $settings['testimonial_effect_duration'] ?: 1 ) ) * 1000 ),
 			'arrows' => true,
 			'dots' => true,
 			'autoplay' => ( $settings['testimonial_autoplay'] === 'yes' ),
-			'autoplaySpeed' => absint( $settings['testimonial_autoplay_duration'] * 1000 ),
+			'autoplaySpeed' => absint( ( floatval( $settings['testimonial_autoplay_duration'] ?: 1 ) ) * 1000 ),
 			'pauseOnHover' => $settings['testimonial_pause_on_hover'],
 			'prevArrow' => '#wpr-testimonial-prev-'. $this->get_id(),
 			'nextArrow' => '#wpr-testimonial-next-'. $this->get_id(),

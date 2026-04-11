@@ -4,7 +4,7 @@
  * Description: The only plugin you need for Elementor page builder.
  * Plugin URI: https://royal-elementor-addons.com/
  * Author: WP Royal
- * Version: 1.7.1056
+ * Version: 1.7.1057
  * License: GPLv3
  * Author URI: https://royal-elementor-addons.com/
  * Elementor tested up to: 4.0.1
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'WPR_ADDONS_VERSION', '1.7.1056' );
+define( 'WPR_ADDONS_VERSION', '1.7.1057' );
 
 define( 'WPR_ADDONS__FILE__', __FILE__ );
 define( 'WPR_ADDONS_PLUGIN_BASE', plugin_basename( WPR_ADDONS__FILE__ ) );
@@ -42,6 +42,35 @@ if ( function_exists( 'wpr_fs' ) ) {
 				$register_freemius = false;
 			}
 		}
+
+		// $pro_plugins = array(
+		// 	'wpr-addons-pro/wpr-addons-pro.php',
+		// 	'royal-elementor-addons-pro/wpr-addons-pro.php',
+		// );
+
+		// foreach ( $pro_plugins as $pro_plugin ) {
+		// 	$is_active = false;
+
+		// 	if ( function_exists( 'is_plugin_active' ) ) {
+		// 		$is_active = is_plugin_active( $pro_plugin );
+		// 	}
+
+		// 	// Fallback for early load order and multisite network activation checks.
+		// 	if ( ! $is_active ) {
+		// 		$active_plugins = (array) get_option( 'active_plugins', array() );
+		// 		$is_active      = in_array( $pro_plugin, $active_plugins, true );
+		// 	}
+
+		// 	if ( ! $is_active && function_exists( 'is_multisite' ) && is_multisite() ) {
+		// 		$network_active_plugins = (array) get_site_option( 'active_sitewide_plugins', array() );
+		// 		$is_active             = isset( $network_active_plugins[ $pro_plugin ] );
+		// 	}
+
+		// 	if ( $is_active ) {
+		// 		$register_freemius = false;
+		// 		break;
+		// 	}
+		// }
 	}
 
 	if ( $register_freemius ) {

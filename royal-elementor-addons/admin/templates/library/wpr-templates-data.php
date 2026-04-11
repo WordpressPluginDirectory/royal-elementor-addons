@@ -97,6 +97,18 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 200,
 				],
+				'v2' => [
+					'name' => 'Plumbing V2',
+					'pages' => 'home,about,services,service-single,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free plumbing solutions repair pipe replacement water cleanup fix bathroom emergency technician professional support plumber electrician handyman solar maintenance contractor hvac',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 200,
+				],
 			],
 			'grocery-store' => [
 				'v1' => [
@@ -137,6 +149,20 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 150,
+				],
+			],
+			'coffee-shop' => [
+				'v1' => [
+					'name' => 'Coffee Shop V1',
+					'pages' => 'home,about,services,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'free coffee shop bakery cofe bar cafe cafee cooking business corporate food menu restaurant tea beverage cafeteria barista blog',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 100,
 				],
 			],
 			'ico-landing-page' => [
@@ -822,10 +848,24 @@ class WPR_Templates_Data {
 					'name' => 'Fitness Gym',
 					'pages' => 'home,about,gallery,classes,pricing,gallery,review,trainers,contact,comingsoon,',
 					'plugins' => '{"contact-form-7":'. $is_cf7_active .', "media-library-assistant":'. $is_mla_active .'}',
-					'tags' => 'free personal trainer gym sport fitness yoga exercises workout cardio strength training weightlifting crossfit hiit bodyweight exercises muscle building bodybuilding powerlifting',
+					'tags' => 'free personal trainer gym sport fitness yoga exercises workout cardio strength training weightlifting crossfit hiit bodyweight exercises muscle building bodybuilding powerlifting health weight',
 					'theme-builder' => true,
 					'woo-builder' => false,
 					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 21,
+				],
+			],
+			'fitness-coach' => [
+				'v1' => [
+					'name' => 'Fitness Coach V1',
+					'pages' => 'home,about,programs,pricing,blog,blog-single,contact,',
+					'plugins' => '{}',
+					'tags' => 'free fitness coach personal train gym workout exercise nutrition health cardio muscle athlete strength fit sport weight loss training trainer exercises',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
 					'priority' => 21,
@@ -2004,6 +2044,20 @@ class WPR_Templates_Data {
 					'label' => 'New',
 					'priority' => 270,
 				],
+				'v5' => [
+					'name' => 'Real Estate V5',
+					'pages' => 'home,projects,project-details,services,service-details,about-us,awards,team,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'real estate agency company property rentals home estate sales developers construction agency property rentals sales property agent flat homes rent sale listing realtor broker acf dynamic houses apartment rental development land investment',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'custom-types' => ['project' => 'project', 'project_budget' => 'project_budget', 'project-status' => 'project-status', 'project_type' => 'project_type', 'location' => 'location'],
+					'label' => 'New',
+					'priority' => 260,
+				],
 			],
 			'real-estate-consultant' => [
 				'v1' => [
@@ -2248,6 +2302,12 @@ class WPR_Templates_Data {
 				'name' => 'Real Estate v3',
 				'pages' => ['home','home-v2','about','directory','blog','contact'],
 				'preview' => ['home','home-v2','about','directory','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'realestate-v5' => [
+				'name' => 'Real Estate V5',
+				'pages' => ['home','services','service-details','about-us','awards','team','faq','blog','contact'],
+				'preview' => ['home','services','service-details','about-us','awards','team','faq','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'realestate-v2' => [
@@ -2748,6 +2808,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','services','pricing','contact',],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
+			'plumbing-v2' => [
+				'name' => 'Plumbing V2',
+				'pages' => ['home','about','services','service-single','blog','contact',],
+				'preview' => ['home','about','services','service-single','blog','contact',],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
 			'photographer-v1' => [
 				'name' => 'Photographer Dark',
 				'pages' => ['home','about','services','portfolio','contact'],
@@ -2790,6 +2856,13 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','gallery','classes','pricing','review','trainers','blog','contact','coming-soon'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'fitness-coach-v1' => [
+				'name' => 'Fitness Coach V1',
+				'pages' => ['home','blog','contact'],
+				'preview' => ['home','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+
 			'personal-coach-v1' => [
 				'name' => 'Personal Coach V1',
 				'pages' => ['home','coaching','details','services','blog','contact'],
@@ -2874,6 +2947,13 @@ class WPR_Templates_Data {
 				'preview' => ['home','menu','about','offer','gallery','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'coffee-shop-v1' => [
+				'name' => 'Coffee Shop V1',
+				'pages' => ['home','about','services','faq','blog','contact'],
+				'preview' => ['home','about','services','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+
 			'winebar-v1' => [
 				'name' => 'Wine Bar',
 				'pages' => ['home','story','wines','dishes','events','contact'],

@@ -29,6 +29,18 @@ if ( ! defined( 'ABSPATH' ) ) {
           return; // Get out of here, the nonce is rotten!
         }
 
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        $submission_secret = isset( $_POST['submission_secret'] ) ? sanitize_text_field( wp_unslash( $_POST['submission_secret'] ) ) : '';
+
+        if ( ! $post_id || get_post_type( $post_id ) !== 'wpr_submissions' ) {
+            wp_send_json_error( 'Invalid post' );
+        }
+
+        $stored_secret = get_post_meta( $post_id, '_wpr_submission_action_secret', true );
+        if ( ! is_string( $stored_secret ) || $stored_secret === '' || ! hash_equals( $stored_secret, $submission_secret ) ) {
+            wp_send_json_error( 'Invalid submission secret.' );
+        }
+
         // Validate custom token
         // $custom_token = $_POST['custom_token'];
         
@@ -52,7 +64,6 @@ if ( ! defined( 'ABSPATH' ) ) {
         //     return;
         // }
 
-        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
         $action_name = isset($_POST['action_name']) ? sanitize_text_field($_POST['action_name']) : '';
         $status = isset($_POST['status']) ? sanitize_text_field($_POST['status']) : '';
         $message = isset($_POST['message']) ? sanitize_text_field($_POST['message']) : '';
@@ -61,10 +72,6 @@ if ( ! defined( 'ABSPATH' ) ) {
             'status' => $status,
             'message' => $message
         ];
-
-        if (get_post_type($post_id) !== 'wpr_submissions') {
-            wp_send_json_error('Invalid post');
-        }
 
         $actions_whitelist = [
             'wpr_form_builder_email',

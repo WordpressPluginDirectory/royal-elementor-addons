@@ -4,6 +4,7 @@ namespace WprAddons;
 use Elementor\Utils;
 use Elementor\Controls_Manager;
 use WprAddons\Includes\Controls\WprAjaxSelect2\WPR_Control_Ajax_Select2;
+use WprAddons\Includes\Controls\WPR_Select2;
 use WprAddons\Includes\Controls\WPR_Control_Animations;
 use WprAddons\Includes\Controls\WPR_Control_Animations_Alt;
 use WprAddons\Includes\Controls\WPR_Control_Button_Animations;
@@ -92,6 +93,7 @@ class Plugin {
 				'wpr-custom-css'            => get_option( 'wpr-custom-css', 'on' ),
 				'wpr-display-conditions'    => get_option( 'wpr-display-conditions', 'on' ),
 				'wpr_override_woo_templates'=> get_option( 'wpr_override_woo_templates', 'on' ),
+				'wpr-column-slider'         => get_option( 'wpr-column-slider', 'on' ),
 			];
 		}
 		return isset( self::$wpr_extension_options[ $key ] ) ? self::$wpr_extension_options[ $key ] : $default;
@@ -106,6 +108,7 @@ class Plugin {
 		require WPR_ADDONS_PATH . 'includes/controls/wpr-ajax-select2/wpr-control-ajax-select2-api.php';
 		require WPR_ADDONS_PATH . 'includes/controls/wpr-control-animations.php';
 		require WPR_ADDONS_PATH . 'includes/controls/wpr-control-icons.php';
+		require WPR_ADDONS_PATH . 'includes/controls/wpr-select2.php';
 
 		// Templates Library
 		require WPR_ADDONS_PATH . 'admin/includes/wpr-templates-library.php';
@@ -157,6 +160,16 @@ class Plugin {
 		// Display Conditions (Visibility)
 		if ( 'on' === $this->wpr_get_extension_option( 'wpr-display-conditions' ) ) {
 			require WPR_ADDONS_PATH . 'extensions/wpr-display-conditions.php';
+		}
+
+		// Column Slider
+		// if ( 'on' === $this->wpr_get_extension_option( 'wpr-column-slider' ) ) {
+		// 	require WPR_ADDONS_PATH . 'extensions/wpr-column-slider.php';
+		// }
+
+		// Equal Height
+		if ( 'on' === get_option('wpr-equal-height', 'on') ) {
+			require WPR_ADDONS_PATH . 'extensions/wpr-equal-height.php';
 		}
 
 		// Mega Menu
@@ -318,6 +331,7 @@ class Plugin {
 
 		$controls_manager = \Elementor\Plugin::$instance->controls_manager;
 		$controls_manager->register( new WPR_Control_Ajax_Select2() );
+		$controls_manager->register( new WPR_Select2() );
 		$controls_manager->register( new WPR_Control_Animations() );
 		$controls_manager->register( new WPR_Control_Animations_Alt() );
 		$controls_manager->register( new WPR_Control_Button_Animations() );
@@ -593,21 +607,12 @@ class Plugin {
 
 	public function enqueue_scripts() {
 
-		// Register DOMPurify
-		wp_enqueue_script(
-			'dompurify',
-			WPR_ADDONS_URL . 'assets/js/lib/dompurify/dompurify.min.js',
-			['jquery', 'elementor-frontend'],
-			'3.0.6',
-		);
-
 		wp_enqueue_script(
 			'wpr-addons-js',
 			WPR_ADDONS_URL . 'assets/js/frontend'. $this->script_suffix() .'.js',
 			[
 				'jquery',
 				'elementor-frontend',
-				'dompurify'
 			],
 			Plugin::instance()->get_version(),
 			true
@@ -658,6 +663,14 @@ class Plugin {
 	}	
 
 	public function register_scripts() {
+
+		// Register DOMPurify
+		wp_register_script(
+			'wpr-dompurify',
+			WPR_ADDONS_URL . 'assets/js/lib/dompurify/dompurify.min.js',
+			['jquery'],
+			'3.0.6',
+		);
 
 		wp_register_script(
 			'wpr-infinite-scroll',
@@ -807,6 +820,16 @@ class Plugin {
 			 WPR_ADDONS_URL .'assets/js/lib/perfect-scrollbar/perfect-scrollbar.min.js', 
 			 [ 'jquery' ], 
 			 '0.4.9' 
+		);
+
+		wp_register_script(
+			'wpr-universal-tilt',
+			WPR_ADDONS_URL . 'assets/js/lib/universal-tilt/universal-tilt'. $this->script_suffix() .'.js',
+			[
+				'jquery',
+			],
+			'6.0.3',
+			true
 		);
 	}
 

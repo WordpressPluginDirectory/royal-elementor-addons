@@ -29,7 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
 
 	public function get_dependent_terms() {
-		// check_ajax_referer('wpr_addons_elementor', 'nonce');
 
 		if ( empty($_POST['taxonomy']) || empty($_POST['parent_term']) ) {
 			wp_send_json_error('Missing data');
@@ -807,6 +806,78 @@ if ( ! defined( 'ABSPATH' ) ) {
 		return $class;
 	}
 
+	/**
+	 * URL used for grid featured image overlay and title links (and any other post-level links using this helper).
+	 *
+	 * @param array    $settings Widget settings.
+	 * @param int|null $post_id  Post ID; defaults to the current post in the loop.
+	 * @return string Unescaped URL string suitable for esc_url() / esc_attr() when outputting.
+	 */
+	public static function get_grid_item_link_url( $settings, $post_id = null ) {
+		if ( null === $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		if ( ! is_array( $settings ) ) {
+			$settings = [];
+		}
+
+		$permalink = get_permalink( $post_id );
+
+		if ( empty( $settings['post_link_source'] ) || 'post' === $settings['post_link_source'] ) {
+			return $permalink;
+		}
+
+		if ( 'custom_field' !== $settings['post_link_source'] ) {
+			return $permalink;
+		}
+
+		$key = isset( $settings['post_link_custom_field_key'] ) ? trim( (string) $settings['post_link_custom_field_key'] ) : '';
+		if ( '' === $key ) {
+			return $permalink;
+		}
+
+		$raw_value = '';
+
+		if ( function_exists( 'get_field' ) ) {
+			$acf_val = get_field( $key, $post_id, false );
+			if ( null !== $acf_val && '' !== $acf_val && false !== $acf_val ) {
+				if ( is_array( $acf_val ) && isset( $acf_val['url'] ) ) {
+					$raw_value = $acf_val['url'];
+				} elseif ( is_string( $acf_val ) ) {
+					$raw_value = $acf_val;
+				}
+			}
+		}
+
+		if ( '' === $raw_value ) {
+			$meta = get_post_meta( $post_id, $key, true );
+			if ( is_array( $meta ) && isset( $meta['url'] ) ) {
+				$raw_value = $meta['url'];
+			} elseif ( is_string( $meta ) ) {
+				$raw_value = $meta;
+			}
+		}
+
+		$raw_value = trim( (string) $raw_value );
+
+		if ( '' === $raw_value ) {
+			return $permalink;
+		}
+
+		if ( preg_match( '#^/#', $raw_value ) && ! preg_match( '#^//#', $raw_value ) ) {
+			$raw_value = home_url( $raw_value );
+		}
+
+		$url = esc_url_raw( $raw_value );
+
+		if ( '' === $url ) {
+			return $permalink;
+		}
+
+		return $url;
+	}
+
 	// Render Password Protected Input
 	public static function render_password_protected_input( $settings ) {
 		if ( ! post_password_required() ) {
@@ -878,7 +949,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	// Render Media Overlay
 	public static function render_media_overlay( $settings ) {
-		echo '<div class="wpr-grid-media-hover-bg '. esc_attr(WPR_Grid_Helpers::get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_attr( get_the_permalink( get_the_ID() ) ) .'">'; // changed esc_url to esc_attr (why?)
+		$item_url = self::get_grid_item_link_url( $settings );
+		echo '<div class="wpr-grid-media-hover-bg '. esc_attr(WPR_Grid_Helpers::get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_attr( $item_url ) .'">'; // changed esc_url to esc_attr (why?)
 
 			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 				if ( '' !== $settings['overlay_image']['url'] ) {
@@ -904,7 +976,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		echo '<'. esc_attr($element_title_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				echo '<a target="'. $open_links_in_new_tab .'" '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
+				$title_link_url = is_array( $general_settings ) ? self::get_grid_item_link_url( $general_settings ) : get_the_permalink();
+				echo '<a target="'. $open_links_in_new_tab .'" '. $pointer_item_class .' href="'. esc_url( $title_link_url ) .'">';
 					if ( 'word_count' === $settings['element_trim_text_by'] ) {
 						echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
 					} else {

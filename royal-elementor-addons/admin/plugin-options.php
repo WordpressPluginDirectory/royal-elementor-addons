@@ -120,6 +120,8 @@ function wpr_register_addons_settings() {
     register_setting('wpr-extension-settings', 'wpr-parallax-multi-layer');
     register_setting('wpr-extension-settings', 'wpr-custom-css');
     register_setting('wpr-extension-settings', 'wpr-display-conditions');
+    register_setting('wpr-extension-settings', 'wpr-equal-height');
+    // register_setting('wpr-extension-settings', 'wpr-column-slider');
     register_setting('wpr-extension-settings', 'wpr-sticky-section');
 
     // Element Toggle
@@ -1630,6 +1632,12 @@ function wpr_addons_settings_page() {
                         echo '<br><span>Tip: Edit any Section > Navigate to Advanced tab</span>';
                     } elseif ( 'wpr-display-conditions' === $option_name ) {
                         echo '<br><span>Tip: Edit any Element > Navigate to Visibility tab</span>';
+                    } elseif ( 'wpr-column-slider' === $option_name ) {
+                        echo '<br><span>Tip: Edit any Section > Navigate to Advanced tab</span>';
+                        // echo '<a href="https://www.youtube.com" target="_blank">Watch Video Tutorial</a>';
+                    } elseif ( 'wpr-equal-height' === $option_name ) {
+                        echo '<br><span>Tip: Edit any Section > Navigate to Advanced tab</span>';
+                        // echo '<a href="https://www.youtube.com" target="_blank">Watch Video Tutorial</a>';
                     }
 
                     // echo '<a href="https://royal-elementor-addons.com/elementor-particle-effects/?ref=rea-plugin-backend-extentions-prev">'. esc_html('View Extension Demo', 'wpr-addons') .'</a>';

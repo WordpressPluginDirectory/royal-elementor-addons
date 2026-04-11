@@ -13,7 +13,7 @@ class WPR_DC_Section_General_Settings extends WPR_DC_Section_Base {
 	}
 
 	public function get_label() {
-		return esc_html__( 'Visibility', 'wpr-addons' );
+		return sprintf(esc_html__('Visibility - %s', 'wpr-addons'), esc_html('RA'));
 	}
 
 	public function get_order() {

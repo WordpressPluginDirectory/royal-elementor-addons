@@ -44,7 +44,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 	}
 
 	public function get_script_depends() {
-		return [ 'swiper', 'wpr-isotope', 'wpr-lightgallery' ];
+		return [ 'wpr-dompurify', 'swiper', 'wpr-isotope', 'wpr-lightgallery' ];
 	}
 
 	public function get_style_depends() {
@@ -4883,7 +4883,8 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 		if ( get_transient($key) === false || empty(get_transient($key)) || ($settings['instagram_access_token'] !== get_option('wpr_instagram_access_token_to_compare'. $this->get_ID())) ) {
 
-			$limit = !empty($settings['limit']) ? $settings['limit'] : 10;
+			$limit = ! empty( $settings['limit'] ) ? absint( $settings['limit'] ) : 10;
+			$access_token = rawurlencode( (string) $access_token );
 
 			$url = 'https://graph.instagram.com/me/media?fields=id,media_type,media_url,thumbnail_url,permalink,children,username,caption,timestamp&access_token='. $access_token .'&limit='. $limit;
 
@@ -4946,11 +4947,12 @@ class Wpr_Instagram_Feed extends Widget_Base {
 	}
 
 	public function refresh_access_token($access_token) {
+		$access_token = rawurlencode( (string) $access_token );
 		$url = 'https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token='.$access_token.'';
 		$response = wp_remote_get($url);
 		if(!isset($body)) {
 			$body = json_decode($response['body']);
-			if ($body->error) {
+			if ($body && $body->error) {
 				$this->reauthorization_needed = true;
 			} else {
 				set_transient('wpr_instagram_access_token'. $this->get_ID(), $body->access_token, $body->expires_in);
@@ -5010,7 +5012,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 		$target = 'yes' == $this->get_settings()['open_in_new_tab'] ? '_blank' : '_self';
 
 
-		echo '<div class="wpr-insta-feed-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_attr( $result->permalink ) .'" data-target="'. $target .'">';
+		echo '<div class="wpr-insta-feed-media-hover-bg '. esc_attr($this->get_animation_class( $settings, 'overlay' )) .'" data-url="'. esc_url( $result->permalink ) .'" data-target="'. esc_attr( $target ) .'">';
 
 		echo '</div>';
 	}
@@ -5025,7 +5027,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 		echo '<'. esc_attr($element_username_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				echo '<a href="'. $result->permalink .'" target="'. $target .'">';
+				echo '<a href="'. esc_url( $result->permalink ) .'" target="'. esc_attr( $target ) .'">';
 					echo esc_html($result->username);
 				echo '</a>';
 			echo '</div>';
@@ -5044,7 +5046,8 @@ class Wpr_Instagram_Feed extends Widget_Base {
 			if ( 'word_count' === $settings['element_trim_text_by'] ) {
 				echo esc_html(wp_trim_words($result->caption, $settings['element_word_count']));
 			} else {
-				echo substr(html_entity_decode($result->caption), 0, $settings['element_letter_count']) .'...';
+				$caption = html_entity_decode( wp_strip_all_tags( (string) $result->caption ), ENT_QUOTES, get_bloginfo( 'charset' ) );
+				echo esc_html( wp_html_excerpt( $caption, absint( $settings['element_letter_count'] ), '...' ) );
 			}
 			echo '</p></figcaption>';
 			echo '</div>';
@@ -5091,7 +5094,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-			   echo '<a href='. $result->permalink .' target='. $target .'>';
+			   echo '<a href="'. esc_url( $result->permalink ) .'" target="'. esc_attr( $target ) .'">';
 				echo '<i class="fab fa-instagram"></i>';
 			   echo '</a>';
 			echo '</div>';
@@ -5394,7 +5397,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 			'iframeMaxWidth' => '60%',
 			'hash' => false,
 			'autoplay' => $settings['lightbox_popup_autoplay'],
-			'pause' => $settings['lightbox_popup_pause'] * 1000,
+			'pause' => absint( ( floatval( $settings['lightbox_popup_pause'] ?: 1 ) ) * 1000 ),
 			'progressBar' => $settings['lightbox_popup_progressbar'],
 			'counter' => $settings['lightbox_popup_counter'],
 			'controls' => $settings['lightbox_popup_arrows'],
@@ -5408,7 +5411,6 @@ class Wpr_Instagram_Feed extends Widget_Base {
 		];
 
 		$instagram_settings['insta_load_more_settings'] = [
-			'instagram_access_token' => $settings['instagram_access_token'],
 			'limit' => (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $settings['limit'] > 6 ? 6 : $settings['limit'],
 			'limit_mobile' => (!defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()) && $settings['limit_mobile'] > 6 ? 6 : $settings['limit_mobile'],
 			'is_mobile' => wp_is_mobile() ? 'mobile' : 'other',
@@ -5546,7 +5548,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 							\Elementor\Icons_Manager::render_icon( $settings['instagram_follow_icon'], [ 'aria-hidden' => 'true' ] ); 
 						}
 					?>
-					<?php echo $settings['instagram_follow_text'] ?>
+					<?php echo esc_html__($settings['instagram_follow_text']) ?>
 				</a>
 			</div>
 		<?php endif; ?>
@@ -5590,12 +5592,12 @@ class Wpr_Instagram_Feed extends Widget_Base {
 							?>
 							<div class="wpr-insta-feed-media-wrap <?php echo esc_attr($this->get_image_effect_class( $settings )) ?>" data-overlay-link="<?php echo esc_attr( $settings['overlay_post_link'] ) ?>">
 							<?php if ( 'CAROUSEL_ALBUM' == $result->media_type || 'IMAGE' == $result->media_type ) : ?>
-								<div class="wpr-insta-feed-image-wrap" data-src=<?php echo $result->media_url ?>>
-									<img src=<?php echo $result->media_url  ?> alt="">
+								<div class="wpr-insta-feed-image-wrap" data-src="<?php echo esc_url( $result->media_url ); ?>">
+									<img src="<?php echo esc_url( $result->media_url ); ?>" alt="">
 								</div>
 							<?php elseif ($result->media_type == 'VIDEO') : ?>
-								<div class="wpr-insta-feed-image-wrap" data-src=<?php echo $result->thumbnail_url ?>>
-									<img class="wpr-insta-feed-thumb" src=<?php echo $result->thumbnail_url ?> alt="">
+								<div class="wpr-insta-feed-image-wrap" data-src="<?php echo esc_url( $result->thumbnail_url ); ?>">
+									<img class="wpr-insta-feed-thumb" src="<?php echo esc_url( $result->thumbnail_url ); ?>" alt="">
 								</div>
 							<?php endif ; ?>
 								<div class="wpr-insta-feed-media-hover wpr-animation-wrap">
@@ -5641,7 +5643,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 								\Elementor\Icons_Manager::render_icon( $settings['instagram_follow_icon'], [ 'aria-hidden' => 'true' ] ); 
 							}
 							?>
-							<?php echo $settings['instagram_follow_text'] ?>
+							<?php echo esc_html__($settings['instagram_follow_text']) ?>
 						</a>
 					</div>
 				<?php endif;

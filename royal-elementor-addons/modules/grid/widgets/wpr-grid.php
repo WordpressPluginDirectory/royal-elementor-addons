@@ -1365,6 +1365,35 @@ class Wpr_Grid extends Widget_Base {
 		);
 
 		$this->add_control_open_links_in_new_tab();
+
+		$this->add_control(
+			'post_link_source',
+			[
+				'label' => esc_html__( 'Image & Title Link', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'post',
+				'options' => [
+					'post' => esc_html__( 'Post URL', 'wpr-addons' ),
+					'custom_field' => esc_html__( 'Custom Field URL', 'wpr-addons' ),
+				],
+			]
+		);
+
+		$this->add_control(
+			'post_link_custom_field_key',
+			[
+				'label' => esc_html__( 'Link Field Key', 'wpr-addons' ),
+				'type' => Controls_Manager::TEXT,
+				'dynamic' => [
+					'active' => true,
+				],
+				'placeholder' => esc_html__( 'e.g. external_link', 'wpr-addons' ),
+				'description' => esc_html__( 'Meta key for a URL (plain or ACF URL/Link). If empty or invalid, the post URL is used.', 'wpr-addons' ),
+				'condition' => [
+					'post_link_source' => 'custom_field',
+				],
+			]
+		);
 		
 		$this->add_control_grid_lazy_loading();
 
@@ -8704,7 +8733,7 @@ class Wpr_Grid extends Widget_Base {
 			'iframeMaxWidth' => '60%',
 			'hash' => false,
 			'autoplay' => $settings['lightbox_popup_autoplay'],
-			'pause' => $settings['lightbox_popup_pause'] * 1000,
+			'pause' => absint( ( floatval( $settings['lightbox_popup_pause'] ?: 1 ) ) * 1000 ),
 			'progressBar' => $settings['lightbox_popup_progressbar'],
 			'counter' => $settings['lightbox_popup_counter'],
 			'controls' => $settings['lightbox_popup_arrows'],
@@ -8778,6 +8807,8 @@ class Wpr_Grid extends Widget_Base {
 				'image_effects_size' => isset($settings['image_effects_size']) ? $settings['image_effects_size'] : null,
 				'image_effects_direction' => isset($settings['image_effects_direction']) ? $settings['image_effects_direction'] : null,
 				'open_links_in_new_tab' => isset($settings['open_links_in_new_tab']) ? $settings['open_links_in_new_tab'] : null,
+				'post_link_source' => isset($settings['post_link_source']) ? $settings['post_link_source'] : null,
+				'post_link_custom_field_key' => isset($settings['post_link_custom_field_key']) ? $settings['post_link_custom_field_key'] : null,
 				'overlay_post_link' => isset($settings['overlay_post_link']) ? $settings['overlay_post_link'] : null,
 				'secondary_img_on_hover' => isset($settings['secondary_img_on_hover']) ? $settings['secondary_img_on_hover'] : null,
 				'grid_lazy_loading' => isset($settings['grid_lazy_loading']) ? $settings['grid_lazy_loading'] : null,
@@ -8840,11 +8871,11 @@ class Wpr_Grid extends Widget_Base {
 		$slider_options = [
 			'rtl' => $slider_is_rtl,
 			'infinite' => ( $settings['layout_slider_loop'] === 'yes' ),
-			'speed' => absint( $settings['layout_slider_effect_duration'] * 1000 ),
+			'speed' => absint( ( floatval( $settings['layout_slider_effect_duration'] ?: 1 ) ) * 1000 ),
 			'arrows' => true,
 			'dots' => true,
 			'autoplay' => ( $settings['layout_slider_autoplay'] === 'yes' ),
-			'autoplaySpeed' => absint( $settings['layout_slider_autoplay_duration'] * 1000 ),
+			'autoplaySpeed' => absint( ( floatval( $settings['layout_slider_autoplay_duration'] ?: 1 ) ) * 1000 ),
 			'pauseOnHover' => $settings['layout_slider_pause_on_hover'],
 			'prevArrow' => '#wpr-grid-slider-prev-'. $this->get_id(),
 			'nextArrow' => '#wpr-grid-slider-next-'. $this->get_id(),
@@ -8863,7 +8894,7 @@ class Wpr_Grid extends Widget_Base {
 			'iframeMaxWidth' => '60%',
 			'hash' => false,
 			'autoplay' => $settings['lightbox_popup_autoplay'],
-			'pause' => $settings['lightbox_popup_pause'] * 1000,
+			'pause' => absint( ( floatval( $settings['lightbox_popup_pause'] ?: 1 ) ) * 1000 ),
 			'progressBar' => $settings['lightbox_popup_progressbar'],
 			'counter' => $settings['lightbox_popup_counter'],
 			'controls' => $settings['lightbox_popup_arrows'],

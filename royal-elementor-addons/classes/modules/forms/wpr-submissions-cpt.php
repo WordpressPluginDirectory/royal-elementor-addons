@@ -64,11 +64,19 @@ if ( ! defined( 'ABSPATH' ) ) {
         update_post_meta($post_id, 'wpr_form_page_id', $sanitized_form_page_id);
         update_post_meta($post_id, 'wpr_user_agent', sanitize_textarea_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ));
         update_post_meta($post_id, 'wpr_user_ip', Utilities::get_client_ip());
+
+        // One-time secret for updating submission action meta (see WPR_Actions_Status); not guessable per post_id.
+        $submission_action_secret = '';
+        if ( $post_id ) {
+            $submission_action_secret = bin2hex( random_bytes( 32 ) );
+            update_post_meta( $post_id, '_wpr_submission_action_secret', $submission_action_secret );
+        }
         
         if( $post_id ) {
             wp_send_json_success(array(
                 'action' => 'wpr_form_builder_submissions',
                 'post_id' => $post_id,
+                'submission_secret' => $submission_action_secret,
                 'message' => esc_html__('Submission created successfully', 'wpr-addons'),
 				'status' => 'success',
                 'content' => $_POST['form_content']
@@ -101,6 +109,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                 '_elementor_data',
                 '_elementor_controls_usage',
                 '_wp_attached_file',
+                '_wpr_submission_action_secret',
                 // Add more if needed
             ];
     

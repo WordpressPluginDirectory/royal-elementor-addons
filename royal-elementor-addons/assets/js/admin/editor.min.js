@@ -58,7 +58,7 @@
 					if ( searchVal.includes('par') && $('.wpr-elementor-search-notice').length < 1 ) {
 						$('#elementor-panel-elements-wrapper').prepend('\
 							<div class="wpr-elementor-search-notice">\
-							<strong>Parallax Background</strong> is only available for the Container (Section) elements. <strong>Edit any container (section)</strong> > <strong>"Styles"</strong> tab > <strong>"Parallax - Royal Addons"</strong>.\
+							<strong>Parallax Background</strong> is only available for the Container (Section) elements. <strong>Edit any container (section)</strong> > <strong>"Styles"</strong> tab > <strong>"Parallax - RA"</strong>.\
 							</div>\
 						');
 					}
@@ -66,7 +66,7 @@
 					if ( searchVal.includes('stic') && $('.wpr-elementor-search-notice').length < 1 ) {
 						$('#elementor-panel-elements-wrapper').prepend('\
 							<div class="wpr-elementor-search-notice">\
-							<strong>Sticky Section</strong> is only available for the Container (Section) elements. <strong>Edit any container (section)</strong> > <strong>"Advanced"</strong> tab > <strong>"Sticky Section - Royal Addons"</strong>.\
+							<strong>Sticky Section</strong> is only available for the Container (Section) elements. <strong>Edit any container (section)</strong> > <strong>"Advanced"</strong> tab > <strong>"Sticky Section - RA"</strong>.\
 							</div>\
 						');
 					}
@@ -812,6 +812,55 @@
 			preview.closest('body').find('#wpr-library-btn').trigger('click');
 		});
 	}
+
+		// Try adding control options
+	var selectOptions = elementor.modules.controls.Select2.extend({
+
+		onBeforeRender: function () {
+
+			if (this.container && ("section" === this.container.type || "container" === this.container.type)) {
+				var widgetObj = elementor.widgetsCache || elementor.config.widgets,
+					optionsToUpdate = {};
+
+				var _this = this;
+				this.container.children.forEach(function (child) {
+
+					if ("container" === _this.container.type) {
+
+						if (child.view.$childViewContainer) {
+							getSiblingWidgets(child);
+						} else {
+							//Get Flex Container widgets when no columns are added.
+							var name = child.view.$el.data("widget_type").split('.')[0];
+
+							if ('undefined' !== typeof widgetObj[name]) {
+								optionsToUpdate[".elementor-widget-" + widgetObj[name].widget_type + " .elementor-widget-container"] = widgetObj[name].title;
+							}
+						}
+
+					} else if ("section" === _this.container.type) {
+						getSiblingWidgets(child);
+					}
+
+				});
+
+				function getSiblingWidgets(child) {
+					child.view.$childViewContainer.children("[data-widget_type]").each(function (index, widget) {
+						var name = $(widget).data("widget_type").split('.')[0];
+
+						if ('undefined' !== typeof widgetObj[name]) {
+							optionsToUpdate[".elementor-widget-" + widgetObj[name].widget_type + " .elementor-widget-container"] = widgetObj[name].title;
+						}
+					});
+
+				}
+
+				this.model.set("options", optionsToUpdate);
+			}
+		},
+	});
+
+	elementor.addControlView("wpr-select2", selectOptions);
 
 }( jQuery ) );
 

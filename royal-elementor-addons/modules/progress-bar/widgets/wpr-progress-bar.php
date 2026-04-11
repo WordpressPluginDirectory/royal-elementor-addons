@@ -1321,8 +1321,8 @@ class Wpr_Progress_Bar extends Widget_Base {
 			'counterValue' => $settings['counter_value'],
 			'counterValuePersent' => $prbar_counter_persent,
 			'counterSeparator' => $settings['counter_separator'],
-			'animDuration' => ( $settings['anim_duration'] * 1000 ),
-			'animDelay' => ( $settings['anim_delay'] * 1000 ),
+			'animDuration' => ( floatval( $settings['anim_duration'] ?: 1 ) * 1000 ),
+			'animDelay' => ( floatval( $settings['anim_delay'] ?: 1 ) * 1000 ),
 			'loop' => isset($settings['anim_loop']) ? $settings['anim_loop'] : '',
 			'loopDelay' => isset($settings['anim_loop_delay']) ? $settings['anim_loop_delay'] : '',
 		];

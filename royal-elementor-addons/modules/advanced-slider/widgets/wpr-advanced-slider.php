@@ -48,7 +48,7 @@ class Wpr_Advanced_Slider extends Widget_Base {
 	}
 	
 	public function get_script_depends() {
-		return [ 'imagesloaded', 'wpr-slick' ];
+		return [ 'wpr-dompurify', 'imagesloaded', 'wpr-slick' ];
 	}
 
 	public function get_style_depends() {

@@ -1,7 +1,7 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1056
+Stable tag: 1.7.1057
 Requires at least: 5.0
 Tested up to: 6.9.4
 Requires PHP: 5.6
@@ -485,6 +485,19 @@ post_max_size 64M
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/royal-elementor-addons)
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1057 - 2026-04-03 =
+* FIXED: Minor Issues
+* ADDED: Elementor Template Kit: Real Estate V5 - [**Real Estate V5**](https://demosites.royal-elementor-addons.com/realestate-v5/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Fitness Coach V1 - [**Fitness Coach V1**](https://demosites.royal-elementor-addons.com/fitness-coach-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Coffee Shop V1 - [**Coffee Shop V1**](https://demosites.royal-elementor-addons.com/coffee-shop-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Plumber V2 - [**Plumber V2**](https://demosites.royal-elementor-addons.com/plumbing-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Video Playlist Widget
+* ADDED: Elementor Icon Box Widget
+* ADDED: Elementor Separator Widget
+* ADDED: Equal Height Extension
+* FIXED: REA Widgets Compatibility with Elementor Tabs Widget
+* FIXED: Instagram Minor Vulnerebilities
+
 = Royal Elementor Addons v1.7.1056 - 2026-04-03 =
 * FIXED: Minor Issues
 

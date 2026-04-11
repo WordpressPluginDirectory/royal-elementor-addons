@@ -2108,9 +2108,9 @@ class Wpr_Content_Ticker extends Widget_Base {
 		$slider_options = [
 			'rtl' => $slider_is_rtl,
 			'infinite' => ( $settings['slider_loop'] === 'yes' ),
-			'speed' => absint( $settings['slider_effect_duration'] * 1000 ),
+			'speed' => absint( ( floatval( $settings['slider_effect_duration'] ?: 1 ) ) * 1000 ),
 			'autoplay' => ( $settings['slider_autoplay'] === 'yes' ),
-			'autoplaySpeed' => absint( $settings['slider_autoplay_duration'] * 1000 ),
+			'autoplaySpeed' => absint( ( floatval( $settings['slider_autoplay_duration'] ?: 1 ) ) * 1000 ),
 			'pauseOnHover' => $settings['slider_pause_on_hover'],
 			'arrows' => false,
 		];

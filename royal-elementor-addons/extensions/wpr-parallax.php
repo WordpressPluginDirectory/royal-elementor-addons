@@ -27,12 +27,34 @@ class Wpr_Parallax_Scroll {
         add_action( 'elementor/container/print_template', [ $this, '_print_template' ], 10, 2 );
     }
 
+    private static function has_active_pro_license() {
+        if ( ! defined( 'WPR_ADDONS_PRO_VERSION' ) || ! function_exists( 'wpr_fs' ) ) {
+            return false;
+        }
+
+        $wpr_fs = wpr_fs();
+
+        return is_object( $wpr_fs ) && method_exists( $wpr_fs, 'can_use_premium_code' ) && $wpr_fs->can_use_premium_code();
+    }
+
+    private static function maybe_add_pro_control( $method, $element ) {
+        $pro_class = '\WprAddonsPro\Extensions\Wpr_Parallax_Scroll_Pro';
+
+        if ( ! self::has_active_pro_license() || ! class_exists( $pro_class ) || ! is_callable( [ $pro_class, $method ] ) ) {
+            return false;
+        }
+
+        call_user_func( [ $pro_class, $method ], $element );
+
+        return true;
+    }
+
     public function register_controls( $element ) {
         $element->start_controls_section(
             'wpr_section_parallax',
             [
                 'tab' => Controls_Manager::TAB_STYLE,
-                'label' =>  sprintf(esc_html__('Parallax - %s', 'wpr-addons'), Utilities::get_plugin_name()),
+                'label' =>  sprintf(esc_html__('Parallax - %s', 'wpr-addons'), esc_html('RA')),
             ]
         );
 
@@ -103,9 +125,7 @@ class Wpr_Parallax_Scroll {
             ]
         );
 
-        if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
-            \WprAddonsPro\Extensions\Wpr_Parallax_Scroll_Pro::add_control_scroll_effect($element);
-        } else {
+        if ( ! self::maybe_add_pro_control( 'add_control_scroll_effect', $element ) ) {
             $element->add_control(
                 'scroll_effect',
                 [
@@ -147,6 +167,20 @@ class Wpr_Parallax_Scroll {
                 ]
             ]
         );
+
+        if ( ! self::maybe_add_pro_control( 'add_control_bg_image_mobile', $element ) ) {
+            $element->add_control(
+                'bg_image_mobile',
+                [
+                    'label' => __( 'Choose Mobile Image (Pro)', 'wpr-addons' ),
+                    'type' => Controls_Manager::MEDIA,
+                    'classes' => 'wpr-pro-control',
+                    'condition' => [
+                        'wpr_enable_jarallax' => 'yes'
+                    ]
+                ]
+            );
+        }
 
         } // end if ( 'on' === get_option('wpr-parallax-background', 'on') ) {
 
@@ -344,7 +378,7 @@ class Wpr_Parallax_Scroll {
             ]
         );
 
-        if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
+        if ( ! self::has_active_pro_license() ) {
             $element->add_control(
                 'paralax_repeater_pro_notice',
                 [
@@ -379,6 +413,7 @@ class Wpr_Parallax_Scroll {
                     'class' => 'wpr-jarallax',
                     'speed-data' => $settings['speed'],
                     'bg-image' => $settings['bg_image']['url'],
+                    'bg-image-mobile' => isset($settings['bg_image_mobile']['url']) ? $settings['bg_image_mobile']['url'] : '',
                     'scroll-effect' => $settings['scroll_effect'],
                 ] );
 
@@ -396,7 +431,7 @@ class Wpr_Parallax_Scroll {
                     echo '<div class="wpr-parallax-multi-layer" scalar-speed="'. esc_attr($settings['scalar_speed']['size']) .'" direction="'. esc_attr($settings['invert_direction']) .'" style="overflow: hidden;">';
 
                     foreach (  $settings['hover_parallax'] as $key => $item ) {
-                        if ( $key < 2 || defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
+                        if ( $key < 2 || self::has_active_pro_license() ) {
                             echo '<div data-depth="'. esc_attr($item['data_depth']) .'" style-top="'. esc_attr($item['layer_position_vr']['size']) .'%" style-left="'. esc_attr($item['layer_position_hr']['size']) .'%" class="wpr-parallax-ml-children elementor-repeater-item-'. esc_attr($item['_id']) .'">';
                                 echo '<img src="'. esc_url($item['repeater_bg_image']['url']) .'">';
                             echo '</div>';
@@ -414,11 +449,11 @@ class Wpr_Parallax_Scroll {
         ob_start();
         
         if ( 'on' === get_option('wpr-parallax-background', 'on') ) {
-            echo '<div class="wpr-jarallax" speed-data-editor="{{settings.speed}}" scroll-effect-editor="{{settings.scroll_effect}}" bg-image-editor="{{settings.bg_image.url}}"></div>';
+            echo '<div class="wpr-jarallax" speed-data-editor="{{settings.speed}}" scroll-effect-editor="{{settings.scroll_effect}}" bg-image-editor="{{settings.bg_image.url}}" bg-image-mobile-editor="{{ settings.bg_image_mobile && settings.bg_image_mobile.url ? settings.bg_image_mobile.url : \'\' }}"></div>';
         }
         // Multi Layer
         if ( 'on' === get_option('wpr-parallax-multi-layer', 'on') ) {
-            if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
+            if ( ! self::has_active_pro_license() ) {
                 ?>
                 <# if ( settings.hover_parallax.length && settings.wpr_enable_parallax_hover == 'yes') { #>
                     <div class="wpr-parallax-multi-layer" direction="{{settings.invert_direction}}" scalar-speed="{{settings.scalar_speed.size}}" data-relative-input="true" style="overflow: hidden;">
