@@ -15,6 +15,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Wpr_Page_List extends Widget_Base {
+
+	/**
+	 * Resolve translated post ID for current language when available.
+	 *
+	 * @param int|string $post_id Original post ID.
+	 * @return int
+	 */
+	private function wpr_get_translated_post_id( $post_id ) {
+		$post_id = (int) $post_id;
+
+		if ( ! $post_id ) {
+			return 0;
+		}
+
+		// Polylang support.
+		if ( function_exists( 'pll_get_post' ) ) {
+			$translated_post_id = (int) pll_get_post( $post_id );
+			return $translated_post_id ?: $post_id;
+		}
+
+		// WPML support.
+		if ( has_filter( 'wpml_object_id' ) ) {
+			$post_type = get_post_type( $post_id );
+
+			if ( $post_type ) {
+				$translated_post_id = (int) apply_filters( 'wpml_object_id', $post_id, $post_type, true );
+				return $translated_post_id ?: $post_id;
+			}
+		}
+
+		return $post_id;
+	}
 	
 	public function get_name() {
 		return 'wpr-page-list';
@@ -39,6 +71,16 @@ class Wpr_Page_List extends Widget_Base {
 	public function has_widget_inner_wrapper(): bool {
 		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
 	}
+
+	public function get_style_depends() {
+		return [ 'wpr-link-animations-css' ];
+	}
+
+    public function get_custom_help_url() {
+    	if ( empty(get_option('wpr_wl_plugin_links')) )
+        // return 'https://royal-elementor-addons.com/contact/?ref=rea-plugin-panel-dual-button-help-btn';
+    		return 'https://wordpress.org/support/plugin/royal-elementor-addons/';
+    }
 
 	public function add_control_title_pointer_color_hr() {}
 
@@ -920,7 +962,16 @@ class Wpr_Page_List extends Widget_Base {
                     }
 
                     if ( 'dynamic' === $item['page_list_item_type'] && isset($item['query_page_selection']) ) {
-                        $wrapper_link = 'yes' === $settings['enable_wrapper_link'] ? get_the_permalink($item['query_page_selection']) : '';
+						$page_id = $this->wpr_get_translated_post_id( $item['query_page_selection'] );
+
+						if ( ! $page_id ) {
+							continue;
+						}
+
+						$page_permalink = get_the_permalink( $page_id );
+						$page_title = get_the_title( $page_id );
+
+                        $wrapper_link = 'yes' === $settings['enable_wrapper_link'] ? $page_permalink : '';
                         
                         if ($wrapper_link) {
                             $this->add_link_attributes( 'wrapper_link'. $key, [
@@ -940,11 +991,11 @@ class Wpr_Page_List extends Widget_Base {
 						echo '<div>';
 						if ($wrapper_link) {
 							echo '<span  class="'. $pointer_item_class .'">';
-								echo get_the_title($item['query_page_selection']);
+								echo esc_html( $page_title );
 							echo '</span>';
 						} else {
-							echo '<a class="'. $pointer_item_class .'" href='. get_the_permalink($item['query_page_selection']) .' target='. $target .'>';
-								echo get_the_title($item['query_page_selection']);
+							echo '<a class="'. $pointer_item_class .'" href="'. esc_url( $page_permalink ) .'" target="'. esc_attr( $target ) .'">';
+								echo esc_html( $page_title );
 							echo '</a>';
 						}
 

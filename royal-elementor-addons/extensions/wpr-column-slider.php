@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class Wpr_Column_Slider {
+class Wpr_Column_Slider extends Wpr_Extensions_Base {
 	public function __construct() {
 		add_action( 'elementor/element/section/section_advanced/after_section_end', [ $this, 'register_controls' ], 10 );
 		add_action( 'elementor/section/print_template', array( $this, '_print_template' ), 10, 2 );
@@ -19,6 +19,135 @@ class Wpr_Column_Slider {
 		add_action( 'elementor/container/print_template', array( $this, '_print_template' ), 10, 2 );
 		add_action( 'elementor/frontend/container/before_render', array( $this, '_before_render' ), 10, 1 );
 
+	}
+
+	private function get_slides_to_show_value( $value, $fallback = 1 ) {
+		$value = absint( $value );
+		$fallback = max( 1, absint( $fallback ) );
+
+		if ( $value < 1 ) {
+			$value = $fallback;
+		}
+
+		if ( ! $this->has_active_pro_license() ) {
+			$value = min( $value, 2 );
+		}
+
+		return $value;
+	}
+
+	private function get_slides_to_scroll_value( $value, $fallback = 1 ) {
+		$value = absint( $value );
+		$fallback = max( 1, absint( $fallback ) );
+
+		if ( $value < 1 ) {
+			$value = $fallback;
+		}
+
+		if ( ! $this->has_active_pro_license() ) {
+			$value = min( $value, 2 );
+		}
+
+		return $value;
+	}
+
+	private function add_control_slides_to_show( $element ) {
+		if ( ! $this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Column_Slider_Pro', 'add_control_slides_to_show', [ $element ] ) ) {
+			$element->add_responsive_control(
+				'wpr_column_slider_slides_to_show',
+				[
+					'label' => esc_html__( 'Slides To Show', 'wpr-addons' ),
+					'description' => esc_html__( 'Number of slides visible at once. Free supports up to 2 slides per view.', 'wpr-addons' ),
+					'type' => Controls_Manager::NUMBER,
+					'default' => 1,
+					'min' => 1,
+					'max' => 2,
+					'condition' => [
+						'wpr_enable_column_slider' => 'yes',
+					],
+				]
+			);
+
+			$element->add_control(
+				'wpr_column_slider_slides_to_show_pro_notice',
+				[
+					'type' => Controls_Manager::RAW_HTML,
+					'raw' => 'More than 2 slides per view are available<br> in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-panel-column-slider-upgrade-pro#purchasepro" target="_blank">Pro version</a></strong>',
+					'content_classes' => 'wpr-pro-notice',
+					'condition' => [
+						'wpr_enable_column_slider' => 'yes',
+					],
+				]
+			);
+		}
+	}
+
+	private function add_control_autoplay( $element ) {
+		if ( ! $this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Column_Slider_Pro', 'add_control_autoplay', [ $element ] ) ) {
+			$element->add_control(
+				'wpr_enable_column_slider_autoplay',
+				[
+					'type' => Controls_Manager::SWITCHER,
+					'label' => sprintf( esc_html__( 'Autoplay %s', 'wpr-addons' ), '<i class="eicon-pro-icon"></i>' ),
+					'separator' => 'before',
+					'classes' => 'wpr-pro-control',
+					'condition' => [
+						'wpr_enable_column_slider' => 'yes',
+					],
+				]
+			);
+		}
+
+		$this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Column_Slider_Pro', 'add_control_autoplay_delay', [ $element ] );
+	}
+
+	private function add_control_slides_to_scroll( $element ) {
+		if ( ! $this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Column_Slider_Pro', 'add_control_slides_to_scroll', [ $element ] ) ) {
+			$element->add_control(
+				'wpr_column_slider_slides_to_scroll',
+				[
+					'label' => sprintf( esc_html__( 'Slides To Scroll %s', 'wpr-addons' ), '<i class="eicon-pro-icon"></i>' ),
+					'type' => Controls_Manager::NUMBER,
+					'default' => 1,
+					'min' => 1,
+					'max' => 2,
+					'classes' => 'wpr-pro-control',
+					'condition' => [
+						'wpr_enable_column_slider' => 'yes',
+					],
+				]
+			);
+		}
+	}
+
+	private function add_control_pagination_type( $element ) {
+		if ( ! $this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Column_Slider_Pro', 'add_control_pagination_type', [ $element ] ) ) {
+			$element->add_control(
+				'wpr_cs_pag_type',
+				[
+					'label' => esc_html__( 'Pagination Type', 'wpr-addons' ),
+					'type' => Controls_Manager::SELECT,
+					'default' => 'fraction',
+					'options' => [
+						'fraction' => esc_html__( 'Fraction', 'wpr-addons' ),
+						'pro-bullets' => esc_html__( 'Bullets (Pro)', 'wpr-addons' ),
+						'pro-progressbar' => esc_html__( 'Progressbar (Pro)', 'wpr-addons' ),
+					],
+					'condition' => [
+						'wpr_enable_column_slider' => 'yes',
+						'wpr_enable_cs_pag' => 'yes',
+					],
+				]
+			);
+
+			Utilities::upgrade_pro_notice(
+				$element,
+				Controls_Manager::RAW_HTML,
+				'column-slider',
+				'wpr_cs_pag_type',
+				[ 'pro-bullets', 'pro-progressbar' ]
+			);
+		}
 	}
     
     public function register_controls( $element ) {
@@ -53,19 +182,7 @@ class Wpr_Column_Slider {
 			]
 		);
 
-		$element->add_responsive_control(
-			'wpr_column_slider_slides_to_show',
-			[
-				'label' => esc_html__( 'Slides To Show', 'wpr-addons' ),
-				'description' => esc_html__( 'Number of slides visible at once. Set different values per breakpoint for responsive behavior.', 'wpr-addons' ),
-				'type' => Controls_Manager::NUMBER,
-				'default' => 1,
-				'min' => 1,
-				'condition' => [
-					'wpr_enable_column_slider' => 'yes',
-				]
-			]
-		);
+		$this->add_control_slides_to_show( $element );
 
 		$element->add_responsive_control(
 			'wpr_column_slider_space_between',
@@ -78,6 +195,8 @@ class Wpr_Column_Slider {
 				]
 			]
 		);
+
+		$this->add_control_slides_to_scroll( $element );
 
 		$element->add_control(
 			'wpr_column_slider_speed',
@@ -445,23 +564,7 @@ class Wpr_Column_Slider {
 			]
 		);
 
-		$element->add_control(
-			'wpr_cs_pag_type',
-			[
-				'label' => esc_html__( 'Pagination Type', 'wpr-addons' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'bullets',
-				'options' => [
-					'bullets' => esc_html__( 'Bullets', 'wpr-addons' ),
-					'fraction' => esc_html__( 'Fraction', 'wpr-addons' ),
-					'progressbar' => esc_html__( 'Progressbar', 'wpr-addons' ),
-				],
-				'condition' => [
-					'wpr_enable_column_slider' => 'yes',
-					'wpr_enable_cs_pag' => 'yes',
-				]
-			]
-		);
+		$this->add_control_pagination_type( $element );
 
 		$element->add_control(
 			'wpr_cs_pag_color',
@@ -619,31 +722,7 @@ class Wpr_Column_Slider {
 			]
 		);
 
-		$element->add_control (
-			'wpr_enable_column_slider_autoplay',
-			[
-				'type' => Controls_Manager::SWITCHER,
-				'label' => esc_html__( 'Autoplay', 'wpr-addons' ),
-				'render_type' => 'template',
-				'separator' => 'before',
-				'condition' => [
-					'wpr_enable_column_slider' => 'yes',
-				]
-			]
-		);
-
-		$element->add_control(
-			'wpr_column_slider_delay',
-			[
-				'label' => __( 'Delay', 'wpr-addons' ),
-				'type' => \Elementor\Controls_Manager::NUMBER,
-				'default' => 1000,
-				'condition' => [
-					'wpr_enable_column_slider' => 'yes',
-					'wpr_enable_column_slider_autoplay' => 'yes'
-				]
-			]
-		);
+		$this->add_control_autoplay( $element );
 
 		$element->add_control (
 			'wpr_enable_column_slider_loop',
@@ -679,15 +758,16 @@ class Wpr_Column_Slider {
 			$navigation = $settings['wpr_enable_cs_nav'];
 			$pagination = $settings['wpr_enable_cs_pag'];
 			$pagination_type = isset($settings['wpr_cs_pag_type']) ? $settings['wpr_cs_pag_type'] : '';
-			$autoplay = $settings['wpr_enable_column_slider_autoplay'];
+			$autoplay = isset( $settings['wpr_enable_column_slider_autoplay'] ) ? $settings['wpr_enable_column_slider_autoplay'] : '';
 			$loop = $settings['wpr_enable_column_slider_loop'];
-			$slides_to_show = $settings['wpr_column_slider_slides_to_show'];
-			$slides_to_show_widescreen = isset($settings['wpr_column_slider_slides_to_show_widescreen']) ? $settings['wpr_column_slider_slides_to_show_widescreen'] : $slides_to_show;
-			$slides_to_show_laptop = isset($settings['wpr_column_slider_slides_to_show_laptop']) ? $settings['wpr_column_slider_slides_to_show_laptop'] : $settings['wpr_column_slider_slides_to_show'];
-			$slides_to_show_tablet_extra = isset($settings['wpr_column_slider_slides_to_show_tablet_extra']) ? $settings['wpr_column_slider_slides_to_show_tablet_extra'] : $slides_to_show_laptop;
-			$slides_to_show_tablet = isset($settings['wpr_column_slider_slides_to_show_tablet']) ? $settings['wpr_column_slider_slides_to_show_tablet'] : $slides_to_show_tablet_extra;
-			$slides_to_show_mobile_extra = isset($settings['wpr_column_slider_slides_to_show_mobile_extra']) ? $settings['wpr_column_slider_slides_to_show_mobile_extra'] : $slides_to_show_tablet;
-			$slides_to_show_mobile = isset($settings['wpr_column_slider_slides_to_show_mobile']) ? $settings['wpr_column_slider_slides_to_show_mobile'] : $slides_to_show_mobile_extra;
+			$slides_to_show = $this->get_slides_to_show_value( $settings['wpr_column_slider_slides_to_show'] );
+			$slides_to_show_widescreen = $this->get_slides_to_show_value( isset( $settings['wpr_column_slider_slides_to_show_widescreen'] ) ? $settings['wpr_column_slider_slides_to_show_widescreen'] : $slides_to_show, $slides_to_show );
+			$slides_to_show_laptop = $this->get_slides_to_show_value( isset( $settings['wpr_column_slider_slides_to_show_laptop'] ) ? $settings['wpr_column_slider_slides_to_show_laptop'] : $slides_to_show, $slides_to_show );
+			$slides_to_show_tablet_extra = $this->get_slides_to_show_value( isset( $settings['wpr_column_slider_slides_to_show_tablet_extra'] ) ? $settings['wpr_column_slider_slides_to_show_tablet_extra'] : $slides_to_show_laptop, $slides_to_show_laptop );
+			$slides_to_show_tablet = $this->get_slides_to_show_value( isset( $settings['wpr_column_slider_slides_to_show_tablet'] ) ? $settings['wpr_column_slider_slides_to_show_tablet'] : $slides_to_show_tablet_extra, $slides_to_show_tablet_extra );
+			$slides_to_show_mobile_extra = $this->get_slides_to_show_value( isset( $settings['wpr_column_slider_slides_to_show_mobile_extra'] ) ? $settings['wpr_column_slider_slides_to_show_mobile_extra'] : $slides_to_show_tablet, $slides_to_show_tablet );
+			$slides_to_show_mobile = $this->get_slides_to_show_value( isset( $settings['wpr_column_slider_slides_to_show_mobile'] ) ? $settings['wpr_column_slider_slides_to_show_mobile'] : $slides_to_show_mobile_extra, $slides_to_show_mobile_extra );
+			$slides_to_scroll = $this->get_slides_to_scroll_value( isset( $settings['wpr_column_slider_slides_to_scroll'] ) ? $settings['wpr_column_slider_slides_to_scroll'] : 1 );
 			$space_between = $settings['wpr_column_slider_space_between'];
 			$space_between_widescreen = isset($settings['wpr_column_slider_space_between_widescreen']) ? $settings['wpr_column_slider_space_between_widescreen'] : $space_between;
 			$space_between_laptop = isset($settings['wpr_column_slider_space_between_laptop']) ? $settings['wpr_column_slider_space_between_laptop'] : $space_between;
@@ -698,7 +778,16 @@ class Wpr_Column_Slider {
 			$delay = isset($settings['wpr_column_slider_delay']) ? $settings['wpr_column_slider_delay'] : '';
 			$speed = $settings['wpr_column_slider_speed'];
 
-			$column_slider_settings = array(
+			if ( ! $this->has_active_pro_license() ) {
+				$autoplay = '';
+				$delay = '';
+
+				if ( in_array( $pagination_type, [ 'bullets', 'progressbar', 'pro-bullets', 'pro-progressbar' ], true ) ) {
+					$pagination_type = 'fraction';
+				}
+			}
+
+			$column_slider_settings = [
 				'wpr_cs_navigation' => $navigation,
 				'wpr_cs_pagination' => $pagination,
 				'wpr_cs_pagination_type' => $pagination_type,
@@ -711,6 +800,7 @@ class Wpr_Column_Slider {
 				'wpr_cs_slides_to_show_tablet' => $slides_to_show_tablet,
 				'wpr_cs_slides_to_show_mobile_extra' => $slides_to_show_mobile_extra,
 				'wpr_cs_slides_to_show_mobile' => $slides_to_show_mobile,
+				'wpr_cs_slides_to_scroll' => $slides_to_scroll,
 				'wpr_cs_space_between' => $space_between,
 				'wpr_cs_space_between_widescreen' => $space_between_widescreen,
 				'wpr_cs_space_between_laptop' => $space_between_laptop,
@@ -721,7 +811,7 @@ class Wpr_Column_Slider {
 				'wpr_cs_delay' => $delay,
 				'wpr_cs_speed' => $speed,
 				// 'enable_on'   => $settings['wpr_enable_equal_height_on'],
-			);
+			];
 
 			if ( 'yes' === $settings['wpr_enable_cs_nav'] ) {
 				echo '<div class="wpr-column-slider-navigation">';
@@ -743,20 +833,40 @@ class Wpr_Column_Slider {
 
 		?>
 		<# if( 'yes' === settings.wpr_enable_column_slider ) {
+			var hasProColumnSlider = <?php echo $this->has_active_pro_license() ? 'true' : 'false'; ?>;
+			var getSlidesToShowValue = function( value, fallback ) {
+				var parsedValue = parseInt( value, 10 );
+				var parsedFallback = parseInt( fallback, 10 );
+
+				if ( isNaN( parsedFallback ) || parsedFallback < 1 ) {
+					parsedFallback = 1;
+				}
+
+				if ( isNaN( parsedValue ) || parsedValue < 1 ) {
+					parsedValue = parsedFallback;
+				}
+
+				if ( ! hasProColumnSlider ) {
+					parsedValue = Math.min( parsedValue, 2 );
+				}
+
+				return parsedValue;
+			};
 
 			<!-- view.addRenderAttribute( 'wpr_column_slider', 'id', 'wpr-column-slider-' + view.getID() ); -->
 			var navigation = settings.wpr_enable_cs_nav;
 			var pagination = settings.wpr_enable_cs_pag;
 			var pagination_type = settings.wpr_cs_pag_type ? settings.wpr_cs_pag_type : '';
-			var autoplay = settings.wpr_enable_column_slider_autoplay;
+			var autoplay = hasProColumnSlider ? settings.wpr_enable_column_slider_autoplay : '';
 			var loop = settings.wpr_enable_column_slider_loop;
-			var slides_to_show = settings.wpr_column_slider_slides_to_show;
-			var slides_to_show_widescreen = settings.wpr_column_slider_slides_to_show_widescreen ? settings.wpr_column_slider_slides_to_show_widescreen : slides_to_show;
-			var slides_to_show_laptop = settings.wpr_column_slider_slides_to_show_laptop ? settings.wpr_column_slider_slides_to_show_laptop : slides_to_show;
-			var slides_to_show_tablet_extra = settings.wpr_column_slider_slides_to_show_tablet_extra ? settings.wpr_column_slider_slides_to_show_tablet_extra : slides_to_show_laptop;
-			var slides_to_show_tablet = settings.wpr_column_slider_slides_to_show_tablet ? settings.wpr_column_slider_slides_to_show_tablet : slides_to_show_tablet_extra;
-			var slides_to_show_mobile_extra = settings.wpr_column_slider_slides_to_show_mobile_extra ? settings.wpr_column_slider_slides_to_show_mobile_extra : slides_to_show_tablet ;
-			var slides_to_show_mobile = settings.wpr_column_slider_slides_to_show_mobile ? settings.wpr_column_slider_slides_to_show_mobile : slides_to_show_mobile_extra;
+			var slides_to_show = getSlidesToShowValue( settings.wpr_column_slider_slides_to_show, 1 );
+			var slides_to_show_widescreen = getSlidesToShowValue( settings.wpr_column_slider_slides_to_show_widescreen, slides_to_show );
+			var slides_to_show_laptop = getSlidesToShowValue( settings.wpr_column_slider_slides_to_show_laptop, slides_to_show );
+			var slides_to_show_tablet_extra = getSlidesToShowValue( settings.wpr_column_slider_slides_to_show_tablet_extra, slides_to_show_laptop );
+			var slides_to_show_tablet = getSlidesToShowValue( settings.wpr_column_slider_slides_to_show_tablet, slides_to_show_tablet_extra );
+			var slides_to_show_mobile_extra = getSlidesToShowValue( settings.wpr_column_slider_slides_to_show_mobile_extra, slides_to_show_tablet );
+			var slides_to_show_mobile = getSlidesToShowValue( settings.wpr_column_slider_slides_to_show_mobile, slides_to_show_mobile_extra );
+			var slides_to_scroll = getSlidesToShowValue( settings.wpr_column_slider_slides_to_scroll, 1 );
 			var space_between = settings.wpr_column_slider_space_between;
 			var space_between_widescreen = settings.wpr_column_slider_space_between_widescreen ? settings.wpr_column_slider_space_between_widescreen : space_between;
 			var space_between_laptop = settings.wpr_column_slider_space_between_laptop ? settings.wpr_column_slider_space_between_laptop : space_between;
@@ -764,8 +874,12 @@ class Wpr_Column_Slider {
 			var space_between_tablet = settings.wpr_column_slider_space_between_tablet ? settings.wpr_column_slider_space_between_tablet : space_between_tablet_extra;
 			var space_between_mobile_extra = settings.wpr_column_slider_space_between_mobile_extra ? settings.wpr_column_slider_space_between_mobile_extra : space_between_tablet;
 			var space_between_mobile = settings.wpr_column_slider_space_between_mobile ? settings.wpr_column_slider_space_between_mobile : space_between_mobile_extra;
-			var delay = settings.wpr_column_slider_delay ? settings.wpr_column_slider_delay : '';
+			var delay = hasProColumnSlider && settings.wpr_column_slider_delay ? settings.wpr_column_slider_delay : '';
 			var speed = settings.wpr_column_slider_speed;
+
+			if ( ! hasProColumnSlider && ( pagination_type === 'bullets' || pagination_type === 'progressbar' || pagination_type === 'pro-bullets' || pagination_type === 'pro-progressbar' ) ) {
+				pagination_type = 'fraction';
+			}
 
 				columnSliderSettings = {
 					'wpr_cs_navigation': navigation,
@@ -780,6 +894,7 @@ class Wpr_Column_Slider {
 					'wpr_cs_slides_to_show_tablet': slides_to_show_tablet,
 					'wpr_cs_slides_to_show_mobile_extra': slides_to_show_mobile_extra,
 					'wpr_cs_slides_to_show_mobile': slides_to_show_mobile,
+					'wpr_cs_slides_to_scroll': slides_to_scroll,
 					'wpr_cs_space_between': space_between,
 					'wpr_cs_space_between_widescreen': space_between_widescreen,
 					'wpr_cs_space_between_laptop': space_between_laptop,

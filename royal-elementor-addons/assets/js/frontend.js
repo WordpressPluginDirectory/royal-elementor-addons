@@ -85,8 +85,8 @@
 				window.elementorFrontend.hooks.addAction( 'frontend/element_ready/' + widget, callback );
 			});
 
-			// window.elementorFrontend.hooks.addAction( 'frontend/element_ready/section', WprElements.initColumnSlider );
-			// window.elementorFrontend.hooks.addAction( 'frontend/element_ready/container', WprElements.initColumnSlider );
+			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/section', WprElements.initColumnSlider );
+			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/container', WprElements.initColumnSlider );
 			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/section', WprElements.equalHeight );
 			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/container', WprElements.equalHeight );
 			window.elementorFrontend.hooks.addAction( 'frontend/element_ready/section', WprElements.widgetSection );
@@ -143,8 +143,23 @@
 				return;
 			}
 
-			$tabContent.find( '.elementor-element' ).each( function() {
+			var supportedTabWidgetTypes = {
+					'wpr-grid.default': true,
+					'wpr-magazine-grid.default': true,
+					'wpr-woo-grid.default': true,
+					'wpr-media-grid.default': true
+				},
+				hasGridTabWidgets = false;
+
+			$tabContent.find( '.elementor-element[data-widget_type]' ).each( function() {
 				var $element = $( this );
+				var widgetType = $element.attr( 'data-widget_type' );
+
+				if ( ! supportedTabWidgetTypes[ widgetType ] ) {
+					return;
+				}
+
+				hasGridTabWidgets = true;
 
 				if ( $element.attr( 'data-wpr-tab-ready' ) === 'yes' ) {
 					return;
@@ -153,6 +168,10 @@
 				window.elementorFrontend.elementsHandler.runReadyTrigger( $element );
 				$element.attr( 'data-wpr-tab-ready', 'yes' );
 			} );
+
+			if ( ! hasGridTabWidgets ) {
+				return;
+			}
 
 			setTimeout( function() {
 				$( window ).trigger( 'resize' );
@@ -958,6 +977,7 @@
 						} : false,
 						loop: sliderSettings.wpr_cs_loop === 'yes' ? true : false,
 						slidesPerView: +sliderSettings.wpr_cs_slides_to_show,
+						slidesPerGroup: +sliderSettings.wpr_cs_slides_to_scroll || 1,
 						spaceBetween: +sliderSettings.wpr_cs_space_between,
 						speed: +sliderSettings.wpr_cs_speed,
 						autoHeight: true,
@@ -6772,7 +6792,8 @@
 					adjustMiddleLineHeight(middleLine, timelineFill, lastIcon, firstIcon, element);
 				});
 	
-				if ( 'load-more' !== iScrollTarget.attr('data-pagination') ) {
+				var paginationType = iScrollTarget.attr('data-pagination');
+				if ( 'load-more' !== paginationType && 'infinite-scroll' !== paginationType ) {
 					$scope.find('.wpr-grid-pagination').css('visibility', 'hidden');
 				}
 
@@ -6816,12 +6837,15 @@
 						
 						// get posts from response
 						var items = $( response ).find(scopeClass).find( '.wpr-timeline-entry' );
+						var existingItemsCount = $scope.find('.wpr-timeline-entry').length;
 						iScrollTarget.infiniteScroll( 'appendItems', items );
 
 						if ( !$scope.find('.wpr-one-sided-timeline').length && !$scope.find('.wpr-one-sided-timeline-left').length ) {
-							$scope.find('.wpr-timeline-entry').each(function(index, value){
+							items.each(function(index, value){
 								$(this).removeClass('wpr-right-aligned wpr-left-aligned');
-								if ( 0 == index % 2 ) {
+								var timelineIndex = existingItemsCount + index;
+
+								if ( 0 == timelineIndex % 2 ) {
 									$(this).addClass('wpr-left-aligned');
 									$(this).find('.wpr-story-info-vertical').attr('data-aos', $(this).find('.wpr-story-info-vertical').attr('data-aos-left'));
 								} else {
@@ -8718,16 +8742,16 @@
 							$scope.find('.wpr-wishlist-products').removeClass('wpr-wishlist-empty-hidden');
 						}
 
-						if ( !$scope.find('.wpr-wishlist-empty').hasClass('wpr-wishlist-empty-hidden') ) {
-							$scope.find('.wpr-wishlist-empty').addClass('wpr-wishlist-empty-hidden');
+						if ( !$scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').hasClass('wpr-wishlist-empty-hidden') ) {
+							$scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').addClass('wpr-wishlist-empty-hidden');
 						}
 					} else {
 						if ( !$scope.find('.wpr-wishlist-products').hasClass('wpr-wishlist-empty-hidden') ) {
 							$scope.find('.wpr-wishlist-products').addClass('wpr-wishlist-empty-hidden');
 						}
 
-						if ( $scope.find('.wpr-wishlist-empty').hasClass('wpr-wishlist-empty-hidden') ) {
-							$scope.find('.wpr-wishlist-empty').removeClass('wpr-wishlist-empty-hidden');
+						if ( $scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').hasClass('wpr-wishlist-empty-hidden') ) {
+							$scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').removeClass('wpr-wishlist-empty-hidden');
 						}
 					}
 				},
@@ -8754,8 +8778,8 @@
 								$scope.find('.wpr-wishlist-products').addClass('wpr-wishlist-empty-hidden');
 							}
 
-							if ( $scope.find('.wpr-wishlist-empty').hasClass('wpr-wishlist-empty-hidden') ) {
-								$scope.find('.wpr-wishlist-empty').removeClass('wpr-wishlist-empty-hidden');
+							if ( $scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').hasClass('wpr-wishlist-empty-hidden') ) {
+								$scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').removeClass('wpr-wishlist-empty-hidden');
 							}
 						}
 
@@ -9824,6 +9848,7 @@
 				  formDataForFile.append('triggering_event', eventType);
 				  formDataForFile.append('wpr_addons_nonce', WprConfig.nonce);
 				  formDataForFile.append('form_field_id', thisId);
+				  formDataForFile.append('upload_token', thisInput.attr('data-wpr-upload-token') || '');
 			  
 				  if ('click' == eventType) {
 					if (!fileUrl[thisId]) {
@@ -10798,10 +10823,10 @@
 				});
 
 				if ( $scope.find('.wpr-wishlist-product').length !== 0 ) {
-					$scope.find('.wpr-wishlist-empty').addClass('wpr-wishlist-empty-hidden');
+					$scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').addClass('wpr-wishlist-empty-hidden');
 					$scope.find('.wpr-view-wishlist').removeClass('wpr-hidden-element');
 				} else {
-					$scope.find('.wpr-wishlist-empty').removeClass('wpr-wishlist-empty-hidden');
+					$scope.find('.wpr-wishlist-empty, .wpr-wishlist-empty-shop-link').removeClass('wpr-wishlist-empty-hidden');
 					$scope.find('.wpr-view-wishlist').addClass('wpr-hidden-element');
 				}
 			});
@@ -13591,6 +13616,56 @@
 			return $( 'body' ).hasClass( 'elementor-editor-active' ) ? true : false;
 		},
 
+		// Featured Video - ensure self-hosted <video> elements autoplay reliably
+		// and pause when scrolled out of view (saves battery / bandwidth).
+		// YouTube / Vimeo iframes rely on their own embed params for autoplay
+		// but are still wired up to lazy-inject if the markup was deferred.
+		initFeaturedVideos: function( $scope ) {
+			var $videos = $scope.find('.wpr-grid-featured-video video');
+			if ( ! $videos.length ) {
+				return;
+			}
+
+			// Attempt an immediate play for each <video> (the `autoplay` attribute
+			// already triggers this, but mobile Safari sometimes requires an
+			// explicit play() after the element is attached to the DOM).
+			$videos.each(function() {
+				var videoEl = this;
+				try {
+					var p = videoEl.play();
+					if ( p && typeof p.catch === 'function' ) {
+						p.catch(function() {});
+					}
+				} catch (e) {}
+			});
+
+			if ( 'undefined' === typeof IntersectionObserver ) {
+				return;
+			}
+
+			var observer = new IntersectionObserver(function( entries ) {
+				entries.forEach(function( entry ) {
+					var videoEl = entry.target;
+					if ( entry.isIntersecting ) {
+						try {
+							var p = videoEl.play();
+							if ( p && typeof p.catch === 'function' ) {
+								p.catch(function() {});
+							}
+						} catch (e) {}
+					} else {
+						try {
+							videoEl.pause();
+						} catch (e) {}
+					}
+				});
+			}, { threshold: 0.15 });
+
+			$videos.each(function() {
+				observer.observe( this );
+			});
+		},
+
 		// Edith with Elementor - Admin Bar Menu
 		changeAdminBarMenu: function() {
 			let editLinks = $('#wp-admin-bar-elementor_edit_page-default');
@@ -13969,6 +14044,7 @@
 						// $(this).find('img:nth-of-type(2)').fadeIn(500).removeClass('wpr-hidden-img');
 						$(this).find('img:first-of-type').addClass('wpr-hidden-img');
 						$(this).find('img:nth-of-type(2)').removeClass('wpr-hidden-img');
+						$(this).find('.wpr-grid-featured-video').addClass('wpr-hidden-img');
 					}
 				}
 			});
@@ -13984,9 +14060,16 @@
 						// $(this).find('img:first-of-type').fadeIn(500).removeClass('wpr-hidden-img');
 						$(this).find('img:nth-of-type(2)').addClass('wpr-hidden-img');
 						$(this).find('img:first-of-type').removeClass('wpr-hidden-img');
+						$(this).find('.wpr-grid-featured-video').removeClass('wpr-hidden-img');
 					}
 				}
 			});
+
+			// Featured Video - kick off autoplay on self-hosted videos once they
+			// enter the viewport (mobile Safari & data-saver modes sometimes
+			// skip initial autoplay). Iframes (YouTube/Vimeo) handle this
+			// themselves via their embed parameters.
+			WprElements.initFeaturedVideos( iGrid );
 
 			if ( 'yes' === iGrid.find( '.wpr-grid-media-wrap' ).attr( 'data-overlay-link' ) && ! WprElements.editorCheck() ) {
 				iGrid.find( '.wpr-grid-media-wrap' ).css('cursor', 'pointer');

@@ -71,6 +71,17 @@ class Wpr_Woo_Grid extends Widget_Base {
 		);
 	}
 
+	public function add_control_featured_video() {
+		$this->add_control(
+			'featured_video_enabled',
+			[
+				'label' => sprintf( __( 'Featured Video %s', 'wpr-addons' ), '<i class="eicon-pro-icon"></i>' ),
+				'type' => Controls_Manager::SWITCHER,
+				'classes' => 'wpr-pro-control no-distance'
+			]
+		);
+	}
+
 	public function add_control_open_links_in_new_tab() {
 		$this->add_control(
 			'open_links_in_new_tab',
@@ -2754,6 +2765,20 @@ class Wpr_Woo_Grid extends Widget_Base {
 		$this->end_controls_section(); // End Controls Section
 
 		// Tab: Content ==============
+		// Section: Featured Video ----
+		$this->start_controls_section(
+			'section_featured_video',
+			[
+				'label' => esc_html__( 'Featured Video', 'wpr-addons' ),
+				'tab' => Controls_Manager::TAB_CONTENT,
+			]
+		);
+
+		$this->add_control_featured_video();
+
+		$this->end_controls_section(); // End Controls Section
+
+		// Tab: Content ==============
 		// Section: Lightbox Popup ----
 		$this->start_controls_section(
 			'section_lightbox_popup',
@@ -3462,6 +3487,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			'Masonry Layout',
 			'Products Slider Columns (Carousel) 1,2,3,4,5,6',
 			'Secondary Featured Image',
+			'Featured Video (Plays by Default)',
 			'Current Page Query, Random Products Query',
 			'Infinite Scrolling Pagination',
 			'Products Slider Autoplay options',
@@ -9112,6 +9138,9 @@ class Wpr_Woo_Grid extends Widget_Base {
 				'open_links_in_new_tab' => isset($settings['open_links_in_new_tab']) ? $settings['open_links_in_new_tab'] : null,
 				'overlay_post_link' => isset($settings['overlay_post_link']) ? $settings['overlay_post_link'] : null,
 				'secondary_img_on_hover' => isset($settings['secondary_img_on_hover']) ? $settings['secondary_img_on_hover'] : null,
+				'featured_video_enabled' => isset($settings['featured_video_enabled']) ? $settings['featured_video_enabled'] : null,
+				'featured_video_loop' => isset($settings['featured_video_loop']) ? $settings['featured_video_loop'] : null,
+				'featured_video_fit' => isset($settings['featured_video_fit']) ? $settings['featured_video_fit'] : null,
 				'grid_lazy_loading' => isset($settings['grid_lazy_loading']) ? $settings['grid_lazy_loading'] : null,
 				'overlay_animation' => isset($settings['overlay_animation']) ? $settings['overlay_animation'] : null,
 				'overlay_animation_size' => isset($settings['overlay_animation_size']) ? $settings['overlay_animation_size'] : null,

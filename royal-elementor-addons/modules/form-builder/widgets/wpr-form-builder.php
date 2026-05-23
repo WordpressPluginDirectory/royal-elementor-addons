@@ -3661,10 +3661,6 @@ class Wpr_Form_Builder extends Widget_Base {
 	}	
 	
 	protected function form_fields_render_attributes( $i, $instance, $item ) {
-		if ( 'upload' === $item['field_type'] ) {
-			update_option( 'wpr_form_upload_field_in_use_' . $this->get_attribute_id( $item ), true );
-		}
-
 		$this->add_render_attribute(
 			[
 				'field-group' . $i => [
@@ -4090,6 +4086,19 @@ class Wpr_Form_Builder extends Widget_Base {
 										]
 									);
 								}
+
+								// Mint a per-render HMAC-signed upload token bound to this post + field + constraints.
+								$wpr_upload_post_id = get_the_ID();
+								if ( ! $wpr_upload_post_id ) {
+									$wpr_upload_post_id = (int) get_queried_object_id();
+								}
+								$wpr_upload_token = \WprAddons\Classes\Modules\Forms\WPR_File_Upload::mint_upload_token(
+									$wpr_upload_post_id,
+									$this->get_attribute_id( $item ),
+									isset( $item['file_types'] ) ? (string) $item['file_types'] : '',
+									isset( $item['file_size'] ) ? (float) $item['file_size'] : 0
+								);
+								$this->add_render_attribute( 'input' . $item_index, 'data-wpr-upload-token', $wpr_upload_token );
 
 								echo '<input size="1 "'. $this->get_render_attribute_string( 'input' . $item_index ) .'>';
 								break;

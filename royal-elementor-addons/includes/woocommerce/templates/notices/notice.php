@@ -12,7 +12,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 10.2.0
+ * @version 10.4.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,7 +26,7 @@ if ( ! $notices ) {
 ?>
 
 <?php foreach ( $notices as $notice ) : ?>
-	<div class="woocommerce-info"<?php echo wc_get_notice_data_attr( $notice ); ?>>
+	<div class="woocommerce-info"<?php echo wc_get_notice_data_attr( $notice ); ?> role="status">
 		<?php
 			if ( strpos( $notice['notice'], '</a>') !== false ) {
 				$notice['notice'] = str_replace(substr($notice['notice'], strpos($notice['notice'], '</a>') + 4), '<p>' . substr($notice['notice'], strpos($notice['notice'], '</a>') + 4) . '</p>', $notice['notice']);

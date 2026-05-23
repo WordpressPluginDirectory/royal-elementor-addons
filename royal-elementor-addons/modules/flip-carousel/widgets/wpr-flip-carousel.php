@@ -143,7 +143,7 @@ class Wpr_Flip_Carousel extends Widget_Base {
 		$repeater->add_control(
 			'slide_link',
 			[
-				'label' => __( 'Link', 'plugin-domain' ),
+				'label' => __( 'Link', 'wpr-addons' ),
 				'type' => Controls_Manager::URL,
 				'dynamic' => [
 					'active' => true,

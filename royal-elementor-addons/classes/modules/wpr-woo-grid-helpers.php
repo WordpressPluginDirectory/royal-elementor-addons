@@ -885,12 +885,206 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$src2 = '';
 		}
 
+		// Featured Video (plays by default over the product thumbnail)
+		$video_enabled = isset($settings['featured_video_enabled']) && 'yes' === $settings['featured_video_enabled'];
+		$video_data = $video_enabled ? self::get_featured_video_data( get_the_ID() ) : null;
+		$has_video = $video_enabled && $video_data;
+
 		if ( has_post_thumbnail() ) {
-			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'"  data-img-on-hover="'. esc_attr( $settings['secondary_img_on_hover'] ) .'" data-src-secondary="'. esc_url( $src2 ) .'">';
+			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'"  data-img-on-hover="'. esc_attr( $settings['secondary_img_on_hover'] ) .'" data-src-secondary="'. esc_url( $src2 ) .'" data-has-video="'. esc_attr( $has_video ? 'yes' : '' ) .'">';
 				echo '<img src="'. esc_url( $src ) .'" alt="'. esc_attr( $alt ) .'" class="wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
 				if ( 'yes' == $settings['secondary_img_on_hover'] ) {
 					echo '<img src="'. esc_url( $src2 ) . '" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-img wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
 				}
+
+				if ( $has_video ) {
+					self::render_featured_video_markup( $video_data, $settings, $src );
+				}
+			echo '</div>';
+		}
+	}
+
+	/**
+	 * Build the featured video data for a given product id.
+	 * Returns null when no usable video is set.
+	 *
+	 * @param int $post_id
+	 * @return array|null { type: 'self'|'youtube'|'vimeo'|'external', url: string }
+	 */
+	public static function get_featured_video_data( $post_id ) {
+		$source = get_post_meta( $post_id, 'wpr_featured_video_source', true );
+		if ( empty( $source ) ) {
+			$source = 'upload';
+		}
+
+		$url = '';
+
+		if ( 'upload' === $source ) {
+			$video_id = absint( get_post_meta( $post_id, 'wpr_featured_video_id', true ) );
+			if ( $video_id ) {
+				$url = wp_get_attachment_url( $video_id );
+			}
+		} else {
+			$url = get_post_meta( $post_id, 'wpr_featured_video_url', true );
+		}
+
+		if ( empty( $url ) ) {
+			return null;
+		}
+
+		$type = self::detect_video_type( $url, $source );
+		if ( null === $type ) {
+			return null;
+		}
+
+		return [
+			'type' => $type,
+			'url'  => $url,
+		];
+	}
+
+	/**
+	 * Detect the video type from a URL.
+	 *
+	 * @param string $url
+	 * @param string $source 'upload' | 'url'
+	 * @return string|null 'self' | 'youtube' | 'vimeo' or null if unrecognized.
+	 */
+	public static function detect_video_type( $url, $source = 'url' ) {
+		if ( 'upload' === $source ) {
+			return 'self';
+		}
+
+		if ( preg_match( '#(youtube\.com|youtu\.be)#i', $url ) ) {
+			return 'youtube';
+		}
+
+		if ( preg_match( '#vimeo\.com#i', $url ) ) {
+			return 'vimeo';
+		}
+
+		// Treat direct media files as self hosted.
+		if ( preg_match( '#\.(mp4|webm|ogg|ogv|m4v|mov)(\?.*)?$#i', $url ) ) {
+			return 'self';
+		}
+
+		return null;
+	}
+
+	/**
+	 * Extract the YouTube video id from a YouTube URL.
+	 */
+	public static function extract_youtube_id( $url ) {
+		$patterns = [
+			'#youtu\.be/([A-Za-z0-9_-]{6,})#i',
+			'#youtube\.com/(?:watch\?.*?v=|embed/|shorts/|v/)([A-Za-z0-9_-]{6,})#i',
+		];
+		foreach ( $patterns as $pattern ) {
+			if ( preg_match( $pattern, $url, $matches ) ) {
+				return $matches[1];
+			}
+		}
+		return '';
+	}
+
+	/**
+	 * Extract the Vimeo video id from a Vimeo URL.
+	 */
+	public static function extract_vimeo_id( $url ) {
+		if ( preg_match( '#vimeo\.com/(?:video/)?(\d+)#i', $url, $matches ) ) {
+			return $matches[1];
+		}
+		return '';
+	}
+
+	/**
+	 * Render the featured video markup. The video is rendered on top of the
+	 * product thumbnail and plays by default (browser autoplay is only allowed
+	 * when the video is muted).
+	 *
+	 * @param array  $video    { type, url } from get_featured_video_data()
+	 * @param array  $settings Widget settings
+	 * @param string $poster   URL used as the poster frame for self-hosted videos
+	 */
+	public static function render_featured_video_markup( $video, $settings, $poster = '' ) {
+		// Videos are always muted: autoplay policies require it and a grid of
+		// products playing audio at the same time would be chaotic.
+		$loop = isset($settings['featured_video_loop']) ? 'yes' === $settings['featured_video_loop'] : true;
+
+		$wrap_attrs = [
+			'class'     => 'wpr-grid-featured-video',
+			'data-type' => $video['type'],
+			'data-url'  => $video['url'],
+			'data-loop' => $loop ? 'yes' : 'no',
+		];
+
+		$type = $video['type'];
+
+		if ( 'self' === $type || 'external' === $type ) {
+			$video_attrs = 'preload="auto" playsinline autoplay muted';
+			if ( $loop ) {
+				$video_attrs .= ' loop';
+			}
+			if ( ! empty( $poster ) ) {
+				$video_attrs .= ' poster="'. esc_url( $poster ) .'"';
+			}
+
+			echo '<div';
+			foreach ( $wrap_attrs as $key => $value ) {
+				echo ' '. esc_attr( $key ) .'="'. esc_attr( $value ) .'"';
+			}
+			echo '>';
+				echo '<video src="'. esc_url( $video['url'] ) .'" '. $video_attrs .'></video>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '</div>';
+		} elseif ( 'youtube' === $type ) {
+			$yt_id = self::extract_youtube_id( $video['url'] );
+			if ( empty( $yt_id ) ) {
+				return;
+			}
+			$wrap_attrs['data-video-id'] = $yt_id;
+
+			$yt_params = [
+				'autoplay'       => 1,
+				'mute'           => 1,
+				'controls'       => 0,
+				'modestbranding' => 1,
+				'rel'            => 0,
+				'playsinline'    => 1,
+				'loop'           => $loop ? 1 : 0,
+			];
+			if ( $loop ) {
+				$yt_params['playlist'] = $yt_id;
+			}
+			$yt_src = 'https://www.youtube.com/embed/'. rawurlencode( $yt_id ) .'?'. http_build_query( $yt_params );
+
+			echo '<div';
+			foreach ( $wrap_attrs as $key => $value ) {
+				echo ' '. esc_attr( $key ) .'="'. esc_attr( $value ) .'"';
+			}
+			echo '>';
+				echo '<iframe src="'. esc_url( $yt_src ) .'" loading="lazy" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+			echo '</div>';
+		} elseif ( 'vimeo' === $type ) {
+			$vm_id = self::extract_vimeo_id( $video['url'] );
+			if ( empty( $vm_id ) ) {
+				return;
+			}
+			$wrap_attrs['data-video-id'] = $vm_id;
+
+			$vm_params = [
+				'autoplay'   => 1,
+				'muted'      => 1,
+				'background' => 1,
+				'loop'       => $loop ? 1 : 0,
+			];
+			$vm_src = 'https://player.vimeo.com/video/'. rawurlencode( $vm_id ) .'?'. http_build_query( $vm_params );
+
+			echo '<div';
+			foreach ( $wrap_attrs as $key => $value ) {
+				echo ' '. esc_attr( $key ) .'="'. esc_attr( $value ) .'"';
+			}
+			echo '>';
+				echo '<iframe src="'. esc_url( $vm_src ) .'" loading="lazy" frameborder="0" allow="autoplay" allowfullscreen></iframe>';
 			echo '</div>';
 		}
 	}

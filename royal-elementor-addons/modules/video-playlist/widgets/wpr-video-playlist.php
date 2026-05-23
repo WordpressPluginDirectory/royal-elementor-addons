@@ -365,7 +365,8 @@ class Wpr_Video_Playlist extends Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        $title_tag       = !empty($settings['title_tag']) ? $settings['title_tag'] : 'h6';
+        $tags_whitelist  = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'];
+        $title_tag       = Utilities::validate_html_tags_wl( !empty($settings['title_tag']) ? $settings['title_tag'] : 'h6', 'h6', $tags_whitelist );
         $playlist_title  = !empty($settings['playlist_title']) ? $settings['playlist_title'] : esc_html__('Now Playing', 'wpr-addons');
         $playlist_query  = !empty($settings['playlist_query']) ? $settings['playlist_query'] : 'custom';
 		$playlist_position = ! empty( $settings['playlist_position'] ) ? $settings['playlist_position'] : 'right';

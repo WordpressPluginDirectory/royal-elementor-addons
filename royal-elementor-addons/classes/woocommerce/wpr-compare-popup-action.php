@@ -46,6 +46,7 @@ class WPR_Compare_Popup_Action {
         
         // Check if the page was created with Elementor
         if (\Elementor\Plugin::$instance->db->is_built_with_elementor($page_id)) {
+            Utilities::enqueue_inner_template_assets( $page_id );
             $content = \Elementor\Plugin::$instance->frontend->get_builder_content($page_id);
             wp_send_json_success(array('content' => $content, 'page_url' => get_page_link( $page_id )));
             // return new WP_REST_Response(array('content' => $content), 200);

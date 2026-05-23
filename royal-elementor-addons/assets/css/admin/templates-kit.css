@@ -776,3 +776,25 @@ div.fs-notice.updated, div.fs-notice.success {
     text-align: center;
   }
 }
+
+/* WordPress admin mobile: sidebar is hidden; keep import bar full-width so Import Templates Kit stays visible */
+@media screen and (max-width: 782px) {
+  .wpr-templates-kit-single .action-buttons-wrap {
+    margin-left: 0 !important;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    row-gap: 10px;
+    -webkit-column-gap: 8px;
+       -moz-column-gap: 8px;
+            column-gap: 8px;
+  }
+
+  .wpr-templates-kit-single .import-template-buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    gap: 8px;
+  }
+}

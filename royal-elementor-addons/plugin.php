@@ -94,6 +94,7 @@ class Plugin {
 				'wpr-display-conditions'    => get_option( 'wpr-display-conditions', 'on' ),
 				'wpr_override_woo_templates'=> get_option( 'wpr_override_woo_templates', 'on' ),
 				'wpr-column-slider'         => get_option( 'wpr-column-slider', 'on' ),
+				'wpr-equal-height'          => get_option( 'wpr-equal-height', 'on' ),
 			];
 		}
 		return isset( self::$wpr_extension_options[ $key ] ) ? self::$wpr_extension_options[ $key ] : $default;
@@ -137,6 +138,9 @@ class Plugin {
 		// Media Grid
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-grid-media.php';
 
+		// Extensions Base
+		require WPR_ADDONS_PATH . 'extensions/wpr-extensions-base.php';
+
 		// Particles
 		if ( 'on' === $this->wpr_get_extension_option( 'wpr-particles' ) ) {
 			require WPR_ADDONS_PATH . 'extensions/wpr-particles.php';
@@ -163,12 +167,12 @@ class Plugin {
 		}
 
 		// Column Slider
-		// if ( 'on' === $this->wpr_get_extension_option( 'wpr-column-slider' ) ) {
-		// 	require WPR_ADDONS_PATH . 'extensions/wpr-column-slider.php';
-		// }
+		if ( 'on' === $this->wpr_get_extension_option( 'wpr-column-slider' ) ) {
+			require WPR_ADDONS_PATH . 'extensions/wpr-column-slider.php';
+		}
 
 		// Equal Height
-		if ( 'on' === get_option('wpr-equal-height', 'on') ) {
+		if ( 'on' === $this->wpr_get_extension_option( 'wpr-equal-height' ) ) {
 			require WPR_ADDONS_PATH . 'extensions/wpr-equal-height.php';
 		}
 
@@ -199,6 +203,9 @@ class Plugin {
 
 			// Secondary Image
 			require WPR_ADDONS_PATH . 'admin/metabox/wpr-secondary-image.php';
+
+			// Featured Video (Woo Grid)
+			require WPR_ADDONS_PATH . 'admin/metabox/wpr-featured-video.php';
 
 			// Dropdown Category Filter for Wpr Templates
 			require WPR_ADDONS_PATH . 'admin/includes/wpr-templates-category-filter.php';

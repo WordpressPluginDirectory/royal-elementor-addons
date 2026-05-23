@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class Wpr_Particles {
+class Wpr_Particles extends Wpr_Extensions_Base {
 
 	private static $_instance = null;
 
@@ -65,18 +65,16 @@ class Wpr_Particles {
 			]
 		);
 
-        if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
-            \WprAddonsPro\Extensions\Wpr_Particles_Pro::add_control_which_particle($element);
-        } else {
+        if ( ! $this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Particles_Pro', 'add_control_which_particle', [ $element ] ) ) {
 			$element->add_control (
 				'which_particle',
 				[
-					'label' => __( 'Select Style', 'plugin-domain' ),
+					'label' => __( 'Select Style', 'wpr-addons' ),
 					'type' => Controls_Manager::SELECT,
 					'default' => 'wpr_particle_json_custom',
 					'options' => [
-						'wpr_particle_json_custom'  => __( 'Custom', 'plugin-domain' ),
-						'pro-pjs' => __( 'Predefined (Pro)', 'plugin-domain' ),
+						'wpr_particle_json_custom'  => __( 'Custom', 'wpr-addons' ),
+						'pro-pjs' => __( 'Predefined (Pro)', 'wpr-addons' ),
 					],
 					'condition' => [
 						'wpr_enable_particles' => 'yes'
@@ -90,9 +88,7 @@ class Wpr_Particles {
 
 		$this->custom_json_particles( $this->default_particles, $element );
 
-		if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
-            \WprAddonsPro\Extensions\Wpr_Particles_Pro::add_control_group_predefined_particles($element);
-		}
+		$this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Particles_Pro', 'add_control_group_predefined_particles', [ $element ] );
 
         $element->end_controls_section();
 
@@ -155,7 +151,7 @@ class Wpr_Particles {
 		if ( $settings['wpr_enable_particles'] === 'yes' ) {
 			$settings['which_particle'] = 'pro-pjs' === $settings['which_particle'] ? 'wpr_particle_json_custom' : $settings['which_particle'];
 			
-			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
+			if ( ! $this->has_active_pro_license() ) {
 				$element->add_render_attribute( '_wrapper', [
 					'data-wpr-particles' => $settings[$settings['which_particle']],
 					'particle-source' => $settings['which_particle'],

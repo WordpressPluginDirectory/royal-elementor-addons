@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class Wpr_Sticky_Section {
+class Wpr_Sticky_Section extends Wpr_Extensions_Base {
 
     public function __construct() {
 		add_action( 'elementor/element/section/section_background/after_section_end', [ $this, 'register_controls' ], 10 );
@@ -233,11 +233,7 @@ class Wpr_Sticky_Section {
 				]
 			);
 
-			if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
-				if ( class_exists('WprAddonsPro\Extensions\Wpr_Sticky_Section_Pro') ) {
-					\WprAddonsPro\Extensions\Wpr_Sticky_Section_Pro::add_control_group_sticky_advanced_options($element);
-				}
-			} else {
+			if ( ! $this->maybe_call_pro_method( '\WprAddonsPro\Extensions\Wpr_Sticky_Section_Pro', 'add_control_group_sticky_advanced_options', [ $element ] ) ) {
 				$this->add_control_group_sticky_advanced_options($element);
 			}
 
