@@ -309,14 +309,23 @@ class Plugin {
 		if ( ! $item_post || $item_post->post_type !== 'nav_menu_item' ) {
 			return new \WP_REST_Response( '', 403 );
 		}
+		$item_status = get_post_status( $item_post );
+		if ( 'publish' !== $item_status && ! current_user_can( 'read_post', $item_id ) ) {
+			return new \WP_REST_Response( '', 403 );
+		}
 		$mega_id = get_post_meta( $item_id, 'wpr-mega-menu-item', true );
-		if ( ! $mega_id || ! get_post( $mega_id ) ) {
+		$mega_post = $mega_id ? get_post( $mega_id ) : false;
+		if ( ! $mega_post ) {
 			return new \WP_REST_Response( '', 404 );
 		}
+		$mega_status = get_post_status( $mega_post );
+		if ( 'publish' !== $mega_status && ! current_user_can( 'read_post', $mega_post->ID ) ) {
+			return new \WP_REST_Response( '', 403 );
+		}
 		$elementor = \Elementor\Plugin::instance();
-		$type = get_post_meta( get_the_ID(), '_wpr_template_type', true ) || get_post_meta( $mega_id, '_elementor_template_type', true );
+		$type = get_post_meta( get_the_ID(), '_wpr_template_type', true ) || get_post_meta( $mega_post->ID, '_elementor_template_type', true );
 		$has_css = 'internal' === get_option( 'elementor_css_print_method' ) || '' !== $type;
-		$content = $elementor->frontend->get_builder_content_for_display( (int) $mega_id, $has_css );
+		$content = $elementor->frontend->get_builder_content_for_display( (int) $mega_post->ID, $has_css );
 		return new \WP_REST_Response( $content, 200 );
 	}
 
@@ -1093,6 +1102,18 @@ class Plugin {
 					'name' => 'wpr-breadcrumbs',
 					'title' => __('Post Breadcrumbs', 'wpr-addons'),
 					'icon' => 'wpr-icon eicon-product-breadcrumbs',
+					'categories' => '["'. $category .'"]',
+				],
+				[
+					'name' => 'wpr-weather',
+					'title' => __('Weather', 'wpr-addons'),
+					'icon' => 'wpr-icon eicon-cloud-check',
+					'categories' => '["'. $category .'"]',
+				],
+				[
+					'name' => 'wpr-google-reviews',
+					'title' => __('Google Reviews', 'wpr-addons'),
+					'icon' => 'wpr-icon eicon-star',
 					'categories' => '["'. $category .'"]',
 				],
 			];

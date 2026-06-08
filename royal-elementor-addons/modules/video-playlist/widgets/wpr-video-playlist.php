@@ -106,6 +106,8 @@ class Wpr_Video_Playlist extends Widget_Base {
 			]
 		);
 
+		Utilities::wpr_library_buttons( $this, Controls_Manager::RAW_HTML );
+
         $this->add_control(
             'query_group_title',
             [
@@ -204,7 +206,7 @@ class Wpr_Video_Playlist extends Widget_Base {
 				'video_urls_pro_notice',
 				[
 					'type' => Controls_Manager::RAW_HTML,
-					'raw' => __('More than 3 Items are<br>available in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-panel-form-builder-upgrade-pro#purchasepro" target="_blank">Pro version</a></strong>'),
+					'raw' => __('More than 3 Items are<br>available in the <strong><a href="https://royal-elementor-addons.com/?ref=rea-plugin-panel-video-playlist-upgrade-pro#purchasepro" target="_blank">Pro version</a></strong>'),
 					'content_classes' => 'wpr-pro-notice',
 					'condition' => [
 						'playlist_query' => 'custom',

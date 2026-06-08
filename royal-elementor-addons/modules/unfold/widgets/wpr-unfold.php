@@ -92,6 +92,8 @@ class Wpr_Unfold extends Widget_Base {
 			]
 		);
 
+		Utilities::wpr_library_buttons( $this, Controls_Manager::RAW_HTML );
+
 		$this->add_control_unfold_content_type();
 
 		// Upgrade to Pro Notice

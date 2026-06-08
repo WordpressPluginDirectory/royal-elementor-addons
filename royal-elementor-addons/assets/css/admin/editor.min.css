@@ -589,7 +589,12 @@
 .elementor-control-wpr_library_buttons .wpr-mega-menu a:last-child,
 .elementor-control-wpr_library_buttons .wpr-charts a:last-child,
 .elementor-control-wpr_library_buttons .wpr-offcanvas a:last-child,
-.elementor-control-wpr_library_buttons .wpr-twitter-feed a:last-child {
+.elementor-control-wpr_library_buttons .wpr-twitter-feed a:last-child,
+.elementor-control-wpr_library_buttons .wpr-password-protected-content a:last-child,
+.elementor-control-wpr_library_buttons .wpr-unfold a:last-child,
+.elementor-control-wpr_library_buttons .wpr-circle-menu a:last-child,
+.elementor-control-wpr_library_buttons .wpr-image-scroll a:last-child,
+.elementor-control-wpr_library_buttons .wpr-video-playlist a:last-child {
 	display: none;
 }
 

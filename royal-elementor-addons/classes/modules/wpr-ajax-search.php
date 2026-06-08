@@ -178,24 +178,24 @@ if ( ! defined( 'ABSPATH' ) ) {
                 $post_thumb = ob_get_clean();
                 ?>
 
-                <li data-number-of-results = <?php echo $the_query->found_posts ?>>
+                <li data-number-of-results="<?php echo esc_attr( (string) $the_query->found_posts ); ?>">
                     
                     <?php if ( !post_password_required() || $can_view_protected_posts ) : ?>
 
                         <?php if ( 'yes' === sanitize_text_field($_POST['wpr_show_ajax_thumbnail']) ) :
                             if ( has_post_thumbnail() ) :
-                                echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href="'. esc_url( get_the_permalink() ) .'">'.  $post_thumb .'</a>';
+                                echo '<a class="wpr-ajax-img-wrap" target="' . esc_attr( sanitize_text_field( wp_unslash( $_POST['wpr_ajax_search_link_target'] ) ) ) . '" href="' . esc_url( get_the_permalink() ) . '">' . wp_kses_post( $post_thumb ) . '</a>';
                                 // echo '<a class="wpr-ajax-img-wrap" target="'. sanitize_text_field($_POST['ajax_search_link_target']) .'" href="'. esc_url( get_the_permalink() ) .'">'.  '<img src="'. Group_Control_Image_Size::get_attachment_image_src( get_post_thumbnail_id(), 'ajax_search_image', [$_POST['ajax_search_image_size']] ) .'"/>' .'</a>';
                             else :
-                                echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href='. esc_url( get_the_permalink() ) .'><img src='.Utils::get_placeholder_image_src().'></a>';
+                                echo '<a class="wpr-ajax-img-wrap" target="' . esc_attr( sanitize_text_field( wp_unslash( $_POST['wpr_ajax_search_link_target'] ) ) ) . '" href="' . esc_url( get_the_permalink() ) . '"><img src="' . esc_url( Utils::get_placeholder_image_src() ) . '" alt=""></a>';
                             endif ;
                         endif ; ?>
 
                         <div class="wpr-ajax-search-content">
-                            <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-ajax-title" href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title();?></a>
+                            <a target="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_POST['wpr_ajax_search_link_target'] ) ) ); ?>" class="wpr-ajax-title" href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title(); ?></a>
 
                             <?php if ( sanitize_text_field($_POST['wpr_show_description']) == 'yes' ) : ?>
-                                <p class="wpr-ajax-desc"><a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" href="<?php echo esc_url( get_the_permalink() ); ?>"><?php echo wp_trim_words(get_the_content(), sanitize_text_field($_POST['wpr_number_of_words'])); ?></a></p>
+                                <p class="wpr-ajax-desc"><a target="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_POST['wpr_ajax_search_link_target'] ) ) ); ?>" href="<?php echo esc_url( get_the_permalink() ); ?>"><?php echo esc_html( wp_trim_words( get_the_content(), (int) sanitize_text_field( wp_unslash( $_POST['wpr_number_of_words'] ) ) ) ); ?></a></p>
                             <?php endif; ?>
 
                             <?php if ( 'yes' === sanitize_text_field($_POST['wpr_show_product_price']) && 
@@ -205,23 +205,23 @@ if ( ! defined( 'ABSPATH' ) ) {
                                 if ($product) {
                                     $price_html = '<div class="wpr-search-product-price">'. $product->get_price_html() .'</div>';
 
-                                    echo $price_html;
+                                    echo wp_kses_post( $price_html );
                                 }
                             endif; ?>
 
                             <?php if ( sanitize_text_field($_POST['wpr_show_view_result_btn']) ) : ?>
-                                <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-view-result" href="<?php echo esc_url( the_permalink() ); ?>"><?php echo sanitize_text_field($_POST['wpr_view_result_text']) ?></a>
+                                <a target="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_POST['wpr_ajax_search_link_target'] ) ) ); ?>" class="wpr-view-result" href="<?php echo esc_url( get_the_permalink() ); ?>"><?php echo esc_html( sanitize_text_field( wp_unslash( $_POST['wpr_view_result_text'] ) ) ); ?></a>
                             <?php endif; ?>
                         </div>
                     
                     <?php else: ?>
 
                         <?php if ( 'yes' === sanitize_text_field($_POST['wpr_show_ajax_thumbnail']) ) :
-                            echo '<a class="wpr-ajax-img-wrap" target="'. esc_attr($_POST['wpr_ajax_search_link_target']) .'" href='. esc_url( get_the_permalink() ) .'><img src='.Utils::get_placeholder_image_src().'></a>';
+                            echo '<a class="wpr-ajax-img-wrap" target="' . esc_attr( sanitize_text_field( wp_unslash( $_POST['wpr_ajax_search_link_target'] ) ) ) . '" href="' . esc_url( get_the_permalink() ) . '"><img src="' . esc_url( Utils::get_placeholder_image_src() ) . '" alt=""></a>';
                         endif ; ?>
 
                         <div class="wpr-ajax-search-content">
-                            <a target="<?php echo esc_attr($_POST['wpr_ajax_search_link_target']) ?>" class="wpr-ajax-title" href="<?php echo esc_url( the_permalink() ); ?>"><?php the_title();?></a>
+                            <a target="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_POST['wpr_ajax_search_link_target'] ) ) ); ?>" class="wpr-ajax-title" href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title(); ?></a>
                         </div>
                     
                     <?php endif; ?>
@@ -236,7 +236,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         else :
             if (0 < sanitize_text_field($_POST['wpr_search_results_offset'])) {
             } else {
-                echo '<p class="wpr-no-results">'. sanitize_text_field($_POST['wpr_no_results']) .'</p>';
+                echo '<p class="wpr-no-results">' . esc_html( sanitize_text_field( wp_unslash( $_POST['wpr_no_results'] ) ) ) . '</p>';
             }
 
         endif;

@@ -26,7 +26,7 @@ jQuery(document).ready(function( $ ) {
 
 			// Import Templates Kit
 			$('.wpr-templates-kit-single').find('.import-kit').on('click', function(){
-				if ( $('.wpr-templates-kit-grid').find('.grid-item[data-kit-id="'+ $(this).attr('data-kit-id') +'"]').data('price') === 'pro' ) {
+				if ( false === $('.wpr-templates-kit-grid').find('.grid-item[data-kit-id="'+ $(this).attr('data-kit-id') +'"]').data('can-import') ) {
 					return false;
 				}
 
@@ -424,7 +424,7 @@ jQuery(document).ready(function( $ ) {
 				// just one page
 			}
 
-			if ( $('.wpr-templates-kit-grid').find('.grid-item[data-kit-id="'+ kit.data('kit-id') +'"]').data('price') === 'pro' ) {
+			if ( false === $('.wpr-templates-kit-grid').find('.grid-item[data-kit-id="'+ kit.data('kit-id') +'"]').data('can-import') ) {
 				$('.wpr-templates-kit-single').find('.import-kit').hide();
 				$('.wpr-templates-kit-single').find('.get-access').show();
 			} else {

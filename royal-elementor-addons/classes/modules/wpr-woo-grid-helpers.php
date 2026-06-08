@@ -1323,7 +1323,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$attributes  = ' data-action="'. esc_attr( $settings['element_sharing_trigger_action'] ) .'"';
 						$attributes .= ' data-direction="'. esc_attr( $settings['element_sharing_trigger_direction'] ) .'"';
 
-						echo '<a class="wpr-sharing-trigger wpr-sharing-icon"'. $attributes .'>';
+						echo '<a class="wpr-sharing-trigger wpr-sharing-icon"'. $attributes .'>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							if ( 'yes' === $settings['element_sharing_tooltip'] ) {
 								echo '<span class="wpr-sharing-tooltip wpr-tooltip">'. esc_html__( 'Share', 'wpr-addons' ) .'</span>';
 							}
@@ -1911,8 +1911,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		
 
 		if ( 'yes' === $settings['show_icon'] ) {
-			$add_to_compare_content .= '<i class="fas fa-exchange-alt"></i>';
-			$remove_from_compare_content .= '<i class="fas fa-exchange-alt"></i>';
+			if ( ! empty( $settings['compare_icon']['value'] ) ) {
+				ob_start();
+				\Elementor\Icons_Manager::render_icon( $settings['compare_icon'], [ 'aria-hidden' => 'true' ] );
+				$compare_icon_html = ob_get_clean();
+			} else {
+				$compare_icon_html = '<i class="fas fa-exchange-alt"></i>';
+			}
+
+			$add_to_compare_content .= $compare_icon_html;
+			$remove_from_compare_content .= $compare_icon_html;
 		}
 
 		if ( 'yes' === $settings['show_text'] ) {

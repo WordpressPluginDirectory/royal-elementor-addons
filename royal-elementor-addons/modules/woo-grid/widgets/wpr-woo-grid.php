@@ -2208,6 +2208,22 @@ class Wpr_Woo_Grid extends Widget_Base {
 		);
 
 		$repeater->add_control(
+			'compare_icon',
+			[
+				'label' => esc_html__( 'Compare Icon', 'wpr-addons' ),
+				'type' => Controls_Manager::ICONS,
+				'skin' => 'inline',
+				'label_block' => false,
+				'condition' => [
+					'element_select' => [
+						'compare-button'
+					],
+					'show_icon' => 'yes',
+				]
+			]
+		);
+
+		$repeater->add_control(
 			'show_text',
 			[
 				'label' => esc_html__( 'Show Text', 'wpr-addons' ),
@@ -6545,7 +6561,8 @@ class Wpr_Woo_Grid extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-compare-add span' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .wpr-compare-add i' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .wpr-compare-add svg' => 'fill: {{VALUE}}'
+					'{{WRAPPER}} .wpr-compare-add svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .wpr-compare-add svg path' => 'fill: {{VALUE}}'
 				]
 			]
 		);
@@ -6586,7 +6603,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'comp_btn_typography',
-				'selector' => '{{WRAPPER}} .wpr-compare-add span, {{WRAPPER}} .wpr-compare-add i, .wpr-compare-remove span, {{WRAPPER}} .wpr-compare-remove i',
+				'selector' => '{{WRAPPER}} .wpr-compare-add span, {{WRAPPER}} .wpr-compare-add i, {{WRAPPER}} .wpr-compare-add svg, {{WRAPPER}} .wpr-compare-remove span, {{WRAPPER}} .wpr-compare-remove i, {{WRAPPER}} .wpr-compare-remove svg',
 				'fields_options' => [
 					'typography' => [
 						'default' => 'custom',
@@ -6614,9 +6631,11 @@ class Wpr_Woo_Grid extends Widget_Base {
 					'{{WRAPPER}} .wpr-compare-add' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .wpr-compare-add span' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .wpr-compare-add i' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .wpr-compare-add svg' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .wpr-compare-remove' => 'transition-duration: {{VALUE}}s',
 					'{{WRAPPER}} .wpr-compare-remove span' => 'transition-duration: {{VALUE}}s',
-					'{{WRAPPER}} .wpr-compare-remove i' => 'transition-duration: {{VALUE}}s'
+					'{{WRAPPER}} .wpr-compare-remove i' => 'transition-duration: {{VALUE}}s',
+					'{{WRAPPER}} .wpr-compare-remove svg' => 'transition-duration: {{VALUE}}s'
 				],
 			]
 		);
@@ -6639,6 +6658,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-compare-add:hover i' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .wpr-compare-add:hover svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .wpr-compare-add:hover svg path' => 'fill: {{VALUE}}',
 					'{{WRAPPER}} .wpr-compare-add:hover span' => 'color: {{VALUE}}'
 				]
 			]
@@ -6695,9 +6715,11 @@ class Wpr_Woo_Grid extends Widget_Base {
 					'{{WRAPPER}} .wpr-compare-remove span' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .wpr-compare-remove i' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .wpr-compare-remove svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .wpr-compare-remove svg path' => 'fill: {{VALUE}}',
 					'{{WRAPPER}} .wpr-compare-remove:hover span' => 'color: {{VALUE}}',
 					'{{WRAPPER}} .wpr-compare-remove:hover i' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .wpr-compare-remove:hover svg' => 'fill: {{VALUE}}'
+					'{{WRAPPER}} .wpr-compare-remove:hover svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .wpr-compare-remove:hover svg path' => 'fill: {{VALUE}}'
 				]
 			]
 		);

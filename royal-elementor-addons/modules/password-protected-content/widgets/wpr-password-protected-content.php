@@ -89,6 +89,8 @@ class Wpr_Password_Protected_Content extends Widget_Base {
 			]
 		);
 
+		Utilities::wpr_library_buttons( $this, Controls_Manager::RAW_HTML );
+
 		$this->add_control_content_type();
 
 		// Upgrade to Pro Notice

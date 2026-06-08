@@ -170,9 +170,9 @@ class WPR_Templates_Loop {
 											}
 
 											if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) || 'product' === $key ) {
-												echo '<option value="'. esc_attr($key) .'">'. $value .' '. esc_html__( 'Archive', 'wpr-addons' ) .'</option>';
+												echo '<option value="'. esc_attr($key) .'">'. esc_html($value) .' '. esc_html__( 'Archive', 'wpr-addons' ) .'</option>';
 											} else {
-												echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'">'. $value .' '. esc_html__( 'Archive (Expert)', 'wpr-addons' ) .'</option>';
+												echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'">'. esc_html($value) .' '. esc_html__( 'Archive (Expert)', 'wpr-addons' ) .'</option>';
 											}
 										}
 									?>
@@ -209,9 +209,9 @@ class WPR_Templates_Loop {
 												}
 
 												if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->is_plan( 'expert' ) ) {
-													echo '<option value="'. esc_attr($key) .'">'. $value .' '. esc_html__( 'Archive', 'wpr-addons' ) .'</option>';
+													echo '<option value="'. esc_attr($key) .'">'. esc_html($value) .' '. esc_html__( 'Archive', 'wpr-addons' ) .'</option>';
 												} else {
-													echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'">'. $value .' '. esc_html__( 'Archive (Expert)', 'wpr-addons' ) .'</option>';
+													echo '<option value="pro-'. esc_attr(substr($key, 0, 3)) .'">'. esc_html($value) .' '. esc_html__( 'Archive (Expert)', 'wpr-addons' ) .'</option>';
 												}
 											}
 										?>

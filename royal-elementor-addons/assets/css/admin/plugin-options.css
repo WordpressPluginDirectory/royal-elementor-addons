@@ -25,8 +25,7 @@
 
 .wpr-settings-page-header h1,
 .wpr-settings-page-header p,
-.wpr-settings-page-header .wpr-preview-buttons,
-.wpr-settings-page-header .wpr-user-template {
+.wpr-settings-page-header .wpr-preview-buttons {
   -webkit-box-ordinal-group: 3;
       -ms-flex-order: 2;
           order: 2;
@@ -50,6 +49,21 @@
 .button.wpr-options-button .dashicons {
   line-height: 30px;
   font-size: 16px;
+  color: #fff;
+}
+
+.button.wpr-options-button:hover .dashicons,
+.button.wpr-options-button:focus .dashicons {
+  color: #fff;
+}
+
+.button.wpr-options-button.wpr-dynamic-tutorial .dashicons {
+  color: #e1ad01;
+}
+
+.button.wpr-options-button.wpr-dynamic-tutorial:hover .dashicons,
+.button.wpr-options-button.wpr-dynamic-tutorial:focus .dashicons {
+  color: #fff;
 }
 
 .button.wpr-options-button.wpr-translate-templates {
@@ -79,26 +93,146 @@
   margin-right: 5px;
 }
 
-.wpr-preview-buttons a:last-child,
+.wpr-preview-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 10px;
+}
+
+.wpr-preview-buttons .button.wpr-options-button {
+  display: -webkit-inline-box !important;
+  display: -ms-inline-flexbox !important;
+  display: inline-flex !important;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 6px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  height: 50px !important;
+  min-height: 50px !important;
+  padding: 0 22px !important;
+  line-height: 1.2 !important;
+  border: 2px solid transparent;
+}
+
+.wpr-preview-buttons .button.wpr-options-button .dashicons {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  line-height: 1;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  margin: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.wpr-preview-buttons .button.wpr-options-button:not(.wpr-dynamic-tutorial):not(.wpr-how-to-use-theme-builder):not(.wpr-how-to-use-woo-builder):hover,
+.wpr-preview-buttons .button.wpr-options-button:not(.wpr-dynamic-tutorial):not(.wpr-how-to-use-theme-builder):not(.wpr-how-to-use-woo-builder):focus {
+  color: #fff;
+  background: #6A4BFF;
+  border: 2px solid transparent !important;
+  padding: 0 22px !important;
+  height: 50px !important;
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+          box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.wpr-preview-buttons a:last-child:not(.wpr-dynamic-tutorial):hover,
+.wpr-preview-buttons a:last-child:not(.wpr-dynamic-tutorial):focus,
+.wpr-preview-buttons a.wpr-how-to-use-theme-builder:hover,
+.wpr-preview-buttons a.wpr-how-to-use-theme-builder:focus {
+  background-color: #6A4BFF !important;
+  border: 2px solid #6A4BFF !important;
+  color: #fff !important;
+  padding: 0 22px !important;
+  height: 50px !important;
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+          box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.wpr-preview-buttons a:last-child:not(.wpr-dynamic-tutorial):hover .dashicons,
+.wpr-preview-buttons a:last-child:not(.wpr-dynamic-tutorial):focus .dashicons,
+.wpr-preview-buttons a.wpr-how-to-use-theme-builder:hover .dashicons,
+.wpr-preview-buttons a.wpr-how-to-use-theme-builder:focus .dashicons {
+  color: #fff !important;
+}
+
+.wpr-preview-buttons a:last-child:not(.wpr-dynamic-tutorial),
 .wpr-preview-buttons a.wpr-how-to-use-theme-builder {
   background-color: transparent;
   border: 2px solid #6A4BFF !important;
   color: #6A4BFF;
-  padding: 5px 22px;
+  padding: 0 22px !important;
+  height: 50px !important;
+}
+
+.wpr-preview-buttons .button.wpr-options-button.wpr-dynamic-tutorial {
+  color: #e1ad01 !important;
+  background: #fff !important;
+  border: 2px solid #e1ad01 !important;
+  margin-left: 0;
+}
+
+.wpr-preview-buttons .button.wpr-options-button.wpr-dynamic-tutorial:hover,
+.wpr-preview-buttons .button.wpr-options-button.wpr-dynamic-tutorial:focus {
+  color: #fff !important;
+  background: #e1ad01 !important;
+  border: 2px solid #e1ad01 !important;
+  padding: 0 22px !important;
+  height: 50px !important;
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+          box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.wpr-preview-buttons .button.wpr-options-button.wpr-dynamic-tutorial .dashicons {
+  color: #e1ad01 !important;
+}
+
+.wpr-preview-buttons .button.wpr-options-button.wpr-dynamic-tutorial:hover .dashicons,
+.wpr-preview-buttons .button.wpr-options-button.wpr-dynamic-tutorial:focus .dashicons {
+  color: #fff !important;
+}
+
+.wp-core-ui .wpr-preview-buttons .button.wpr-options-button .dashicons {
+  color: inherit !important;
 }
 
 .wpr-preview-buttons a.wpr-how-to-use-woo-builder {
   background-color: transparent !important;
   border: 2px solid #96588a !important;
   color: #96588a !important;
-  padding: 5px 22px;
+  padding: 0 22px !important;
+  height: 50px !important;
 }
 
 .wpr-preview-buttons a.wpr-how-to-use-woo-builder:hover,
 .wpr-preview-buttons a.wpr-how-to-use-woo-builder:focus {
   color: #fff !important;
   background: #96588a !important;
-  padding: 8px 22px !important;
+  border: 2px solid #96588a !important;
+  padding: 0 22px !important;
+  height: 50px !important;
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+          box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
 .wpr-settings-page-header h1 {
@@ -152,16 +286,6 @@
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.5);
-}
-
-.royal-addons_page_wpr-theme-builder .wpr-preview-buttons {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: reverse;
-      -ms-flex-direction: row-reverse;
-          flex-direction: row-reverse;
 }
 
 .royal-addons_page_wpr-theme-builder .wpr-user-template {
@@ -810,6 +934,15 @@
   line-height: 30px;
 }
 
+.wpr-my-templates-list .wpr-delete-template .dashicons-no-alt {
+  color: #fff !important;
+}
+
+.wpr-my-templates-list .wpr-delete-template:hover .dashicons-no-alt,
+.wpr-my-templates-list .wpr-delete-template:focus .dashicons-no-alt {
+  color: #fff !important;
+}
+
 .wpr-active-conditions-template {
   border-left: 5px solid #6A4BFF;
   background: #F6F7F7;
@@ -909,6 +1042,9 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .wpr-free-vs-pro-search-wrap .button.wpr-free-pro-upgrade {
@@ -917,15 +1053,27 @@
 }
 
 .button.wpr-free-pro-upgrade {
-  display: block;
+  display: -webkit-inline-box !important;
+  display: -ms-inline-flexbox !important;
+  display: inline-flex !important;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 6px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   max-width: 250px;
+  height: 45px;
   border: none;
   background-color: #f44;
   color: #fff;
   text-align: center;
   text-transform: uppercase;
   font-weight: 600;
-  line-height: 43px;
+  line-height: 1.2;
 }
 
 .last.button.wpr-free-pro-upgrade {
@@ -939,8 +1087,23 @@
 }
 
 .button.wpr-free-pro-upgrade .dashicons {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 16px;
+  height: 16px;
   font-size: 16px;
-  line-height: 40px;
+  line-height: 1;
+  margin: 0;
+  color: #fff !important;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
 }
 
 .wpr-free-pro-upgrade.last {

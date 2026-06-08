@@ -26,6 +26,14 @@ class Wpr_Popup extends Elementor\Core\Base\Document {
 		return esc_html__( 'WPR Popup', 'wpr-addons' );
 	}
 
+	public static function get_properties() {
+		$properties = parent::get_properties();
+
+		$properties['support_kit'] = true;
+
+		return $properties;
+	}
+
 	public function get_css_wrapper_selector() {
 		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
 			return '.wpr-template-popup';

@@ -40,18 +40,18 @@ function wpr_addons_theme_builder_page() {
             ?>
         </div>
         
-        <a href="https://www.youtube.com/watch?v=kE1zmi3fxh8" class="wpr-dynamic-tutorial wpr-options-button button" target="_blank" style="padding: 8px 22px;">
-            <?php echo esc_html__( 'Dynamic Websites Tutorial', 'wpr-addons' ); ?>
+        <a href="https://www.youtube.com/watch?v=cwkhwO_rPuo" class="wpr-how-to-use-theme-builder wpr-options-button button" target="_blank">
+            <?php echo esc_html__( 'Theme Builder Tutorial', 'wpr-addons' ); ?>
             <span class="dashicons dashicons-video-alt3"></span>
         </a>
-        
-        <a href="https://www.youtube.com/watch?v=f_3tNiBC3dw" class="wpr-how-to-use-woo-builder wpr-options-button button" target="_blank" style="padding: 8px 22px; margin-left: 10px;">
+
+        <a href="https://www.youtube.com/watch?v=f_3tNiBC3dw" class="wpr-how-to-use-woo-builder wpr-options-button button" target="_blank">
             <?php echo esc_html__( 'WooCommerce Builder Tutorial', 'wpr-addons' ); ?>
             <span class="dashicons dashicons-video-alt3"></span>
         </a>
 
-        <a href="https://www.youtube.com/watch?v=cwkhwO_rPuo" class="wpr-how-to-use-theme-builder wpr-options-button button" target="_blank" style="padding: 8px 22px; margin-left: 10px;">
-            <?php echo esc_html__( 'Theme Builder Tutorial', 'wpr-addons' ); ?>
+        <a href="https://www.youtube.com/watch?v=kE1zmi3fxh8" class="wpr-dynamic-tutorial wpr-options-button button" target="_blank">
+            <?php echo esc_html__( 'Dynamic Websites Tutorial', 'wpr-addons' ); ?>
             <span class="dashicons dashicons-video-alt3"></span>
         </a>
     </div>

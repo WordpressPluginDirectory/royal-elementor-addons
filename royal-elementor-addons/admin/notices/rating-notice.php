@@ -90,7 +90,7 @@ class WprRatingNotice {
 
             echo '<div class="notice wpr-rating-notice is-dismissible" style="border-left-color: #7A75FF!important; display: flex; align-items: center; position: relative;">
                         <div class="wpr-rating-notice-logo">
-                            <img src="' . WPR_ADDONS_ASSETS_URL . '/img/logo-128x128.png">
+                            <img src="' . esc_url( WPR_ADDONS_ASSETS_URL ) . '/img/logo-128x128.png">
                         </div>
                         <div>
                             <h3>Thank you for using Royal Elementor Addons to build this website!</h3>
@@ -113,7 +113,7 @@ class WprRatingNotice {
         echo "
         <style>
             .wpr-rating-notice {
-              padding: 10px 20px;
+              padding: 10px 38px 10px 20px;
               border-top: 0;
               border-bottom: 0;
             }
@@ -141,10 +141,23 @@ class WprRatingNotice {
             .wpr-already-rated,
             .wpr-need-support,
             .wpr-notice-dismiss-2 {
-              text-decoration: none;
+              text-decoration: none !important;
               margin-left: 12px;
               font-size: 14px;
               cursor: pointer;
+            }
+
+            .wpr-maybe-later:hover,
+            .wpr-maybe-later:focus,
+            .wpr-maybe-later:active,
+            .wpr-already-rated:hover,
+            .wpr-already-rated:focus,
+            .wpr-already-rated:active,
+            .wpr-need-support:hover,
+            .wpr-need-support:focus,
+            .wpr-notice-dismiss-2:hover,
+            .wpr-notice-dismiss-2:focus {
+              text-decoration: none !important;
             }
 
             .wpr-already-rated .dashicons,
@@ -158,13 +171,17 @@ class WprRatingNotice {
             }
 
             .wpr-rating-notice .notice-dismiss {
-                display: block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 position: absolute;
-                top: 0;
-                right: 1px;
+                top: 8px;
+                right: 8px;
                 border: none;
                 margin: 0;
-                padding: 9px;
+                padding: 0;
+                width: 32px;
+                height: 32px;
                 background: none;
                 color: #787c82;
                 cursor: pointer;
@@ -175,11 +192,12 @@ class WprRatingNotice {
                 color: #787c82;
                 content: '\\f153';
                 display: block;
-                font: normal 16px/20px dashicons;
+                font: normal 16px/1 dashicons;
                 speak: never;
                 height: 20px;
-                text-align: center;
                 width: 20px;
+                line-height: 20px;
+                text-align: center;
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
             }
@@ -199,7 +217,7 @@ class WprRatingNotice {
                         type: 'POST',
                         data: {
                             action: 'wpr_rating_dismiss_notice',
-                            nonce: '" . wp_create_nonce('wpr-plugin-notice-js') . "'
+                            nonce: '" . esc_js( wp_create_nonce( 'wpr-plugin-notice-js' ) ) . "'
                         },
                         success: function() {
                             $('.wpr-rating-notice').fadeOut();

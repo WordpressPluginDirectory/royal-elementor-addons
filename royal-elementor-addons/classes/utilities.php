@@ -70,15 +70,15 @@ class Utilities {
 			'Template' => ['elementor-template', '', '', ''],
 			'Reading Progress Bar' => ['reading-progress-bar', 'https://royal-elementor-addons.com/elementor-reading-progress-bar-widget/', '', ''],
 			'Twitter Feed' => ['twitter-feed', 'https://royal-elementor-addons.com/elementor-twitter-feed-widget/', '', ''],
-			'Image Scroll' => ['image-scroll', 'https://royal-elementor-addons.com/elementor-image-scroll-widget/', '', ''],
+			'Image Scroll' => ['image-scroll', 'https://royal-elementor-addons.com/image-scroll/', '', ''],
 			'Date' => ['date', 'https://royal-elementor-addons.com/elementor-date-widget/', '', ''],
-			'Video Playlist' => ['video-playlist', '', '', 'new'],
-			'Password Protected Content' => ['password-protected-content', '', '', 'new'],
+			'Video Playlist' => ['video-playlist', 'https://royal-elementor-addons.com/video-playlist/', '', 'new'],
+			'Password Protected Content' => ['password-protected-content', 'https://royal-elementor-addons.com/password-protected-content/', '', 'new'],
 			'Icon Box' => ['icon-box', '', '', 'new'],
 			'Separator' => ['separator', '', '', 'new'],
 			// 'Random Image' => ['random-image', '', '', 'new'],
-			'Circle Menu' => ['circle-menu', '', '', 'new'],
-			'Unfold' => ['unfold', '', '', 'new'],
+			'Circle Menu' => ['circle-menu', 'https://royal-elementor-addons.com/circle-menu/', '', 'new'],
+			'Unfold' => ['unfold', 'https://royal-elementor-addons.com/unfold-widget/', '', 'new'],
 		];
 	}
 

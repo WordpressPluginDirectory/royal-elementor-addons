@@ -490,7 +490,8 @@ button.lg-icon {
     height: 100%;
     display: block;
     border: 0;
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
 }
 
 .wpr-hidden-item {
@@ -15411,6 +15412,20 @@ flex-grow: 0; */
     font-weight: 600 !important;
 }
 
+.wpr-compare-add svg,
+.wpr-compare-remove svg {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+}
+
+.wpr-compare-add svg path,
+.wpr-compare-remove svg path {
+    fill: currentColor;
+}
+
 /* == Compare Count */
 @-webkit-keyframes compare-popup-grow-in-align-middle {
     0% {-webkit-transform: scale(0) translateX(-50%) translateY(-50%);transform: scale(0) translateX(-50%) translateY(-50%); -webkit-transform-origin: top left; transform-origin: top left;}
@@ -20712,11 +20727,15 @@ input.wpr-date-filter-end {
     --wpr-weather-icon-thermo-tube: #a3a3a3;
     --wpr-weather-icon-wind: #94a3b8;
     --wpr-weather-icon-fog-lines: #cbd5e1;
+    --wpr-weather-extra-info-icon-size: 28px;
+    --wpr-weather-extra-info-icon-gap: 8px;
+    --wpr-weather-extra-info-row-gap: 6px;
     padding: 23px;
     border: 1px solid #e8e8e8;
     border-radius: 10px;
     background-color: #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .wpr-weather-header {
@@ -20734,6 +20753,8 @@ input.wpr-date-filter-end {
 }
 
 .wpr-weather-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
@@ -20758,8 +20779,12 @@ input.wpr-date-filter-end {
 }
 
 .wpr-weather-info:nth-child(1) {
-    justify-content: center;
-    align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .wpr-weather-info:nth-child(2) {
@@ -20775,27 +20800,71 @@ input.wpr-date-filter-end {
     text-transform: capitalize;
 }
 
-.wpr-weather-extra-info > div {
-    display: flex;
-}
-
-.wpr-weather-extra-info svg {
-    width: 30px;
-    height: 30px;
-}
-
-.wpr-weather-extra-info span {
-    display: block;
-    margin: 5px 0;
-}
-
 .wpr-weather-extra-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    gap: var(--wpr-weather-extra-info-row-gap);
     text-align: left;
 }
 
-.wpr-weather-footer {
+.wpr-weather-extra-info-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    gap: var(--wpr-weather-extra-info-icon-gap);
+}
+
+.wpr-weather-extra-info-icon {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 var(--wpr-weather-extra-info-icon-size);
+            flex: 0 0 var(--wpr-weather-extra-info-icon-size);
+    width: var(--wpr-weather-extra-info-icon-size);
+    height: var(--wpr-weather-extra-info-icon-size);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+}
+
+.wpr-weather-extra-info-icon .wpr-weather-svg {
+    width: var(--wpr-weather-extra-info-icon-size);
+    height: var(--wpr-weather-extra-info-icon-size);
+    -ms-flex-negative: 0;
+        flex-shrink: 0;
+}
+
+.wpr-weather-extra-info-icon .wpr-weather-svg-windy {
+    width: calc(var(--wpr-weather-extra-info-icon-size) * 0.93);
+    height: auto;
+    max-height: calc(var(--wpr-weather-extra-info-icon-size) * 0.64);
+}
+
+.wpr-weather-extra-info-text {
+    display: block;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.wpr-weather-footer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
 }
 
 .wpr-weather-forecast {
@@ -20822,7 +20891,10 @@ input.wpr-date-filter-end {
 
 @media (max-width: 767px) {
     .wpr-weather-info-wrap {
-        flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
     }
 
     .wpr-weather-info:nth-child(2) > div {
@@ -20830,10 +20902,417 @@ input.wpr-date-filter-end {
     }
 
     .wpr-weather-footer {
-        flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
     }
 
     .wpr-weather-forecast {
-        flex: 0 0 auto;
+        -webkit-box-flex: 0;
+            -ms-flex: 0 0 auto;
+                flex: 0 0 auto;
+    }
+}
+.wpr-google-reviews-wrap {
+    position: relative;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
+}
+
+.elementor-editor-active .wpr-google-reviews-wrap {
+    opacity: 1;
+}
+
+.wpr-google-reviews-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    gap: 16px;
+    margin: 0 0 16px;
+}
+
+.wpr-google-place-summary {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    margin: 0;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 1 auto;
+            flex: 0 1 auto;
+    min-width: 0;
+}
+
+.wpr-google-place-summary-brand {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: auto;
+    max-width: 100%;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    gap: 6px;
+    margin: 0 0 8px;
+    line-height: 1;
+}
+
+.wpr-google-wordmark {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+.wpr-google-letter-g {
+    color: #4285f4;
+}
+
+.wpr-google-letter-o1 {
+    color: #ea4335;
+}
+
+.wpr-google-letter-o2 {
+    color: #fbbc04;
+}
+
+.wpr-google-letter-g2 {
+    color: #4285f4;
+}
+
+.wpr-google-letter-l {
+    color: #34a853;
+}
+
+.wpr-google-letter-e {
+    color: #ea4335;
+}
+
+.wpr-google-brand-label {
+    font-size: 20px;
+    font-weight: 500;
+    color: #202124;
+}
+
+.wpr-google-place-summary-rating {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+}
+
+a.wpr-google-place-summary-rating:hover {
+    color: inherit;
+}
+
+.wpr-google-place-summary-score {
+    font-size: 16px;
+    font-weight: 500;
+    color: #3c4043;
+    line-height: 1;
+}
+
+.wpr-google-place-summary-stars {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    line-height: 1;
+}
+
+.wpr-google-place-summary-count {
+    font-size: 14px;
+    color: #70757a;
+    line-height: 1;
+}
+
+.wpr-google-reviews-place-link {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+    margin: 0;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    color: #ffffff;
+    background-color: #605be5;
+    border-radius: 50px;
+    text-decoration: none;
+    -webkit-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
+}
+
+.wpr-google-reviews-place-link:hover {
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.wpr-google-reviews-slider {
+    position: relative;
+    overflow: hidden;
+}
+
+.wpr-google-reviews-slider.wpr-google-reviews-no-nav {
+    padding: 0;
+}
+
+.wpr-google-reviews-slider .swiper-wrapper {
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+}
+
+.wpr-google-reviews-slider .swiper-slide {
+    height: auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.wpr-google-review-card {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    gap: 12px;
+}
+
+.wpr-google-review-head {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    gap: 10px;
+}
+
+.wpr-google-review-avatar img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    -o-object-fit: cover;
+       object-fit: cover;
+}
+
+.wpr-google-review-meta {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
+
+.wpr-google-review-card-icon {
+    margin-left: auto;
+    margin-top: 2px;
+    line-height: 0;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -ms-flex-item-align: start;
+        align-self: flex-start;
+}
+
+.wpr-google-review-card-icon svg {
+    width: 18px;
+    height: 18px;
+    max-width: none;
+    -ms-flex-negative: 0;
+        flex-shrink: 0;
+    display: block;
+}
+
+.wpr-google-review-author {
+    line-height: 1.2;
+}
+
+.wpr-google-review-date {
+    font-size: 12px;
+    color: #7a7a7a;
+}
+
+.wpr-google-review-stars {
+    line-height: 1;
+}
+
+.wpr-google-star {
+    color: #cfcfcf;
+    font-size: 16px;
+    display: inline-block;
+    margin-right: 2px;
+}
+
+.wpr-google-star.is-active {
+    color: #fbbc04;
+}
+
+.wpr-google-review-text {
+    color: #2a2a2a;
+    line-height: 1.6;
+}
+
+.wpr-google-review-stars-link {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    text-decoration: none;
+    color: inherit;
+    line-height: 1;
+}
+
+.wpr-google-review-stars-link:hover {
+    color: inherit;
+}
+
+.wpr-google-review-link {
+    margin-top: auto;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    font-size: 13px;
+    color: #605be5;
+}
+
+.wpr-google-reviews-slider .wpr-button-prev,
+.wpr-google-reviews-slider .wpr-button-next {
+    position: absolute;
+    top: clamp(calc(var(--wpr-google-nav-size, 24px) / 2), var(--wpr-google-nav-y, 50%), calc(100% - (var(--wpr-google-nav-size, 24px) / 2)));
+    bottom: auto;
+    z-index: 2;
+    width: 24px;
+    height: 24px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    border-radius: 0;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+    color: #605be5;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.wpr-google-reviews-slider .wpr-button-prev {
+    left: clamp(0px, var(--wpr-google-nav-x, 10px), calc(100% - var(--wpr-google-nav-size, 24px)));
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+}
+
+.wpr-google-reviews-slider .wpr-button-next {
+    right: clamp(0px, var(--wpr-google-nav-x, 10px), calc(100% - var(--wpr-google-nav-size, 24px)));
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+}
+
+.wpr-google-reviews-slider .wpr-next-arrow {
+    -webkit-transform: translateY(-50%) rotate(180deg);
+        -ms-transform: translateY(-50%) rotate(180deg);
+            transform: translateY(-50%) rotate(180deg);
+}
+
+.wpr-google-reviews-slider .wpr-button-prev.swiper-button-disabled,
+.wpr-google-reviews-slider .wpr-button-next.swiper-button-disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.wpr-google-reviews-error {
+    padding: 10px;
+    border: 1px solid #dc2626;
+    color: #dc2626;
+    border-radius: 6px;
+}
+
+@media (max-width: 767px) {
+    .wpr-google-reviews-slider.wpr-google-reviews-no-nav {
+        padding-bottom: 0;
+    }
+
+    .wpr-google-reviews-slider .wpr-button-prev,
+    .wpr-google-reviews-slider .wpr-button-next {
+        width: 22px;
+        height: 22px;
+        font-size: 18px;
+        bottom: auto;
+    }
+
+    .wpr-google-reviews-slider .wpr-button-prev {
+        left: 8px;
+    }
+
+    .wpr-google-reviews-slider .wpr-button-next {
+        right: 8px;
     }
 }

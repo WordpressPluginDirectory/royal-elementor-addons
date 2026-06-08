@@ -17,6 +17,20 @@ jQuery(document).ready(function( $ ) {
 			currentTab = currentTab.replace(' ', '_');
 		}
 
+	function parseConditionsJSON( value ) {
+		if ( '' === value || '[]' === value || null == value ) {
+			return {};
+		}
+
+		try {
+			var parsed = JSON.parse( value );
+			return ( parsed && 'object' === typeof parsed ) ? parsed : {};
+		} catch ( error ) {
+			console.warn( 'REA: Invalid conditions JSON, using fallback.', error );
+			return {};
+		}
+	}
+
 	/*
 	** Get Active Filter -------------------------
 	*/
@@ -204,7 +218,7 @@ jQuery(document).ready(function( $ ) {
 
 			// Delete associated Conditions
 			if ( 'my_templates' !== getActiveFilter() ) {
-				var conditions = JSON.parse($( '#wpr_'+ currentTab +'_conditions' ).val());
+				var conditions = parseConditionsJSON( $( '#wpr_'+ currentTab +'_conditions' ).val() );
 					delete conditions[slug];
 
 				// Set Conditions
@@ -331,7 +345,7 @@ jQuery(document).ready(function( $ ) {
 	*/
 	function popupSetConditions( template ) {
 		var conditions = $( '#wpr_'+ currentTab +'_conditions' ).val();
-			conditions = '' !== conditions ? JSON.parse(conditions) : {};
+			conditions = parseConditionsJSON( conditions );
 		// Reset
 		$('.wpr-conditions').remove();
 
@@ -423,7 +437,7 @@ jQuery(document).ready(function( $ ) {
 		$( '.wpr-delete-template-conditions' ).on( 'click', function() {
 			var current = $(this).parent(),
 				conditions = $( '#wpr_'+ currentTab +'_conditions' ).val();
-				conditions = '' !== conditions ? JSON.parse(conditions) : {};
+				conditions = parseConditionsJSON( conditions );
 
 			// Update Conditions
 			$('#wpr_'+ currentTab +'_conditions').val( JSON.stringify( removeConditions( conditions, getConditionsPath(current) ) ) );
@@ -564,7 +578,7 @@ jQuery(document).ready(function( $ ) {
 	*/
 	function getConditions( template, conditions ) {
 		// Conditions
-		conditions = ('' === conditions || '[]' === conditions) ? {} : JSON.parse(conditions);
+		conditions = parseConditionsJSON( conditions );
 		conditions[template] = [];
 
 		$('.wpr-conditions').each( function() {
@@ -657,7 +671,7 @@ jQuery(document).ready(function( $ ) {
 	if ( $('body').hasClass('royal-addons_page_wpr-theme-builder') || $('body').hasClass('royal-addons_page_wpr-popups') ) {
 		if ( currentTab && 'my_templates' !== currentTab ) {
 			var conditions = $( '#wpr_'+ currentTab +'_conditions' ).val(),
-				conditions = ('' === conditions || '[]' === conditions) ? {} : JSON.parse(conditions);
+				conditions = parseConditionsJSON( conditions );
 
 			for ( var key in conditions ) {
 				$('.wpr-delete-template[data-slug="'+ key +'"]').closest('li').addClass('wpr-active-conditions-template');

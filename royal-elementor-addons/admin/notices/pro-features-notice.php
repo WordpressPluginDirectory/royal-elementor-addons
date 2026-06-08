@@ -243,9 +243,9 @@ class WprProFeaturesNotice {
             .wpr-pro-features-btn,
             .wpr-new-widgets-list + a {
                 display: inline-block;
-                text-decoration: none;
+                text-decoration: none !important;
                 text-transform: uppercase;
-                color: #fff;
+                color: #fff !important;
                 background: #6A4BFF;
                 padding: 5px 18px 7px;
                 border-radius: 3px;
@@ -274,12 +274,12 @@ class WprProFeaturesNotice {
                 background: #e1ad01;
             }
 
-            .wpr-pro-features-btn:hover {
-                color: #FFF;
-            }
-
-            .wpr-pro-features-btn:focus {
-                color: #FFF;
+            .wpr-pro-features-btn:hover,
+            .wpr-pro-features-btn:focus,
+            .wpr-pro-features-btn:active,
+            .wpr-pro-features-btn:visited {
+                color: #fff !important;
+                text-decoration: none !important;
             }
 
             .wpr-get-started-button.button-primary {

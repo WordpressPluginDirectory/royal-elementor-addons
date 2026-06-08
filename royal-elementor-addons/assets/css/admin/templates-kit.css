@@ -181,6 +181,21 @@
 .button.wpr-options-button .dashicons {
   font-size: 16px;
   line-height: 32px;
+  color: #fff;
+}
+
+.wpr-templates-kit-page-title .button.wpr-options-button .dashicons-video-alt3 {
+  color: #fff !important;
+}
+
+.button.wpr-options-button:hover .dashicons,
+.button.wpr-options-button:focus .dashicons {
+  color: #fff;
+}
+
+.wpr-templates-kit-page-title .button.wpr-options-button:hover .dashicons-video-alt3,
+.wpr-templates-kit-page-title .button.wpr-options-button:focus .dashicons-video-alt3 {
+  color: #fff !important;
 }
 
 .wpr-templates-kit-grid {
@@ -505,6 +520,19 @@ span.wpr-woo-builder-label {
 .wpr-templates-kit-single .get-access .dashicons {
   font-size: 14px;
   line-height: 30px;
+  color: #fff;
+}
+
+.wpr-templates-kit-single .import-kit .dashicons-download,
+.wpr-templates-kit-single .get-access .dashicons-download {
+  color: #fff !important;
+}
+
+.wpr-templates-kit-single .import-kit:hover .dashicons-download,
+.wpr-templates-kit-single .import-kit:focus .dashicons-download,
+.wpr-templates-kit-single .get-access:hover .dashicons-download,
+.wpr-templates-kit-single .get-access:focus .dashicons-download {
+  color: #fff !important;
 }
 
 .wpr-templates-kit-single .selected-template {

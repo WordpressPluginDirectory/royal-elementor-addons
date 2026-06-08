@@ -54,22 +54,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 		];
 
 		$response = wp_remote_post( trim(get_option('wpr_webhook_url_' . $_POST['wpr_form_id'])), $args );
+		$response_code = (int) wp_remote_retrieve_response_code( $response );
+		$is_success = ! is_wp_error( $response ) && $response_code >= 200 && $response_code < 300;
 
-		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-			wp_send_json_error(array(
+		if ( ! $is_success ) {
+			wp_send_json_error([
 				'action' => 'wpr_form_builder_webhook',
 				'message' => esc_html__('Webhook error', 'wpr-addons'),
 				'status' => 'error',
 				'details' => json_encode($message_body)
-			));
+			]);
 			// throw new \Exception( 'Webhook error.' );
 		} else {
-			wp_send_json_success(array(
+			wp_send_json_success([
 				'action' => 'wpr_form_builder_webhook',
 				'message' => esc_html__('Webhook success', 'wpr-addons'),
 				'status' => 'success',
 				'details' => json_encode($message_body)
-			));
+			]);
         }
     }
  }

@@ -126,9 +126,9 @@ function render_settings_popup() {
                 <span class="dashicons dashicons-no-alt wpr-mm-settings-close-popup-btn"></span>
             </div>
 
-            <?php $pro_active = defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ? 'data-pro-active="true"' : 'data-pro-active="false"'; ?>
-            
-            <div class="wpr-mm-settings-wrap" <?php echo $pro_active; ?>>
+            <?php $pro_active = ( defined( 'WPR_ADDONS_PRO_VERSION' ) && wpr_fs()->can_use_premium_code() ) ? 'true' : 'false'; ?>
+
+            <div class="wpr-mm-settings-wrap" data-pro-active="<?php echo esc_attr( $pro_active ); ?>">
                 <h4><?php esc_html_e('General', 'wpr-addons'); ?></h4>
                 <div class="wpr-mm-setting wpr-mm-setting-switcher">
                     <h4><?php esc_html_e('Enable Mega Menu', 'wpr-addons'); ?></h4>

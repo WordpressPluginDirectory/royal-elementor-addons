@@ -37,6 +37,7 @@ if ( version_compare( get_bloginfo( 'version' ), '5.1.0', '>=' ) ) {
 ** Render Templates Kit Page
 */
 function wpr_addons_templates_kit_page() {
+    $has_pro_access = defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code();
 
 ?>
 
@@ -111,9 +112,11 @@ function wpr_addons_templates_kit_page() {
 
             // Loop
             foreach ($sorted_kits as $kit_id => $data) {
+                $is_pro_kit = isset($data['price']) && 'pro' === $data['price'];
+                $can_import = $is_pro_kit ? $has_pro_access : true;
                 $is_expert = isset($data['expert']) && 'expert' === $data['expert'] ? 'true' : 'false';
 
-                echo '<div class="grid-item" data-kit-id="'. esc_attr($kit_id) .'" data-title="'. esc_attr(strtolower($data['name'])) .'" data-tags="'. esc_attr($data['tags']) .'" data-plugins="'. esc_attr($data['plugins']) .'" data-pages="'. esc_attr($data['pages']) .'" data-price="'. esc_attr($data['price']) .'" data-expert="'. esc_attr($is_expert) .'">';
+                echo '<div class="grid-item" data-kit-id="'. esc_attr($kit_id) .'" data-title="'. esc_attr(strtolower($data['name'])) .'" data-tags="'. esc_attr($data['tags']) .'" data-plugins="'. esc_attr($data['plugins']) .'" data-pages="'. esc_attr($data['pages']) .'" data-price="'. esc_attr($data['price']) .'" data-can-import="'. esc_attr($can_import ? 'true' : 'false') .'" data-expert="'. esc_attr($is_expert) .'">';
                     echo '' !== $data['label'] ? '<span class="label label-'. esc_attr($data['label']) .'">'. esc_html($data['label']) .'</span>' : '';
                     echo '<div class="image-wrap">';
                         echo '<img class="lazy" src="'. esc_url(WPR_ADDONS_ASSETS_URL .'img/icon-256x256.png') .'" data-src="'. esc_url('https://royal-elementor-addons.com/library/templates-kit/'. $kit_id .'/home.jpg') .'" alt="'. esc_attr($data['name']) .'">';

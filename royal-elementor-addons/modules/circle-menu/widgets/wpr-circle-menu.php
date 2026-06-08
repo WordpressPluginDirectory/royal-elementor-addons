@@ -132,6 +132,8 @@ class Wpr_Circle_Menu extends Widget_Base {
 			]
 		);
 
+		Utilities::wpr_library_buttons( $this, Controls_Manager::RAW_HTML );
+
 		$repeater = new Repeater();
 
 		$repeater->add_control(

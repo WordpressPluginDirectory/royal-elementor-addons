@@ -21,6 +21,14 @@ class Wpr_Theme_Builder extends Elementor\Core\Base\Document {
 		return esc_html__( 'WPR Theme Builder', 'wpr-addons' );
 	}
 
+	public static function get_properties() {
+		$properties = parent::get_properties();
+
+		$properties['support_kit'] = true;
+
+		return $properties;
+	}
+
 	protected function register_controls() {
 		// Get Available Post Types
 		$post_types = Utilities::get_custom_types_of( 'post', false );

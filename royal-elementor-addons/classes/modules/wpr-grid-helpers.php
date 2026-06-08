@@ -1330,7 +1330,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$attributes  = ' data-action="'. esc_attr( $settings['element_sharing_trigger_action'] ) .'"';
 						$attributes .= ' data-direction="'. esc_attr( $settings['element_sharing_trigger_direction'] ) .'"';
 
-						echo '<a class="wpr-sharing-trigger wpr-sharing-icon"'. $attributes .'>';
+						echo '<a class="wpr-sharing-trigger wpr-sharing-icon"'. $attributes .'>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							if ( 'yes' === $settings['element_sharing_tooltip'] ) {
 								echo '<span class="wpr-sharing-tooltip wpr-tooltip">'. esc_html__( 'Share', 'wpr-addons' ) .'</span>';
 							}

@@ -1,7 +1,7 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1062
+Stable tag: 1.7.1063
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 5.6
@@ -503,6 +503,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 15. Elementor Premade Blocks
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1063 - 2026-06-08 =
+* FIXED: Minor Vulnerebilities
+* FIXED: Minor Bugs
+* ADDED: Google Review Widget (PRO)
+* ADDED: Global Styles now available in Theme Builder Templates
+
 = Royal Elementor Addons v1.7.1062 - 2026-05-22 =
 * ADDED: Elementor Template Kit: School V2 - [**School V2**](https://demosites.royal-elementor-addons.com/school-v2/?ref=rea-wpo-pp-details-tab).
 

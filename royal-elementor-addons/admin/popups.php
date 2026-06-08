@@ -30,12 +30,12 @@ function wpr_addons_popups_page() {
             <span class="plus-icon">+</span>
         </div>
 
-        <a href="https://www.youtube.com/watch?v=TbKTNpuXM68" class="wpr-options-button button" target="_blank" style="padding: 10px 22px;">
+        <a href="https://www.youtube.com/watch?v=TbKTNpuXM68" class="wpr-options-button button" target="_blank">
             <?php echo esc_html__( 'How to use Popups', 'wpr-addons' ); ?>
             <span class="dashicons dashicons-video-alt3"></span>
         </a>
 
-        <a href="https://royaladdons.frill.co/b/6m4d5qm4/feature-ideas" class="wpr-options-button button" target="_blank" style="padding: 8px 22px;">
+        <a href="https://royaladdons.frill.co/b/6m4d5qm4/feature-ideas" class="wpr-options-button button" target="_blank">
             <?php echo esc_html__( 'Request New Feature', 'wpr-addons' ); ?>
             <span class="dashicons dashicons-star-empty"></span>
         </a>

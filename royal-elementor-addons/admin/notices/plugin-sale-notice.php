@@ -213,6 +213,12 @@ class WprPluginSaleNotice {
               line-height: 30px;
             }
 
+            .wpr-plugin-sale-notice .wpr-upgrade-to-pro-button:first-child .dashicons-arrow-right-alt,
+            .wpr-plugin-sale-notice .wpr-upgrade-to-pro-button:first-child:hover .dashicons-arrow-right-alt,
+            .wpr-plugin-sale-notice .wpr-upgrade-to-pro-button:first-child:focus .dashicons-arrow-right-alt {
+              color: #fff !important;
+            }
+
             .wpr-plugin-sale-notice .wpr-dynamic-tutorial {
                 text-decoration: none;
                 color: #FFF;

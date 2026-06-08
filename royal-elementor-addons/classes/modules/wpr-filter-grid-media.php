@@ -266,7 +266,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public function render_post_title( $settings, $class ) {
 		$title_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $_POST['grid_settings']['title_pointer'];
 		$title_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $_POST['grid_settings']['title_pointer_animation'];
-		$pointer_item_class = (isset($_POST['grid_settings']['title_pointer']) && 'none' !==$_POST['grid_settings']['title_pointer']) ? 'class="wpr-pointer-item"' : '';
+		$pointer_item_class = ( isset( $_POST['grid_settings']['title_pointer'] ) && 'none' !== $_POST['grid_settings']['title_pointer'] ) ? 'wpr-pointer-item' : '';
 		
 		$class .= ' wpr-pointer-'. $title_pointer;
 		$class .= ' wpr-pointer-line-fx wpr-pointer-fx-'. $title_pointer_animation;
@@ -277,11 +277,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		echo '<'. esc_attr($element_title_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				if ( 'yes' === $settings['element_disable_link'] ) {
-					echo '<span '. $pointer_item_class .'>';
+					echo '<span class="' . esc_attr( $pointer_item_class ) . '">';
 						echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
 					echo '</span>';
 				} else {
-					echo '<a '. $pointer_item_class .' href="'. esc_url( get_the_permalink() ) .'">';
+					echo '<a class="' . esc_attr( $pointer_item_class ) . '" href="' . esc_url( get_the_permalink() ) . '">';
 						echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
 					echo '</a>';
 				}
@@ -337,7 +337,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 				 	echo '</span>';
 				}
 
@@ -351,7 +351,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 				 	echo '</span>';
 				}
 				// Text: After
@@ -379,7 +379,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 				 	echo '</span>';
 				}
 
@@ -393,7 +393,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 				 	echo '</span>';
 				}
 				// Text: After
@@ -426,7 +426,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 				 	echo '</span>';
 				}
 					if ( 'yes' === $settings['element_show_avatar'] ) {
@@ -442,7 +442,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 				 	echo '</span>';
 				}
 				echo '</a>';
@@ -465,7 +465,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					echo '<span class="wpr-grid-extra-text-left">'. esc_html( $settings['element_extra_text'] ) .'</span>';
 				}
 
-				echo $post_likes->get_button( $post_id, $settings );
+				echo wp_kses_post( $post_likes->get_button( $post_id, $settings ) );
 
 				// Text: After
 				if ( 'after' === $settings['element_extra_text_pos'] ) {
@@ -502,22 +502,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$attributes  = ' data-action="'. esc_attr( $settings['element_sharing_trigger_action'] ) .'"';
 						$attributes .= ' data-direction="'. esc_attr( $settings['element_sharing_trigger_direction'] ) .'"';
 
-						echo '<a class="wpr-sharing-trigger wpr-sharing-icon"'. $attributes .'>';
+						echo '<a class="wpr-sharing-trigger wpr-sharing-icon"'. $attributes .'>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							if ( 'yes' === $settings['element_sharing_tooltip'] ) {
 								echo '<span class="wpr-sharing-tooltip wpr-tooltip">'. esc_html__( 'Share', 'wpr-addons' ) .'</span>';
 							}
 
-							echo Utilities::get_wpr_icon( $settings['element_sharing_trigger_icon'], '' );
+							echo wp_kses_post( Utilities::get_wpr_icon( $settings['element_sharing_trigger_icon'], '' ) );
 						echo '</a>';
 					}
 
 
-					echo '<span class="wpr-post-sharing-inner'. $hidden_class .'">';
+					echo '<span class="wpr-post-sharing-inner' . esc_attr( $hidden_class ) . '">';
 
 					for ( $i = 1; $i < 7; $i++ ) {
 						$args['network'] = $settings['element_sharing_icon_'. $i];
 
-						echo Utilities::get_post_sharing_icon( $args );
+						echo wp_kses_post( Utilities::get_post_sharing_icon( $args ) );
 					}
 
 					echo '</span>';
@@ -658,7 +658,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 					echo '</span>';
 				}
 
@@ -678,7 +678,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						echo '<style>'. esc_html($custom_tax_styles) .'</style>'; // TODO: take out of loop if possible
 					}
 
-					echo '<a class="'. $pointer_item_class .' wpr-tax-id-'. esc_attr($term->term_id) .'" href="'. esc_url(get_term_link( $term->term_id )) .'">'. esc_html( $term->name );
+					echo '<a class="' . esc_attr( trim( $pointer_item_class . ' wpr-tax-id-' . $term->term_id ) ) . '" href="' . esc_url( get_term_link( $term->term_id ) ) . '">' . esc_html( $term->name );
 						if ( ++$count !== count( $terms ) ) {
 							echo '<span class="tax-sep">'. esc_html($settings['element_tax_sep']) .'</span>';
 						}
@@ -692,7 +692,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo wp_kses_post( $extra_icon );
 					echo '</span>';
 				}
 				// Text: After

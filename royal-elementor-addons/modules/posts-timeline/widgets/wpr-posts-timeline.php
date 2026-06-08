@@ -4634,8 +4634,8 @@ class Wpr_Posts_Timeline extends Widget_Base {
 
 		$this->end_controls_section();
 
-			$this->start_controls_section(
-				'navigation_button_styles',
+		$this->start_controls_section(
+			'navigation_button_styles',
 			[
 				'label' => esc_html__( 'Navigation', 'wpr-addons' ),
 				'tab' => Controls_Manager::TAB_STYLE,

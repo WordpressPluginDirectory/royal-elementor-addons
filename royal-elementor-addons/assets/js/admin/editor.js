@@ -804,7 +804,14 @@
 	function openPedefinedStyles( panel, preview, widget, url, filter ) {
 		panel.on( 'click', '.elementor-control-wpr_library_buttons .elementor-control-raw-html div a:first-child', function() {
 			var theme = $(this).data('theme');
-			$(this).attr('href', url +'?ref=rea-plugin-panel-'+ widget +'-utmtr'+ theme.slice(0,3) +'nkbs'+ theme.slice(3,theme.length) +'-preview'+ filter);
+			var previewURL = url;
+
+			// Some widget pages use /<widget-slug>-widget/ structure.
+			if ( ! previewURL ) {
+				previewURL = 'https://royal-elementor-addons.com/' + widget + '-widget/';
+			}
+
+			$(this).attr('href', previewURL +'?ref=rea-plugin-panel-'+ widget +'-utmtr'+ theme.slice(0,3) +'nkbs'+ theme.slice(3,theme.length) +'-preview'+ filter);
 		});
 
 		panel.on( 'click', '.elementor-control-wpr_library_buttons .elementor-control-raw-html div a:last-child', function() {

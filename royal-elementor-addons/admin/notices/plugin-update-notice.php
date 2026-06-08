@@ -80,11 +80,9 @@ class WprPluginNotice {
                 align-items: center;
                 margin-top: 20px;
                 margin-bottom: 20px;
-                padding: 30px;
+                padding: 30px 38px 30px 40px;
                 border: 0 !important;
                 box-shadow: 0 0 5px rgb(0 0 0 / 0.1);
-
-                padding-left: 40px;
             }
 
             .wpr-plugin-update-notice-logo {
@@ -202,6 +200,42 @@ class WprPluginNotice {
               width: 100%;
               height: 100%;
               pointer-events: none;
+            }
+
+            .wpr-plugin-update-notice .notice-dismiss {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                border: none;
+                margin: 0;
+                padding: 0;
+                width: 32px;
+                height: 32px;
+                background: none;
+                color: #787c82;
+                cursor: pointer;
+            }
+
+            .wpr-plugin-update-notice .notice-dismiss:before {
+                background: none;
+                color: #787c82;
+                content: '\\f153';
+                display: block;
+                font: normal 16px/1 dashicons;
+                speak: never;
+                height: 20px;
+                width: 20px;
+                line-height: 20px;
+                text-align: center;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            .wpr-plugin-update-notice .notice-dismiss:hover:before {
+                color: #d63638;
             }
         </style>";
 
