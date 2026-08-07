@@ -1,9 +1,9 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1063
+Stable tag: 1.7.1065
 Requires at least: 5.0
-Tested up to: 7.0
+Tested up to: 7.0.3
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -503,6 +503,18 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 15. Elementor Premade Blocks
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1065 - 2026-08-07 =
+* ADDED: Elementor Template Kit: Digital Marketing Agency V5 - [**Digital Marketing Agency V5**](https://demosites.royal-elementor-addons.com/digital-marketing-agency-v5/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Hotel V3 - [**Hotel V3**](https://demosites.royal-elementor-addons.com/hotel-v3/?ref=rea-wpo-pp-details-tab).
+* ADDED: Wooshop V3 - Elementor Template Kit [**Wooshop V3**](https://demosites.royal-elementor-addons.com/wooshop-v3/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Product Showcase V1 - [**Product Showcase V1**](https://demosites.royal-elementor-addons.com/product-showcase-v1/?ref=rea-wpo-pp-details-tab).
+* ADDED: Template Kit Filters in the plugin backend
+* FIXED: Bugs and Minor issues.
+
+= Royal Elementor Addons v1.7.1064 - 2026-06-25 =
+* ADDED: Elementor Template Kit: Jewelry V3 - [**Jewelry V3**](https://demosites.royal-elementor-addons.com/jewelry-v3/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Skincare V2 - [**Skincare V2**](https://demosites.royal-elementor-addons.com/skincare-v2/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.7.1063 - 2026-06-08 =
 * FIXED: Minor Vulnerebilities
 * FIXED: Minor Bugs
@@ -527,7 +539,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = Royal Elementor Addons v1.7.1058 - 2026-04-24 =
 * FIXED: Minor Issues
-* ADDED: Elementor Template Kit: Hotel V2 - [**Hotel V5**](https://demosites.royal-elementor-addons.com/hotel-v2/?ref=rea-wpo-pp-details-tab).
+* ADDED: Elementor Template Kit: Hotel V2 - [**Hotel V2**](https://demosites.royal-elementor-addons.com/hotel-v2/?ref=rea-wpo-pp-details-tab).
 
 = Royal Elementor Addons v1.7.1057 - 2026-04-03 =
 * FIXED: Minor Issues

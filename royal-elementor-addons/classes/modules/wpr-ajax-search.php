@@ -23,6 +23,37 @@ if ( ! defined( 'ABSPATH' ) ) {
         add_action('wp_ajax_nopriv_wpr_data_fetch',[$this, 'data_fetch']);
     }
 
+    /**
+     * Sanitize meta keys for ajax search. Rejects empty and underscore-prefixed (private) keys.
+     *
+     * @param string|array $raw_keys Comma-separated string or array of meta keys.
+     * @return string[]
+     */
+    private static function sanitize_search_meta_keys( $raw_keys ) {
+        if ( is_string( $raw_keys ) ) {
+            $raw_keys = preg_split( '/\s*,\s*/', $raw_keys, -1, PREG_SPLIT_NO_EMPTY );
+        }
+
+        if ( ! is_array( $raw_keys ) ) {
+            return [];
+        }
+
+        $keys = [];
+
+        foreach ( $raw_keys as $key ) {
+            $key = sanitize_text_field( (string) $key );
+
+            // Allow only safe public meta key characters; reject private (_*) keys.
+            if ( '' === $key || '_' === $key[0] || ! preg_match( '/^[A-Za-z0-9_\-]+$/', $key ) ) {
+                continue;
+            }
+
+            $keys[] = $key;
+        }
+
+        return array_values( array_unique( $keys ) );
+    }
+
     public function data_fetch() {
 
         $nonce = $_POST['nonce'];
@@ -112,7 +143,6 @@ if ( ! defined( 'ABSPATH' ) ) {
             } 
         }
 
-        $keyword = sanitize_text_field( $_POST['wpr_keyword'] );
         $can_view_protected_posts = current_user_can('read_private_posts');
         $meta_query = [];
 
@@ -149,19 +179,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 
         $the_query = new \WP_Query( $args );
 
-        if ( !$the_query->have_posts() && $keyword !== '' && 'yes' === sanitize_text_field( $_POST['wpr_meta_query'] ) ) {
-            $fallback_args = $args;
-            $fallback_args['s'] = ''; // disable default search
-            $fallback_args['meta_query'] = [
-                [
-                    'value'   => $keyword,
-                    'compare' => 'LIKE'
-                ]
-            ];
+        // Fallback: search selected public meta keys only (never key-less / never _* keys).
+        if ( ! $the_query->have_posts() && 'yes' === sanitize_text_field( wp_unslash( $_POST['wpr_meta_query'] ?? '' ) ) ) {
+            $keyword = sanitize_text_field( wp_unslash( $_POST['wpr_keyword'] ?? '' ) );
+            $meta_keys = self::sanitize_search_meta_keys( wp_unslash( $_POST['wpr_meta_keys'] ?? '' ) );
 
-            $the_query = new \WP_Query($fallback_args);
+            if ( '' !== $keyword && mb_strlen( $keyword ) >= 3 && ! empty( $meta_keys ) ) {
+                $meta_query_or = [ 'relation' => 'OR' ];
+
+                foreach ( $meta_keys as $meta_key ) {
+                    $meta_query_or[] = [
+                        'key'     => $meta_key,
+                        'value'   => $keyword,
+                        'compare' => 'LIKE',
+                    ];
+                }
+
+                if ( 'yes' === sanitize_text_field( wp_unslash( $_POST['wpr_exclude_without_thumb'] ?? '' ) ) ) {
+                    $meta_query_or = [
+                        'relation' => 'AND',
+                        [ 'key' => '_thumbnail_id' ],
+                        $meta_query_or,
+                    ];
+                }
+
+                $args['s'] = '';
+                $args['meta_query'] = $meta_query_or;
+
+                $the_query = new \WP_Query( $args );
+            }
         }
-        
+
         if( $the_query->have_posts() ) :
             $number_of_queried_posts = $the_query->found_posts;
             $post_count = 0;

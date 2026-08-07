@@ -4,10 +4,7 @@ namespace WprAddons\Modules\GoogleMaps\Widgets;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Repeater;
-use Elementor\Group_Control_Text_Shadow;
 use Elementor\Group_Control_Typography;
-use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use WprAddons\Classes\Utilities;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -614,6 +611,17 @@ class Wpr_Google_Maps extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'infow_window_close_icon_color',
+			[
+				'label'  => esc_html__( 'Close Icon Color', 'wpr-addons' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .gm-ui-hover-effect span' => 'background-color: {{VALUE}} !important',
+				],
+			]
+		);
+
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -708,6 +716,24 @@ class Wpr_Google_Maps extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'infow_window_close_icon_size',
+			[
+				'label' => esc_html__( 'Close Icon Size', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'min' => 18,
+						'max' => 44,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} button.gm-ui-hover-effect span' => 'width: {{SIZE}}px !important; height: {{SIZE}}px !important; margin: calc({{SIZE}}px / 4) !important;',
+					'{{WRAPPER}} button.gm-ui-hover-effect' => 'width: calc({{SIZE}}px * 1.5) !important; height: calc({{SIZE}}px * 1.5) !important;'
+				]
+			]
+		);
+
 		$this->end_controls_section(); // End Controls Section
 
 	}
@@ -743,7 +769,7 @@ class Wpr_Google_Maps extends Widget_Base {
 		// Get Settings
 		$settings = $this->get_settings();
 		
-		if ( '' == get_option('wpr_google_map_api_key') && 'without_api_key' === $settings['gm_integration'] ) {
+		if ( 'without_api_key' === $settings['gm_integration'] ) {
 			$latitude  = $settings['gm_latitude'] ?? '';
 			$longitude = $settings['gm_longtitude'] ?? '';
 			$gm_location_title = $settings['gm_location_title'] ?? '';

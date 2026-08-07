@@ -301,6 +301,36 @@ class Wpr_Icon_Box extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'icon_box_media_align',
+			[
+				'label' => esc_html__( 'Icon/Image Align', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default' => 'center',
+				'options' => [
+					'flex-start' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'flex-end' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-right',
+					]
+				],
+				'selectors' => [
+					'{{WRAPPER}}.wpr-icon-box-center .wpr-icon-box-icon-inner-wrap' => 'justify-content: {{VALUE}}',
+				],
+                'condition' => [
+                    'icon_box_alignment' => 'center'
+                ]
+			]
+		);
+
 		$this->end_controls_section(); // End Controls Section
 
         // Tab: Content ==============
@@ -2029,6 +2059,9 @@ class Wpr_Icon_Box extends Widget_Base {
         // Get Settings
         $settings = $this->get_settings_for_display();
 
+		$tags_whitelist = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ];
+		$icon_box_title_tag = Utilities::validate_html_tags_wl( $settings['icon_box_title_tag'], 'h2', $tags_whitelist );
+
 		if ( 'none' !== $settings['icon_box_link_type'] ) {
 			$this->add_link_attributes( 'icon_box_url', $settings['icon_box_title_url'] );
 		}
@@ -2081,9 +2114,9 @@ class Wpr_Icon_Box extends Widget_Base {
 
                         if ( !empty($settings['icon_box_title']) ) {
                             if ( 'title' !== $settings['icon_box_link_type'] ) {
-                                echo '<'. esc_html($settings['icon_box_title_tag']) .' class="wpr-icon-box-title">' . wp_kses_post($settings['icon_box_title']) . '</'. esc_html($settings['icon_box_title_tag']) .'>';
+                                echo '<'. esc_attr( $icon_box_title_tag ) .' class="wpr-icon-box-title">' . wp_kses_post($settings['icon_box_title']) . '</'. esc_attr( $icon_box_title_tag ) .'>';
                             } else {
-                                echo '<'. esc_html($settings['icon_box_title_tag']) .' class="wpr-icon-box-title"><a class="wpr-icon-box-url" '. $this->get_render_attribute_string( 'icon_box_url' ) .'>' . $settings['icon_box_title'] . '</a></'. esc_html($settings['icon_box_title_tag']) .'>';
+                                echo '<'. esc_attr( $icon_box_title_tag ) .' class="wpr-icon-box-title"><a class="wpr-icon-box-url" '. $this->get_render_attribute_string( 'icon_box_url' ) .'>' . wp_kses_post($settings['icon_box_title']) . '</a></'. esc_attr( $icon_box_title_tag ) .'>';
                             }
                         }
 

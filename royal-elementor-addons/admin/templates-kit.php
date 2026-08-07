@@ -70,16 +70,6 @@ function wpr_addons_templates_kit_page() {
             </ul>
         </div>
 
-        <div class="wpr-templates-kit-filters">
-            <div>Filter: All</div>
-            <ul>
-                <li data-filter="all">Blog</li>
-                <li data-filter="blog">Blog</li>
-                <li data-filter="business">Business</li>
-                <li data-filter="ecommerce">eCommerce</li>
-                <li data-filter="beauty">Beauty</li>
-            </ul>
-        </div>
     </header>
 
     <div class="wpr-templates-kit-page-title">
@@ -92,6 +82,30 @@ function wpr_addons_templates_kit_page() {
             </a>
         </p>
     </div>
+
+    <?php
+    $kit_category_filters = [
+        [ 'all', '', __( 'All Templates', 'wpr-addons' ) ],
+        [ 'shop', 'shop,woocommerce,estore,ecommerce', __( 'Shop', 'wpr-addons' ) ],
+        [ 'portfolio', 'portfolio', __( 'Portfolio', 'wpr-addons' ) ],
+        [ 'news-magazine', 'magazine,newspaper,news magazine', __( 'News/Magazine', 'wpr-addons' ) ],
+        [ 'landing-page', 'landing page,landingpage,onepage,one page', __( 'Landing Page', 'wpr-addons' ) ],
+        [ 'dynamic', 'dynamic,acf', __( 'Dynamic', 'wpr-addons' ) ],
+        [ 'digital-agency', 'digital agency', __( 'Digital Agency', 'wpr-addons' ) ],
+        [ 'business', 'business,corporate', __( 'Business', 'wpr-addons' ) ],
+        [ 'blog', 'blog,blogger', __( 'Blog', 'wpr-addons' ) ],
+        [ 'ai', 'artificial intelligence,ai website,ai templates,ai agency,ai saas,chatgpt,chat gpt,ai automation', __( 'AI', 'wpr-addons' ) ],
+    ];
+    ?>
+    <ul class="wpr-templates-kit-category-filters">
+        <?php foreach ( $kit_category_filters as $index => $filter ) : ?>
+            <li
+                data-filter="<?php echo esc_attr( $filter[0] ); ?>"
+                <?php echo '' !== $filter[1] ? 'data-filter-tags="' . esc_attr( $filter[1] ) . '"' : ''; ?>
+                <?php echo 0 === $index ? 'class="wpr-active-filter"' : ''; ?>
+            ><?php echo esc_html( $filter[2] ); ?></li>
+        <?php endforeach; ?>
+    </ul>
 
     <div class="wpr-templates-kit-grid main-grid" data-theme-status="<?php echo esc_attr(get_theme_status()); ?>">
         <?php

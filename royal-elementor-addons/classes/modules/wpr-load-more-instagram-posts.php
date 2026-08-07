@@ -97,7 +97,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 				// Icon: Before
 				if ( 'before' === $settings['element_extra_icon_pos'] ) {
-					echo '<i class="wpr-insta-feed-extra-icon-left '. esc_attr( $settings['element_extra_icon']['value'] ) .'"></i>';
+					\Elementor\Icons_Manager::render_icon( $settings['element_extra_icon'], [
+						'aria-hidden' => 'true',
+						'class'       => 'wpr-insta-feed-extra-icon-left',
+					] );
 				}
 
 				// Date
@@ -109,7 +112,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				// Icon: After
 				if ( 'after' === $settings['element_extra_icon_pos'] ) {
-					echo '<i class="wpr-insta-feed-extra-icon-right '. esc_attr( $settings['element_extra_icon']['value'] ) .'"></i>';
+					\Elementor\Icons_Manager::render_icon( $settings['element_extra_icon'], [
+						'aria-hidden' => 'true',
+						'class'       => 'wpr-insta-feed-extra-icon-right',
+					] );
 				}
 				// Text: After
 				if ( 'after' === $settings['element_extra_text_pos'] ) {
@@ -151,7 +157,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 
 					// Lightbox Icon
-					echo '<i class="'. esc_attr( $settings['element_extra_icon']['value'] ) .'"></i>';
+					\Elementor\Icons_Manager::render_icon( $settings['element_extra_icon'], [ 'aria-hidden' => 'true' ] );
 
 					// Text: After
 					if ( 'after' === $settings['element_extra_text_pos'] ) {
@@ -199,17 +205,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 								echo '<span class="wpr-sharing-tooltip wpr-tooltip">'. esc_html__( 'Share', 'wpr-addons' ) .'</span>';
 							}
 
-							echo Utilities::get_wpr_icon( $settings['element_sharing_trigger_icon'], '' );
+							echo Utilities::get_wpr_icon( $settings['element_sharing_trigger_icon'], '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo '</a>';
 					}
 
 
-					echo '<span class="wpr-post-sharing-inner'. $hidden_class .'">';
+					echo '<span class="wpr-post-sharing-inner' . esc_attr( $hidden_class ) . '">';
 
 					for ( $i = 1; $i < 7; $i++ ) {
 						$args['network'] = $settings['element_sharing_icon_'. $i];
 
-						echo Utilities::get_post_sharing_icon( $args );
+						echo Utilities::get_post_sharing_icon( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 
 					echo '</span>';
@@ -443,8 +449,8 @@ if ( ! defined( 'ABSPATH' ) ) {
             <div class="wpr-insta-feed-content-wrap wpr-insta-col-12">
                 <figure>
                     <?php
-                        // Content: Below Media
-                        echo $this->get_elements_by_location( 'above', $settings, $result );
+                        // Content: Above Media
+                        $this->get_elements_by_location( 'above', $settings, $result );
                     ?>
                     <div class="wpr-insta-feed-media-wrap <?php echo esc_attr($this->get_image_effect_class( $settings )) ?>" data-overlay-link="<?php echo esc_attr( $settings['overlay_post_link'] ) ?>">
                     <?php if ( 'CAROUSEL_ALBUM' == $result->media_type || 'IMAGE' == $result->media_type ) : ?>
@@ -468,7 +474,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     </div>
                     <?php
                         // Content: Below Media
-                        echo $this->get_elements_by_location( 'below', $settings, $result );
+                        $this->get_elements_by_location( 'below', $settings, $result );
                     ?>
                 </figure>
             </div>

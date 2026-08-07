@@ -136,7 +136,7 @@ class Plugin {
 		require WPR_ADDONS_PATH . 'classes/modules/wpr-woo-grid-helpers.php';
 
 		// Media Grid
-		require WPR_ADDONS_PATH . 'classes/modules/wpr-filter-grid-media.php';
+		require WPR_ADDONS_PATH . 'classes/modules/wpr-media-grid-helpers.php';
 
 		// Extensions Base
 		require WPR_ADDONS_PATH . 'extensions/wpr-extensions-base.php';
@@ -725,7 +725,7 @@ class Plugin {
 			[
 				'jquery',
 			],
-			'',
+			'1.0.0',
 			true
 		);
 
@@ -763,7 +763,7 @@ class Plugin {
 			'wpr-google-maps',
 			'https://maps.googleapis.com/maps/api/js?key='. esc_attr(get_option('wpr_google_map_api_key')) . '&language='. esc_attr(get_option('wpr_google_map_language')),
 			[],
-			'',
+			'1.0.0',
 			true
 		);
 
@@ -845,6 +845,14 @@ class Plugin {
 				'jquery',
 			],
 			'6.0.3',
+			true
+		);
+
+		wp_register_script(
+			'wpr-gsap',
+			WPR_ADDONS_URL . 'assets/js/lib/gsap/gsap.min.js',
+			[],
+			'3.12.7',
 			true
 		);
 	}

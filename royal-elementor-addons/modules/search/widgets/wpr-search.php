@@ -2114,6 +2114,7 @@ class Wpr_Search extends Widget_Base {
 				'number-of-results' => isset($settings['number_of_results']) && (defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code()) ? $settings['number_of_results'] : 2,
 				'ajax-search' => isset($settings['ajax_search']) ? $settings['ajax_search'] : '',
 				'meta-query' => isset($settings['enable_meta_query']) ? $settings['enable_meta_query'] : '',
+				'meta-keys' => ! empty( $settings['query_meta_keys'] ) ? implode( ',', (array) $settings['query_meta_keys'] ) : '',
 				'show-description' => isset($settings['show_description']) ? $settings['show_description'] : '',
 				'number-of-words' => isset($settings['number_of_words_in_excerpt']) ? $settings['number_of_words_in_excerpt'] : '',
 				'show-ajax-thumbnails' => isset($settings['show_ajax_thumbnails']) ? $settings['show_ajax_thumbnails'] : '',

@@ -722,7 +722,7 @@ class Wpr_Separator extends Widget_Base {
 				echo '<div class="wpr-separator-animations" data-settings="'. esc_attr( $this->separator_lottie_attributes( $settings ) ) .'" data-json-url="'. esc_url( $separator_lottie_json ) .'"></div>';
               echo '</div>';
               break;
-            case 'none';
+            case 'none':
               echo '';
               break;
 

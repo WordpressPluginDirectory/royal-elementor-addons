@@ -1475,4 +1475,151 @@ class Utilities {
 	
 		return ( 'keys' === $type ) ? array_keys( $ordered_devices ) : $ordered_devices;
 	}
+
+	/**
+	 * Validate a Form Builder webhook URL against SSRF-prone targets.
+	 *
+	 * @param string $url Raw webhook URL.
+	 * @return string|\WP_Error Sanitized URL on success, WP_Error on failure.
+	 */
+	public static function wpr_validate_webhook_url( $url ) {
+		if ( ! is_string( $url ) || '' === trim( $url ) ) {
+			return '';
+		}
+
+		$url = esc_url_raw( trim( $url ) );
+		if ( '' === $url ) {
+			return new \WP_Error( 'wpr_webhook_invalid_url', esc_html__( 'Please provide a valid webhook URL.', 'wpr-addons' ) );
+		}
+
+		$parsed_url = wp_parse_url( $url );
+		if ( ! is_array( $parsed_url ) || empty( $parsed_url['host'] ) ) {
+			return new \WP_Error( 'wpr_webhook_invalid_url', esc_html__( 'Please provide a valid webhook URL.', 'wpr-addons' ) );
+		}
+
+		$scheme = isset( $parsed_url['scheme'] ) ? strtolower( $parsed_url['scheme'] ) : '';
+		if ( ! in_array( $scheme, [ 'http', 'https' ], true ) ) {
+			return new \WP_Error( 'wpr_webhook_invalid_scheme', esc_html__( 'Only HTTP(S) webhook URLs are allowed.', 'wpr-addons' ) );
+		}
+
+		// Align with wp_safe_remote_* / wp_http_validate_url checks.
+		if ( function_exists( 'wp_http_validate_url' ) && false === wp_http_validate_url( $url ) ) {
+			return new \WP_Error( 'wpr_webhook_unsafe_url', esc_html__( 'This webhook URL is not allowed.', 'wpr-addons' ) );
+		}
+
+		$host = strtolower( $parsed_url['host'] );
+		$allowed_hosts = apply_filters( 'wpr_form_builder_allowed_webhook_hosts', [] );
+		$allowed_hosts = array_filter( array_map( 'strtolower', (array) $allowed_hosts ) );
+
+		if ( ! empty( $allowed_hosts ) ) {
+			$is_allowed_host = false;
+			foreach ( $allowed_hosts as $allowed_host ) {
+				if ( $host === $allowed_host || ( function_exists( 'str_ends_with' ) && str_ends_with( $host, '.' . $allowed_host ) ) ) {
+					$is_allowed_host = true;
+					break;
+				}
+			}
+
+			if ( ! $is_allowed_host ) {
+				return new \WP_Error( 'wpr_webhook_host_not_allowed', esc_html__( 'This webhook host is not allowed.', 'wpr-addons' ) );
+			}
+		}
+
+		if ( self::wpr_is_blocked_remote_host( $host ) ) {
+			return new \WP_Error( 'wpr_webhook_blocked_host', esc_html__( 'This webhook URL points to a blocked network address.', 'wpr-addons' ) );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Whether a remote host resolves to a private/local address.
+	 *
+	 * @param string $host Hostname or IP.
+	 * @return bool
+	 */
+	public static function wpr_is_blocked_remote_host( $host ) {
+		$host = trim( strtolower( (string) $host ) );
+
+		if ( '' === $host ) {
+			return true;
+		}
+
+		if ( in_array( $host, [ 'localhost', 'localhost.localdomain' ], true ) ) {
+			return true;
+		}
+
+		$ips = [];
+
+		if ( filter_var( $host, FILTER_VALIDATE_IP ) ) {
+			$ips[] = $host;
+		} else {
+			$ipv4 = @gethostbynamel( $host );
+			if ( is_array( $ipv4 ) ) {
+				$ips = array_merge( $ips, $ipv4 );
+			}
+
+			if ( function_exists( 'dns_get_record' ) ) {
+				$ipv6_records = @dns_get_record( $host, DNS_AAAA );
+				if ( is_array( $ipv6_records ) ) {
+					foreach ( $ipv6_records as $record ) {
+						if ( ! empty( $record['ipv6'] ) ) {
+							$ips[] = $record['ipv6'];
+						}
+					}
+				}
+			}
+		}
+
+		$ips = array_unique( array_filter( $ips ) );
+		// DNS resolution can be unreliable; don't block solely on empty results.
+		if ( empty( $ips ) ) {
+			return false;
+		}
+
+		foreach ( $ips as $ip ) {
+			if ( self::wpr_is_private_or_local_ip( $ip ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether an IP is private, reserved, or link-local.
+	 *
+	 * @param string $ip IP address.
+	 * @return bool
+	 */
+	public static function wpr_is_private_or_local_ip( $ip ) {
+		if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+			return true;
+		}
+
+		if ( false === filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+			return true;
+		}
+
+		if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) ) {
+			$packed = @inet_pton( $ip );
+			if ( false === $packed || strlen( $packed ) !== 16 ) {
+				return true;
+			}
+
+			$first  = ord( $packed[0] );
+			$second = ord( $packed[1] );
+
+			// fc00::/7 unique local, fe80::/10 link-local.
+			if ( 0xfc === ( $first & 0xfe ) ) {
+				return true;
+			}
+
+			if ( 0xfe === $first && 0x80 === ( $second & 0xc0 ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

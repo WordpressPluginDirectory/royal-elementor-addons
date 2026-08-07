@@ -3094,6 +3094,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 				'default' => '#9C9C9C',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-insta-feed-item-date .inner-block i[class*="wpr-insta-feed-extra-icon"]' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-insta-feed-item-date .inner-block svg[class*="wpr-insta-feed-extra-icon"]' => 'fill: {{VALUE}}',
 				],
 				'separator' => 'after',
 			]
@@ -3543,6 +3544,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 				'default' => '#D60EC8',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-insta-feed-item-lightbox .inner-block > span' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-insta-feed-item-lightbox .inner-block > span svg' => 'fill: {{VALUE}}',
 				],
 			]
 		);
@@ -3574,7 +3576,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 			Group_Control_Text_Shadow::get_type(),
 			[
 				'name' => 'lightbox_shadow',
-				'selector' => '{{WRAPPER}} .wpr-insta-feed-item-lightbox i',
+				'selector' => '{{WRAPPER}} .wpr-insta-feed-item-lightbox i, {{WRAPPER}} .wpr-insta-feed-item-lightbox svg',
 			]
 		);
 
@@ -3595,6 +3597,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 				'default' => '#605BE5',
 				'selectors' => [
 					'{{WRAPPER}} .wpr-insta-feed-item-lightbox .inner-block > span:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .wpr-insta-feed-item-lightbox .inner-block > span:hover svg' => 'fill: {{VALUE}}',
 				],
 			]
 		);
@@ -5064,7 +5067,10 @@ class Wpr_Instagram_Feed extends Widget_Base {
 				}
 				// Icon: Before
 				if ( 'before' === $settings['element_extra_icon_pos'] ) {
-					echo '<i class="wpr-insta-feed-extra-icon-left '. esc_attr( $settings['element_extra_icon']['value'] ) .'"></i>';
+					\Elementor\Icons_Manager::render_icon( $settings['element_extra_icon'], [
+						'aria-hidden' => 'true',
+						'class' => 'wpr-insta-feed-extra-icon-left',
+					] );
 				}
 
 				// Date
@@ -5076,7 +5082,10 @@ class Wpr_Instagram_Feed extends Widget_Base {
 
 				// Icon: After
 				if ( 'after' === $settings['element_extra_icon_pos'] ) {
-					echo '<i class="wpr-insta-feed-extra-icon-right '. esc_attr( $settings['element_extra_icon']['value'] ) .'"></i>';
+					\Elementor\Icons_Manager::render_icon( $settings['element_extra_icon'], [
+						'aria-hidden' => 'true',
+						'class'       => 'wpr-insta-feed-extra-icon-right',
+					] );
 				}
 
 				// Text: After
@@ -5119,7 +5128,7 @@ class Wpr_Instagram_Feed extends Widget_Base {
 					}
 
 					// Lightbox Icon
-					echo '<i class="'. esc_attr( $settings['element_extra_icon']['value'] ) .'"></i>';
+					\Elementor\Icons_Manager::render_icon( $settings['element_extra_icon'], [ 'aria-hidden' => 'true' ] );
 
 					// Text: After
 					if ( 'after' === $settings['element_extra_text_pos'] ) {

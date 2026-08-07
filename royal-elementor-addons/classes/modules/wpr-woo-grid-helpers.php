@@ -28,6 +28,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public static $my_upsells;
 	public static $crossell_ids;
 
+	/**
+	 * Archive Products Per Page for Current Query (Theme Builder options).
+	 * Only meaningful when query_selection is "current".
+	 */
+	public static function get_current_query_posts_per_page( $settings = [] ) {
+		$tax = isset( $settings['current_query_tax'] ) ? $settings['current_query_tax'] : '';
+
+		if ( 'product_cat' === $tax || ( ! wp_doing_ajax() && function_exists( 'is_product_category' ) && is_product_category() ) ) {
+			return intval( get_option( 'wpr_woo_shop_cat_ppp', 9 ) );
+		}
+
+		if ( 'product_tag' === $tax || ( ! wp_doing_ajax() && function_exists( 'is_product_tag' ) && is_product_tag() ) ) {
+			return intval( get_option( 'wpr_woo_shop_tag_ppp', 9 ) );
+		}
+
+		return intval( get_option( 'wpr_woo_shop_ppp', 9 ) );
+	}
+
 	// Get Max Pages
 	public static function get_max_num_pages( $settings ) {
 		if ( isset($_POST['wpr_url_params']) ) {
@@ -240,14 +258,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$args['meta_key'] = '_thumbnail_id';
 		}
 
-		// Exclude Out Of Stock
-		if ( 'yes' === $settings['query_exclude_out_of_stock'] ) {
-			$args['meta_query'] = [
-				[
-					'key'     => '_stock_status',
-					'value'   => 'outofstock',
-					'compare' => 'NOT LIKE',
-				]
+		// Exclude Out Of Stock — applied again after query_selection rebuilds $args (see below)
+		$exclude_out_of_stock = ( 'yes' === ( $settings['query_exclude_out_of_stock'] ?? '' ) );
+		if ( $exclude_out_of_stock ) {
+			if ( empty( $args['meta_query'] ) || ! is_array( $args['meta_query'] ) ) {
+				$args['meta_query'] = [ 'relation' => 'AND' ];
+			}
+			$args['meta_query'][] = [
+				'key'     => '_stock_status',
+				'value'   => 'outofstock',
+				'compare' => 'NOT LIKE',
 			];
 		}
 
@@ -270,27 +290,56 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		// Get Post Type
 		if ( 'current' === $settings[ 'query_selection' ] && true !== \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-			global $wp_query;
+			// Current Query only — Dynamic/Manual/Featured/etc. keep query_posts_per_page.
+			$posts_per_page = WPR_Woo_Grid_Helpers::get_current_query_posts_per_page( $settings );
 
-			// Products Per Page
-			if ( is_product_category() ) {
-				$posts_per_page = intval(get_option('wpr_woo_shop_cat_ppp', 9));
-			} elseif ( is_product_tag() ) {
-				$posts_per_page = intval(get_option('wpr_woo_shop_tag_ppp', 9));
+			// admin-ajax.php has no shop archive $wp_query — rebuild from grid_settings
+			if ( wp_doing_ajax() ) {
+				$args = [
+					'post_type' => 'product',
+					'tax_query' => WPR_Woo_Grid_Helpers::get_tax_query_args($settings),
+					'meta_query' => WPR_Woo_Grid_Helpers::get_meta_query_args(),
+					'posts_per_page' => $posts_per_page,
+					'paged' => 1,
+				];
 			} else {
-				$posts_per_page = intval(get_option('wpr_woo_shop_ppp', 9));
+				global $wp_query;
+				$args = $wp_query->query_vars;
+				$args['tax_query'] = WPR_Woo_Grid_Helpers::get_tax_query_args($settings);
+				$args['meta_query'] = WPR_Woo_Grid_Helpers::get_meta_query_args();
+				$args['posts_per_page'] = $posts_per_page;
+				$args['post_type'] = 'product';
 			}
-			$args = $wp_query->query_vars;
-			$args['tax_query'] = WPR_Woo_Grid_Helpers::get_tax_query_args($settings);
-			$args['meta_query'] = WPR_Woo_Grid_Helpers::get_meta_query_args();
-			$args['posts_per_page'] = $posts_per_page;
+
 			if (!empty($settings['query_randomize'])) {
 				$args['orderby'] = $settings['query_randomize'];
 			} else {
-				$args['orderby'] = get_query_var('orderby') ? get_query_var('orderby') : $settings['current_query_orderby'];
-				$args['order'] = $settings['order_direction'] ? $settings['order_direction'] : $settings['current_query_order'];
+				$orderby = '';
+				if ( ! wp_doing_ajax() && get_query_var('orderby') ) {
+					$orderby = get_query_var('orderby');
+				} elseif ( ! empty( $settings['current_query_orderby'] ) ) {
+					$orderby = $settings['current_query_orderby'];
+				} else {
+					$orderby = 'menu_order title';
+				}
+				$args['orderby'] = $orderby;
+				$args['order'] = ! empty( $settings['order_direction'] )
+					? $settings['order_direction']
+					: ( ! empty( $settings['current_query_order'] ) ? $settings['current_query_order'] : 'ASC' );
 			}
 			$args['post_type'] = 'product'; // GOGA: needs check
+
+			// Re-apply after Current Query rebuild (AJAX replaces $args and would drop OOS meta)
+			if ( $exclude_out_of_stock ) {
+				if ( empty( $args['meta_query'] ) || ! is_array( $args['meta_query'] ) ) {
+					$args['meta_query'] = [ 'relation' => 'AND' ];
+				}
+				$args['meta_query'][] = [
+					'key'     => '_stock_status',
+					'value'   => 'outofstock',
+					'compare' => 'NOT LIKE',
+				];
+			}
 		}
 
 		// Sorting
@@ -338,7 +387,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		if ( isset($_POST['wpr_offset']) ) {
-			$args['offset'] = $_POST['wpr_offset'];
+			// Absolute skip from AF load-more — keep paged at 1 so WP does not combine pagination + offset
+			$args['offset'] = absint( $_POST['wpr_offset'] );
+			$args['paged']  = 1;
+		}
+
+		// Already-rendered items (load more) — prevents duplicates when OOS/visibility shifts the offset window
+		if ( isset( $_POST['wpr_exclude_ids'] ) && ! empty( $_POST['wpr_exclude_ids'] ) ) {
+			$exclude_ids = array_filter( array_map( 'absint', (array) $_POST['wpr_exclude_ids'] ) );
+			if ( ! empty( $exclude_ids ) ) {
+				$existing_not_in = isset( $args['post__not_in'] ) ? (array) $args['post__not_in'] : [];
+				$args['post__not_in'] = array_values( array_unique( array_merge( $existing_not_in, $exclude_ids ) ) );
+			}
 		}
 
 		if ( isset($_POST['wpr_taxonomy']) ) {
@@ -598,7 +658,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 				}
 
-				if ( !empty($tax_query) ) {
+				if ( !empty($tax_query) && count($tax_query) > 1 ) {
 					if ( !empty($args['tax_query']) ) {
 						$args['tax_query'] = array_merge( $args['tax_query'], $tax_query );
 					} else {
@@ -606,9 +666,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 				}
 
-				if ( !empty($meta_query) )  {
+				if ( !empty($meta_query) && count($meta_query) > 1 )  {
 					if ( !empty($args['meta_query']) ) {
-						$args['tax_query'] = array_merge( $args['tax_query'], $tax_query );
+						$args['meta_query'] = array_merge( (array) $args['meta_query'], $meta_query );
 					} else {
 						$args['meta_query'] = $meta_query;
 					}
@@ -667,6 +727,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	// Taxonomy Query Args
 	public static function get_tax_query_args($settings) {
 		$tax_query = [];
+
+		// Match WC catalog visibility (exclude-from-catalog + hide out of stock) on every custom/AJAX query
+		if ( function_exists( 'WC' ) && WC()->query ) {
+			$wc_tax_query = WC()->query->get_tax_query( [], false );
+			if ( ! empty( $wc_tax_query ) ) {
+				foreach ( $wc_tax_query as $clause ) {
+					if ( is_array( $clause ) && isset( $clause['taxonomy'] ) ) {
+						$tax_query[] = $clause;
+					}
+				}
+			}
+		}
 
 		// Filters Query
 		if ( isset($_GET['wprfilters']) ) {

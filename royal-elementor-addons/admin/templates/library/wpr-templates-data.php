@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class WPR_Templates_Data {
 	public static function get_available_kits() {
-		$is_pro_active = defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code();
-		$is_expert = $is_pro_active && wpr_fs()->is_plan( 'expert' );
+		$is_pro_active = false;
+		$is_expert = false;
 		$is_cf7_active = is_plugin_active('contact-form-7/wp-contact-form-7.php') ? 'true' : 'false';
 		$is_mla_active = is_plugin_active('media-library-assistant/index.php') ? 'true' : 'false';
 		$is_woo_active = is_plugin_active('woocommerce/woocommerce.php') ? 'true' : 'false';
@@ -709,6 +709,18 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 3,
 				],
+				'v3' => [
+					'name' => 'Woo Shop V3',
+					'pages' => 'home,shop,single-product,cart,checkout,about,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'free shop shopping woo-commerce woocommerce estore ecommerce shop ecommerce product online shop online store boutique clothes eshopping fashion designer market reseller digital purchases e commerce black friday',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => false,
+					'price' => $is_pro_active ? 'free' : 'free',
+					'label' => 'new',
+					'priority' => 3,
+				],
 			],
 			'shop-wooshop' => [
 				'v2' => [
@@ -722,6 +734,20 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'New',
 					'priority' => 4,
+				],
+			],
+			'product-showcase' => [
+				'v1' => [
+					'name' => 'Product Showcase V1',
+					'pages' => 'home,overview,features,technology,design,review,pricing',
+					'plugins' => '{}',
+					'tags' => 'single page landing page one page onepage landingpage products product showcase modern catalog features attributes reviews rating testimonial technology woocommerce shop woo shopping headphones parallax',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 50,
 				],
 			],
 			'cosmetic' => [
@@ -853,6 +879,18 @@ class WPR_Templates_Data {
 					'price' => $is_pro_active ? 'free' : 'pro',
 					'label' => 'new',
 					'priority' => 20,
+				],
+				'v3' => [
+					'name' => 'Hotel V3',
+					'pages' => 'home,about,rooms-1,rooms-2,room-single,services,spa-wellness,restaurant,gallery,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'hotel rooms apartment resort bnb accommodation tourism luxury hotel booking reservation travel vacation rent trip suites hospitality guest service wellness spa ',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 19,
 				],
 			],
 			'fitness-gym' => [
@@ -1151,6 +1189,18 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 2,
 				],
+				'v5' => [
+					'name' => 'Digital Marketing Agency v5',
+					'pages' => 'home,about,services,single-project,work-process,team,faq,blog,single-blog,contact,',
+					'plugins' => '{}',
+					'tags' => 'digital agency portfolio creative branding business company corporate digital services office agency web digital marketing content seo social media branding',
+					'theme-builder' => true,
+					'woo-builder' => false,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'new',
+					'priority' => 2,
+				],
 			],
 			'digital-seo-marketing-agency' => [
 				'v1' => [
@@ -1373,7 +1423,7 @@ class WPR_Templates_Data {
 					'name' => 'Car Rent',
 					'pages' => 'home,cars,car-details,about,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
-					'tags' => 'expert car rental service driver rent car delivery jorney luxary airport transfer car booking car hire',
+					'tags' => 'expert car rental service driver rent car delivery jorney luxary journey luxury airport transfer car booking car hire',
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => false,
@@ -1617,16 +1667,29 @@ class WPR_Templates_Data {
 			],
 			'skincare' => [
 				'v1' => [
-					'name' => 'Skin Care',
+					'name' => 'Skin Care V1',
 					'pages' => 'home,about,services,procedures,gallery,pricing,contact,',
 					'plugins' => '{}',
-					'tags' => 'free skincare skin care beauty clean face skin-beauty health wellness',
+					'tags' => 'free skincare skin care beauty clean face skin-beauty health wellness cosmetics shop woo woocommerce estore estetic makeup haircare customers essentials nail perfumes',
 					'theme-builder' => false,
 					'woo-builder' => false,
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => '',
 					'priority' => 160,
+				],
+				'v2' => [
+					'name' => 'Skin Care V2',
+					'pages' => 'home,shop,cart,checkout,compare,wishlist,single-product,about,faq,blog,single-blog,contact-v1,contact-v2',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'skincare beauty skin care shop ecommerce clean store face cream natural selfcare product glow health wellness cosmetics shop woo woocommerce estore estetic makeup haircare customers essentials nail perfumes',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'New',
+					'priority' => 1,
 				],
 			],
 			'nail-salon' => [
@@ -1766,7 +1829,7 @@ class WPR_Templates_Data {
 					'name' => 'Jewelry Shop V1',
 					'pages' => 'home,shop,single-product,cart,compare,wishlist,about,about-me,faq,blog,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
-					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet luxury elegance',
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => false,
@@ -1779,7 +1842,7 @@ class WPR_Templates_Data {
 					'name' => 'Jewelry Shop V2',
 					'pages' => 'home,shop,shop-grid,shop-list,single-product,cart,compare,wishlist,about-me,about-us,faq,blog,single-blog,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
-					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet luxury elegance',
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => false,
@@ -1787,6 +1850,19 @@ class WPR_Templates_Data {
 					'expert' => $is_expert ? 'free' : 'expert',
 					'label' => 'new',
 					'priority' => 5,
+				],
+				'v3' => [
+					'name' => 'Jewelry Shop V3',
+					'pages' => 'home,shop,shop-list-view,single-product,cart,checkout,compare,wishlist,about,faq,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online eshopping market ecommerce shop e commerce jewelry fashion store luxury diamond earrings gold jewelry care watch permanent jewelry diamond gold necklace ring earrings bracelet luxury elegance',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 1,
 				],
 			],
 			'drone' => [
@@ -2298,6 +2374,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','services','service-details','team','portfolio','faq','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'digital-marketing-agency-v5' => [
+				'name' => 'Digital Marketing Agency v5',
+				'pages' => ['home','about','services','single-project','work-process','team','faq','blog','contact'],
+				'preview' => ['home','about','services','single-project','work-process','team','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'fashion-v2' => [
 				'name' => 'Fashion',
 				'pages' => ['home','home-v2','home-v3','shop-v1','shop-v2','shop-v3','blog','about-v1','about-v2','contact-v1','contact-v2','contact-v3',],
@@ -2508,6 +2590,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','services','procedures','gallery','pricing','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
+			'skincare-v2' => [
+				'name' => 'Skin Care V2',
+				'pages' => ['home','shop','cart','about','faq','blog','contact-v1','contact-v2'],
+				'preview' => ['home','shop','cart','about','faq','blog','contact-v1','contact-v2'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'nail-salon-v1' => [
 				'name' => 'Nail Salon',
 				'pages' => ['home','about','services','gallery','blog','contact'],
@@ -2608,6 +2696,12 @@ class WPR_Templates_Data {
 				'name' => 'Woo Shop V2',
 				'pages' => ['home','shop','cart','blog','about','contact'],
 				'preview' => ['home','shop','cart','blog','about','contact'],
+				'price' => $is_pro_active ? 'free' : 'free',
+			],
+			'wooshop-v3' => [
+				'name' => 'Woo Shop V3',
+				'pages' => ['home','shop','cart','checkout','about','contact'],
+				'preview' => ['home','shop','cart','checkout','about','contact'],
 				'price' => $is_pro_active ? 'free' : 'free',
 			],
 			'fashion-v1' => [
@@ -2862,6 +2956,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','about','rooms','single-room','services','events','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'hotel-v3' => [
+				'name' => 'Hotel V3',
+				'pages' => ['home','about','rooms-1','rooms-2','room-single','services','spa-wellness','restaurant','gallery','faq','blog','contact'],
+				'preview' => ['home','about','rooms-1','rooms-2','room-single','services','spa-wellness','restaurant','gallery','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'digital-seo-marketing-agency-v1' => [
 				'name' => 'Digital SEO Agency v1',
 				'pages' => ['home','about','services','team','projects','details','pricing','blog','faq','contact'],
@@ -2969,6 +3069,12 @@ class WPR_Templates_Data {
 				'name' => 'Jewelry Shop V2',
 				'pages' => ['home','shop','shop-grid','shop-list','cart','about-us','about-me','faq','blog','contact'],
 				'preview' => ['home','shop','shop-grid','shop-list','cart','about-us','about-me','faq','blog','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'jewelry-v3' => [
+				'name' => 'Jewelry Shop V3',
+				'pages' => ['home','home-v2','shop','shop-list-view','cart','about','faq','blog','contact'],
+				'preview' => ['home','home-v2','shop','shop-list-view','cart','about','faq','blog','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'travel-v3' => [

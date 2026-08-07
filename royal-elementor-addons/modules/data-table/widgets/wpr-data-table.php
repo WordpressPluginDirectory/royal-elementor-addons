@@ -2474,7 +2474,7 @@ class Wpr_Data_Table extends Widget_Base {
 			} ?>
 
 			<?php $table_header = ( isset( $settings['table_header'] ) && is_array( $settings['table_header'] ) ) ? $settings['table_header'] : []; ?>
-			<table class="wpr-data-table" id="wpr-data-table">
+			<table class="wpr-data-table">
 			<?php if ( ! empty( $table_header ) ) { ?>
 					
 				<thead>

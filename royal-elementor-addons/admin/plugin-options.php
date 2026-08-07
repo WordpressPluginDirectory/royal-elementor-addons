@@ -58,6 +58,13 @@ function wpr_register_addons_settings() {
     register_setting ('wpr-settings', 'wpr_hide_banners');
     register_setting ('wpr-settings', 'wpr_hide_head_foot_on_maintenenace');
 
+    // Bundled ACF (Expert / Pro)
+    $bundled_acf_args = [ 'default' => 'on' ];
+    if ( function_exists( 'wpr_sanitize_bundled_acf_option' ) ) {
+        $bundled_acf_args['sanitize_callback'] = 'wpr_sanitize_bundled_acf_option';
+    }
+    register_setting( 'wpr-settings', 'wpr-bundled-acf', $bundled_acf_args );
+
     // WooCommerce
     register_setting( 'wpr-settings', 'wpr_override_woo_templates' );
     register_setting( 'wpr-settings', 'wpr_override_woo_cart' );
@@ -506,6 +513,17 @@ function wpr_addons_settings_page() {
                 <input type="checkbox" name="wpr_hide_head_foot_on_maintenenace" id="wpr_hide_head_foot_on_maintenenace" <?php echo checked( get_option('wpr_hide_head_foot_on_maintenenace', 'on'), 'on', true ); ?>>
                 <label for="wpr_hide_head_foot_on_maintenenace"></label>
             </div>
+
+            <?php if ( defined( 'WPR_ADDONS_PRO_VERSION' ) && function_exists( 'wpr_fs' ) && wpr_fs()->is_plan( 'expert' ) ) : ?>
+            <div class="wpr-woo-template-info">
+                <div class="wpr-woo-template-title">
+                    <h4><?php esc_html_e( 'Bundled ACF', 'wpr-addons' ); ?></h4>
+                    <span><?php esc_html_e( 'Load bundled Advanced Custom Fields from Royal Addons Pro. Disable when using a standalone ACF / ACF Pro plugin.', 'wpr-addons' ); ?></span>
+                </div>
+                <input type="checkbox" name="wpr-bundled-acf" id="wpr-bundled-acf" value="on" <?php echo checked( get_option( 'wpr-bundled-acf', 'on' ), 'on', false ); ?>>
+                <label for="wpr-bundled-acf"></label>
+            </div>
+            <?php endif; ?>
         </div>
 
         <div class="wpr-settings-group wpr-settings-group-optimizers">

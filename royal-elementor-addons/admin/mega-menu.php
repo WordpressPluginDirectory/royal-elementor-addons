@@ -1,6 +1,10 @@
 <?php
 use WprAddons\Plugin;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 // Register Post Type
 function register_mega_menu_cpt() {
     $args = array(

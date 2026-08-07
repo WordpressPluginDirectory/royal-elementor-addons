@@ -21,7 +21,7 @@ function secondary_image_metabox ( $post ) {
     global $content_width, $_wp_additional_image_sizes;
 
     $image_id = get_post_meta( $post->ID, 'wpr_secondary_image_id', true );
-    $content   = '';
+    $content = '';
 
     $old_content_width = $content_width;
     $content_width = 254;
@@ -49,7 +49,7 @@ function secondary_image_metabox ( $post ) {
 
     }
 
-    echo wp_kses_post( $content );
+	echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Admin metabox markup: wp_get_attachment_image() core output and escaped literals; wp_kses_post() strips required hidden input.
 }
 
 add_action( 'save_post', 'secondary_image_save', 10, 1 );

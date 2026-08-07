@@ -830,7 +830,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 			'advanced_filters',
 			[
 				'label' => esc_html__( 'Enable Advanced Filters', 'wpr-addons' ),
-				'description' => esc_html__( 'Turn on Only with Advanced Filters widget. Works with Load More Pagination for now (Other Pagination Types will be applied in next updates as well).', 'wpr-addons' ),
+				'description' => esc_html__( 'Turn on Only with Advanced Filters widget. Works with Load More and Infinite Scroll Pagination for now (Other Pagination Types will be applied in next updates as well).', 'wpr-addons' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'no',
 				'return_value' => 'yes',
@@ -9144,6 +9144,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 				'query_orderby' => isset($settings['query_orderby']) ? $settings['query_orderby'] : null,
 				'order_direction' => isset($settings['order_direction']) ? $settings['order_direction'] : null,
 				'query_exclude_no_images' => isset($settings['query_exclude_no_images']) ? $settings['query_exclude_no_images'] : null,
+				'query_exclude_out_of_stock' => isset($settings['query_exclude_out_of_stock']) ? $settings['query_exclude_out_of_stock'] : null,
 				'query_selection' => isset($settings['query_selection']) ? $settings['query_selection'] : null,
 				'query_tax_selection' => isset($settings['query_tax_selection']) ? $settings['query_tax_selection'] : null,
 				'query_manual' => isset($settings['query_manual_' . 'product']) ? $settings['query_manual_' . 'product'] : null,
