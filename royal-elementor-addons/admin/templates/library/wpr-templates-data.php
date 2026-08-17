@@ -707,7 +707,7 @@ class WPR_Templates_Data {
 					'off-canvas' => false,
 					'price' => $is_pro_active ? 'free' : 'free',
 					'label' => 'new',
-					'priority' => 3,
+					'priority' => 10,
 				],
 				'v3' => [
 					'name' => 'Woo Shop V3',

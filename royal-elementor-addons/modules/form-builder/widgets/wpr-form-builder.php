@@ -3781,9 +3781,10 @@ class Wpr_Form_Builder extends Widget_Base {
 		update_option('wpr_email_from_name_'. $this->get_id(), $instance['email_from_name']);
 		update_option('wpr_reply_to_'. $this->get_id(), $instance['email_reply_to']);
 		update_option('wpr_meta_keys_'. $this->get_id(), $instance['form_metadata']);
-		update_option('wpr_referrer_'. $this->get_id(), home_url( $_SERVER['REQUEST_URI'] ));
-		if ($post && $post->ID) {
-			update_option('wpr_referrer_title_'. $this->get_id(), get_the_title($post->ID));
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		update_option( 'wpr_referrer_' . $this->get_id(), esc_url_raw( home_url( $request_uri ) ) );
+		if ( $post && $post->ID ) {
+			update_option( 'wpr_referrer_title_' . $this->get_id(), sanitize_text_field( get_the_title( $post->ID ) ) );
 		}
 
 		$this->wpr_persist_webhook_url( isset( $instance['webhook_url'] ) ? $instance['webhook_url'] : '' );

@@ -3022,7 +3022,7 @@ class Wpr_Woo_Grid extends Widget_Base {
 										],
 									]
 								],
-								[	
+								[
 									'name' => 'layout_pagination',
 									'operator' => '==',
 									'value' => '',

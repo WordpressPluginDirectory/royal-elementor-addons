@@ -807,7 +807,7 @@ function wpr_addons_settings_page() {
 
             <div class="wpr-setting">
                 <h4>
-                    <span><?php esc_html_e( 'Google API Key (REA)', 'wpr-addons' ); ?></span>
+                    <span><?php esc_html_e( 'Google Reviews API Key', 'wpr-addons' ); ?></span>
                     <br>
                     <a href="https://www.youtube.com/watch?v=hsNlz7-abd0" target="_blank"><?php esc_html_e( 'How to get Google API Key?', 'wpr-addons' ); ?></a>
                 </h4>

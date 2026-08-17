@@ -29,46 +29,65 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
 
 	public function get_dependent_terms() {
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
-		if ( empty($_POST['taxonomy']) || empty($_POST['parent_term']) ) {
-			wp_send_json_error('Missing data');
+		if ( ! wp_verify_nonce( $nonce, 'wpr-addons-js' ) ) {
+			wp_send_json_error( esc_html__( 'Security check failed.', 'wpr-addons' ) );
 		}
 
-		$taxonomy    = sanitize_text_field($_POST['taxonomy']);
-		$parent_raw  = sanitize_text_field($_POST['parent_term']);
+		if ( empty( $_POST['taxonomy'] ) || empty( $_POST['parent_term'] ) ) {
+			wp_send_json_error( 'Missing data' );
+		}
+
+		$taxonomy = sanitize_key( wp_unslash( $_POST['taxonomy'] ) );
+
+		if ( ! self::is_public_taxonomy( $taxonomy ) ) {
+			wp_send_json_error( esc_html__( 'Invalid taxonomy.', 'wpr-addons' ) );
+		}
+
+		$parent_raw = sanitize_text_field( wp_unslash( $_POST['parent_term'] ) );
 
 		// Determine if parent_term is ID or slug
-		if ( is_numeric($parent_raw) ) {
-			$related_term = get_term(intval($parent_raw));
+		if ( is_numeric( $parent_raw ) ) {
+			$related_term = get_term( intval( $parent_raw ) );
 		} else {
 			// Optional: detect the related taxonomy (requires an extra POST param or default)
-			$related_taxonomy = sanitize_text_field($_POST['related_taxonomy'] ?? '');
-			if ( empty($related_taxonomy) ) {
-				wp_send_json_error('Missing related taxonomy for slug');
+			$related_taxonomy = isset( $_POST['related_taxonomy'] ) ? sanitize_key( wp_unslash( $_POST['related_taxonomy'] ) ) : '';
+			if ( empty( $related_taxonomy ) || ! self::is_public_taxonomy( $related_taxonomy ) ) {
+				wp_send_json_error( 'Missing related taxonomy for slug' );
 			}
-			$related_term = get_term_by('slug', $parent_raw, $related_taxonomy);
+			$related_term = get_term_by( 'slug', $parent_raw, $related_taxonomy );
 		}
 
-		if ( ! $related_term || is_wp_error($related_term) ) {
-			wp_send_json_error('Invalid parent term');
+		if ( ! $related_term || is_wp_error( $related_term ) ) {
+			wp_send_json_error( 'Invalid parent term' );
 		}
 
 		$related_taxonomy = $related_term->taxonomy;
+
+		if ( ! self::is_public_taxonomy( $related_taxonomy ) ) {
+			wp_send_json_error( esc_html__( 'Invalid taxonomy.', 'wpr-addons' ) );
+		}
+
 		$tax_array = [];
 
-		if ( isset($_POST['tax_array']) ) {
-			$related_taxonomies = $_POST['tax_array'];
-			$related_terms = $_POST['parent_terms'];
+		if ( isset( $_POST['tax_array'] ) ) {
+			$related_taxonomies = (array) wp_unslash( $_POST['tax_array'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$related_terms      = isset( $_POST['parent_terms'] ) ? (array) wp_unslash( $_POST['parent_terms'] ) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 			// Add relation AND
 			$tax_array['relation'] = 'AND';
 
 			foreach ( $related_taxonomies as $index => $tax ) {
-				if ( isset($related_terms[$index]) && $related_terms[$index] !== '' ) {
+				$tax = sanitize_key( $tax );
+				if ( ! self::is_public_taxonomy( $tax ) ) {
+					continue;
+				}
+				if ( isset( $related_terms[ $index ] ) && $related_terms[ $index ] !== '' ) {
 					$tax_array[] = [
-						'taxonomy' => sanitize_text_field($tax),
+						'taxonomy' => $tax,
 						'field'    => 'term_id',
-						'terms'    => intval($related_terms[$index]),
+						'terms'    => intval( $related_terms[ $index ] ),
 					];
 				}
 			}
@@ -88,12 +107,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'fields' => 'ids',
 		]);
 
-		if ( empty($posts) ) {
-			wp_send_json_success([]);
+		if ( empty( $posts ) ) {
+			wp_send_json_success( [] );
 		}
 
 		// Get all terms from the target taxonomy used in these posts
-		$terms = wp_get_object_terms($posts, $taxonomy, [
+		$terms = wp_get_object_terms( $posts, $taxonomy, [
 			'hide_empty' => true,
 		]);
 
@@ -102,14 +121,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$options[] = [
 				'id' => $term->term_id,
 				'name' => $term->name,
-				// 'posts' => $posts,
-				// 'related_tax' => $related_taxonomy,
-				// 'related_term' => $related_term->slug,
-				// 'taxonomy' => $taxonomy,
 			];
 		}
 
-		wp_send_json_success($options);
+		wp_send_json_success( $options );
+	}
+
+	/**
+	 * Whether a taxonomy is registered and public.
+	 *
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return bool
+	 */
+	public static function is_public_taxonomy( $taxonomy ) {
+		$taxonomy = sanitize_key( $taxonomy );
+		if ( '' === $taxonomy ) {
+			return false;
+		}
+
+		$tax_obj = get_taxonomy( $taxonomy );
+
+		return $tax_obj && ! empty( $tax_obj->public );
 	}
     
 	// Get Taxonomies Related to Post Type
@@ -418,8 +450,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$args['order'] = $settings['order_direction'];
 		}
 
-		if ( isset($_POST['wpr_offset']) ) { // Check if causes issues with grid itself
-			$args['offset'] = $_POST['wpr_offset'];
+		if ( isset( $_POST['wpr_offset'] ) ) {
+			// Absolute skip from AF load-more — keep paged at 1 so WP does not combine pagination + offset
+			$args['offset'] = absint( $_POST['wpr_offset'] );
+			$args['paged']  = 1;
+		}
+
+		// Already-rendered items (load more) — matches shop AF JS (base offset + post__not_in)
+		if ( isset( $_POST['wpr_exclude_ids'] ) && ! empty( $_POST['wpr_exclude_ids'] ) ) {
+			$exclude_ids = array_filter( array_map( 'absint', (array) $_POST['wpr_exclude_ids'] ) );
+			if ( ! empty( $exclude_ids ) ) {
+				$existing_not_in = isset( $args['post__not_in'] ) ? (array) $args['post__not_in'] : [];
+				$args['post__not_in'] = array_values( array_unique( array_merge( $existing_not_in, $exclude_ids ) ) );
+			}
 		}
 
 		if ( !isset($args['tax_query']) ) {
@@ -447,8 +490,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$args['tax_query'] = $tax_query;
 			}
 
-			if ( isset($_POST['wpr_offset']) ) {
-				$args['offset'] = $_POST['wpr_offset'];
+			if ( isset( $_POST['wpr_offset'] ) ) {
+				$args['offset'] = absint( $_POST['wpr_offset'] );
+				$args['paged']  = 1;
 			}
 
 			return $args;
@@ -562,44 +606,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 													];
 												}
 											} else {
-												if ( isset($meta_query) ) {
-													if ( isset($_POST['wpr_afr_' . $cleanedKey]) && !empty(explode(',', $_POST['wpr_afr_'. $cleanedKey])[0]) ) {
-														$meta_relation = explode(',', $_POST['wpr_afr_'. $cleanedKey])[0];
-													} else if ( isset($wpr_url_params['wpr_afr_'. $cleanedKey]) && !empty(explode(',', $wpr_url_params['wpr_afr_'. $cleanedKey])[0]) ) {
-														$meta_relation = explode(',', $wpr_url_params['wpr_afr_'. $cleanedKey])[0];
-													} else {
-														$meta_relation = '';
-													}
-													
-													$for_meta_query = [ // needs check if overrides somethings
-														'relation' => $meta_relation,
-													];
-				
-													foreach ($filtervalues as $filtervalue) {
-														$filtervalue = sanitize_text_field($filtervalue);
-													
-														array_push($for_meta_query, [
-															[
-																'key'     => $cleanedKey,
-																'value'   => $filtervalue
-															],
-														]);
-													}
-				
-													array_push( $meta_query, $for_meta_query );
-												} else {
-													$meta_query = [ // needs check if overrides something
-														'relation' => explode(',', $_POST['wpr_afr_'. $cleanedKey])[0] ? explode(',', $_POST['wpr_afr_'. $cleanedKey])[0] : explode(',', $wpr_url_params['wpr_afr_'. $cleanedKey])[0],
-													];
-		
-													if (is_array($filtervalues)) {
-														foreach ($filtervalues as $filtervalue) {
-															$meta_query[] = [
+												$meta_relation = 'OR';
+												if ( isset( $wpr_url_params[ 'wpr_afr_' . $cleanedKey ] ) && ! empty( explode( ',', $wpr_url_params[ 'wpr_afr_' . $cleanedKey ] )[0] ) ) {
+													$meta_relation = strtoupper( sanitize_text_field( explode( ',', $wpr_url_params[ 'wpr_afr_' . $cleanedKey ] )[0] ) );
+												} elseif ( isset( $_POST[ 'wpr_afr_' . $cleanedKey ] ) && ! empty( explode( ',', $_POST[ 'wpr_afr_' . $cleanedKey ] )[0] ) ) {
+													$meta_relation = strtoupper( sanitize_text_field( explode( ',', $_POST[ 'wpr_afr_' . $cleanedKey ] )[0] ) );
+												}
+
+												$values = array_values( array_filter( array_map( 'sanitize_text_field', $filtervalues ), 'strlen' ) );
+
+												if ( ! empty( $values ) ) {
+													if ( 'AND' === $meta_relation ) {
+														$for_meta_query = [ 'relation' => 'AND' ];
+														foreach ( $values as $filtervalue ) {
+															$for_meta_query[] = [
 																'key'     => $cleanedKey,
 																'value'   => $filtervalue,
 																'compare' => '=',
 															];
 														}
+														$meta_query[] = $for_meta_query;
+													} elseif ( 1 === count( $values ) ) {
+														$meta_query[] = [
+															'key'     => $cleanedKey,
+															'value'   => $values[0],
+															'compare' => '=',
+														];
+													} else {
+														$meta_query[] = [
+															'key'     => $cleanedKey,
+															'value'   => $values,
+															'compare' => 'IN',
+														];
 													}
 												}
 											}
@@ -630,25 +668,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 										$filtervalues = sanitize_text_field($wpr_url_params[$key]);
 		
 										if ( $key_type == 'meta_field' || $key_type == 'custom_field' ) {
-											if ( isset($meta_query) ) {
-												array_push($meta_query, [
-													[
-														'key'     => $cleanedKey,
-														'value'   => [$filtervalues],
-														// 'type'    => 'NUMERIC',
-														// 'compare' => 'BETWEEN',
-													],
-												]);
-											} else {
-												$meta_query = [
-													[
-														'key'     => $cleanedKey,
-														'value'   => [$filtervalues],
-														// 'type'    => 'NUMERIC',
-														// 'compare' => 'BETWEEN',
-													],
-												];
-											}
+											$meta_query[] = [
+												'key'     => $cleanedKey,
+												'value'   => $filtervalues,
+												'compare' => '=',
+											];
 										} else {
 											if (isset($wpr_url_params[$key])) {
 						
@@ -676,7 +700,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				if ( !empty($meta_query) )  {
 					if ( !empty($args['meta_query']) ) {
-						$args['tax_query'] = array_merge( $args['tax_query'], $tax_query );
+						$args['meta_query'] = array_merge( $args['meta_query'], $meta_query );
 					} else {
 						$args['meta_query'] = $meta_query;
 					}
@@ -933,7 +957,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( has_post_thumbnail() ) {
 			echo '<div class="wpr-grid-image-wrap" data-src="'. esc_url( $src ) .'" data-img-on-hover="'. esc_attr( $settings['secondary_img_on_hover'] ) .'"  data-src-secondary="'. esc_url( $src2 ) .'">';
 				if ( 'yes' == $settings['grid_lazy_loading'] ) {
-					echo '<img data-no-lazy="1" src="'. WPR_ADDONS_ASSETS_URL . 'img/icon-256x256.png" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-image wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
+					echo '<img data-no-lazy="1" src="'. esc_url( WPR_ADDONS_ASSETS_URL ) . 'img/icon-256x256.png" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-image wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
 					if ( 'yes' == $settings['secondary_img_on_hover'] ) {
 						echo '<img data-no-lazy="1" src="'. esc_url( $src2 ) . '" alt="'. esc_attr( $alt ) .'" class="wpr-hidden-img wpr-anim-timing-'. esc_attr($settings[ 'image_effects_animation_timing']) .'">';
 					}
@@ -965,7 +989,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public static function render_post_title( $settings, $class, $general_settings = '' ) {
 		$title_pointer = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'none' : $general_settings['title_pointer'];
 		$title_pointer_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'fade' : $general_settings['title_pointer_animation'];
-		$pointer_item_class = (isset($general_settings['title_pointer']) && 'none' !==$general_settings['title_pointer']) ? 'class="wpr-pointer-item"' : '';
+		$pointer_item_class = (isset($general_settings['title_pointer']) && 'none' !==$general_settings['title_pointer']) ? 'wpr-pointer-item' : '';
 		$open_links_in_new_tab = 'yes' === $general_settings['open_links_in_new_tab'] ? '_blank' : '_self';
 
 		$class .= ' wpr-pointer-'. $title_pointer;
@@ -977,7 +1001,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		echo '<'. esc_attr($element_title_tag) .' class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
 				$title_link_url = is_array( $general_settings ) ? self::get_grid_item_link_url( $general_settings ) : get_the_permalink();
-				echo '<a target="'. $open_links_in_new_tab .'" '. $pointer_item_class .' href="'. esc_url( $title_link_url ) .'">';
+				echo '<a target="'. esc_attr( $open_links_in_new_tab ) .'"' . ( '' !== $pointer_item_class ? ' class="'. esc_attr( $pointer_item_class ) .'"' : '' ) . ' href="'. esc_url( $title_link_url ) .'">';
 					if ( 'word_count' === $settings['element_trim_text_by'] ) {
 						echo esc_html(wp_trim_words( get_the_title(), $settings['element_word_count'] ));
 					} else {
@@ -1053,7 +1077,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 
@@ -1071,7 +1095,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 				// Text: After
@@ -1099,7 +1123,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 
@@ -1113,7 +1137,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 				// Text: After
@@ -1146,7 +1170,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 					if ( 'yes' === $settings['element_show_avatar'] ) {
@@ -1162,7 +1186,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 				echo '</a>';
@@ -1205,7 +1229,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$extra_icon = ob_get_clean();
 		
 						echo '<span class="wpr-grid-extra-icon-left">';
-							echo $extra_icon;
+							echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 						echo '</span>';
 					}
 
@@ -1218,7 +1242,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$extra_icon = ob_get_clean();
 			
 						echo '<span class="wpr-grid-extra-icon-right">';
-							echo $extra_icon;
+							echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 						echo '</span>';
 					}
 
@@ -1240,7 +1264,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				echo '<a target="'. $open_links_in_new_tab .'" href="'. esc_url( get_the_permalink() ) .'" class="wpr-button-effect '. esc_attr($read_more_animation) .'">';
+				echo '<a target="'. esc_attr( $open_links_in_new_tab ) .'" href="'. esc_url( get_the_permalink() ) .'" class="wpr-button-effect '. esc_attr($read_more_animation) .'">';
 
 				// Icon: Before
 				if ( 'before' === $settings['element_extra_icon_pos'] ) {
@@ -1249,7 +1273,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 
@@ -1263,7 +1287,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 
@@ -1288,7 +1312,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					echo '<span class="wpr-grid-extra-text-left">'. esc_html( $settings['element_extra_text'] ) .'</span>';
 				}
 
-				echo $post_likes->get_button( $post_id, $settings );
+				echo $post_likes->get_button( $post_id, $settings ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WPR_Post_Likes::get_button() returns pre-escaped HTML.
 
 				// Text: After
 				if ( 'after' === $settings['element_extra_text_pos'] ) {
@@ -1335,17 +1359,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 								echo '<span class="wpr-sharing-tooltip wpr-tooltip">'. esc_html__( 'Share', 'wpr-addons' ) .'</span>';
 							}
 
-							echo Utilities::get_wpr_icon( $settings['element_sharing_trigger_icon'], '' );
+							echo Utilities::get_wpr_icon( $settings['element_sharing_trigger_icon'], '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo '</a>';
 					}
 
 
-					echo '<span class="wpr-post-sharing-inner'. $hidden_class .'">';
+					echo '<span class="wpr-post-sharing-inner' . esc_attr( $hidden_class ) . '">';
 
 					for ( $i = 1; $i < 7; $i++ ) {
 						$args['network'] = $settings['element_sharing_icon_'. $i];
 
-						echo Utilities::get_post_sharing_icon( $args );
+						echo Utilities::get_post_sharing_icon( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 
 					echo '</span>';
@@ -1485,7 +1509,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			return;
 		}
 
-		echo '<div class="'. esc_attr($class) .' '. $settings['element_custom_field_style'] .'">';
+		echo '<div class="'. esc_attr( trim( $class . ' ' . $settings['element_custom_field_style'] ) ) .'">';
 			echo '<div class="inner-block">';
 				if ( 'yes' === $settings['element_custom_field_btn_link'] ) {
 					$target = 'yes' === $settings['element_custom_field_new_tab'] ? '_blank' : '_self';
@@ -1505,7 +1529,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 
@@ -1522,9 +1546,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 						echo '<'. esc_attr($element_cf_tag) .'>';
 							if ( 'yes' === $settings['element_custom_field_wrapper'] ) {
-								echo str_replace( '*cf_value*', $custom_field_value, $custom_field_html );
+								echo wp_kses_post( str_replace( '*cf_value*', $custom_field_value, $custom_field_html ) );
 							} else {
-								echo $custom_field_value;
+								echo wp_kses_post( $custom_field_value );
 							}
 						echo '</'. esc_attr($element_cf_tag) .'>';
 					}
@@ -1537,7 +1561,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 				// Text: After
@@ -1594,7 +1618,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 		
 					echo '<span class="wpr-grid-extra-icon-left">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 
@@ -1622,7 +1646,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						echo '<style>'. esc_html($custom_tax_styles) .'</style>'; // TODO: take out of loop if possible
 					}
 
-					echo '<a class="'. $pointer_item_class .' wpr-tax-id-'. esc_attr($term->term_id) .'" href="'. esc_url( $term_link ) .'">'. esc_html( $term->name );
+					echo '<a class="'. esc_attr( trim( $pointer_item_class . ' wpr-tax-id-' . $term->term_id ) ) .'" href="'. esc_url( $term_link ) .'">'. esc_html( $term->name );
 						if ( ++$count !== count( $terms ) ) {
 							echo '<span class="tax-sep">'. esc_html($settings['element_tax_sep']) .'</span>';
 						}
@@ -1636,7 +1660,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$extra_icon = ob_get_clean();
 
 					echo '<span class="wpr-grid-extra-icon-right">';
-						echo $extra_icon;
+						echo $extra_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Elementor Icons_Manager trusted markup.
 					echo '</span>';
 				}
 				// Text: After

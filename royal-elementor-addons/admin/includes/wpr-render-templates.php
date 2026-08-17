@@ -66,6 +66,11 @@ class WPR_Render_Templates {
 			add_action( 'wp', [ $this, 'global_compatibility' ] );
 		}
 
+		// Ultimate Addons for Elementor (Header Footer Elementor)
+		if ( defined( 'HFE_VER' ) || function_exists( 'hfe_header_enabled' ) ) {
+			require_once __DIR__ . '/../templates/views/hfe/class-hfe-compat.php';
+		}
+
 		// Scripts and Styles
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 

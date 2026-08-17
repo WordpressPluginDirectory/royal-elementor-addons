@@ -2111,7 +2111,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 		foreach ( $settings['accordion_elements'] as $key => $data ) {
 			$place = 'over';
-			$align_vr = $data['element_align_vr'];
+			$align_vr = Utilities::validate_option( $data['element_align_vr'] ?? '', [ 'top', 'middle', 'bottom' ], 'middle' );
 
 			if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 				$align_vr = 'middle';
@@ -2141,22 +2141,37 @@ class Wpr_Image_Accordion extends Widget_Base {
 						echo '<div class="wpr-cv-container"><div class="wpr-cv-outer"><div class="wpr-cv-inner">';
 					}
 
-					echo '<div class="wpr-img-accordion-media-hover-'. $align .' elementor-clearfix">';
+					echo '<div class="'. esc_attr( 'wpr-img-accordion-media-hover-' . $align . ' elementor-clearfix' ) .'">';
 						foreach ( $elements as $data ) {
-							
+							$element_select = Utilities::validate_option(
+								$data['element_select'] ?? '',
+								array_keys( $this->add_option_element_select() ),
+								'title'
+							);
+							$element_display = Utilities::validate_option(
+								$data['element_display'] ?? '',
+								[ 'inline', 'block', 'custom' ],
+								'block'
+							);
+							$element_align_hr = Utilities::validate_option(
+								$data['element_align_hr'] ?? '',
+								[ 'left', 'center', 'right' ],
+								'center'
+							);
+
 							// Get Class
-							$class  = 'wpr-img-accordion-item-'. $data['element_select'];
+							$class  = 'wpr-img-accordion-item-'. $element_select;
 							$class .= ' elementor-repeater-item-'. $data['_id'];
-							$class .= ' wpr-img-accordion-item-display-'. $data['element_display'];
+							$class .= ' wpr-img-accordion-item-display-'. $element_display;
 							if  ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
 								$class .= ' wpr-img-accordion-item-align-center';
 							} else {
-								$class .= ' wpr-img-accordion-item-align-'. $data['element_align_hr'];
+								$class .= ' wpr-img-accordion-item-align-'. $element_align_hr;
 							}
 							$class .= $this->get_animation_class( $data, 'element' );
 
 							// Element
-							$this->get_elements( $data['element_select'], $data, $class, $item );
+							$this->get_elements( $element_select, $data, $class, $item );
 						}
 					echo '</div>';
 
@@ -2171,7 +2186,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 	// Render Media Overlay
 	public function render_media_overlay( $settings ) {
-		echo '<div class="wpr-img-accordion-hover-bg '. $this->get_animation_class( $settings, 'overlay' ) .'">';
+		echo '<div class="'. esc_attr( 'wpr-img-accordion-hover-bg' . $this->get_animation_class( $settings, 'overlay' ) ) .'">';
 
 			// if ( defined('WPR_ADDONS_PRO_VERSION') && wpr_fs()->can_use_premium_code() ) {
 			// 	if ( '' !== $settings['overlay_image']['url'] ) {
@@ -2181,18 +2196,68 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 		echo '</div>';
 	}
+
+	/**
+	 * Allowed keys for wpr-animations / wpr-animations-alt controls.
+	 *
+	 * @return string[]
+	 */
+	protected function get_allowed_animation_keys() {
+		$keys = [ 'none' ];
+
+		foreach ( \WprAddons\Includes\Controls\WPR_Control_Animations::get_animations() as $group ) {
+			if ( is_array( $group ) ) {
+				$keys = array_merge( $keys, array_map( 'strval', array_keys( $group ) ) );
+			}
+		}
+
+		return array_values( array_unique( $keys ) );
+	}
+
+	/**
+	 * Allowed keys for wpr-button-animations control.
+	 *
+	 * @return string[]
+	 */
+	protected function get_allowed_button_animation_keys() {
+		$keys = [];
+
+		foreach ( \WprAddons\Includes\Controls\WPR_Control_Button_Animations::get_animations() as $group ) {
+			if ( is_array( $group ) ) {
+				$keys = array_merge( $keys, array_map( 'strval', array_keys( $group ) ) );
+			}
+		}
+
+		return array_values( array_unique( $keys ) );
+	}
 	
 	// Get Animation Class
 	public function get_animation_class( $data, $object ) {
 		$class = '';
 
-		// Animation Class
-		if ( 'none' !== $data[ $object .'_animation'] ) {
-			$class .= ' wpr-'. $object .'-'. $data[ $object .'_animation'];
-			$class .= ' wpr-anim-size-'. $data[ $object .'_animation_size'];
-			$class .= ' wpr-anim-timing-'. $data[ $object .'_animation_timing'];
+		$animation = Utilities::validate_option(
+			$data[ $object . '_animation' ] ?? '',
+			$this->get_allowed_animation_keys(),
+			'none'
+		);
+		$size = Utilities::validate_option(
+			$data[ $object . '_animation_size' ] ?? '',
+			[ 'small', 'medium', 'large' ],
+			'large'
+		);
+		$timing = Utilities::validate_option(
+			$data[ $object . '_animation_timing' ] ?? '',
+			array_keys( Utilities::wpr_animation_timings() ),
+			'ease-default'
+		);
 
-			if ( 'yes' === $data[ $object .'_animation_tr'] ) {
+		// Animation Class
+		if ( 'none' !== $animation ) {
+			$class .= ' wpr-'. $object .'-'. $animation;
+			$class .= ' wpr-anim-size-'. $size;
+			$class .= ' wpr-anim-timing-'. $timing;
+
+			if ( 'yes' === ( $data[ $object . '_animation_tr' ] ?? '' ) ) {
 				$class .= ' wpr-anim-transparency';
 			}
 		}
@@ -2235,11 +2300,17 @@ class Wpr_Image_Accordion extends Widget_Base {
 
 	// Render Post Read More
 	public function render_repeater_button( $settings, $class, $item ) {
-		$button_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ? 'wpr-button-none' : $this->get_settings_for_display()['button_animation'];
+		$button_animation = !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code()
+			? 'wpr-button-none'
+			: Utilities::validate_option(
+				$this->get_settings_for_display()['button_animation'] ?? '',
+				$this->get_allowed_button_animation_keys(),
+				'wpr-button-none'
+			);
 
 		echo '<div class="'. esc_attr($class) .'">';
 			echo '<div class="inner-block">';
-				echo '<a '. $this->get_render_attribute_string( 'accordion_btn_url'.$item['_id'] ) .' class="wpr-button-effect '. $button_animation .'">';
+				echo '<a '. $this->get_render_attribute_string( 'accordion_btn_url'.$item['_id'] ) .' class="'. esc_attr( 'wpr-button-effect ' . $button_animation ) .'">';
 
 				// Icon: Before
 				if ( 'before' === $settings['element_extra_icon_pos'] ) {
@@ -2340,22 +2411,44 @@ class Wpr_Image_Accordion extends Widget_Base {
 	public function get_image_effect_class( $settings ) {
 		$class = '';
 
+		// Free + Pro option keys (Pro replaces placeholders with real effect slugs).
+		$allowed_effects = [
+			'none',
+			'zoom-in',
+			'zoom-out',
+			'pro-zi',
+			'pro-zo',
+			'grayscale-in',
+			'grayscale-out',
+			'pro-go',
+			'blur-in',
+			'blur-out',
+			'pro-bo',
+			'slide',
+		];
+		$allowed_sizes = [ 'small', 'medium', 'large' ];
+		$allowed_dirs  = [ 'top', 'right', 'bottom', 'left' ];
+
+		$image_effects = Utilities::validate_option( $settings['image_effects'] ?? '', $allowed_effects, 'none' );
+		$image_effects_size = Utilities::validate_option( $settings['image_effects_size'] ?? '', $allowed_sizes, 'medium' );
+		$image_effects_direction = Utilities::validate_option( $settings['image_effects_direction'] ?? '', $allowed_dirs, 'bottom' );
+
 		if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) {
-			if ( 'pro-zi' ==  $settings['image_effects'] || 'pro-zo' ==  $settings['image_effects'] || 'pro-go' ==  $settings['image_effects'] || 'pro-bo' ==  $settings['image_effects'] ) {
-				$settings['image_effects'] = 'none';
+			if ( in_array( $image_effects, [ 'pro-zi', 'pro-zo', 'pro-go', 'pro-bo' ], true ) ) {
+				$image_effects = 'none';
 			}
 		}
 
 		// Animation Class
-		if ( 'none' !== $settings['image_effects'] ) {
-			$class .= ' wpr-'. $settings['image_effects'];
+		if ( 'none' !== $image_effects ) {
+			$class .= ' wpr-'. $image_effects;
 		}
 		
 		// Slide Effect
-		if ( 'slide' !== $settings['image_effects'] ) {
-			$class .= ' wpr-effect-size-'. $settings['image_effects_size'];
+		if ( 'slide' !== $image_effects ) {
+			$class .= ' wpr-effect-size-'. $image_effects_size;
 		} else {
-			$class .= ' wpr-effect-dir-'. $settings['image_effects_direction'];
+			$class .= ' wpr-effect-dir-'. $image_effects_direction;
 		}
 
 		return $class;
@@ -2404,7 +2497,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 		}
 		?>
 
-		<div class="wpr-image-accordion-wrap <?php echo $no_column ?>">
+		<div class="wpr-image-accordion-wrap <?php echo esc_attr( $no_column ); ?>">
 
 			<?php if ( !defined('WPR_ADDONS_PRO_VERSION') || !wpr_fs()->can_use_premium_code() ) : ?>
 				<div class="wpr-image-accordion">
@@ -2446,9 +2539,11 @@ class Wpr_Image_Accordion extends Widget_Base {
 			if ( ! empty( $item['accordion_btn_url']['url'] ) ) {
 				$this->add_link_attributes( 'accordion_btn_url'. esc_attr($item['_id']), $item['accordion_btn_url'] );
 			}
+
+			$item_class = 'wpr-image-accordion-item elementor-repeater-item-' . $item['_id'] . $this->get_image_effect_class( $settings );
 			?>
 
-				<div data-src=<?php echo esc_url( $this->item_bg_image_url ) ?>   class="wpr-image-accordion-item elementor-repeater-item-<?php echo esc_attr($item['_id']) . $this->get_image_effect_class( $settings )?>">
+				<div data-src="<?php echo esc_url( $this->item_bg_image_url ); ?>" class="<?php echo esc_attr( $item_class ); ?>">
 
 				<div class="wpr-accordion-background" style="background-image: url(<?php echo esc_attr( $this->item_bg_image_url ) ?>);"></div>
 							

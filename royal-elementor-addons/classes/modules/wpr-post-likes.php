@@ -24,24 +24,33 @@ class WPR_Post_Likes {
 	** Likes Init
 	*/
 	public function wpr_likes_init() {
-		// Security
-		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash($_REQUEST['nonce']) ) : 0;
+		// Base variables
+		$post_id = ( isset( $_REQUEST['post_id'] ) && is_numeric( $_REQUEST['post_id'] ) ) ? absint( $_REQUEST['post_id'] ) : 0;
 
-		if ( ! wp_verify_nonce( $nonce, 'wpr-post-likes-nonce' ) ) {
+		if ( ! $post_id || ! get_post( $post_id ) ) {
+			exit( esc_html__( 'Not permitted', 'wpr-addons' ) );
+		}
+
+		// Only allow likes on publicly viewable posts (or posts the current user can read).
+		if ( ! is_post_publicly_viewable( $post_id ) && ! current_user_can( 'read_post', $post_id ) ) {
+			exit( esc_html__( 'Not permitted', 'wpr-addons' ) );
+		}
+
+		// Security — nonce is tied to the post that rendered the like button.
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'wpr-post-likes-nonce-' . $post_id ) ) {
 			exit( esc_html__( 'Not permitted', 'wpr-addons' ) );
 		}
 
 		// Test if javascript is disabled
 		$js_disabled = ( isset( $_REQUEST['disabled'] ) && $_REQUEST['disabled'] == true ) ? true : false;
 
-		// Base variables
-		$post_id = ( isset( $_REQUEST['post_id'] ) && is_numeric( $_REQUEST['post_id'] ) ) ? absint($_REQUEST['post_id']) : '';
-
 		$post_users = NULL;
 		$like_count = 0;
 
 		// Init
-		if ( $post_id != '' ) {
+		if ( $post_id ) {
 			// Likes Count
 			$count = get_post_meta( $post_id, '_post_like_count', true );
 			$count = ( isset( $count ) && is_numeric( $count ) ) ? $count : 0;
@@ -140,7 +149,7 @@ class WPR_Post_Likes {
 	** Get Button
 	*/
 	public function get_button( $post_id, $settings ) {
-		$nonce = wp_create_nonce( 'wpr-post-likes-nonce' ); // Security
+		$nonce = wp_create_nonce( 'wpr-post-likes-nonce-' . $post_id ); // Security
 		$like_count = get_post_meta( $post_id, '_post_like_count', true );
 		$like_count = ( isset( $like_count ) && is_numeric( $like_count ) ) ? $like_count : 0;
 		$default_text_class = '';
@@ -269,16 +278,11 @@ class WPR_Post_Likes {
 	** Utility: Get IP
 	*/
 	public function get_IP() {
-		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-			$ip = sanitize_text_field(wp_unslash($_SERVER['HTTP_CLIENT_IP']));
-		} else {
-			$ip = ( isset( $_SERVER['REMOTE_ADDR'] ) ) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '0.0.0.0';
-		}
-
+		// Use REMOTE_ADDR only — Client-IP / X-Forwarded-For are attacker-controlled.
+		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '0.0.0.0';
 		$ip = filter_var( $ip, FILTER_VALIDATE_IP );
-		$ip = ( $ip === false ) ? '0.0.0.0' : $ip;
 
-		return $ip;
+		return ( false === $ip ) ? '0.0.0.0' : $ip;
 	}
 
 	/**

@@ -407,8 +407,9 @@ class Wpr_Phone_Call extends Widget_Base {
 			'type' => Controls_Manager::COLOR,
 			'default' => '#fff',
 			'selectors' => [
-				'{{WRAPPER}} .wpr-pc-btn:hover > .wpr-pc-btn-icon' => 'Color: {{VALUE}}',
+				'{{WRAPPER}} .wpr-pc-btn:hover .wpr-pc-btn-icon' => 'Color: {{VALUE}}',
 				'{{WRAPPER}} .wpr-pc-btn:hover svg' => 'fill: {{VALUE}}',
+				'{{WRAPPER}} .wpr-pc-btn:hover .wpr-pc-text' => 'color: {{VALUE}}'
 			],
 		]
 	);

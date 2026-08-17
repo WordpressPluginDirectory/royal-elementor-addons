@@ -127,18 +127,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 					break;
 
 				case 'page_url':
+					$referrer_url = get_option( 'wpr_referrer_' . $_POST['wpr_form_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 					$meta_fields['page_url'] = [
 						'title' => esc_html__( 'Page URL', 'wpr-addons' ),
-						// 'value' => get_option('wpr_referrer_'. $_POST['wpr_form_id']) ? esc_url_raw( wp_unslash( get_option('wpr_referrer_'. $_POST['wpr_form_id']) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Missing
-						'value' => get_option('wpr_referrer_'. $_POST['wpr_form_id']) ? get_option('wpr_referrer_'. $_POST['wpr_form_id']) : '', // phpcs:ignore WordPress.Security.NonceVerification.Missing
+						'value' => $referrer_url ? esc_html( esc_url( $referrer_url ) ) : '',
 					];
 					break;
 
 				case 'page_title':
+					$referrer_title = get_option( 'wpr_referrer_title_' . $_POST['wpr_form_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 					$meta_fields['page_title'] = [
 						'title' => esc_html__( 'Page Title', 'wpr-addons' ),
-						// 'value' => get_option('wpr_referrer_title_'. $_POST['wpr_form_id']) ? sanitize_text_field( wp_unslash( get_option('wpr_referrer_title_'. $_POST['wpr_form_id']) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Missing
-						'value' => get_option('wpr_referrer_title_'. $_POST['wpr_form_id']) ? get_option('wpr_referrer_title_'. $_POST['wpr_form_id']) : '', // phpcs:ignore WordPress.Security.NonceVerification.Missing
+						'value' => $referrer_title ? esc_html( sanitize_text_field( $referrer_title ) ) : '',
 					];
 					break;
 

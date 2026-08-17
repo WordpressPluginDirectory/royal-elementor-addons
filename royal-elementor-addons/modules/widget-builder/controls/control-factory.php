@@ -426,8 +426,8 @@ class ControlFactory {
 	 * Prevents PHP injection by escaping quotes and removing PHP tags.
 	 */
 	public static function escape_string( $str ) {
-		// Remove any PHP tags that could break out of strings
-		$str = str_replace( [ '<?php', '<?=', '<?', '?>' ], '', $str );
+		// Remove any PHP tags that could break out of strings (iterative; single-pass can recombine).
+		$str = \WprAddons\Classes\Utilities::strip_php_tags( $str );
 		// Escape backslashes and single quotes
 		return addcslashes( $str, "\\'" );
 	}

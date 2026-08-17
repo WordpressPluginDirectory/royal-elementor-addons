@@ -1,6 +1,8 @@
 <?php
 namespace WprAddons\Modules\WidgetBuilder\Api;
 
+use WprAddons\Classes\Utilities;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -107,9 +109,9 @@ class Endpoints {
 			'icon'         => ! empty( $body['icon'] ) ? sanitize_text_field( $body['icon'] ) : 'eicon-cog',
 			'categories'   => [ $category ],
 			'push_id'      => $id,
-			'markup'       => isset( $body['markup'] ) ? str_replace( [ '<?php', '<?=', '<?', '?>' ], '', $body['markup'] ) : '',
+			'markup'       => isset( $body['markup'] ) ? Utilities::strip_php_tags( $body['markup'] ) : '',
 			'css'          => isset( $body['css'] ) ? wp_strip_all_tags( $body['css'] ) : '',
-			'js'           => isset( $body['js'] ) ? str_replace( '</script>', '', $body['js'] ) : '',
+			'js'           => isset( $body['js'] ) ? preg_replace( '/<\/script>/i', '', (string) $body['js'] ) : '',
 			'css_includes' => ! empty( $body['css_includes'] ) ? array_map( 'esc_url_raw', (array) $body['css_includes'] ) : [],
 			'js_includes'  => ! empty( $body['js_includes'] ) ? array_map( 'esc_url_raw', (array) $body['js_includes'] ) : [],
 			'tabs'         => isset( $body['tabs'] ) ? $body['tabs'] : [
