@@ -1587,7 +1587,7 @@ class Wpr_Image_Accordion extends Widget_Base {
 					'size' => 100,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .wpr-img-accordion-item-description .inner-block' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-img-accordion-item-description .inner-block' => 'width: {{SIZE}}%;',
 				],
 				'separator' => 'before',
 			]

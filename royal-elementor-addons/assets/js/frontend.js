@@ -5173,8 +5173,8 @@
 							action: 'wpr_data_fetch',
 							nonce: WprConfig.nonce,
 							wpr_keyword: $scope.find('.wpr-search-form-input').val(),
-							wpr_meta_query: $scope.find('.wpr-search-form-input').attr('meta-query'),
-							wpr_meta_keys: $scope.find('.wpr-search-form-input').attr('meta-keys') || '',
+							wpr_widget_id: $scope.find('.wpr-search-form-input').attr('wpr-widget-id') || $scope.attr('data-id') || '',
+							wpr_document_id: $scope.find('.wpr-search-form-input').attr('wpr-document-id') || $scope.closest('[data-elementor-id]').attr('data-elementor-id') || '',
 							wpr_query_type: $scope.find('.wpr-search-form-input').attr('wpr-query-type'),
 							wpr_option_post_type: optionPostType ? $scope.find('.wpr-category-select').find('option:selected').data('post-type') : '',
 							wpr_taxonomy_type: wprTaxonomyType,
@@ -5454,13 +5454,15 @@
 						hideWord( headline.find('.wpr-anim-text-visible').eq(0) );
 					}, duration);
 
-					// Fix Bigger Words Flip
+					// Fix Bigger Words Flip — size wrapper to longest word so shorter ones don't jump
 					if ( headline.hasClass( 'wpr-anim-text-type-rotate-1' ) ) {
+						var maxWordWidth = 0;
 						spanWrapper.find( 'b' ).each(function() {
-							if ( $(this).outerWidth() > spanWrapper.outerWidth() ) {
-								spanWrapper.css( 'width', $(this).outerWidth() );
-							}
+							maxWordWidth = Math.max( maxWordWidth, $(this).outerWidth() );
 						});
+						if ( maxWordWidth > 0 ) {
+							spanWrapper.css( 'width', maxWordWidth );
+						}
 					}
 				});
 			}
@@ -11600,13 +11602,17 @@
 					});
 				}
 
-				if ( widgetSelector.find('.wpr-load-more-btn').length > 0 ) {
-					widgetSelector.find('.wpr-load-more-btn').on('click', function(e) {
-						e.preventDefault();
-						e.stopImmediatePropagation();
-						ajaxFilters($(this));
-					});
-				}
+				// Delegated: AF grids skip InfiniteScroll click preventDefault, so the <a> must be
+				// intercepted here or Load More full-page navigates.
+				$(document).off('click.wprAfLoadMore').on('click.wprAfLoadMore', '.wpr-load-more-btn', function(e) {
+					var $afGrid = $(this).closest('[class*="elementor-widget-wpr-"]').find('.wpr-grid[data-advanced-filters="yes"]');
+					if ( ! $afGrid.length ) {
+						return;
+					}
+					e.preventDefault();
+					e.stopImmediatePropagation();
+					ajaxFilters($(this));
+				});
 
 				if ( widgetSelector.find('.wpr-grid-orderby').length > 0 ) {
 					widgetSelector.find('.wpr-grid-orderby').find('select').on('change', function(e) {
@@ -12629,6 +12635,15 @@
 				renderActiveFilters('ajax');
 
 				let targetGrid = actionSelector;
+
+				// Load More on a specific AF grid — use that grid, not only the first AF grid on the page.
+				if ( triggerElement && triggerElement.hasClass && triggerElement.hasClass('wpr-load-more-btn') ) {
+					var $clickedGrid = triggerElement.closest('[class*="elementor-widget-wpr-"]').find('.wpr-grid[data-advanced-filters="yes"]');
+					if ( $clickedGrid.length ) {
+						targetGrid = $clickedGrid;
+						widgetSelector = triggerElement.closest('[class*="elementor-widget-wpr-"]');
+					}
+				}
 
                 // If not ajax relocate
                 if ( self.closest('.wpr-advanced-filters-wrap').length > 0 && 'yes' !== self.closest('.wpr-advanced-filters-wrap').data('enable-ajax') ) {

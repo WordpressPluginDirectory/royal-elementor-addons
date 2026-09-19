@@ -402,6 +402,55 @@ class Advanced_Text extends Widget_Base {
 		);
 
 		$this->add_control(
+			'text_layout',
+			[
+				'label' => esc_html__( 'Layout', 'wpr-addons' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'inline',
+				'options' => [
+					'inline' => esc_html__( 'Inline', 'wpr-addons' ),
+					'stacked' => esc_html__( 'Stacked', 'wpr-addons' ),
+				],
+				'prefix_class' => 'wpr-advanced-text-layout-',
+			]
+		);
+
+		$this->add_responsive_control(
+			'animated_text_align',
+			[
+				'label' => esc_html__( 'Animated Text Alignment', 'wpr-addons' ),
+				'type' => Controls_Manager::CHOOSE,
+				'default' => 'center',
+				'label_block' => false,
+				'options' => [
+					'left' => [
+						'title' => esc_html__( 'Left', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => esc_html__( 'Right', 'wpr-addons' ),
+						'icon' => 'eicon-text-align-right',
+					],
+				],
+				// Skew-safe: centers/rights absolute words without transform (see text-animations.css).
+				'prefix_class' => 'wpr-anim-text-align-',
+				'selectors' => [
+					'{{WRAPPER}} .wpr-anim-text' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .wpr-highlighted-text' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .wpr-clipped-text' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .wpr-anim-text-inner' => 'text-align: {{VALUE}}; float: none;',
+				],
+				'condition' => [
+					'text_layout' => 'stacked',
+				],
+			]
+		);
+
+		$this->add_control(
 			'text_tag',
 			[
 				'label' => esc_html__( 'Text HTML Tag', 'wpr-addons' ),

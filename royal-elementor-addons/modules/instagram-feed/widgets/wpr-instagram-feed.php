@@ -4953,16 +4953,27 @@ class Wpr_Instagram_Feed extends Widget_Base {
 		$access_token = rawurlencode( (string) $access_token );
 		$url = 'https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token='.$access_token.'';
 		$response = wp_remote_get($url);
-		if(!isset($body)) {
-			$body = json_decode($response['body']);
-			if ($body && $body->error) {
-				$this->reauthorization_needed = true;
-			} else {
-				set_transient('wpr_instagram_access_token'. $this->get_ID(), $body->access_token, $body->expires_in);
-				set_transient('wpr_instagram_access_token_expires_in'. $this->get_ID(), $body->expires_in, $body->expires_in);
-				set_transient('wpr_instagram_access_token_generation_date'. $this->get_ID(), date('Y-m-d'), $body->expires_in);
-			}
+
+		if ( is_wp_error( $response ) ) {
+			$this->reauthorization_needed = true;
+			return;
 		}
+
+		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+			$this->reauthorization_needed = true;
+			return;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( ! $body || ! empty( $body->error ) || empty( $body->access_token ) || empty( $body->expires_in ) ) {
+			$this->reauthorization_needed = true;
+			return;
+		}
+
+		set_transient( 'wpr_instagram_access_token' . $this->get_ID(), $body->access_token, $body->expires_in );
+		set_transient( 'wpr_instagram_access_token_expires_in' . $this->get_ID(), $body->expires_in, $body->expires_in );
+		set_transient( 'wpr_instagram_access_token_generation_date' . $this->get_ID(), date( 'Y-m-d' ), $body->expires_in );
 	}
 
 	// Get Animation Class

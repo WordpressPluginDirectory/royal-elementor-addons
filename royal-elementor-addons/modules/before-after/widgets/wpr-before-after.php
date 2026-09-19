@@ -796,6 +796,9 @@ class Wpr_Before_After extends Widget_Base {
 		$image_1_src = !empty($settings_new['image_upload_1']['id']) ? Group_Control_Image_Size::get_attachment_image_src( $settings_new['image_upload_1']['id'], 'image_size', $settings_new ) : $settings_new['image_upload_1']['url'];
 		$image_2_src = !empty($settings_new['image_upload_2']['id']) ? Group_Control_Image_Size::get_attachment_image_src( $settings_new['image_upload_2']['id'], 'image_size', $settings_new ) : $settings_new['image_upload_2']['url'];
 
+		$image_1_alt = ! empty( $settings_new['image_upload_1']['id'] ) ? get_post_meta( $settings_new['image_upload_1']['id'], '_wp_attachment_image_alt', true ) : '';
+		$image_2_alt = ! empty( $settings_new['image_upload_2']['id'] ) ? get_post_meta( $settings_new['image_upload_2']['id'], '_wp_attachment_image_alt', true ) : '';
+
 		// Divider
 		echo '<div class="wpr-ba-image-container'. esc_attr($class) .'" data-position="'. esc_attr($settings['divider_position']) .'" data-trigger="'. esc_attr($settings['trigger']) .'">';
 			
@@ -809,12 +812,12 @@ class Wpr_Before_After extends Widget_Base {
 
 			// Image 1
 			echo '<div class="wpr-ba-image-1">';
-				echo '<img src="'. esc_url( $image_1_src ) .'">';
+				echo '<img src="'. esc_url( $image_1_src ) .'" alt="'. esc_attr( $image_1_alt ) .'">';
 			echo '</div>';
 			
 			// Image 2
 			echo '<div class="wpr-ba-image-2">';
-				echo '<img src="'. esc_url( $image_2_src ) .'">';
+				echo '<img src="'. esc_url( $image_2_src ) .'" alt="'. esc_attr( $image_2_alt ) .'">';
 			echo '</div>';
 
 			// Divider

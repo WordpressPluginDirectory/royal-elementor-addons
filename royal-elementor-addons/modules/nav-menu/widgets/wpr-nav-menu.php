@@ -1073,6 +1073,24 @@ class Wpr_Nav_Menu extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'sub_menu_padding_first_last',
+			[
+				'label' => esc_html__( 'Top / Bottom Padding', 'wpr-addons' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 80,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-sub-menu > li:first-child > .wpr-sub-menu-item' => 'padding-top: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .wpr-sub-menu > li:last-child > .wpr-sub-menu-item' => 'padding-bottom: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
 			'sub_menu_offset',
 			[
 				'label' => esc_html__( 'Sub Menu Offset', 'wpr-addons' ),

@@ -653,12 +653,13 @@ class Wpr_Offcanvas extends Widget_Base {
 			[
 				'label' => esc_html__( 'Padding', 'wpr-addons' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px' ],
+				'size_units' => [ 'px', '%' ],
 				'default' => [
 					'top' => 10,
 					'right' => 10,
 					'bottom' => 10,
 					'left' => 10,
+					'unit' => 'px',
 				],
 				'selectors' => [
 					'{{WRAPPER}} .wpr-offcanvas-trigger' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -1106,6 +1107,24 @@ class Wpr_Offcanvas extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .wpr-offcanvas-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'.wpr-offcanvas-wrap-{{ID}} .wpr-offcanvas-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'offcanvas_wrap_margin',
+			[
+				'label' => esc_html__( 'Margin', 'wpr-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'default' => [
+					'top' => 0,
+					'right' => 0,
+					'bottom' => 0,
+					'left' => 0,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .wpr-offcanvas-wrap' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);

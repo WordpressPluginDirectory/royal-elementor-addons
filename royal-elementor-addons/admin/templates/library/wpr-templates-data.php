@@ -588,6 +588,19 @@ class WPR_Templates_Data {
 					'label' => 'new',
 					'priority' => 4,
 				],
+			   'v4' => [
+					'name' => 'Electronic Store - V4 - Shop',
+					'pages' => 'home,shop,single-product,cart,compare,wishlist,checkout,blog,single-blog,about,faq,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore ecommerce product online market reseller ecommerce shop gadget iphone phone electronic gadgets tech e commerce',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 4,
+				],
 			],
 			'woo-food' => [
 				'v1' => [
@@ -675,6 +688,19 @@ class WPR_Templates_Data {
 					'pages' => 'home,man,kids,shop,shop-v2,shop-grid-catalog-mode,shop-grid-list-mode,single-product,store-finder,cart,compare,wishlist,blog,single-blog,about,faq,contact-v1,contact-v2,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
 					'tags' => 'shop shopping woo-commerce woocommerce estore store ecommerce product ecommerce shop online boutique clothes eshopping fashion designer market reseller digital purchases e commerce',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'expert' => $is_expert ? 'free' : 'expert',
+					'label' => 'new',
+					'priority' => 3,
+				],
+				'v6' => [
+					'name' => 'Fashion 6 - Shop',
+					'pages' => 'home,shop,shop-grid-list-view,shop-grid-vertical-filters,single-product,sale,our-store,about,faq,cart,compare,wishlist,checkout,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'shop shopping woo-commerce woocommerce estore store ecommerce product ecommerce shop online boutique clothes eshopping fashion designer market reseller sale digital purchases e commerce',
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => true,
@@ -1948,7 +1974,7 @@ class WPR_Templates_Data {
 					'name' => 'Construction v3',
 					'pages' => 'home,home-v2,about,services,megamenu,shop,single-product,minicart,blog,gallery,contact,',
 					'plugins' => '{"woocommerce":'. $is_woo_active .', "media-library-assistant":'. $is_mla_active .'}',
-					'tags' => 'construction architecture company building consultation e commerce',
+					'tags' => 'construction architecture architect company building build consultation e commerce shop renovation constructor contractor engineering business company industry',
 					'theme-builder' => true,
 					'woo-builder' => true,
 					'off-canvas' => true,
@@ -1956,6 +1982,18 @@ class WPR_Templates_Data {
 					'label' => 'New',
 					'priority' => 243,
 					],
+				'v4' => [
+					'name' => 'Construction V4',
+					'pages' => 'home,about,clients-partners,team,gallery,projects,projects-v2,projects-single,services,services-single,shop,single-product,cart,checkout,blog,single-blog,contact,',
+					'plugins' => '{"woocommerce":'. $is_woo_active .'}',
+					'tags' => 'construction architecture architect company building build consultation e commerce shop renovation constructor contractor engineering business company industry',
+					'theme-builder' => true,
+					'woo-builder' => true,
+					'off-canvas' => true,
+					'price' => $is_pro_active ? 'free' : 'pro',
+					'label' => 'New',
+					'priority' => 1,
+					]
 			],
 			'ittech' => [
 				'v1' => [
@@ -2494,6 +2532,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','home-v2','about','services','shop','blog','gallery','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'construction-v4' => [
+				'name' => 'Construction V4',
+				'pages' => ['home','about','clients-partners','team','gallery','projects','projects-v2','projects-single','services','services-single','shop','blog','contact,'],
+				'preview' => ['home','about','clients-partners','team','gallery','projects','projects-v2','projects-single','services','services-single','shop','blog','contact,'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'woo-auto-parts-v1' => [
 				'name' => 'Auto Parts Store',
 				'pages' => ['home','shop','about','blog','contact'],
@@ -2710,6 +2754,12 @@ class WPR_Templates_Data {
 				'preview' => ['home','shop-fashion-v1','shop-v2','blog','about','faq','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
+			'fashion-v6' => [
+				'name' => 'Fashion 6 - Shop',
+				'pages' => ['home','shop','shop-grid-list-view','shop-grid-vertical-filters','sale','our-store','about','faq','cart','compare','checkout','blog','contact',],
+				'preview' => ['home','shop','shop-grid-list-view','shop-grid-vertical-filters','sale','our-store','about','faq','cart','compare','checkout','blog','contact',],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
 			'woo-food-v1' => [
 				'name' => 'Food Delivery',
 				'pages' => ['home','home-v2','food','about','contact','faq','blog'],
@@ -2732,6 +2782,12 @@ class WPR_Templates_Data {
 				'name' => 'Electronic Store - V2',
 				'pages' => ['home','shop','cart','blog','about','contact'],
 				'preview' => ['home','shop','cart','blog','about','contact'],
+				'price' => $is_pro_active ? 'free' : 'pro',
+			],
+			'estore-v4' => [
+				'name' => 'Electronic Store - V4',
+				'pages' => ['home','shop','about','blog','faq','contact'],
+				'preview' => ['home','shop','about','blog','faq','contact'],
 				'price' => $is_pro_active ? 'free' : 'pro',
 			],
 			'furniture-shop-v1' => [

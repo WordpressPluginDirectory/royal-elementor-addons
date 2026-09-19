@@ -817,7 +817,7 @@ class Wpr_Icon_Box extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'icon_box_border_width',
 			[
 				'label' => esc_html__( 'Border Width', 'wpr-addons' ),
@@ -838,7 +838,7 @@ class Wpr_Icon_Box extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'icon_box_border_radius',
 			[
 				'label' => esc_html__( 'Border Radius', 'wpr-addons' ),

@@ -23,61 +23,90 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     public function send_email() {
 
-        $nonce = $_POST['nonce'];
+        $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
-        if ( !wp_verify_nonce( $nonce, 'wpr-addons-js' ) ) {
+        if ( ! wp_verify_nonce( $nonce, 'wpr-addons-js' ) ) {
             return; // Get out of here, the nonce is rotten!
         }
+
+		$form_content = isset( $_POST['form_content'] ) && is_array( $_POST['form_content'] ) ? wp_unslash( $_POST['form_content'] ) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- escaped for the email body below.
         
         $message_body = [];
 
-		foreach ($_POST['form_content'] as $field) {
-			if ($field[0] === 'email') {
-				if (!is_email($field[1])) {
+		foreach ( $form_content as $field ) {
+			if ( ! is_array( $field ) ) {
+				continue;
+			}
+			if ( isset( $field[0] ) && 'email' === $field[0] ) {
+				$field_email = isset( $field[1] ) ? $field[1] : '';
+				if ( ! is_email( $field_email ) ) {
 					// The field is an email, but it is not a valid email address
 					// Take action or abort function execution here
-					wp_send_json_error(array(
+					wp_send_json_error( [
 						'action' => 'wpr_form_builder_email',
-						'message' => esc_html__('Email provided is invalid', 'wpr-addons'),
-						'status' => 'error'
-					));
+						'message' => esc_html__( 'Email provided is invalid', 'wpr-addons' ),
+						'status' => 'error',
+					] );
 				}
 			}
 		}
 		
-		// Rest of your function code here (if needed)
-		$content_type = get_option('wpr_email_content_type_'. $_POST['wpr_form_id']);
+		$form_id      = isset( $_POST['wpr_form_id'] ) ? sanitize_text_field( wp_unslash( $_POST['wpr_form_id'] ) ) : '';
+		$content_type = get_option( 'wpr_email_content_type_' . $form_id );
+		$is_html      = ( 'html' === $content_type );
 
-		$line_break = 'html' === $content_type ? '<br>' : "\n";
+		$line_break = $is_html ? '<br>' : "\n";
     
-		$email_fields = trim(get_option('wpr_email_fields_' . $_POST['wpr_form_id']));
-		
-		if ( $email_fields === '[all-fields]' || str_contains($email_fields, '[all-fields]') ) {
+		$email_fields = trim( (string) get_option( 'wpr_email_fields_' . $form_id ) );
 
-			// Function to replace the shortcode with the form value
-			$replace_shortcode_with_value = function ($matches) {
-				$field_id = $matches[1];
-				foreach ($_POST['form_content'] as $key => $value) {
-					$key_parts = explode('-', $key);
-					$last_part = end($key_parts);
-					if ($last_part === $field_id) {
-						return is_array($value[1]) ? implode("\n", $value[1]) : $value[1];
-					}
+		$replace_shortcode_with_value = function ( $matches ) use ( $form_content, $is_html ) {
+			$field_id = $matches[1];
+			foreach ( $form_content as $key => $value ) {
+				if ( ! is_array( $value ) ) {
+					continue;
 				}
-				return ''; // Return an empty string if the field id is not found
-			};
+				$key_parts = explode( '-', (string) $key );
+				$last_part = end( $key_parts );
+				if ( $last_part === $field_id ) {
+					$field_value = isset( $value[1] ) ? $value[1] : '';
+					return $this->format_body_value( $field_value, $is_html );
+				}
+			}
+			return '';
+		};
 
-			// Function to replace the shortcode with the form value
+		$replace_shortcode_with_labeled_value = function ( $matches ) use ( $form_content, $is_html ) {
+			$field_id = $matches[1];
+			foreach ( $form_content as $key => $value ) {
+				if ( ! is_array( $value ) ) {
+					continue;
+				}
+				$key_parts = explode( '-', (string) $key );
+				$last_part = end( $key_parts );
+				if ( $last_part === $field_id ) {
+					$label       = isset( $value[2] ) ? $value[2] : '';
+					$field_value = isset( $value[1] ) ? $value[1] : '';
+					return $this->format_body_field_line( $label, $field_value, $is_html );
+				}
+			}
+			return '';
+		};
+		
+		if ( '[all-fields]' === $email_fields || str_contains( $email_fields, '[all-fields]' ) ) {
+
 			$all_fields_content = [];
 
-            foreach ($_POST['form_content'] as $key => $value) {
-				$value[2] = wp_unslash($value[2]);
-                $all_fields_content[] = is_array($value[1]) ? trim($value[2]) . ': ' . implode("\n", $value[1]) : trim($value[2]) . ': ' . $value[1];
-            }
-            $all_fields_content = implode("\n", $all_fields_content);
-	
-			// Process user input to replace shortcodes
-            $processed_message = str_replace('[all-fields]', $all_fields_content, $email_fields);
+			foreach ( $form_content as $value ) {
+				if ( ! is_array( $value ) ) {
+					continue;
+				}
+				$label       = isset( $value[2] ) ? $value[2] : '';
+				$field_value = isset( $value[1] ) ? $value[1] : '';
+				$all_fields_content[] = $this->format_body_field_line( $label, $field_value, $is_html );
+			}
+			$all_fields_content = implode( "\n", $all_fields_content );
+
+			$processed_message = str_replace( '[all-fields]', $all_fields_content, $email_fields );
 
 			$processed_message = preg_replace_callback(
 				'/\[id="([^"]+)"\]/',
@@ -85,108 +114,95 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$processed_message
 			);
 		} else {
-
-			// Function to replace the shortcode with the form value
-			$replace_shortcode_with_value = function ($matches) {
-				$field_id = $matches[1];
-				foreach ($_POST['form_content'] as $key => $value) {
-					$key_parts = explode('-', $key);
-					$last_part = end($key_parts);
-					if ($last_part === $field_id) {
-						return is_array($value[1]) ? trim($value[2]) . ': ' . implode("\n", $value[1]) : trim($value[2]) . ': ' . $value[1];
-					}
-				}
-				return ''; // Return an empty string if the field id is not found
-			};
-	
-			// Process user input to replace shortcodes
 			$processed_message = preg_replace_callback(
 				'/\[id="([^"]+)"\]/',
-				$replace_shortcode_with_value,
+				$replace_shortcode_with_labeled_value,
 				$email_fields
 			);
 		}
 		
-        $meta_keys = get_option('wpr_meta_keys_'. $_POST['wpr_form_id']);
-        $meta_fields = [];
+		$meta_keys = get_option( 'wpr_meta_keys_' . $form_id );
+		$meta_fields = [];
 
-		foreach ( $meta_keys as $metadata_type ) {
-			switch ( $metadata_type ) {
-				case 'date':
-					$meta_fields['date'] = [
-						'title' => esc_html__( 'Date', 'wpr-addons' ),
-						'value' => date_i18n( get_option( 'date_format' ) ),
-					];
-					break;
+		if ( is_array( $meta_keys ) ) {
+			foreach ( $meta_keys as $metadata_type ) {
+				switch ( $metadata_type ) {
+					case 'date':
+						$meta_fields['date'] = [
+							'title' => __( 'Date', 'wpr-addons' ),
+							'value' => date_i18n( get_option( 'date_format' ) ),
+						];
+						break;
 
-				case 'time':
-					$meta_fields['time'] = [
-						'title' => esc_html__( 'Time', 'wpr-addons' ),
-						'value' => date_i18n( get_option( 'time_format' ) ),
-					];
-					break;
+					case 'time':
+						$meta_fields['time'] = [
+							'title' => __( 'Time', 'wpr-addons' ),
+							'value' => date_i18n( get_option( 'time_format' ) ),
+						];
+						break;
 
-				case 'page_url':
-					$referrer_url = get_option( 'wpr_referrer_' . $_POST['wpr_form_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-					$meta_fields['page_url'] = [
-						'title' => esc_html__( 'Page URL', 'wpr-addons' ),
-						'value' => $referrer_url ? esc_html( esc_url( $referrer_url ) ) : '',
-					];
-					break;
+					case 'page_url':
+						$referrer_url = get_option( 'wpr_referrer_' . $form_id ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+						$meta_fields['page_url'] = [
+							'title' => __( 'Page URL', 'wpr-addons' ),
+							'value' => $referrer_url ? esc_url( $referrer_url ) : '',
+						];
+						break;
 
-				case 'page_title':
-					$referrer_title = get_option( 'wpr_referrer_title_' . $_POST['wpr_form_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-					$meta_fields['page_title'] = [
-						'title' => esc_html__( 'Page Title', 'wpr-addons' ),
-						'value' => $referrer_title ? esc_html( sanitize_text_field( $referrer_title ) ) : '',
-					];
-					break;
+					case 'page_title':
+						$referrer_title = get_option( 'wpr_referrer_title_' . $form_id ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+						$meta_fields['page_title'] = [
+							'title' => __( 'Page Title', 'wpr-addons' ),
+							'value' => $referrer_title ? sanitize_text_field( $referrer_title ) : '',
+						];
+						break;
 
-				case 'user_agent':
-					$meta_fields['user_agent'] = [
-						'title' => esc_html__( 'User Agent', 'wpr-addons' ),
-						'value' => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_textarea_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '',
-					];
-					break;
+					case 'user_agent':
+						$meta_fields['user_agent'] = [
+							'title' => __( 'User Agent', 'wpr-addons' ),
+							'value' => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_textarea_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '',
+						];
+						break;
 
-				case 'remote_ip':
-					$meta_fields['remote_ip'] = [
-						'title' => esc_html__( 'Remote IP', 'wpr-addons' ),
-						'value' => Utilities::get_client_ip(),
-					];
-					break;
-                    
-				case 'credit':
-					$meta_fields['credit'] = [
-						'title' => esc_html__( 'Powered by', 'wpr-addons' ),
-						'value' => esc_html__( 'Royal Addons', 'wpr-addons' ), // is it necessary ?
-					];
-					break;
+					case 'remote_ip':
+						$meta_fields['remote_ip'] = [
+							'title' => __( 'Remote IP', 'wpr-addons' ),
+							'value' => Utilities::get_client_ip(),
+						];
+						break;
+
+					case 'credit':
+						$meta_fields['credit'] = [
+							'title' => __( 'Powered by', 'wpr-addons' ),
+							'value' => __( 'Royal Addons', 'wpr-addons' ),
+						];
+						break;
+				}
 			}
 		}
 
-        $email_meta = [];
+		$email_meta = [];
 
-        foreach( $meta_fields as $key => $value ) {
-            $email_meta[] = $value['title'] . ': ' . $value['value'];
-        }
+		foreach ( $meta_fields as $value ) {
+			$email_meta[] = $this->format_body_field_line( $value['title'], $value['value'], $is_html );
+		}
 
-        $to = get_option('wpr_email_to_'. $_POST['wpr_form_id']);
+        $to = get_option( 'wpr_email_to_' . $form_id );
 
 		$to = preg_replace_callback(
 			'/\[id="(\w+)"\]/',
-			function ($matches) {
-				return $this->get_field_value($matches[1]);
+			function ( $matches ) use ( $form_content ) {
+				return $this->get_field_value( $matches[1], $form_content );
 			},
 			$to
 		);
 
-        $subject = get_option('wpr_email_subject_'. $_POST['wpr_form_id']);
+        $subject = get_option( 'wpr_email_subject_' . $form_id );
 
 		$subject = preg_replace_callback(
 			'/\[id="(\w+)"\]/',
-			function ($matches) {
-				return $this->get_field_value($matches[1]);
+			function ( $matches ) use ( $form_content ) {
+				return $this->get_field_value( $matches[1], $form_content );
 			},
 			$subject
 		);
@@ -207,69 +223,76 @@ if ( ! defined( 'ABSPATH' ) ) {
         $body = implode($line_break, $message_body) . $line_break . '-----' . $line_break . implode($line_break, $email_meta);
 
 		$cc_header = '';
-		if ( !empty( get_option('wpr_cc_header_'. $_POST['wpr_form_id']) ) ) {
-			$cc_header = 'Cc: ' . get_option('wpr_cc_header_'. $_POST['wpr_form_id']);
+		if ( ! empty( get_option( 'wpr_cc_header_' . $form_id ) ) ) {
+			$cc_header = 'Cc: ' . get_option( 'wpr_cc_header_' . $form_id );
 
 			$cc_header = preg_replace_callback(
 				'/\[id="(\w+)"\]/',
-				function ($matches) {
-					return $this->get_field_value($matches[1]);
+				function ( $matches ) use ( $form_content ) {
+					return $this->get_field_value( $matches[1], $form_content );
 				},
 				$cc_header
 			);
 		}
 
 		$bcc_header = '';
-		if ( !empty( get_option('wpr_bcc_header_'. $_POST['wpr_form_id']) ) ) {
-			$bcc_header = 'Bcc: ' . get_option('wpr_bcc_header_'. $_POST['wpr_form_id']);
+		if ( ! empty( get_option( 'wpr_bcc_header_' . $form_id ) ) ) {
+			$bcc_header = 'Bcc: ' . get_option( 'wpr_bcc_header_' . $form_id );
 
 			$bcc_header = preg_replace_callback(
 				'/\[id="(\w+)"\]/',
-				function ($matches) {
-					return $this->get_field_value($matches[1]);
+				function ( $matches ) use ( $form_content ) {
+					return $this->get_field_value( $matches[1], $form_content );
 				},
 				$bcc_header
 			);
 		}
 		
-		if ( !empty( get_option('wpr_reply_to_'. $_POST['wpr_form_id']) ) && !empty(get_option('wpr_email_from_name_'. $_POST['wpr_form_id'])) && !empty(get_option('wpr_email_from_'. $_POST['wpr_form_id'])) ) {
+		$email_from_name = '';
+		$email_from_mail = '';
+		$reply_to        = '';
+
+		if ( ! empty( get_option( 'wpr_reply_to_' . $form_id ) ) && ! empty( get_option( 'wpr_email_from_name_' . $form_id ) ) && ! empty( get_option( 'wpr_email_from_' . $form_id ) ) ) {
 			
-			preg_match_all('/id="([^"]+)"/', get_option('wpr_reply_to_'. $_POST['wpr_form_id']), $matche);
+			preg_match_all( '/id="([^"]+)"/', get_option( 'wpr_reply_to_' . $form_id ), $matche );
 			$reply_to_field_id = $matche[1];
 			
-			preg_match_all('/id="([^"]+)"/', get_option('wpr_email_from_name_'. $_POST['wpr_form_id']), $matche);
+			preg_match_all( '/id="([^"]+)"/', get_option( 'wpr_email_from_name_' . $form_id ), $matche );
 			$email_from_name_field_id = $matche[1];
 			
-			preg_match_all('/id="([^"]+)"/', get_option('wpr_email_from_'. $_POST['wpr_form_id']), $matche);
+			preg_match_all( '/id="([^"]+)"/', get_option( 'wpr_email_from_' . $form_id ), $matche );
 			$email_from_field_id = $matche[1];
 
-			foreach ( $_POST['form_content'] as $key => $value ) {
-				$key_parts = explode('-', $key);
-				$last_part = end($key_parts);
+			foreach ( $form_content as $key => $value ) {
+				if ( ! is_array( $value ) ) {
+					continue;
+				}
+				$key_parts = explode( '-', (string) $key );
+				$last_part = end( $key_parts );
 
-				if (in_array($last_part, $reply_to_field_id)) {
-					$reply_to_address = $value[1];
+				if ( in_array( $last_part, $reply_to_field_id, true ) ) {
+					$reply_to_address = $this->get_field_value( $last_part, $form_content );
 				}
 
-				if (in_array($last_part, $email_from_name_field_id)) {
-					$email_from_name = $value[1];
+				if ( in_array( $last_part, $email_from_name_field_id, true ) ) {
+					$email_from_name = $this->get_field_value( $last_part, $form_content );
 				}
 
-				if (in_array($last_part, $email_from_field_id)) {
-					$email_from_mail = $value[1];
+				if ( in_array( $last_part, $email_from_field_id, true ) ) {
+					$email_from_mail = $this->get_field_value( $last_part, $form_content );
 				}
 			}
 
-			if ( !isset($reply_to_address) || empty($reply_to_address) ) {
-				$reply_to_address = get_option('wpr_reply_to_'. $_POST['wpr_form_id']);
+			if ( ! isset( $reply_to_address ) || empty( $reply_to_address ) ) {
+				$reply_to_address = get_option( 'wpr_reply_to_' . $form_id );
 			}
 
-			if ( !isset($email_from_name) || empty($email_from_name) ) {
-				$email_from_name = get_option('wpr_email_from_name_'. $_POST['wpr_form_id']);
+			if ( ! isset( $email_from_name ) || empty( $email_from_name ) ) {
+				$email_from_name = get_option( 'wpr_email_from_name_' . $form_id );
 			}
 
-			if ( !isset($email_from_mail) || empty($email_from_mail) ) {
-				$email_from_mail = get_option('wpr_email_from_'. $_POST['wpr_form_id']);
+			if ( ! isset( $email_from_mail ) || empty( $email_from_mail ) ) {
+				$email_from_mail = get_option( 'wpr_email_from_' . $form_id );
 			}
 			
 			$reply_to = 'Reply-To: ' . $reply_to_address;
@@ -299,16 +322,122 @@ if ( ! defined( 'ABSPATH' ) ) {
         }
     }
 	
-	public function get_field_value($field_id) {
-		foreach ($_POST['form_content'] as $key => $field) {
-			$key_parts = explode('-', $key);
-			$last_part = end($key_parts);
-	
-			if ($last_part === $field_id) {
-				return $field[1];
+	/**
+	 * Escape a scalar string for the notification email body.
+	 *
+	 * @param mixed $text    Raw text.
+	 * @param bool  $is_html Whether the email is sent as HTML.
+	 * @return string
+	 */
+	protected function format_body_text( $text, $is_html ) {
+		$text = (string) $text;
+
+		if ( $is_html ) {
+			return esc_html( $text );
+		}
+
+		return $text;
+	}
+
+	/**
+	 * Escape a submitted field value for the notification email body.
+	 *
+	 * @param mixed $value   Field value (string or list of strings).
+	 * @param bool  $is_html Whether the email is sent as HTML.
+	 * @return string
+	 */
+	protected function format_body_value( $value, $is_html ) {
+		if ( is_array( $value ) ) {
+			$value = $this->chosen_values_from_field( $value );
+			$parts = [];
+			foreach ( $value as $item ) {
+				if ( is_array( $item ) ) {
+					continue;
+				}
+				$parts[] = $this->format_body_text( $item, $is_html );
+			}
+			return implode( "\n", $parts );
+		}
+
+		return $this->format_body_text( $value, $is_html );
+	}
+
+	/**
+	 * Reduce checkbox/radio payloads to selected values only.
+	 *
+	 * JS sends [ optionValue, isChecked, name, id ] per option.
+	 *
+	 * @param array $value Field value list.
+	 * @return array
+	 */
+	protected function chosen_values_from_field( $value ) {
+		if ( empty( $value ) ) {
+			return [];
+		}
+
+		$first = reset( $value );
+		if ( ! is_array( $first ) || ! array_key_exists( 0, $first ) || ! array_key_exists( 1, $first ) ) {
+			return $value;
+		}
+
+		$chosen = [];
+		foreach ( $value as $item ) {
+			if ( ! is_array( $item ) ) {
+				$chosen[] = $item;
+				continue;
+			}
+
+			$checked = isset( $item[1] ) ? $item[1] : false;
+			if ( true === $checked || 1 === $checked || '1' === $checked || 'true' === $checked ) {
+				$chosen[] = isset( $item[0] ) ? $item[0] : '';
 			}
 		}
-		return ''; // Return an empty string if the field id is not found
+
+		return $chosen;
+	}
+
+	/**
+	 * Format a "Label: value" line for the notification email body.
+	 *
+	 * @param mixed $label   Field label.
+	 * @param mixed $value   Field value.
+	 * @param bool  $is_html Whether the email is sent as HTML.
+	 * @return string
+	 */
+	protected function format_body_field_line( $label, $value, $is_html ) {
+		return $this->format_body_text( trim( (string) $label ), $is_html ) . ': ' . $this->format_body_value( $value, $is_html );
+	}
+
+	/**
+	 * Get a submitted field value for email headers (not HTML).
+	 *
+	 * @param string $field_id     Field ID from an [id="..."] shortcode.
+	 * @param array  $form_content Unslashed form_content POST payload.
+	 * @return string
+	 */
+	public function get_field_value( $field_id, $form_content = [] ) {
+		if ( ! is_array( $form_content ) ) {
+			$form_content = [];
+		}
+
+		foreach ( $form_content as $key => $field ) {
+			if ( ! is_array( $field ) ) {
+				continue;
+			}
+
+			$key_parts = explode( '-', (string) $key );
+			$last_part = end( $key_parts );
+
+			if ( $last_part === $field_id ) {
+				$value = isset( $field[1] ) ? $field[1] : '';
+				if ( is_array( $value ) ) {
+					$value = implode( ', ', $value );
+				}
+				return str_replace( [ "\r", "\n" ], '', (string) $value );
+			}
+		}
+
+		return '';
 	}
  }
 

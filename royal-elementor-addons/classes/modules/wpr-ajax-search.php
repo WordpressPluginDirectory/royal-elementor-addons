@@ -54,6 +54,75 @@ if ( ! defined( 'ABSPATH' ) ) {
         return array_values( array_unique( $keys ) );
     }
 
+    /**
+     * Load Search widget meta-query settings from saved Elementor data.
+     * Keys are never taken from the request body.
+     *
+     * @param int    $document_id Elementor document ID.
+     * @param string $widget_id   Elementor widget ID.
+     * @return array{enabled: bool, keys: string[]}
+     */
+    private static function get_saved_search_meta_settings( $document_id, $widget_id ) {
+        $empty = [
+            'enabled' => false,
+            'keys'    => [],
+        ];
+
+        $document_id = absint( $document_id );
+        $widget_id   = sanitize_text_field( (string) $widget_id );
+
+        if ( $document_id < 1 || '' === $widget_id || ! preg_match( '/^[A-Za-z0-9]+$/', $widget_id ) ) {
+            return $empty;
+        }
+
+        $post_status = get_post_status( $document_id );
+        if ( ! $post_status ) {
+            return $empty;
+        }
+
+        if ( 'publish' !== $post_status && ! current_user_can( 'read_post', $document_id ) ) {
+            return $empty;
+        }
+
+        $elements = [];
+        $document = \Elementor\Plugin::$instance->documents->get( $document_id );
+
+        if ( $document ) {
+            $elements = $document->get_elements_data();
+        }
+
+        if ( empty( $elements ) || ! is_array( $elements ) ) {
+            $raw = get_post_meta( $document_id, '_elementor_data', true );
+
+            if ( is_string( $raw ) && '' !== $raw ) {
+                $decoded = json_decode( wp_unslash( $raw ), true );
+                $elements = is_array( $decoded ) ? $decoded : [];
+            } elseif ( is_array( $raw ) ) {
+                $elements = $raw;
+            }
+        }
+
+        if ( empty( $elements ) || ! is_array( $elements ) ) {
+            return $empty;
+        }
+
+        $widget_data = Utilities::find_widget_in_elements( $elements, $widget_id );
+        if ( ! $widget_data || 'wpr-search' !== ( $widget_data['widgetType'] ?? '' ) ) {
+            return $empty;
+        }
+
+        $settings = isset( $widget_data['settings'] ) && is_array( $widget_data['settings'] ) ? $widget_data['settings'] : [];
+
+        if ( 'yes' !== ( $settings['enable_meta_query'] ?? '' ) ) {
+            return $empty;
+        }
+
+        return [
+            'enabled' => true,
+            'keys'    => self::sanitize_search_meta_keys( $settings['query_meta_keys'] ?? [] ),
+        ];
+    }
+
     public function data_fetch() {
 
         $nonce = $_POST['nonce'];
@@ -179,12 +248,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
         $the_query = new \WP_Query( $args );
 
-        // Fallback: search selected public meta keys only (never key-less / never _* keys).
-        if ( ! $the_query->have_posts() && 'yes' === sanitize_text_field( wp_unslash( $_POST['wpr_meta_query'] ?? '' ) ) ) {
+        // Fallback: search public meta keys saved on this Search widget (never from $_POST).
+        if ( ! $the_query->have_posts() ) {
             $keyword = sanitize_text_field( wp_unslash( $_POST['wpr_keyword'] ?? '' ) );
-            $meta_keys = self::sanitize_search_meta_keys( wp_unslash( $_POST['wpr_meta_keys'] ?? '' ) );
+            $saved_meta = self::get_saved_search_meta_settings(
+                wp_unslash( $_POST['wpr_document_id'] ?? 0 ),
+                wp_unslash( $_POST['wpr_widget_id'] ?? '' )
+            );
+            $meta_keys = $saved_meta['keys'];
 
-            if ( '' !== $keyword && mb_strlen( $keyword ) >= 3 && ! empty( $meta_keys ) ) {
+            if ( $saved_meta['enabled'] && '' !== $keyword && mb_strlen( $keyword ) >= 3 && ! empty( $meta_keys ) ) {
                 $meta_query_or = [ 'relation' => 'OR' ];
 
                 foreach ( $meta_keys as $meta_key ) {

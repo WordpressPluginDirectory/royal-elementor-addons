@@ -9362,6 +9362,35 @@ select.wpr-category-select {
     float: left;
 }
 
+.wpr-advanced-text-layout-stacked .wpr-advanced-text-preffix,
+.wpr-advanced-text-layout-stacked .wpr-advanced-text-suffix,
+.wpr-advanced-text-layout-stacked .wpr-anim-text,
+.wpr-advanced-text-layout-stacked .wpr-highlighted-text,
+.wpr-advanced-text-layout-stacked .wpr-clipped-text {
+    display: block;
+}
+
+.wpr-anim-text-align-center .wpr-anim-text-inner,
+.wpr-anim-text-align-right .wpr-anim-text-inner {
+    float: none;
+}
+
+/* Center absolute rotating words without transform (skew-safe) */
+.wpr-anim-text-align-center .wpr-anim-text-inner b {
+    left: 0;
+    right: 0;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wpr-anim-text-align-right .wpr-anim-text-inner b {
+    left: auto;
+    right: 0;
+}
+
 .wpr-anim-text-cursor {
     display: inline-block;
     zoom: 1;
@@ -19814,6 +19843,10 @@ input.wpr-date-filter-end {
 
     .wpr-breadcrumbs li {
         white-space: nowrap;
+    }
+
+    .wpr-breadcrumbs li:last-of-type {
+        white-space: normal;
     }
 }
 
