@@ -1,9 +1,9 @@
 === Royal Addons for Elementor – Addons and Templates Kit for Elementor ===
 Contributors: wproyal, rubeushagrid13, cyberpinky, elementoraddonswpr, ggedenidze1982, wprduke
 Tags: elementor, elementor templates, elementor addons, elementor widgets, header footer builder, elementor mega menu, elementor woocommerce builder, theme builder, header footer builder, elementor post grid, elementor product grid, addons for elementor
-Stable tag: 1.7.1068
+Stable tag: 1.7.1069
 Requires at least: 5.0
-Tested up to: 7.1.1
+Tested up to: 7.1.3
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -503,6 +503,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 15. Elementor Premade Blocks
 
 == Changelog ===
+= Royal Elementor Addons v1.7.1069 - 2026-10-15 =
+* FIXED: Minor Bugs
+* ADDED: Furniture Shop V3 - Elementor Template Kit - [**Furniture Store V3**](https://demosites.royal-elementor-addons.com/furniture-shop-v3/?ref=rea-wpo-pp-details-tab).
+
 = Royal Elementor Addons v1.7.1068 - 2026-09-18 =
 * ADDED: Electronic Store V4 - Elementor Template Kit - [**Electronic Store V4**](https://demosites.royal-elementor-addons.com/estore-v4/?ref=rea-wpo-pp-details-tab).
 * ADDED: Elementor Fashion (Shop) V6 Template Kit - [**Fashion V6**](https://demosites.royal-elementor-addons.com/fashion-v6/?ref=rea-wpo-pp-details-tab).
